@@ -1,0 +1,161 @@
+# =============================================================================
+#  Arcadia — local development stack
+#
+#    docker compose up -d                   app, nginx, queue, node, mysql
+#    docker compose --profile ssr up -d     also the server render (build it first)
+#    docker compose --profile mail up -d    also the Mailpit mail catcher
+#    docker compose down                    stop (named volumes survive)
+#
+#  http://localhost:8083. Ports are offset from yhn-dev-side's stack (8082, 3310,
+#  5173) so both run at once. See DOCKER.md for the first run.
+# =============================================================================
+
+# What every PHP container reads instead of `.env`'s host-oriented values. Real
+# environment variables win over `.env`, so `.env` stays usable outside Docker.
+x-app-env: &app-env
+  APP_URL: http://localhost:${APP_PORT:-8083}
+  DB_CONNECTION: mysql
+  DB_HOST: mysql
+  DB_PORT: 3306
+  DB_DATABASE: ${DB_DATABASE:-arcadia}
+  DB_USERNAME: ${DB_USERNAME:-arcadia_app}
+  DB_PASSWORD: ${DB_PASSWORD:-arcadia}
+  INERTIA_SSR_URL: http://ssr:13714
+  MAIL_MAILER: smtp
+  MAIL_HOST: mailpit
+  MAIL_PORT: 1025
+
+x-php: &php
+  build:
+    context: .
+    target: dev
+  image: arcadia-dev
+  restart: unless-stopped
+  environment: *app-env
+  volumes:
+    - .:/var/www:delegated
+  networks:
+    - arcadia_net
+  depends_on:
+    mysql:
+      condition: service_healthy
+
+services:
+  # ---- PHP-FPM: the Laravel application --------------------------------
+  app:
+    <<: *php
+    container_name: arcadia_app
+
+  # ---- Queue worker: every mail goes out through a queued job ----------
+  #  `queue:listen`, not `queue:work`: it boots the code fresh for every job, so
+  #  a PHP change is picked up without a restart. Production keeps `queue:work`.
+  queue:
+    <<: *php
+    container_name: arcadia_queue
+    command: ["php", "artisan", "queue:listen", "--queue=arcadia", "--tries=3", "--backoff=10"]
+
+  # ---- Nginx: the HTTP entrypoint ---------------------------------------
+  nginx:
+    image: nginx:alpine
+    container_name: arcadia_nginx
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8083}:80"
+    volumes:
+      - .:/var/www:delegated
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - arcadia_net
+    depends_on:
+      - app
+
+  # ---- Node: Vite dev server and builds ---------------------------------
+  #  Idle by design — you exec into it:
+  #    docker compose exec node npm run dev
+  #  The app's image, not `node:22`: Wayfinder's Vite plugin runs `php artisan`.
+  node:
+    image: arcadia-dev
+    container_name: arcadia_node
+    working_dir: /var/www
+    environment:
+      <<: *app-env
+      VITE_PORT: ${VITE_PORT:-5174}
+    ports:
+      - "${VITE_PORT:-5174}:${VITE_PORT:-5174}"
+    volumes:
+      - .:/var/www:delegated
+      # Its own node_modules: Rollup, Lightning CSS and Tailwind's oxide ship one
+      # native binary per platform, so the Mac's install cannot load in Linux.
+      - arcadia_node_modules:/var/www/node_modules
+    networks:
+      - arcadia_net
+    tty: true
+    command: ["sh", "-c", "tail -f /dev/null"]
+
+  # ---- SSR: the server render of guests' pages --------------------------
+  #  Off unless asked for, because it needs `bootstrap/ssr/ssr.js` built first
+  #  (`docker compose exec node npm run build:ssr`). Without it Laravel renders
+  #  on the client, which is fine for everything but link previews.
+  ssr:
+    image: arcadia-dev
+    container_name: arcadia_ssr
+    restart: unless-stopped
+    profiles: ["ssr"]
+    working_dir: /var/www
+    command: ["node", "bootstrap/ssr/ssr.js"]
+    environment: *app-env
+    volumes:
+      - .:/var/www:delegated
+      - arcadia_node_modules:/var/www/node_modules
+    networks:
+      - arcadia_net
+    depends_on:
+      - app
+
+  # ---- MySQL: 8.0, the version production runs ----------------------------
+  #  root, the app's own user and a read-only agent_ro, as on the server
+  #  (docker/mysql/01-users.sh, first start only).
+  mysql:
+    image: mysql:8.0
+    container_name: arcadia_mysql
+    restart: unless-stopped
+    ports:
+      - "${DB_FORWARD_PORT:-3311}:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: ${DB_DATABASE:-arcadia}
+      DB_USERNAME: ${DB_USERNAME:-arcadia_app}
+      DB_PASSWORD: ${DB_PASSWORD:-arcadia}
+      AGENT_RO_PASSWORD: ${AGENT_RO_PASSWORD:-agent_ro}
+    volumes:
+      - arcadia_mysql_data:/var/lib/mysql
+      - ./docker/mysql/01-users.sh:/docker-entrypoint-initdb.d/01-users.sh:ro
+      - ./docker/mysql/agent-ro-grants:/usr/local/bin/agent-ro-grants:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p\"$$MYSQL_ROOT_PASSWORD\" --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    networks:
+      - arcadia_net
+
+  # ---- Mailpit: optional mail catcher --------------------------------------
+  #  docker compose --profile mail up -d  →  http://localhost:8026
+  mailpit:
+    image: axllent/mailpit
+    container_name: arcadia_mailpit
+    restart: unless-stopped
+    profiles: ["mail"]
+    ports:
+      - "${MAIL_UI_PORT:-8026}:8025"
+    networks:
+      - arcadia_net
+
+volumes:
+  arcadia_mysql_data:
+  arcadia_node_modules:
+
+networks:
+  arcadia_net:
+    driver: bridge

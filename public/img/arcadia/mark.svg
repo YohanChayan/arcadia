@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="96 170 1063 963" width="1063" height="963">
+  <defs>
+    <!-- Right leg: cyan on the inner side, mint on the outer side -->
+    <linearGradient id="right" x1="760" y1="760" x2="1060" y2="640" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0bbde2"/>
+      <stop offset="1" stop-color="#55eec8"/>
+    </linearGradient>
+    <!-- Shadow cast by the blue band onto the right leg -->
+    <radialGradient id="rightShadow" cx="690" cy="380" r="300" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0a8195" stop-opacity="0.7"/>
+      <stop offset="1" stop-color="#056f86" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Left leg: deep blue bottom-left to aqua top-right -->
+    <linearGradient id="left" x1="160" y1="1000" x2="760" y2="190" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#038cf7"/>
+      <stop offset="0.72" stop-color="#12c8ff"/>
+      <stop offset="1" stop-color="#52f0dc"/>
+    </linearGradient>
+    <!-- The folded underside of the left leg -->
+    <linearGradient id="fold" x1="470" y1="640" x2="300" y2="1130" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0058d4"/>
+      <stop offset="0.45" stop-color="#0784ff"/>
+      <stop offset="1" stop-color="#07c2ff"/>
+    </linearGradient>
+
+    <!-- Leaf -->
+    <linearGradient id="leafTop" x1="460" y1="820" x2="790" y2="570" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#10bcc6"/>
+      <stop offset="1" stop-color="#a2f6a0"/>
+    </linearGradient>
+    <linearGradient id="leafBottom" x1="450" y1="830" x2="720" y2="660" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0cb6d2"/>
+      <stop offset="1" stop-color="#5fe4b4"/>
+    </linearGradient>
+
+    <path id="leftLeg" d="M 485 222
+      C 503 188 533 170 572 170 L 688 170 C 720 170 745 186 762 210
+      L 430 855 L 336 1053 C 312 1103 268 1133 218 1133 L 196 1133
+      C 126 1133 74 1056 107 977 Z"/>
+    <path id="leaf" d="M 430 855
+      C 436 770 468 705 525 662 C 600 606 700 590 803 566
+      C 776 655 714 735 620 775 C 560 800 505 808 470 820
+      C 452 827 440 838 430 855 Z"/>
+    <clipPath id="leftClip"><use href="#leftLeg"/></clipPath>
+    <clipPath id="leafClip"><use href="#leaf"/></clipPath>
+  </defs>
+
+  <!-- Right leg, behind -->
+  <path d="M 760 210 L 1145 975 C 1185 1056 1128 1133 1050 1133 L 1000 1133
+    C 956 1133 921 1102 901 1056 L 520 210 Z" fill="url(#right)"/>
+  <path d="M 760 210 L 1145 975 L 901 1056 L 520 210 Z" fill="url(#rightShadow)"/>
+
+  <!-- Left leg with its folded underside -->
+  <use href="#leftLeg" fill="url(#left)"/>
+  <path clip-path="url(#leftClip)" fill="url(#fold)"
+    d="M 588 535 C 520 640 390 690 300 752 C 230 800 172 858 132 918
+       L 0 990 L 0 1254 L 700 1254 L 700 535 Z"/>
+
+  <!-- Leaf, in front -->
+  <use href="#leaf" fill="url(#leafTop)"/>
+  <path clip-path="url(#leafClip)" fill="url(#leafBottom)"
+    d="M 430 856 C 470 770 560 700 690 662 C 740 648 800 600 820 560
+       L 900 900 L 380 900 Z"/>
+</svg>

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -41,5 +42,15 @@ class UserFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
         ]);
+    }
+
+    /** A membership of Arcadia with the role of that `alias_number`. */
+    public function withRole(int $aliasNumber): static
+    {
+        return $this->afterCreating(function (User $user) use ($aliasNumber) {
+            $role = Role::firstOrCreate(['alias_number' => $aliasNumber], ['name' => Role::aliasFor($aliasNumber)]);
+
+            $user->membership()->create(['role_id' => $role->id]);
+        });
     }
 }

@@ -50,10 +50,10 @@ const handleDelete = () => {
                     </span>
                 </div>
                 <p class="text-sm text-muted-foreground">
-                    Added {{ passkey.created_at_diff }}
+                    {{ $t('arcadia.account.passkeys.added', { when: passkey.created_at_diff }) }}
                     <template v-if="passkey.last_used_at_diff">
                         <span class="mx-1 text-muted-foreground/50">/</span>
-                        Last used {{ passkey.last_used_at_diff }}
+                        {{ $t('arcadia.account.passkeys.last_used', { when: passkey.last_used_at_diff }) }}
                     </template>
                 </p>
             </div>
@@ -67,26 +67,23 @@ const handleDelete = () => {
                     class="text-destructive hover:bg-destructive/10 hover:text-destructive"
                 >
                     <Trash2 class="h-4 w-4" />
-                    <span class="sr-only">Remove</span>
+                    <span class="sr-only">{{ $t('arcadia.account.passkeys.remove') }}</span>
                 </Button>
             </DialogTrigger>
 
             <DialogContent>
-                <DialogTitle>Remove passkey</DialogTitle>
-                <DialogDescription>
-                    Are you sure you want to remove the "{{ passkey.name }}"
-                    passkey? You will no longer be able to use it to sign in.
-                </DialogDescription>
+                <DialogTitle>{{ $t('arcadia.account.passkeys.remove_title') }}</DialogTitle>
+                <DialogDescription>{{ $t('arcadia.account.passkeys.remove_body', { name: passkey.name }) }}</DialogDescription>
                 <DialogFooter class="gap-2">
                     <DialogClose as-child>
-                        <Button variant="secondary">Cancel</Button>
+                        <Button variant="secondary">{{ $t('arcadia.account.cancel') }}</Button>
                     </DialogClose>
                     <Button
                         variant="destructive"
                         :disabled="isDeleting"
                         @click="handleDelete"
                     >
-                        {{ isDeleting ? 'Removing...' : 'Remove passkey' }}
+                        {{ isDeleting ? $t('arcadia.account.passkeys.removing') : $t('arcadia.account.passkeys.remove_confirm') }}
                     </Button>
                 </DialogFooter>
             </DialogContent>

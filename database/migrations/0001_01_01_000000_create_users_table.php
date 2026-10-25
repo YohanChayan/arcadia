@@ -14,8 +14,11 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email')->unique();
+            // Nullable: a social sign-in may arrive without one (`HandleSocialAuthUser`).
+            $table->string('email')->nullable()->unique();
             $table->timestamp('email_verified_at')->nullable();
+            // The owner's admission: an `admin` membership counts only once this is set.
+            $table->timestamp('approved_at')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

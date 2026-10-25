@@ -1,0 +1,16 @@
+#!/bin/bash
+# Grants `agent_ro` SELECT on every table of the database except `users`, one table at a time,
+# as production's `/usr/local/sbin/agent-ro-grants` does. MySQL cannot grant a whole database
+# minus one table, so a new table needs this run again — after every `migrate`.
+#
+#   docker compose exec mysql agent-ro-grants
+set -euo pipefail
+
+db="${MYSQL_DATABASE}"
+run() { mysql -uroot -p"${MYSQL_ROOT_PASSWORD}" -N -e "$1"; }
+
+for table in $(run "SELECT table_name FROM information_schema.tables WHERE table_schema = '${db}' AND table_name <> 'users'"); do
+    run "GRANT SELECT ON \`${db}\`.\`${table}\` TO 'agent_ro'@'%'"
+done
+
+echo "agent_ro may now read $(run "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = '${db}' AND table_name <> 'users'") tables of ${db} (never users)."

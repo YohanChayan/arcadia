@@ -1,0 +1,1567 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$email\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Actions/Auth/HandleSocialAuthUser.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Actions/Auth/HandleSocialAuthUser.php
+
+		-
+			message: '#^Access to an undefined property Laravel\\Socialite\\Contracts\\User\:\:\$expiresIn\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Actions/Auth/HandleSocialAuthUser.php
+
+		-
+			message: '#^Access to an undefined property Laravel\\Socialite\\Contracts\\User\:\:\$refreshToken\.$#'
+			identifier: property.notFound
+			count: 4
+			path: app/Actions/Auth/HandleSocialAuthUser.php
+
+		-
+			message: '#^Access to an undefined property Laravel\\Socialite\\Contracts\\User\:\:\$token\.$#'
+			identifier: property.notFound
+			count: 4
+			path: app/Actions/Auth/HandleSocialAuthUser.php
+
+		-
+			message: '#^Method App\\Actions\\Auth\\HandleSocialAuthUser\:\:updateExistingOAuthUser\(\) should return App\\Models\\User but returns Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Actions/Auth/HandleSocialAuthUser.php
+
+		-
+			message: '#^Call to an undefined method Laravel\\Socialite\\Contracts\\User\:\:getRaw\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Actions/AdmitGoogleAccount.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Actions/AppendContent.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$position\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Actions/AppendContent.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:owningVersion\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Actions/AppendContent.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Relations\\HasMany\:\:withTrashed\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Actions/AssignReader.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:sections\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Actions/DraftNextPromptVersion.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:variables\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Actions/DraftNextPromptVersion.php
+
+		-
+			message: '#^Method App\\Actions\\DraftNextPromptVersion\:\:handle\(\) should return App\\Models\\PromptVersion but returns Illuminate\\Database\\Eloquent\\Model\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Actions/DraftNextPromptVersion.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$cards\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Actions/DraftNextVersion.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Actions/DraftNextVersion.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:sections\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Actions/DraftNextVersion.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:stages\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Actions/DraftNextVersion.php
+
+		-
+			message: '#^Method App\\Actions\\DraftNextVersion\:\:handle\(\) should return App\\Models\\Version but returns Illuminate\\Database\\Eloquent\\Model\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Actions/DraftNextVersion.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:cards\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Actions/ImportGuideContent.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$position\.$#'
+			identifier: property.notFound
+			count: 5
+			path: app/Actions/MoveContent.php
+
+		-
+			message: '#^Method App\\Actions\\SaveGuide\:\:handle\(\) has parameter \$phraseIds with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Actions/SaveGuide.php
+
+		-
+			message: '#^Method App\\Actions\\StartGuideFromInquiry\:\:handle\(\) should return App\\Models\\Guide but returns Illuminate\\Database\\Eloquent\\Model\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Actions/StartGuideFromInquiry.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$directory\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Actions/StoreGuideImage.php
+
+		-
+			message: '#^Cannot use array destructuring on array\<int\|string, int\|string\>\|false\.$#'
+			identifier: offsetAccess.nonArray
+			count: 1
+			path: app/Actions/StoreGuideImage.php
+
+		-
+			message: '#^Method App\\Actions\\StoreGuideImage\:\:handle\(\) should return App\\Models\\GuideImage but returns Illuminate\\Database\\Eloquent\\Model\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Actions/StoreGuideImage.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:isReadable\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Actions/TellReaders.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Support\\Collection\<int,Illuminate\\Database\\Eloquent\\Model\>\:\:each\(\) expects callable\(Illuminate\\Database\\Eloquent\\Model, int\)\: mixed, Closure\(App\\Models\\Reader\)\: void given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Actions/TellReaders.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Relations\\HasMany\:\:withTrashed\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/AccessRequestController.php
+
+		-
+			message: '#^Parameter \#1 \$accessRequest of job class App\\Jobs\\SendAccessRequestNotificationJob constructor expects App\\Models\\AccessRequest in App\\Jobs\\SendAccessRequestNotificationJob\:\:dispatch\(\), Illuminate\\Database\\Eloquent\\Model given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/AccessRequestController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Reader\:\:\$email\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Editor/AppearanceController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$number\.$#'
+			identifier: property.notFound
+			count: 5
+			path: app/Http/Controllers/Editor/CompareController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Editor\\CompareController\:\:labels\(\) should return array\<string, string\> but returns array\<int\|string, \(array\|string\)\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Editor/CompareController.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,App\\Models\\VersionChange\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: app/Http/Controllers/Editor/CompareController.php
+
+		-
+			message: '#^Parameter \#1 \$from of method App\\Services\\VersionDiff\:\:between\(\) expects App\\Models\\Version, Illuminate\\Database\\Eloquent\\Model given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Editor/CompareController.php
+
+		-
+			message: '#^Parameter \#2 \$to of method App\\Services\\VersionDiff\:\:between\(\) expects App\\Models\\Version, Illuminate\\Database\\Eloquent\\Model given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Editor/CompareController.php
+
+		-
+			message: '#^Return type of call to method Illuminate\\Database\\Eloquent\\Collection\<int,App\\Models\\VersionChange\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: method.unresolvableReturnType
+			count: 1
+			path: app/Http/Controllers/Editor/CompareController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Editor/ContentController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$number\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Editor/ContentController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$released_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Editor/ContentController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:changes\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Editor/ContentController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:isReleased\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Editor/ContentController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:owningVersion\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Editor/ContentController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:sections\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Editor/ContentController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:stages\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Editor/ContentController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Editor\\ContentController\:\:options\(\) should return list\<array\{value\: string, label\: string\}\> but returns list\<array\{value\: int\|string, label\: \(array\|string\)\}\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Editor/ContentController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Guide\:\:\$has_release\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Editor/GuideController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$number\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Editor/GuideController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$template\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Editor/GuideController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$template_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Editor/GuideController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Editor/GuidePromptController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:\$variables\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Editor/GuidePromptController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:freeze\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Editor/GuidePromptController.php
+
+		-
+			message: '#^Parameter \#1 \$version of method App\\Services\\PromptRenderer\:\:render\(\) expects App\\Models\\PromptVersion, Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Editor/GuidePromptController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Editor/ImageController.php
+
+		-
+			message: '#^Parameter \#1 \$groupBy of method Illuminate\\Support\\Collection\<int,Illuminate\\Database\\Eloquent\\Model\>\:\:groupBy\(\) expects \(callable\(Illuminate\\Database\\Eloquent\\Model, int\)\: \(''cover''\|''flyer''\)\)\|list\<Closure\|string\>\|string, Closure\(App\\Models\\GuideImage\)\: \(''cover''\|''flyer''\) given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Editor/ImageController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 2
+			path: app/Http/Controllers/Editor/ImageController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$email\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Editor/InquiryController.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Pagination\\AbstractPaginator\<int,App\\Models\\Inquiry\>\:\:through\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: app/Http/Controllers/Editor/InquiryController.php
+
+		-
+			message: '#^Return type of call to method Illuminate\\Pagination\\AbstractPaginator\<int,App\\Models\\Inquiry\>\:\:through\(\) contains unresolvable type\.$#'
+			identifier: method.unresolvableReturnType
+			count: 1
+			path: app/Http/Controllers/Editor/InquiryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$accent\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Editor/PreviewController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$palette\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Editor/PreviewController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:displayName\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Editor/PreviewController.php
+
+		-
+			message: '#^Parameter \#2 \$version of method App\\Services\\GuidePresenter\:\:present\(\) expects App\\Models\\Version, Illuminate\\Database\\Eloquent\\Model given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Editor/PreviewController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>accent" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Editor/PreviewController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>palette" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Editor/PreviewController.php
+
+		-
+			message: '#^Parameter \#1 \$version of method App\\Services\\PromptRenderer\:\:render\(\) expects App\\Models\\PromptVersion, Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Editor/PromptFillController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Editor\\PromptSectionController\:\:find\(\) should return App\\Models\\PromptSection but returns Illuminate\\Database\\Eloquent\\Model\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Editor/PromptSectionController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Editor/PromptTemplateController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Editor/PromptTemplateController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$number\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Editor/PromptTemplateController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$sections\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Editor/PromptTemplateController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$variables\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Editor/PromptTemplateController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:isFrozen\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Http/Controllers/Editor/PromptTemplateController.php
+
+		-
+			message: '#^Parameter \#1 \$version of method App\\Services\\PromptFormOptions\:\:version\(\) expects App\\Models\\PromptVersion, Illuminate\\Database\\Eloquent\\Model given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Editor/PromptTemplateController.php
+
+		-
+			message: '#^Parameter \#1 \$version of method App\\Services\\PromptRenderer\:\:placeholders\(\) expects App\\Models\\PromptVersion, Illuminate\\Database\\Eloquent\\Model given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Editor/PromptTemplateController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Editor\\PromptVariableController\:\:find\(\) should return App\\Models\\PromptVariable but returns Illuminate\\Database\\Eloquent\\Model\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Editor/PromptVariableController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Reader\:\:\$email\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Editor/ReaderController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$email\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Editor/ReaderController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Editor/ReaderController.php
+
+		-
+			message: '#^Anonymous function should return array\{id\: int\<0, max\>, user_id\: int\<0, max\>\|null, email\: mixed, name\: string\|null, display_name\: string\|null, has_account\: bool, palette\: ''arcadia''\|''cocoa''\|''forest''\|''graphite''\|''plum'', accent\: ''amber''\|''blue''\|''coral''\|''pink''\|''sky''\|''teal''\|''violet'', \.\.\.\} but returns array\{id\: int\<0, max\>, user_id\: int\<0, max\>\|null, email\: mixed, name\: string\|null, display_name\: string\|null, has_account\: bool, palette\: ''arcadia''\|''cocoa''\|''forest''\|''graphite''\|''plum'', accent\: ''amber''\|''blue''\|''coral''\|''pink''\|''sky''\|''teal''\|''violet'', \.\.\.\}\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Editor/ReaderController.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,Illuminate\\Database\\Eloquent\\Model\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 2
+			path: app/Http/Controllers/Editor/ReaderController.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,Illuminate\\Database\\Eloquent\\Model\>\:\:map\(\) expects callable\(Illuminate\\Database\\Eloquent\\Model, int\)\: array\{id\: int\<0, max\>, name\: mixed, email\: mixed, status\: ''approved''\|''declined''\|''pending'', message\: string\|null, owner_note\: string\|null, created_at\: Carbon\\CarbonImmutable\|null, decided_at\: Carbon\\CarbonImmutable\|null\}, Closure\(App\\Models\\AccessRequest\)\: array\{id\: int\<0, max\>, name\: mixed, email\: mixed, status\: ''approved''\|''declined''\|''pending'', message\: string\|null, owner_note\: string\|null, created_at\: Carbon\\CarbonImmutable\|null, decided_at\: Carbon\\CarbonImmutable\|null\} given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Editor/ReaderController.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,Illuminate\\Database\\Eloquent\\Model\>\:\:map\(\) expects callable\(Illuminate\\Database\\Eloquent\\Model, int\)\: array\{id\: int\<0, max\>, user_id\: int\<0, max\>\|null, email\: mixed, name\: string\|null, display_name\: string\|null, has_account\: bool, palette\: ''arcadia''\|''cocoa''\|''forest''\|''graphite''\|''plum'', accent\: ''amber''\|''blue''\|''coral''\|''pink''\|''sky''\|''teal''\|''violet'', appearance_by\: string\|null, appearance_at\: Carbon\\CarbonImmutable\|null, created_at\: Carbon\\CarbonImmutable\|null, notify\: bool, notified_at\: Carbon\\CarbonImmutable\|null, devices\: Illuminate\\Support\\Collection\<int, array\{id\: int, label\: string, created_at\: Carbon\\CarbonImmutable\|null, last_used_at\: Carbon\\CarbonImmutable\}\>, device_limit\: mixed, progress\: Illuminate\\Support\\Collection\<string, array\{done\: int, total\: int\}\|int\|string\|null\>\|null\}, Closure\(App\\Models\\Reader\)\: array\{id\: int\<0, max\>, user_id\: int\<0, max\>\|null, email\: mixed, name\: string\|null, display_name\: string\|null, has_account\: bool, palette\: ''arcadia''\|''cocoa''\|''forest''\|''graphite''\|''plum'', accent\: ''amber''\|''blue''\|''coral''\|''pink''\|''sky''\|''teal''\|''violet'', appearance_by\: string\|null, appearance_at\: Carbon\\CarbonImmutable\|null, created_at\: Carbon\\CarbonImmutable\|null, notify\: bool, notified_at\: Carbon\\CarbonImmutable\|null, devices\: Illuminate\\Support\\Collection\<int, array\{id\: int, label\: string, created_at\: Carbon\\CarbonImmutable\|null, last_used_at\: Carbon\\CarbonImmutable\}\>, device_limit\: mixed, progress\: Illuminate\\Support\\Collection\<string, array\{done\: int, total\: int\}\|int\|string\|null\>\|null\} given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Editor/ReaderController.php
+
+		-
+			message: '#^Return type of call to method Illuminate\\Database\\Eloquent\\Collection\<int,Illuminate\\Database\\Eloquent\\Model\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: method.unresolvableReturnType
+			count: 2
+			path: app/Http/Controllers/Editor/ReaderController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Editor\\VocabularyController\:\:find\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/Editor/VocabularyController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/GuidePageController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Relations\\HasMany\:\:withTrashed\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/GuidePageController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\LandingController\:\:price\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Controllers/LandingController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$locale\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Reader/AppearanceController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$has_release\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Reader/DashboardController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$level\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Reader/DashboardController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$link_token\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Reader/DashboardController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$locale\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Reader/DashboardController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Reader/DashboardController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Reader/DashboardController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:cover\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Reader/DashboardController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:releasedVersion\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Reader/DashboardController.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,App\\Models\\Reader\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: app/Http/Controllers/Reader/DashboardController.php
+
+		-
+			message: '#^Parameter \#1 \$guide of method App\\Services\\MotivationPicker\:\:forGuide\(\) expects App\\Models\\Guide, Illuminate\\Database\\Eloquent\\Model\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Reader/DashboardController.php
+
+		-
+			message: '#^Return type of call to method Illuminate\\Database\\Eloquent\\Collection\<int,App\\Models\\Reader\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: method.unresolvableReturnType
+			count: 1
+			path: app/Http/Controllers/Reader/DashboardController.php
+
+		-
+			message: '#^Return type of call to method Illuminate\\Support\\Collection\<int,array\<string, mixed\>\>\:\:values\(\) contains unresolvable type\.$#'
+			identifier: method.unresolvableReturnType
+			count: 1
+			path: app/Http/Controllers/Reader/DashboardController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$locale\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Reader/NoteController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Reader/NoteController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:releasedVersion\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Reader/NoteController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$locale\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Reader/ProgressController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Reader/ProgressController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:releasedVersion\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Reader/ProgressController.php
+
+		-
+			message: '#^Method App\\Http\\Requests\\ContentNodeRequest\:\:rules\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Requests/ContentNodeRequest.php
+
+		-
+			message: '#^Method App\\Http\\Requests\\FillPromptRequest\:\:rules\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Requests/FillPromptRequest.php
+
+		-
+			message: '#^Method App\\Http\\Requests\\GuideImageRequest\:\:guide\(\) should return App\\Models\\Guide but returns \(object\|string\|null\)\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Requests/GuideImageRequest.php
+
+		-
+			message: '#^Method App\\Http\\Requests\\GuideImageRequest\:\:rules\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Requests/GuideImageRequest.php
+
+		-
+			message: '#^Method App\\Http\\Requests\\GuideRequest\:\:rules\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Requests/GuideRequest.php
+
+		-
+			message: '#^Method App\\Http\\Requests\\ImportRequest\:\:rules\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Requests/ImportRequest.php
+
+		-
+			message: '#^Method App\\Http\\Requests\\InquiryRequest\:\:rules\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Requests/InquiryRequest.php
+
+		-
+			message: '#^Method App\\Http\\Requests\\ItemFixRequest\:\:rules\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Requests/ItemFixRequest.php
+
+		-
+			message: '#^Method App\\Http\\Requests\\PhraseRequest\:\:rules\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Requests/PhraseRequest.php
+
+		-
+			message: '#^Method App\\Http\\Requests\\PromptSectionRequest\:\:rules\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Requests/PromptSectionRequest.php
+
+		-
+			message: '#^Method App\\Http\\Requests\\PromptTemplateRequest\:\:rules\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Requests/PromptTemplateRequest.php
+
+		-
+			message: '#^Method App\\Http\\Requests\\PromptVariableRequest\:\:rules\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Requests/PromptVariableRequest.php
+
+		-
+			message: '#^Method App\\Http\\Requests\\PromptVersionRequest\:\:rules\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Requests/PromptVersionRequest.php
+
+		-
+			message: '#^Access to an undefined property \(object\|string\)\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Requests/ReaderRequest.php
+
+		-
+			message: '#^Method App\\Http\\Requests\\ReaderRequest\:\:rules\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Requests/ReaderRequest.php
+
+		-
+			message: '#^Method App\\Http\\Requests\\SettingsRequest\:\:rules\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Requests/SettingsRequest.php
+
+		-
+			message: '#^Method App\\Http\\Requests\\VocabularyTermRequest\:\:rules\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Requests/VocabularyTermRequest.php
+
+		-
+			message: '#^Method App\\Http\\Resources\\FilledPromptResource\:\:toArray\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Resources/FilledPromptResource.php
+
+		-
+			message: '#^Method App\\Http\\Resources\\ImportPreviewResource\:\:toArray\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Resources/ImportPreviewResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Reader\:\:\$email\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Jobs/SendGuideSharedJob.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:isReadable\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Jobs/SendGuideSharedJob.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$email\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Mail/AccessRequestedMail.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Mail/AccessRequestedMail.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$locale\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Mail/AccessRequestedMail.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Mail/AccessRequestedMail.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Mail/AccessRequestedMail.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Reader\:\:\$email\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Mail/GuideSharedMail.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$link_token\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Mail/GuideSharedMail.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$locale\.$#'
+			identifier: property.notFound
+			count: 6
+			path: app/Mail/GuideSharedMail.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Mail/GuideSharedMail.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$email\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Mail/InquiryReceivedMail.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>email" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Mail/InquiryReceivedMail.php
+
+		-
+			message: '#^Method App\\Models\\AccessRequest\:\:decider\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/AccessRequest.php
+
+		-
+			message: '#^Method App\\Models\\AccessRequest\:\:guide\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/AccessRequest.php
+
+		-
+			message: '#^Method App\\Models\\AccessRequest\:\:scopePending\(\) has parameter \$query with generic class Illuminate\\Database\\Eloquent\\Builder but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/AccessRequest.php
+
+		-
+			message: '#^Method App\\Models\\AccessRequest\:\:user\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/AccessRequest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$version\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Card.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$version_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Card.php
+
+		-
+			message: '#^Method App\\Models\\Card\:\:items\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Card.php
+
+		-
+			message: '#^Method App\\Models\\Card\:\:stage\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Card.php
+
+		-
+			message: '#^Method App\\Models\\Card\:\:version\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Card.php
+
+		-
+			message: '#^Method App\\Models\\Category\:\:guides\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Category.php
+
+		-
+			message: '#^Method App\\Models\\Device\:\:scopeActive\(\) has parameter \$query with generic class Illuminate\\Database\\Eloquent\\Builder but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Device.php
+
+		-
+			message: '#^Method App\\Models\\Device\:\:user\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Device.php
+
+		-
+			message: '#^Method App\\Models\\Guide\:\:accessRequests\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Guide.php
+
+		-
+			message: '#^Method App\\Models\\Guide\:\:category\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Guide.php
+
+		-
+			message: '#^Method App\\Models\\Guide\:\:counterpart\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Guide.php
+
+		-
+			message: '#^Method App\\Models\\Guide\:\:cover\(\) should return App\\Models\\GuideImage\|null but returns Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Models/Guide.php
+
+		-
+			message: '#^Method App\\Models\\Guide\:\:goalLines\(\) should return list\<string\> but returns array\<int, non\-falsy\-string\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Models/Guide.php
+
+		-
+			message: '#^Method App\\Models\\Guide\:\:images\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Guide.php
+
+		-
+			message: '#^Method App\\Models\\Guide\:\:inquiry\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Guide.php
+
+		-
+			message: '#^Method App\\Models\\Guide\:\:latestVersion\(\) should return App\\Models\\Version but returns Illuminate\\Database\\Eloquent\\Model\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Models/Guide.php
+
+		-
+			message: '#^Method App\\Models\\Guide\:\:phrases\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany does not specify its types\: TRelatedModel, TDeclaringModel, TPivotModel, TAccessor \(2\-4 required\)$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Guide.php
+
+		-
+			message: '#^Method App\\Models\\Guide\:\:promptVersion\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Guide.php
+
+		-
+			message: '#^Method App\\Models\\Guide\:\:readers\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Guide.php
+
+		-
+			message: '#^Method App\\Models\\Guide\:\:releasedVersion\(\) should return App\\Models\\Version\|null but returns Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Models/Guide.php
+
+		-
+			message: '#^Method App\\Models\\Guide\:\:scopeListed\(\) has parameter \$query with generic class Illuminate\\Database\\Eloquent\\Builder but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Guide.php
+
+		-
+			message: '#^Method App\\Models\\Guide\:\:topics\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany does not specify its types\: TRelatedModel, TDeclaringModel, TPivotModel, TAccessor \(2\-4 required\)$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Guide.php
+
+		-
+			message: '#^Method App\\Models\\Guide\:\:versions\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Guide.php
+
+		-
+			message: '#^Method App\\Models\\GuideImage\:\:guide\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/GuideImage.php
+
+		-
+			message: '#^Method App\\Models\\GuideImage\:\:toEditor\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Models/GuideImage.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Inquiry.php
+
+		-
+			message: '#^Method App\\Models\\Inquiry\:\:guide\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasOne does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Inquiry.php
+
+		-
+			message: '#^Method App\\Models\\Inquiry\:\:scopeAtStage\(\) has parameter \$query with generic class Illuminate\\Database\\Eloquent\\Builder but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Inquiry.php
+
+		-
+			message: '#^Method App\\Models\\Inquiry\:\:user\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Inquiry.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Models/Inquiry.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$stage\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Models/Item.php
+
+		-
+			message: '#^Method App\\Models\\Item\:\:card\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Item.php
+
+		-
+			message: '#^Method App\\Models\\Item\:\:version\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Item.php
+
+		-
+			message: '#^Method App\\Models\\Note\:\:toReader\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Models/Note.php
+
+		-
+			message: '#^Method App\\Models\\Phrase\:\:guides\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany does not specify its types\: TRelatedModel, TDeclaringModel, TPivotModel, TAccessor \(2\-4 required\)$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Phrase.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:isFrozen\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Models/PromptSection.php
+
+		-
+			message: '#^Method App\\Models\\PromptSection\:\:version\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/PromptSection.php
+
+		-
+			message: '#^Method App\\Models\\PromptTemplate\:\:latestVersion\(\) should return App\\Models\\PromptVersion but returns Illuminate\\Database\\Eloquent\\Model\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Models/PromptTemplate.php
+
+		-
+			message: '#^Method App\\Models\\PromptTemplate\:\:versions\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/PromptTemplate.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:isFrozen\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Models/PromptVariable.php
+
+		-
+			message: '#^Method App\\Models\\PromptVariable\:\:version\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/PromptVariable.php
+
+		-
+			message: '#^Method App\\Models\\PromptVersion\:\:sections\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/PromptVersion.php
+
+		-
+			message: '#^Method App\\Models\\PromptVersion\:\:template\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/PromptVersion.php
+
+		-
+			message: '#^Method App\\Models\\PromptVersion\:\:variables\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/PromptVersion.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$default_accent\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Reader.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$default_palette\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Reader.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Reader.php
+
+		-
+			message: '#^Method App\\Models\\Reader\:\:email\(\) return type with generic class Illuminate\\Database\\Eloquent\\Casts\\Attribute does not specify its types\: TGet, TSet$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Reader.php
+
+		-
+			message: '#^Method App\\Models\\Reader\:\:guide\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Reader.php
+
+		-
+			message: '#^Method App\\Models\\Reader\:\:tickedKeys\(\) should return list\<string\> but returns array\<mixed\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Models/Reader.php
+
+		-
+			message: '#^Method App\\Models\\Reader\:\:user\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Reader.php
+
+		-
+			message: '#^Method App\\Models\\Section\:\:owningVersion\(\) should return App\\Models\\Version\|null but returns Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Models/Section.php
+
+		-
+			message: '#^Method App\\Models\\Section\:\:version\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Section.php
+
+		-
+			message: '#^Method App\\Models\\Stage\:\:cards\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Stage.php
+
+		-
+			message: '#^Method App\\Models\\Stage\:\:owningVersion\(\) should return App\\Models\\Version\|null but returns Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Models/Stage.php
+
+		-
+			message: '#^Method App\\Models\\Stage\:\:version\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Stage.php
+
+		-
+			message: '#^Method App\\Models\\Topic\:\:guides\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany does not specify its types\: TRelatedModel, TDeclaringModel, TPivotModel, TAccessor \(2\-4 required\)$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Topic.php
+
+		-
+			message: '#^Method App\\Models\\Version\:\:changes\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Version.php
+
+		-
+			message: '#^Method App\\Models\\Version\:\:guide\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Version.php
+
+		-
+			message: '#^Method App\\Models\\Version\:\:items\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Version.php
+
+		-
+			message: '#^Method App\\Models\\Version\:\:sections\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Version.php
+
+		-
+			message: '#^Method App\\Models\\Version\:\:stages\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Version.php
+
+		-
+			message: '#^Method App\\Models\\VersionChange\:\:version\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/VersionChange.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>device_limit" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Services/Devices.php
+
+		-
+			message: '#^Unable to resolve the template type TFlatMapKey in call to method Illuminate\\Support\\Collection\<\(int\|string\),mixed\>\:\:flatMap\(\)$#'
+			identifier: argument.templateType
+			count: 2
+			path: app/Services/GuideImport.php
+
+		-
+			message: '#^Unable to resolve the template type TFlatMapValue in call to method Illuminate\\Support\\Collection\<\(int\|string\),mixed\>\:\:flatMap\(\)$#'
+			identifier: argument.templateType
+			count: 2
+			path: app/Services/GuideImport.php
+
+		-
+			message: '#^Unable to resolve the template type TKey in call to function collect$#'
+			identifier: argument.templateType
+			count: 1
+			path: app/Services/GuideImport.php
+
+		-
+			message: '#^Unable to resolve the template type TValue in call to function collect$#'
+			identifier: argument.templateType
+			count: 1
+			path: app/Services/GuideImport.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/GuidePresentation.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$cards\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/GuidePresenter.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/GuidePresenter.php
+
+		-
+			message: '#^Offset ''video'' might not exist on array\{video\?\: string, playlist\?\: string, start\: int, end\?\: int\}\.$#'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: app/Services/GuidePresenter.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$stage_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/GuideProgressSummary.php
+
+		-
+			message: '#^Unable to resolve the template type TGroupKey in call to method Illuminate\\Support\\Collection\<int,App\\Models\\Item\>\:\:groupBy\(\)$#'
+			identifier: argument.templateType
+			count: 1
+			path: app/Services/GuideProgressSummary.php
+
+		-
+			message: '#^Parameter \#1 \$width of function imagecreatetruecolor expects int\<1, max\>, int given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Services/ImageCrops.php
+
+		-
+			message: '#^Parameter \#2 \$height of function imagecreatetruecolor expects int\<1, max\>, int given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Services/ImageCrops.php
+
+		-
+			message: '#^Parameter \#4 \$color of function imagefill expects int, int\<0, max\>\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Services/ImageCrops.php
+
+		-
+			message: '#^Parameter \#1 \$phrases of method App\\Services\\MotivationPicker\:\:pick\(\) expects Illuminate\\Support\\Collection\<int, App\\Models\\Phrase\>, Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Support\\Collection\<int, App\\Models\\Phrase\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Services/MotivationPicker.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$purpose\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/PromptFormOptions.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$topic\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/PromptFormOptions.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:requesterName\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Services/PromptFormOptions.php
+
+		-
+			message: '#^Method App\\Services\\PromptFormOptions\:\:researchValues\(\) should return array\<string, string\> but returns array\<string, mixed\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Services/PromptFormOptions.php
+
+		-
+			message: '#^Method App\\Services\\PromptFormOptions\:\:template\(\) should return array\{id\: int, name\: string, versions\: list\<array\<string, mixed\>\>\}\|null but returns array\{id\: int\<0, max\>, name\: string, versions\: array\<int, array\<string, mixed\>\>\}\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Services/PromptFormOptions.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,Illuminate\\Database\\Eloquent\\Model\>\:\:map\(\) expects callable\(Illuminate\\Database\\Eloquent\\Model, int\)\: array\<string, mixed\>, Closure\(App\\Models\\PromptVersion\)\: array\<string, mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Services/PromptFormOptions.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,Illuminate\\Database\\Eloquent\\Model\>\:\:map\(\) expects callable\(Illuminate\\Database\\Eloquent\\Model, int\)\: array\{name\: string, label\: string, type\: ''category''\|''language''\|''level''\|''longtext''\|''phone''\|''price''\|''step_length''\|''text'', required\: bool, default\: string\|null\}, Closure\(App\\Models\\PromptVariable\)\: array\{name\: string, label\: string, type\: ''category''\|''language''\|''level''\|''longtext''\|''phone''\|''price''\|''step_length''\|''text'', required\: bool, default\: string\|null\} given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Services/PromptFormOptions.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>topic" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Services/PromptFormOptions.php
+
+		-
+			message: '#^Variable \$setting on left side of \?\?\= always exists and is always null\.$#'
+			identifier: nullCoalesce.variable
+			count: 2
+			path: app/Services/PromptFormOptions.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$required\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Services/PromptRenderer.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,Illuminate\\Database\\Eloquent\\Model\>\:\:map\(\) expects callable\(Illuminate\\Database\\Eloquent\\Model, int\)\: string, Closure\(App\\Models\\PromptSection\)\: string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Services/PromptRenderer.php
+
+		-
+			message: '#^Parameter \#1 \$variable of method App\\Services\\PromptRenderer\:\:words\(\) expects App\\Models\\PromptVariable, Illuminate\\Database\\Eloquent\\Model given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Services/PromptRenderer.php
+
+		-
+			message: '#^Parameter \#2 \$variables of method App\\Services\\PromptRenderer\:\:dropEmptyLines\(\) expects Illuminate\\Support\\Collection\<string, App\\Models\\PromptVariable\>, Illuminate\\Database\\Eloquent\\Collection\<\(int\|string\), Illuminate\\Database\\Eloquent\\Model\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Services/PromptRenderer.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$cards\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Services/VersionDiff.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$key\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Services/VersionDiff.php
+
+		-
+			message: '#^Method App\\Services\\VersionDiff\:\:children\(\) has parameter \$nodes with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Services/VersionDiff.php
+
+		-
+			message: '#^Method App\\Services\\VersionDiff\:\:compare\(\) has parameter \$after with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Services/VersionDiff.php
+
+		-
+			message: '#^Method App\\Services\\VersionDiff\:\:compare\(\) has parameter \$before with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Services/VersionDiff.php
+
+		-
+			message: '#^Method App\\Services\\VersionDiff\:\:reordered\(\) has parameter \$after with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Services/VersionDiff.php
+
+		-
+			message: '#^Method App\\Services\\VersionDiff\:\:reordered\(\) has parameter \$before with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Services/VersionDiff.php
+
+		-
+			message: '#^Method App\\Services\\VersionDiff\:\:summary\(\) has parameter \$nodes with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Services/VersionDiff.php
+
+		-
+			message: '#^Method App\\Services\\VersionDiff\:\:touch\(\) has parameter \$node with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Services/VersionDiff.php
+
+		-
+			message: '#^Method App\\Services\\VersionDiff\:\:touch\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Services/VersionDiff.php
+
+		-
+			message: '#^Parameter \#1 \$array \(list\) of array_values is already a list, call has no effect\.$#'
+			identifier: arrayValues.list
+			count: 1
+			path: app/Services/VersionDiff.php
+
+		-
+			message: '#^Method App\\Models\\AuthProvider\:\:title\(\) return type with generic class Illuminate\\Database\\Eloquent\\Casts\\Attribute does not specify its types\: TGet, TSet$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/AuthProvider.php
+
+		-
+			message: '#^Method App\\Models\\AuthProvider\:\:userAuthProviders\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/AuthProvider.php
+
+		-
+			message: '#^Property ''title'' does not exist in model\.$#'
+			identifier: rules.modelAppends
+			count: 1
+			path: app/Models/AuthProvider.php
+
+		-
+			message: '#^Class App\\Models\\Role uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Role.php
+
+		-
+			message: '#^Method App\\Models\\Role\:\:getAliasAttribute\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Models/Role.php
+
+		-
+			message: '#^Method App\\Models\\Role\:\:scopeAdmin\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Models/Role.php
+
+		-
+			message: '#^Method App\\Models\\Role\:\:scopeAdmin\(\) has parameter \$query with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Models/Role.php
+
+		-
+			message: '#^Method App\\Models\\UserAuthProvider\:\:provider\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/UserAuthProvider.php
+
+		-
+			message: '#^Method App\\Models\\UserAuthProvider\:\:scopeForProvider\(\) has parameter \$query with generic class Illuminate\\Database\\Eloquent\\Builder but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/UserAuthProvider.php
+
+		-
+			message: '#^Method App\\Models\\UserAuthProvider\:\:scopeForProvider\(\) return type with generic class Illuminate\\Database\\Eloquent\\Builder does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/UserAuthProvider.php
+
+		-
+			message: '#^Method App\\Models\\UserAuthProvider\:\:user\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/UserAuthProvider.php
+
+		-
+			message: '#^Variable \$site in PHPDoc tag @var does not match any variable in the foreach loop\: \$locale$#'
+			identifier: varTag.differentVariable
+			count: 1
+			path: routes/editor.php
+
+		-
+			message: '#^Variable \$site might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: routes/editor.php
+
+		-
+			message: '#^Variable \$site in PHPDoc tag @var does not match any variable in the foreach loop\: \$locale$#'
+			identifier: varTag.differentVariable
+			count: 1
+			path: routes/reader.php
+
+		-
+			message: '#^Variable \$site might not be defined\.$#'
+			identifier: variable.undefined
+			count: 7
+			path: routes/reader.php

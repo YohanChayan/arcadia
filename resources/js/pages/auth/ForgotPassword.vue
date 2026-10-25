@@ -1,66 +1,42 @@
-<script setup lang="ts">
-import { Form, Head } from '@inertiajs/vue3';
-import InputError from '@/components/InputError.vue';
-import TextLink from '@/components/TextLink.vue';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Spinner } from '@/components/ui/spinner';
-import { login } from '@/routes';
-import { email } from '@/routes/password';
+<script setup>
+/**
+ * "Forgot your password?" for an email-and-password account on Arcadia. The link it emails opens
+ * on Arcadia (`ArcadiaAccountMail`). Fortify answers the same whether the address exists or not.
+ */
+import { useForm } from '@inertiajs/vue3'
+import SeoHead from '@/components/common/SeoHead.vue'
+import ArcadiaAuthFrame from '@/components/ArcadiaAuthFrame.vue'
+import { Button } from '@/components/ui/button'
+import { Field, FieldError, FieldLabel } from '@/components/ui/field'
+import { Input } from '@/components/ui/input'
 
-defineOptions({
-    layout: {
-        title: 'Forgot password',
-        description: 'Enter your email to receive a password reset link',
-    },
-});
+const props = defineProps({
+    status: { type: String, default: null },
+    pageTitle: String,
+    noIndex: Boolean,
+})
 
-defineProps<{
-    status?: string;
-}>();
+const form = useForm({ email: '' })
+
+const submit = () => form.post('/forgot-password')
 </script>
 
 <template>
-    <Head title="Forgot password" />
+    <SeoHead :page-title="pageTitle" :no-index="noIndex" />
 
-    <div
-        v-if="status"
-        class="mb-4 text-center text-sm font-medium text-green-600"
-    >
-        {{ status }}
-    </div>
+    <ArcadiaAuthFrame>
+        <h1 class="m-0 text-center font-display text-2xl font-semibold text-ink">{{ $t('arcadia.auth.screens.forgot-password.title') }}</h1>
+        <p class="mt-1 text-center text-sm text-ink-3">{{ $t('arcadia.auth.screens.forgot-password.lead') }}</p>
+        <p v-if="status" class="mt-6 mb-0 rounded-control border border-success/30 bg-success/5 p-3 text-sm text-ink" role="status">{{ status }}</p>
 
-    <div class="space-y-6">
-        <Form v-bind="email.form()" v-slot="{ errors, processing }">
-            <div class="grid gap-2">
-                <Label for="email">Email address</Label>
-                <Input
-                    id="email"
-                    type="email"
-                    name="email"
-                    autocomplete="off"
-                    v-focus
-                    placeholder="email@example.com"
-                />
-                <InputError :message="errors.email" />
-            </div>
+        <form class="mt-6 flex flex-col gap-5" @submit.prevent="submit">
+            <Field :data-invalid="form.errors.email ? true : undefined">
+                <FieldLabel for="email">{{ $t('arcadia.auth.fields.email') }}</FieldLabel>
+                <Input id="email" v-model="form.email" type="email" inputmode="email" autocomplete="email" required :aria-invalid="form.errors.email ? 'true' : undefined" />
+                <FieldError v-if="form.errors.email">{{ form.errors.email }}</FieldError>
+            </Field>
 
-            <div class="my-6 flex items-center justify-start">
-                <Button
-                    class="w-full"
-                    :disabled="processing"
-                    data-test="email-password-reset-link-button"
-                >
-                    <Spinner v-if="processing" />
-                    Email password reset link
-                </Button>
-            </div>
-        </Form>
-
-        <div class="space-x-1 text-center text-sm text-muted-foreground">
-            <span>Or, return to</span>
-            <TextLink :href="login()">log in</TextLink>
-        </div>
-    </div>
+            <Button type="submit" variant="brand" size="lg" :disabled="form.processing" class="w-full">{{ $t('arcadia.auth.screens.forgot-password.submit') }}</Button>
+        </form>
+    </ArcadiaAuthFrame>
 </template>

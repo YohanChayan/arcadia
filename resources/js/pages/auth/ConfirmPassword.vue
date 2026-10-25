@@ -6,32 +6,35 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 import { store } from '@/routes/password/confirm';
-import {
-    index as confirmOptions,
-    store as confirmStore,
-} from '@/actions/Laravel/Passkeys/Http/Controllers/PasskeyConfirmationController';
 import PasskeyVerify from '@/components/PasskeyVerify.vue';
 
-defineOptions({
-    layout: {
-        title: 'Confirm password',
-        description:
-            'This is a secure area of the application. Please confirm your password before continuing.',
-    },
-});
+// Fortify's passkey routes, written out rather than imported from Wayfinder: they exist only
+// while `PASSKEYS_ENABLED` is on, and a build must not depend on that switch.
+const confirmOptions = { url: '/passkeys/confirm/options', method: 'get' } as const;
+const confirmStore = { url: '/passkeys/confirm', method: 'post' } as const;
+
+defineProps<{ canUsePasskeys?: boolean }>();
+
 </script>
 
 <template>
-    <Head title="Confirm password" />
+    <Head :title="$t('arcadia.account.confirm.title')" />
+
+    <!-- Its own heading: `app.js` assigns the layout, so a layout-props object here would be dropped. -->
+    <div class="mb-6 space-y-2 text-center">
+        <h1 class="text-xl font-medium">{{ $t('arcadia.account.confirm.title') }}</h1>
+        <p class="text-sm text-muted-foreground">{{ $t('arcadia.account.confirm.lead') }}</p>
+    </div>
 
     <PasskeyVerify
+        v-if="canUsePasskeys"
         :routes="{
-            options: confirmOptions(),
-            submit: confirmStore(),
+            options: confirmOptions,
+            submit: confirmStore,
         }"
-        label="Confirm with passkey"
-        loading-label="Confirming..."
-        separator="Or confirm with password"
+        :label="$t('arcadia.account.confirm.passkey')"
+        :loading-label="$t('arcadia.account.confirm.passkey_loading')"
+        :separator="$t('arcadia.account.confirm.or')"
     />
 
     <Form
@@ -41,7 +44,7 @@ defineOptions({
     >
         <div class="space-y-6">
             <div class="grid gap-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">{{ $t('arcadia.account.confirm.password') }}</Label>
                 <PasswordInput
                     id="password"
                     name="password"
@@ -61,7 +64,7 @@ defineOptions({
                     data-test="confirm-password-button"
                 >
                     <Spinner v-if="processing" />
-                    Confirm password
+                    {{ $t('arcadia.account.confirm.button') }}
                 </Button>
             </div>
         </div>

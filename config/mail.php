@@ -110,6 +110,18 @@ return [
     |
     */
 
+    /*
+    |--------------------------------------------------------------------------
+    | Business Address
+    |--------------------------------------------------------------------------
+    |
+    | Where the owner is told of a guide request or an access request. `?:` rather than env()'s
+    | default, so an empty key in `.env` still has an address.
+    |
+    */
+
+    'business_address' => env('MAIL_BUSINESS_ADDRESS') ?: 'yhndevside@gmail.com',
+
     'from' => [
         'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
         'name' => env('MAIL_FROM_NAME', env('APP_NAME', 'Laravel')),

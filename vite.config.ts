@@ -1,23 +1,27 @@
-import inertia from '@inertiajs/vite';
 import { wayfinder } from '@laravel/vite-plugin-wayfinder';
 import tailwindcss from '@tailwindcss/vite';
 import vue from '@vitejs/plugin-vue';
 import laravel from 'laravel-vite-plugin';
-import { bunny } from 'laravel-vite-plugin/fonts';
+import i18n from 'laravel-vue-i18n/vite';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { defineConfig, lazyPlugins } from 'vite-plus';
 
 export default defineConfig({
+    resolve: {
+        alias: {
+            '@': fileURLToPath(new URL('./resources/js', import.meta.url)),
+            '@css': fileURLToPath(new URL('./resources/css', import.meta.url)),
+            // Ziggy's client from the PHP package, so the two can never disagree on a version.
+            'ziggy-js': path.resolve('vendor/tightenco/ziggy'),
+        },
+    },
     plugins: lazyPlugins(() => [
         laravel({
-            input: ['resources/css/app.css', 'resources/js/app.ts'],
+            input: ['resources/css/app.css', 'resources/js/app.js'],
+            ssr: 'resources/js/ssr.js',
             refresh: true,
-            fonts: [
-                bunny('Instrument Sans', {
-                    weights: [400, 500, 600],
-                }),
-            ],
         }),
-        inertia(),
         tailwindcss(),
         vue({
             template: {
@@ -27,11 +31,22 @@ export default defineConfig({
                 },
             },
         }),
+        // The PHP lang files compiled to `lang/php_{locale}.json`, which `$t()` reads.
+        i18n(),
+        // Typed route helpers for the kit's account settings pages.
         wayfinder({
             formVariants: true,
         }),
     ]),
     server: {
+        // On every interface, so the dev server in the `node` container is reachable from the
+        // Mac; the browser always talks to the published port on localhost.
+        host: '0.0.0.0',
+        port: Number(process.env.VITE_PORT ?? 5173),
+        strictPort: true,
+        hmr: {
+            host: 'localhost',
+        },
         watch: {
             ignored: [
                 '**/.agents/**',

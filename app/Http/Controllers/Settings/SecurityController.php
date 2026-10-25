@@ -37,6 +37,7 @@ class SecurityController extends Controller
                     ->all()
                 : [],
             'passwordRules' => Password::defaults()->toPasswordRulesString(),
+            'status' => $request->session()->get('status'),
         ];
 
         return Inertia::render('settings/Security', $props);
@@ -51,8 +52,7 @@ class SecurityController extends Controller
             'password' => $request->password,
         ]);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Password updated.')]);
-
-        return back();
+        // Said beside the Save button (`settings/Security`), in whichever shell the page sits.
+        return back()->with('status', 'password-updated');
     }
 }

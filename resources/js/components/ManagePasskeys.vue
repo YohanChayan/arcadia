@@ -5,7 +5,6 @@ import type { Passkey } from '@/types/auth';
 import Heading from '@/components/Heading.vue';
 import PasskeyItem from '@/components/PasskeyItem.vue';
 import PasskeyRegister from '@/components/PasskeyRegister.vue';
-import { destroy } from '@/actions/Laravel/Passkeys/Http/Controllers/PasskeyRegistrationController';
 
 export type Props = {
     canManagePasskeys?: boolean;
@@ -18,7 +17,8 @@ withDefaults(defineProps<Props>(), {
 });
 
 const handleDelete = (id: number, onError: () => void) => {
-    router.delete(destroy.url(id), {
+    // Written out, not imported from Wayfinder: the route exists only while passkeys are on.
+    router.delete(`/user/passkeys/${id}`, {
         preserveScroll: true,
         onError,
     });
@@ -33,8 +33,8 @@ const handleRegisterSuccess = () => {
     <div v-if="canManagePasskeys" class="space-y-6">
         <Heading
             variant="small"
-            title="Passkeys"
-            description="Manage your passkeys for passwordless sign-in"
+            :title="$t('arcadia.account.passkeys.title')"
+            :description="$t('arcadia.account.passkeys.lead')"
         />
 
         <div class="overflow-hidden rounded-lg border border-border">
@@ -53,10 +53,8 @@ const handleRegisterSuccess = () => {
                 >
                     <KeyRound class="h-7 w-7 text-muted-foreground" />
                 </div>
-                <p class="font-medium">No passkeys yet</p>
-                <p class="mt-1 text-sm text-muted-foreground">
-                    Add a passkey to sign in without a password
-                </p>
+                <p class="font-medium">{{ $t('arcadia.account.passkeys.empty') }}</p>
+                <p class="mt-1 text-sm text-muted-foreground">{{ $t('arcadia.account.passkeys.empty_hint') }}</p>
             </div>
         </div>
 

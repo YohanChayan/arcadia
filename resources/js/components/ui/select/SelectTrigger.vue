@@ -1,18 +1,21 @@
-<script setup lang="ts">
-import type { SelectTriggerProps } from "reka-ui"
-import type { HTMLAttributes } from "vue"
-import { ChevronDown } from "@lucide/vue"
-import { reactiveOmit } from "@vueuse/core"
-import { SelectIcon, SelectTrigger, useForwardProps } from "reka-ui"
-import { cn } from "@/lib/utils"
+<script setup>
+// The house field look (formerly `.yhn-field-1`), so a select sits level with the inputs.
+import { ChevronDown } from "@lucide/vue";
+import { reactiveOmit } from "@vueuse/core";
+import { SelectIcon, SelectTrigger, useForwardProps } from "reka-ui";
+import { cn } from "@/lib/utils";
 
-const props = withDefaults(
-  defineProps<SelectTriggerProps & { class?: HTMLAttributes["class"], size?: "sm" | "default" }>(),
-  { size: "default" },
-)
+const props = defineProps({
+  disabled: { type: Boolean, required: false },
+  reference: { type: null, required: false },
+  asChild: { type: Boolean, required: false },
+  as: { type: null, required: false },
+  class: { type: null, required: false },
+  size: { type: String, required: false, default: "default" },
+});
 
-const delegatedProps = reactiveOmit(props, "class", "size")
-const forwardedProps = useForwardProps(delegatedProps)
+const delegatedProps = reactiveOmit(props, "class", "size");
+const forwardedProps = useForwardProps(delegatedProps);
 </script>
 
 <template>
@@ -20,10 +23,13 @@ const forwardedProps = useForwardProps(delegatedProps)
     data-slot="select-trigger"
     :data-size="size"
     v-bind="forwardedProps"
-    :class="cn(
-      'border-input data-[placeholder]:text-muted-foreground [&_svg:not([class*=\'text-\'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 flex w-fit items-center justify-between gap-2 rounded-md border bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*=\'size-\'])]:size-4',
-      props.class,
-    )"
+    :class="
+      cn(
+        `flex w-full items-center justify-between gap-2 px-3 text-left whitespace-nowrap data-[size=default]:py-3 data-[size=default]:text-base data-[size=sm]:py-2 data-[size=sm]:text-sm data-[placeholder]:text-ink-4 data-[state=open]:border-accent [&_svg:not([class*='text-'])]:text-ink-3 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4`,
+        'rounded-panel border-2 border-rule bg-well text-ink backdrop-blur-md transition-colors duration-200 outline-none placeholder:text-ink-4 focus-visible:border-accent focus-visible:bg-ink/5 focus-visible:shadow-[0_0_0_4px_color-mix(in_srgb,var(--accent)_18%,transparent)] aria-invalid:border-danger aria-invalid:bg-danger/5 disabled:cursor-not-allowed disabled:opacity-50',
+        props.class,
+      )
+    "
   >
     <slot />
     <SelectIcon as-child>

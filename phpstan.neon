@@ -1,5 +1,8 @@
 includes:
     - vendor/larastan/larastan/extension.neon
+    # The errors in the code ported from yhn-dev-side, which was never analysed. New code is held
+    # to the level below; shrink this file as the ported code is touched.
+    - phpstan-baseline.neon
     - vendor/nesbot/carbon/extension.neon
 
 parameters:

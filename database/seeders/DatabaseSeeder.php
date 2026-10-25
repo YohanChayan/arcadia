@@ -2,24 +2,33 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
+/**
+ * A working Arcadia: its roles and Google, the owner, the per-language settings, the starter
+ * phrases and prompts — and, locally only, fake guides and readers to work against.
+ *
+ * Every seeder here is idempotent except `DemoSeeder`, which is why it runs only locally: start
+ * over with `php artisan migrate:fresh --seed`.
+ */
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $this->call([
+            RoleSeeder::class,
+            AuthProviderSeeder::class,
+            UserSeeder::class,
+            GuideSettingsSeeder::class,
+            GuidePhraseSeeder::class,
+            PromptTemplateSeeder::class,
+            CoverPromptTemplateSeeder::class,
+            GuideFlyerPromptTemplateSeeder::class,
+            ArcadiaFlyerPromptTemplateSeeder::class,
         ]);
+
+        if (app()->isLocal()) {
+            $this->call(DemoSeeder::class);
+        }
     }
 }

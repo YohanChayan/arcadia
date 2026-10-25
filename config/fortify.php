@@ -163,9 +163,12 @@ return [
         Features::registration(),
         Features::resetPasswords(),
         Features::emailVerification(),
-        Features::passkeys([
+        // Optional (`PASSKEYS_ENABLED`, on by default): off, no passkey control appears and
+        // the passkey routes are not registered. On, each user still chooses to add one in
+        // Settings › Security.
+        ...(env('PASSKEYS_ENABLED', true) ? [Features::passkeys([
             'confirmPassword' => true,
-        ]),
+        ])] : []),
     ],
 
 ];

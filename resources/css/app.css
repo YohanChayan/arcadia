@@ -1,172 +1,1079 @@
-@import 'tailwindcss';
-
-@import 'tw-animate-css';
-
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
+@import "tailwindcss";
+/* The enter/leave utilities shadcn-vue primitives use (`animate-in`, `fade-in-0` …). */
+@import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
+/* Typography, decided 2026-09-16. Three faces, three jobs — a mono face is what makes a
+   number read as a fact rather than as decoration, which matters now that the components
+   are data-dense. Before this the site loaded no webfont at all and rendered in whatever
+   system font the visitor had. */
+@theme {
+  --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Sora', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* Geometry, settled 2026-09-16.
+   Six radii were in active use — rounded-full ×123, xl ×76, lg ×73, 2xl ×38, 3xl ×11,
+   md ×2 — against a --radius declared below that nothing referenced. Four of those six
+   were doing the same job: the edge of a card.
+
+   Rather than rewrite ~240 class names across 60 files, which could not be reviewed or
+   visually verified, the scale is collapsed here: several utilities now resolve to the
+   same value. Three distinct radii survive in the rendered output —
+
+     controls  8px   buttons, inputs, chips, small controls
+     panels   14px   cards, sections, dialogs
+     full            pills and avatars only
+
+   Components keep whatever class they already have. To change the geometry, change these
+   numbers, not the markup. */
+@theme {
+  --radius-control: 0.5rem;
+  --radius-panel: 0.875rem;
+
+  --radius-md: var(--radius-control);
+  --radius-lg: var(--radius-control);
+  --radius-xl: var(--radius-panel);
+  --radius-2xl: var(--radius-panel);
+  --radius-3xl: var(--radius-panel);
+}
+
+/* The shadcn-vue bridge, 2026-10-01.
+   The primitives in components/ui/ are written against shadcn's colour names. Rather than
+   edit their class names one by one, each name points at a brand token here, once. The
+   brand tokens already switch on `.dark`, so this block needs no dark twin, and a primitive
+   added through the CLI renders in the brand without being touched.
+
+   Two names are deliberately absent. `accent` is the brand's interactive colour (declared
+   with the surface contract below); in shadcn it means a subtle hover surface, so shadcn's
+   `accent-foreground` is not bridged — a primitive's `hover:bg-accent
+   hover:text-accent-foreground` becomes `hover:bg-hover hover:text-ink` when it is added.
+   `chart-*` and `sidebar-*` had no user and were removed. */
 @theme inline {
-    --font-sans:
-        Instrument Sans, ui-sans-serif, system-ui, sans-serif,
-        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-        'Noto Color Emoji';
-
-    --radius-lg: var(--radius);
-    --radius-md: calc(var(--radius) - 2px);
-    --radius-sm: calc(var(--radius) - 4px);
-
-    --color-background: var(--background);
-    --color-foreground: var(--foreground);
-
-    --color-card: var(--card);
-    --color-card-foreground: var(--card-foreground);
-
-    --color-popover: var(--popover);
-    --color-popover-foreground: var(--popover-foreground);
-
-    --color-primary: var(--primary);
-    --color-primary-foreground: var(--primary-foreground);
-
-    --color-secondary: var(--secondary);
-    --color-secondary-foreground: var(--secondary-foreground);
-
-    --color-muted: var(--muted);
-    --color-muted-foreground: var(--muted-foreground);
-
-    --color-accent: var(--accent);
-    --color-accent-foreground: var(--accent-foreground);
-
-    --color-destructive: var(--destructive);
-    --color-destructive-foreground: var(--destructive-foreground);
-
-    --color-border: var(--border);
-    --color-input: var(--input);
-    --color-ring: var(--ring);
-
-    --color-chart-1: var(--chart-1);
-    --color-chart-2: var(--chart-2);
-    --color-chart-3: var(--chart-3);
-    --color-chart-4: var(--chart-4);
-    --color-chart-5: var(--chart-5);
-
-    --color-sidebar: var(--sidebar-background);
-    --color-sidebar-foreground: var(--sidebar-foreground);
-    --color-sidebar-primary: var(--sidebar-primary);
-    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-    --color-sidebar-accent: var(--sidebar-accent);
-    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-    --color-sidebar-border: var(--sidebar-border);
-    --color-sidebar-ring: var(--sidebar-ring);
-}
-
-/*
-  The default border color has changed to `currentColor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
-*/
-@layer base {
-    *,
-    ::after,
-    ::before,
-    ::backdrop,
-    ::file-selector-button {
-        border-color: var(--color-gray-200, currentColor);
-    }
-}
-
-@layer utilities {
-    body,
-    html {
-        --font-sans:
-            'Instrument Sans', ui-sans-serif, system-ui, sans-serif,
-            'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-            'Noto Color Emoji';
-    }
+  --radius-sm: var(--radius-control);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
 }
 
 :root {
-    --background: hsl(0 0% 100%);
-    --foreground: hsl(0 0% 3.9%);
-    --card: hsl(0 0% 100%);
-    --card-foreground: hsl(0 0% 3.9%);
-    --popover: hsl(0 0% 100%);
-    --popover-foreground: hsl(0 0% 3.9%);
-    --primary: hsl(0 0% 9%);
-    --primary-foreground: hsl(0 0% 98%);
-    --secondary: hsl(0 0% 92.1%);
-    --secondary-foreground: hsl(0 0% 9%);
-    --muted: hsl(0 0% 96.1%);
-    --muted-foreground: hsl(0 0% 45.1%);
-    --accent: hsl(0 0% 96.1%);
-    --accent-foreground: hsl(0 0% 9%);
-    --destructive: hsl(0 84.2% 60.2%);
-    --destructive-foreground: hsl(0 0% 98%);
-    --border: hsl(0 0% 92.8%);
-    --input: hsl(0 0% 89.8%);
-    --ring: hsl(0 0% 3.9%);
-    --chart-1: hsl(12 76% 61%);
-    --chart-2: hsl(173 58% 39%);
-    --chart-3: hsl(197 37% 24%);
-    --chart-4: hsl(43 74% 66%);
-    --chart-5: hsl(27 87% 67%);
-    --radius: 0.5rem;
-    --sidebar-background: hsl(0 0% 98%);
-    --sidebar-foreground: hsl(240 5.3% 26.1%);
-    --sidebar-primary: hsl(0 0% 10%);
-    --sidebar-primary-foreground: hsl(0 0% 98%);
-    --sidebar-accent: hsl(0 0% 94%);
-    --sidebar-accent-foreground: hsl(0 0% 30%);
-    --sidebar-border: hsl(0 0% 91%);
-    --sidebar-ring: hsl(217.2 91.2% 59.8%);
-    --sidebar: hsl(0 0% 98%);
+  /* ── The chrome a sticky element has to clear ────────────────────────────────────────
+     The navbar is `sticky top-0` at every width (see `LandingLayout`), and nothing in the
+     public chrome holds the bottom edge, so a sticky element clears the top only. Since
+     2026-10-12 this is not measured from the bar but imposed on it: the bar and the open
+     mobile menu's top row are sized FROM this value, at every width, so it cannot drift.
+
+     Stated once because three things need it — the draft panel, the result page's booking
+     rail, and a cover that runs under the bar (`data-under-chrome`) — and a wrong guess is invisible until something quietly scrolls underneath
+     the navbar. Until 2026-10-07 the navbar was fixed to the bottom below `md` and a
+     MiniFooter held the bottom from `md` up, which took two more offsets. */
+  --chrome-top: 3.25rem;
+
+  /* ── Layers (2026-10-13) ─────────────────────────────────────────────────────────────
+     Every element that floats above the page takes one of these, never a number of its own.
+     The order is the contract: the chrome stays under anything the user opened. Without it the
+     dashboard sidebar sat at 1000 and painted over every dialog, at 50. Page content stacks
+     with small local values (`z-[1]`, `z-[10]`) and never reaches these.
+     `StackingLayersTest` fails on a z-index of 100 or more anywhere in `resources/`. */
+  --layer-chrome: 40;   /* navbar, dashboard sidebar and its expand button */
+  --layer-banner: 45;   /* the cookie consent banner */
+  --layer-overlay: 50;  /* dialogs and alert dialogs, with their scrim */
+  --layer-popover: 60;  /* selects, dropdowns and tooltips, which can open inside a dialog */
+
+  /* Drives the shadcn primitives' --radius. Aligned to the control radius above. */
+  --radius: 0.5rem;
+
+  --background: var(--raised-solid);
+  --foreground: var(--ink);
+  --card: var(--raised);
+  --card-foreground: var(--ink);
+  --popover: var(--raised-solid);
+  --popover-foreground: var(--ink);
+  --primary: var(--accent);
+  --primary-foreground: var(--on-accent);
+  --secondary: var(--well);
+  --secondary-foreground: var(--ink);
+  --muted: var(--well);
+  --muted-foreground: var(--ink-3);
+  --destructive: var(--danger);
+  --border: var(--rule);
+  --input: var(--edge);
+  --ring: var(--focus);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════════════
+   THE SURFACE CONTRACT — Indigo Mist (light) and Indigo Ink (dark)
+   Palette decided 2026-09-13; implemented 2026-09-17.
+
+   Why these are tokens and not Tailwind opacity modifiers: an earlier proposal was to
+   replace the ~272 `rgba()` literals with `text-white/70` and friends. That works in one
+   theme only. `white` at 70% is correct ink on a dark ground and invisible on a light one,
+   so the fourteen ad-hoc white opacities in the codebase are not a Tailwind problem — they
+   are the *reason* light mode was never possible. The ink tiers below are the same ladder,
+   expressed so it can flip.
+
+   THE RULE MOST LIKELY TO BE BROKEN, and it is what made the first light attempt look
+   dated: `--edge` is for boundaries a user must see to operate a CONTROL — inputs, ghost
+   buttons, tiles — and holds >= 3:1 against its surface. `--panel-border` is for decorative
+   panel edges and in light mode it is TRANSPARENT. A modern light surface separates regions
+   by tint, elevation and light; a dated one draws a line around everything. Do not collapse
+   these two names back into one.
+   ═══════════════════════════════════════════════════════════════════════════════════════ */
+:root {
+  /* light — Indigo Mist, softened 2026-09-18 for eye comfort.
+     Dark is deliberately unchanged; only this block moved.
+
+     The complaint was glare, and the cause was the PANEL, not the ground: at #F7F7FC it had
+     a relative luminance of 0.933 — effectively white — and it is the surface most text sits
+     on. Dropping it to 0.873 removes the glare, and takes maximum text contrast from 11.26:1
+     to 9.70:1, which reads as softer while staying far above AAA.
+
+     The lavender tint is kept rather than neutralised to grey. A fully neutral light mode
+     stops echoing the indigo brand and reads as a default theme; lowering luminance is what
+     buys comfort, not removing hue. */
+  --ground-a: #DEE0EB;
+  --ground-b: #D8DAE6;
+
+  /* Nothing is pure white. #E7E8F0 shares the ground's hue and simply holds more light.
+
+     Taken down a second step on 2026-09-18: at #EFF0F6 (luminance 0.873) the panel still
+     read as white. 0.810 is the floor — one step further and `--edge` can no longer hold
+     3:1 against the ground, which is the constraint that actually caps how dim a light
+     theme can go without losing its control boundaries. */
+  --raised: rgb(231 232 240 / 82%);
+  --raised-solid: #E7E8F0;
+
+  /* #2F3550 is 9.58:1 on the ground — above AAA, and deliberately not near-black, which
+     read as harsh on a tint. The tiers replace fourteen hand-typed opacities. */
+  /* The tiers are NOT one shared alpha ladder. Measured 2026-09-18: the first version used
+     72/52/32 in both themes, which is fine on a near-black ground and fails on a pale one —
+     `ink-3`, the muted body tier used in 135 places, came out at 2.80:1, below even the 3:1
+     large-text floor. Dark ink on a light ground has far less headroom than light ink on a
+     dark one, so light needs higher alphas to reach the same target.
+
+     Each value is the smallest that meets its target against the WORSE of ground and panel:
+     ink-2 >= 7:1 (AAA body), ink-3 >= 4.5:1 (AA body), ink-4 >= 3:1 (AA large / UI). */
+  --ink: #383D54;                                            /* 8.13:1 on ground */
+  --ink-2: color-mix(in srgb, var(--ink) 95%, transparent);  /* 7.17:1 */
+  --ink-3: color-mix(in srgb, var(--ink) 77%, transparent);  /* 4.55:1 */
+  --ink-4: color-mix(in srgb, var(--ink) 60%, transparent);  /* 3.05:1 */
+
+  --accent: #4551C9;
+  --signal: #9D4E0E;
+  /* Two-series chart pair (admin conversions, EN · ES), validated with the dataviz palette
+     checker against --raised-solid in each theme. Dark ES is a step below --signal, which
+     sits above the chart lightness band. */
+  --chart-en: #4551C9;
+  --chart-es: #9D4E0E;
+  --focus: #4551C9;
+
+  --edge: #76798D;                 /* 3.27:1 on the ground — the binding constraint, see above */
+  --rule: rgb(56 61 84 / 12%);
+  --panel-border: transparent;
+
+  /* Tinted with the accent, not grey-black: a grey shadow on a tinted ground reads as
+     dirt. */
+  --panel-shadow: 0 10px 30px -12px rgb(69 81 201 / 24%);
+  --scrim: rgb(56 61 84 / 48%);
+
+  /* Status. Added 2026-09-18 with the literal conversion: components were reaching for
+     `bg-green-600` / `bg-yellow-600` / `#EF8784` — stock Tailwind and one off-palette red —
+     so status was the one thing on the site with no brand at all. */
+  /* Re-measured after the ground came down on 2026-09-18. `#B23A36` and `#9D4E0E` both
+     landed on exactly 4.50 against the new ground — technically AA, with no margin at all
+     for a value that has to survive the next palette nudge. Darkened for headroom. */
+  --success: #1B6B43;  /* 4.94:1 */
+  --warning: #95490C;  /* 4.93:1 */
+  --danger:  #A93430;  /* 4.96:1 */
+
+  /* What sits ON a filled accent or signal surface. Buttons were hardcoding a dark ink
+     (`#06231F`, `#1A1006`) chosen against the DARK theme's bright accents; in light mode
+     those accents are dark, so the label went dark-on-dark. */
+  --on-accent: #F7F7FC;
+  --on-signal: #F7F7FC;
+
+  /* A sunken surface — inputs, insets, footers inside a panel. It is NOT `--raised`
+     inverted: a well is darker than its surround in both themes, which is why
+     `bg-black/20` could not simply become `bg-ink/20` (in dark mode ink is near-white, so
+     that would have raised the well instead of sinking it). */
+  --well: rgb(56 61 84 / 7%);
+
+  /* The hover surface of a ghost control or a menu row — what shadcn calls `accent`, which
+     this palette cannot use because `accent` is the interactive colour. A faint ink tint,
+     so the label stays `--ink` at full contrast; it raises in dark and sinks in light, as
+     a tint of ink does. */
+  --hover: color-mix(in srgb, var(--ink) 6%, transparent);
+
+  /* One accent bloom, used behind the single most important block on a page. Replaces the
+     scattered inline radial gradients. */
+  --bloom: radial-gradient(60% 100% at 50% 0%, rgb(69 81 201 / 12%), transparent 70%);
+  --glow: 0 10px 30px -12px rgb(69 81 201 / 35%);
+
+  /* The brand gradient, used on filled primary actions. It has to be two real stops in BOTH
+     themes: in light, `--focus` and `--accent` are the same indigo, so a gradient written
+     between them renders flat. */
+  --brand-a: #5661D6;   /* 4.82:1 against --on-accent */
+  --brand-b: #36409F;   /* 8.23:1 — a visible two-stop ramp, both stops clearing AA */
+
+  /* The lit edge: a one-pixel highlight along the top of a raised surface. The design note
+     calls it "the detail that makes a panel read as an object rather than a hole", and it
+     was on 3 of 117 panels. On a pale ground the highlight is nearly white and crisp; on a
+     dark one it is a faint sheen. */
+  --lit: inset 0 1px 0 rgb(255 255 255 / 75%);
+
+  /* One shadow scale, three steps. 91 shadows were `shadow-lg` / `shadow-2xl` (Tailwind's
+     black defaults, theme-blind) or stock coloured glows — `shadow-cyan-500/20` and friends
+     — against 19 that used a token. */
+  /* A pale ground swallows a hairline, so a chip needs a fill and a whisper of shadow to
+     read as an object; on dark, the hairline alone already does it. Same for a band. */
+  --chip-bg: rgb(255 255 255 / 66%);
+  --chip-shadow: 0 1px 1px rgb(54 59 82 / 5%);
+  --band: rgb(255 255 255 / 34%);
+
+  /* Strengthened 2026-09-18. The first values were tuned by eye against the dark theme and
+     carried straight over; on a pale ground a 5% shadow is invisible, so public cards read as
+     flat rectangles while the dashboard's — which reach for `--shadow-lg` — read as objects.
+     Three stops rather than two: a tight contact shadow, a mid lift, and a wide accent-tinted
+     ambient. The far stop stays tinted with the accent, never grey, because a grey shadow on
+     a tinted ground reads as dirt. */
+  --shadow-sm: 0 1px 2px rgb(54 59 82 / 7%), 0 3px 8px -3px rgb(54 59 82 / 8%);
+  --shadow-md: 0 1px 2px rgb(54 59 82 / 7%), 0 4px 10px -3px rgb(54 59 82 / 9%),
+               0 16px 32px -14px rgb(69 81 201 / 28%);
+  --shadow-lg: 0 2px 4px rgb(54 59 82 / 8%), 0 8px 18px -6px rgb(54 59 82 / 10%),
+               0 30px 56px -24px rgb(69 81 201 / 34%);
+
+  /* The other half of "well-defined shape": a raised surface catches more light at its top
+     edge. Light only — the dark theme's panels already separate from their ground by value. */
+  --panel-sheen: linear-gradient(180deg, rgb(255 255 255 / 55%), rgb(255 255 255 / 0%) 62%);
+
+  /* Cover images.
+
+     Each cover now ships a purpose-made light variant — `welcome_coverN-light.png` — rather
+     than being filtered at runtime. Two earlier attempts are worth not repeating: inverting
+     turned the photographs into colour negatives, and fading them to a 12% watermark made
+     light mode look like it had no artwork at all.
+
+     A light variant is authored, not derived: it is its own photograph, chosen so the scene
+     reads as daylight rather than as a washed-out night. Keep both at the same dimensions.
+
+     Theme selection is pure CSS below — no JS, no flash, and it works under SSR. */
+  --cover-opacity: 0.9;
+  --cover-line-opacity: 0.55;
+  /* Light veil only. At 45% over an already-pale variant the artwork vanished into the
+     ground — visible in neither theme was the actual bug report. */
+  --cover-wash: linear-gradient(180deg, rgb(222 224 235 / 5%), rgb(216 218 230 / 22%));
+  /* The hero's headline sits left, over a photograph measuring ~92/255 luminance there —
+     dark and mottled, so dark text does not survive a whole line unaided. A HORIZONTAL
+     scrim fixes what `--cover-wash` structurally cannot: that one runs vertically, and
+     lifting it far enough to help erases the artwork (already tried, at 45%).
+     It tops out at the ground colour itself, so text over the scrim has the same contrast
+     as text on the page — legible without a bright panel. Holding the plateau to 42% and
+     clearing by 68% keeps the laptop and cup, the subject, out of the wash.
+     Measured through the full stack (cover opacity, wash, scrim): h1 on `--ink` is 7.9:1
+     at the left edge and still 4.5:1 at 57%; the paragraph on `--ink-2` holds 6.9:1 across
+     its `max-w-lg` column. */
+  --hero-scrim: linear-gradient(90deg, rgb(222 224 235 / 97%) 0%, rgb(222 224 235 / 94%) 42%, rgb(222 224 235 / 0%) 68%);
+  --hero-scrim-sm: linear-gradient(180deg, rgb(222 224 235 / 82%) 0%, rgb(222 224 235 / 74%) 70%, rgb(222 224 235 / 58%) 100%);
 }
 
 .dark {
-    --background: hsl(0 0% 3.9%);
-    --foreground: hsl(0 0% 98%);
-    --card: hsl(0 0% 3.9%);
-    --card-foreground: hsl(0 0% 98%);
-    --popover: hsl(0 0% 3.9%);
-    --popover-foreground: hsl(0 0% 98%);
-    --primary: hsl(0 0% 98%);
-    --primary-foreground: hsl(0 0% 9%);
-    --secondary: hsl(0 0% 14.9%);
-    --secondary-foreground: hsl(0 0% 98%);
-    --muted: hsl(0 0% 16.08%);
-    --muted-foreground: hsl(0 0% 63.9%);
-    --accent: hsl(0 0% 14.9%);
-    --accent-foreground: hsl(0 0% 98%);
-    --destructive: hsl(0 84% 60%);
-    --destructive-foreground: hsl(0 0% 98%);
-    --border: hsl(0 0% 14.9%);
-    --input: hsl(0 0% 14.9%);
-    --ring: hsl(0 0% 83.1%);
-    --chart-1: hsl(220 70% 50%);
-    --chart-2: hsl(160 60% 45%);
-    --chart-3: hsl(30 80% 55%);
-    --chart-4: hsl(280 65% 60%);
-    --chart-5: hsl(340 75% 55%);
-    --sidebar-background: hsl(0 0% 7%);
-    --sidebar-foreground: hsl(0 0% 95.9%);
-    --sidebar-primary: hsl(360, 100%, 100%);
-    --sidebar-primary-foreground: hsl(0 0% 100%);
-    --sidebar-accent: hsl(0 0% 15.9%);
-    --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
-    --sidebar-border: hsl(0 0% 15.9%);
-    --sidebar-ring: hsl(217.2 91.2% 59.8%);
-    --sidebar: hsl(240 5.9% 10%);
+  /* dark — Indigo Ink. #16213E is promoted from background to raised panel. */
+  --ground-a: #0F1729;
+  --ground-b: #0B1120;
+
+  --raised: rgb(22 33 62 / 72%);
+  --raised-solid: #16213E;
+
+  --ink: #EBEEF7;
+  --ink-2: color-mix(in srgb, var(--ink) 68%, transparent);  /* 7.04:1 */
+  --ink-3: color-mix(in srgb, var(--ink) 51%, transparent);  /* 4.58:1 */
+  --ink-4: color-mix(in srgb, var(--ink) 37%, transparent);  /* 3.07:1 */
+
+  /* The accent is indigo in BOTH modes, so the two themes are one identity rather than
+     two that share a domain. The original cyan survives in exactly one role — the dark
+     focus ring. Do not reintroduce it elsewhere. */
+  --accent: #7687F0;
+  --signal: #F09536;
+  --chart-en: #7687F0;
+  --chart-es: #D07C22;
+  --focus: #74F9F2;
+
+  --edge: rgb(235 238 247 / 24%);
+  --rule: rgb(235 238 247 / 10%);
+  --panel-border: rgb(235 238 247 / 8%);
+
+  --panel-shadow: 0 10px 30px -12px rgb(0 0 0 / 55%);
+  --scrim: rgb(5 7 14 / 62%);
+
+  --success: #4ADE80;
+  --warning: #F09536;
+  --danger:  #EF8784;
+
+  --on-accent: #0F1729;
+  --on-signal: #1A1006;
+
+  --well: rgb(0 0 0 / 22%);
+  --hover: color-mix(in srgb, var(--ink) 7%, transparent);
+
+  --bloom: radial-gradient(60% 100% at 50% 0%, rgb(118 135 240 / 16%), transparent 70%);
+  --glow: 0 10px 30px -12px rgb(116 249 242 / 22%);
+
+  /* Exactly the cyan-to-indigo the dark theme always had. */
+  --brand-a: #74F9F2;
+  --brand-b: #7687F0;
+
+  --lit: inset 0 1px 0 rgb(255 255 255 / 7%);
+
+  --chip-bg: rgb(235 238 247 / 5%);
+  --chip-shadow: none;
+  --band: rgb(235 238 247 / 3%);
+
+  --panel-sheen: none;
+
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 30%), 0 2px 8px -4px rgb(0 0 0 / 40%);
+  --shadow-md: 0 2px 4px rgb(0 0 0 / 30%), 0 10px 24px -12px rgb(0 0 0 / 55%);
+  --shadow-lg: 0 4px 8px rgb(0 0 0 / 35%), 0 24px 48px -20px rgb(0 0 0 / 65%);
+
+  /* Dark keeps the artwork exactly as drawn — it was made for this ground. Unchanged. */
+  --cover-opacity: 1;
+  --cover-line-opacity: 1;
+  /* 55→75%, not 85→90%. The heavier pair came from the About page and was applied to every
+     cover; the hero's own overlay had always been 40–60%, so the change quietly buried the
+     artwork under a near-opaque sheet. This is light enough to see the photograph and heavy
+     enough to keep the headline legible over the bright part of it. */
+  --cover-wash: linear-gradient(180deg, rgb(22 33 62 / 42%), rgb(26 26 46 / 62%));
+  /* Dark needs less: the artwork is already night-toned and the wash is heavier. */
+  --hero-scrim: linear-gradient(90deg, rgb(15 23 41 / 92%) 0%, rgb(15 23 41 / 74%) 30%, rgb(15 23 41 / 0%) 64%);
+  --hero-scrim-sm: linear-gradient(180deg, rgb(15 23 41 / 72%) 0%, rgb(15 23 41 / 62%) 70%, rgb(15 23 41 / 46%) 100%);
+}
+
+/* Arcadia — teal on navy (2026-10-15, ADR 0019; was royal blue, ADR 0016).
+   The guide hosts render `app.blade.php`, whose <html> carries `data-site="arcadia"` and is
+   dark only. Same tokens, same components: only the colour moves. The ground is the logo tile's
+   navy, a step deeper so text carries; the accent is the mock's teal-mint, with dark text on it —
+   light text on it is 1.50:1. The signal and focus ring are the cyan where the logo's strokes cross.
+   Measured on `--ground-a`: ink 15.05:1, ink-2 7.46:1, ink-3 4.74:1, ink-4 3.09:1 — each tier at
+   least the studio's — and `--accent` 10.91:1. */
+.dark[data-site="arcadia"] {
+  --ground-a: #061A33;
+  --ground-b: #030D1C;
+  --raised: rgb(11 34 64 / 72%);
+  --raised-solid: #0B2240;
+
+  --accent: #2EE6B8;
+  --signal: #2DD6F5;
+  --focus: #2DD6F5;
+  --on-accent: #061A33;
+  --on-signal: #03121F;
+
+  --bloom: radial-gradient(60% 100% at 50% 0%, rgb(46 230 184 / 14%), transparent 70%);
+  --glow: 0 10px 30px -12px rgb(46 230 184 / 35%);
+
+  --brand-a: #2EE6B8;
+  --brand-b: #2DD6F5;
+
+  /* The logo's own ramp — teal, cyan, blue — for the one decorative gradient a page may carry. */
+  --mark-a: #0FC3AF;
+  --mark-b: #2DD6F5;
+  --mark-c: #1EA4FE;
+
+  /* Over the landing's photograph: opaque navy at the text's side, clear at the subject's. */
+  --hero-scrim: linear-gradient(90deg, rgb(6 26 51 / 92%) 0%, rgb(6 26 51 / 72%) 34%, rgb(6 26 51 / 0%) 66%);
+  --hero-scrim-sm: linear-gradient(180deg, rgb(6 26 51 / 78%) 0%, rgb(6 26 51 / 66%) 70%, rgb(6 26 51 / 50%) 100%);
+}
+
+/* Arcadia's editor — slate navy (2026-10-15). `EditorLayout` marks <html>
+   `data-surface="editor"`; only the ground, the surfaces and the light move, so the accent stays
+   Arcadia's teal. Two green grounds came first the same day — green-teal `#04211E`, then a
+   near-black green `#08120F` — and both read as too green once the teal accent sat on them: green
+   on green. This is the landing's navy, a step greyer and calmer for long sessions, so the teal
+   reads as the one accent it is on the landing. The bloom is off: a work surface needs no glow.
+   Measured: ink 15.75:1, ink-2 7.74:1, ink-3 4.86:1, ink-4 3.12:1 and teal 11.42:1 on
+   `--ground-a`; ink 14.26:1, ink-3 4.69:1 and teal 10.34:1 on `--raised-solid`. */
+.dark[data-site="arcadia"][data-surface="editor"] {
+  --ground-a: #0B1526;
+  --ground-b: #070E1A;
+  --raised: rgb(18 31 51 / 72%);
+  --raised-solid: #121F33;
+  --on-accent: #061A33;
+  --bloom: none;
+  --glow: 0 8px 24px -12px rgb(46 230 184 / 18%);
+}
+
+/* The landing page's aurora (2026-10-13, trimmed 2026-10-15): colour arrives as light behind the
+   page and as one hue per topic and sample, rather than as hard-edged shapes. Since the teal
+   rebrand every hue is the logo's — blue, cyan, mint, teal, its light-green tip and a deeper
+   blue; the violet, pink and amber are retired. Body text is never set in them; the one text use
+   is a large display line in a gradient of three (each at least 3:1 on `--ground-a`, the floor
+   for large text). Read by `pages/Landing.vue` and `components/landing/`. */
+.dark[data-site="arcadia"] {
+  --aurora-1: #1EA4FE;
+  --aurora-2: #2DD6F5;
+  --aurora-3: #2EE6B8;
+  --aurora-4: #0FC3AF;
+  --aurora-5: #7FF0C0;
+  --aurora-6: #3B82F6;
+}
+
+/* The reader's tokens (2026-10-13). The guide page customers see (`components/reader/`)
+   reads ONLY these, never `--accent` or a literal, so a guide can later carry its own colours by
+   setting them on the page's root — a reader's palette and accent do (`App\Enums\Palette`,
+   `Accent`, 2026-10-15). Unset, they follow Arcadia's teal on navy above, and the ground stays
+   the site's own, glow included. */
+[data-site="arcadia"] {
+  --guide-ground: transparent;
+  --guide-accent: var(--accent);
+  --guide-on-accent: var(--on-accent);
+  --guide-surface: var(--raised);
+  --guide-well: var(--well);
+  --guide-ink: var(--ink);
+  --guide-ink-soft: var(--ink-3);
+  --guide-rule: var(--rule);
+  --guide-done: var(--success);
+}
+
+@theme inline {
+  --color-guide-ground: var(--guide-ground);
+  --color-guide-accent: var(--guide-accent);
+  --color-guide-on-accent: var(--guide-on-accent);
+  --color-guide-surface: var(--guide-surface);
+  --color-guide-well: var(--guide-well);
+  --color-guide-ink: var(--guide-ink);
+  --color-guide-ink-soft: var(--guide-ink-soft);
+  --color-guide-rule: var(--guide-rule);
+  --color-guide-done: var(--guide-done);
+}
+
+/* Exposed as Tailwind utilities, so a component writes `text-ink-2` / `bg-raised` /
+   `border-edge` and never a literal. */
+@theme inline {
+  --color-ground: var(--ground-a);
+  --color-raised: var(--raised);
+  --color-raised-solid: var(--raised-solid);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-ink-4: var(--ink-4);
+  --color-accent: var(--accent);
+  --color-signal: var(--signal);
+  --color-chart-en: var(--chart-en);
+  --color-chart-es: var(--chart-es);
+  --color-focus: var(--focus);
+  --color-edge: var(--edge);
+  --color-rule: var(--rule);
+  --color-panel-border: var(--panel-border);
+  --color-scrim: var(--scrim);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-on-accent: var(--on-accent);
+  --color-on-signal: var(--on-signal);
+  --color-well: var(--well);
+  --color-hover: var(--hover);
 }
 
 @layer base {
-    * {
-        @apply border-border outline-ring/50;
+  * {
+    @apply border-border outline-ring/50;
+  }
+  /* The ground is a two-stop wash lit from the top right in BOTH modes, so the themes
+     share a light source rather than being inversions of each other. */
+  body {
+    @apply font-sans;
+    color: var(--ink);
+    background-color: var(--ground-a);
+    background-image:
+      radial-gradient(120% 90% at 100% 0%, var(--ground-b), transparent 62%),
+      linear-gradient(180deg, var(--ground-a), var(--ground-b));
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+
+  /* Grain — light mode only.
+     A large, perfectly flat pale field is what actually reads as glare; a fraction of a
+     percent of noise gives it the quality of paper and also kills the banding that a
+     two-stop gradient shows on a wide monitor. It is an inline SVG, so there is no asset
+     and no request, and it is `pointer-events: none` so it never intercepts a click.
+
+     Dark mode does not get it: the existing dark ground has no banding problem and the
+     instruction was to leave that theme exactly as it is. */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    /* 0.035 at three octaves read as visible speckle on a pale ground rather than as
+       paper. Halved, and the turbulence made finer and single-octave so it sits below the
+       threshold where the eye resolves it as noise. */
+    opacity: 0.018;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='1' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .dark body::before { opacity: 0; }
+
+  /* A bare rule fades rather than butting into its container. */
+  hr {
+    height: 1px;
+    border: 0;
+    background: var(--rule);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  }
+
+  /* Keyboard focus. Only 11 of 128 components declared any focus style, and most override
+     the default outline, so a keyboard user had almost no position indicator. `:focus-visible`
+     fires on keyboard navigation only, so this is invisible to mouse users. */
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* Headings take the display face without every component having to ask for it.
+     Anything that should not follow can override with `font-sans` locally. */
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+}
+
+/* Click affordance, restored 2026-09-17.
+
+   Tailwind v4's Preflight sets `button, [role="button"] { cursor: default }` — it follows
+   the browser's own default, where v3 shipped `cursor: pointer`. Nothing in this codebase
+   asked for that change; it arrived with the upgrade, and it silently removed the hover
+   affordance from all 68 buttons on the site at once. A control that does not change the
+   cursor reads as decoration, which is the most expensive kind of invisible bug: nobody
+   reports it, they just don't click.
+
+   Restored here rather than per component, so a new button cannot forget it. Disabled
+   controls get `not-allowed` for the same reason — the state has to be visible before the
+   click, not after. */
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  summary,
+  label[for],
+  select:not(:disabled) {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  select:disabled,
+  [aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+}
+
+/* A page cover: the artwork, then the theme's wash over it. Used by every hero.
+   `--cover-filter` is what makes a night-sky illustration usable on a pale ground; without
+   it a light page opens with a black rectangle. */
+@layer components {
+  /* A cover element sets two custom properties inline — `--cover-dark` and `--cover-light`,
+     each a `url(...)` — and the theme picks. `--cover-light` falls back to `--cover-dark`,
+     so a new cover added without a light variant degrades to the dark art rather than to a
+     blank rectangle.
+
+     `.cover-art` is for photographs, `.cover-art-line` for line-art and diagrams; the only
+     difference now is how far each is faded, since a grid sitting behind a whole page of
+     content has to be quieter than a hero. */
+  .cover-art,
+  .cover-art-line {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  /* Theme selection is VISIBILITY, not `var()` substitution. Routing the artwork's `url()`
+     through a custom property and reading it back with `background-image: var(--cover-dark)`
+     leaves every cover blank — the browser never even requests the file, so it reads as a
+     missing image rather than a broken one. Each cover ships both layers and hides one, and
+     the surviving layer sets `background-image` directly, which is what worked before. */
+  .cover-for-dark { display: none; }
+  .dark .cover-for-dark { display: block; }
+  .dark .cover-for-light { display: none; }
+
+  .cover-art { opacity: var(--cover-opacity); }
+  .cover-art-line { opacity: var(--cover-line-opacity); }
+
+  .cover-wash {
+    background-image: var(--cover-wash);
+  }
+
+  /* Sits above the wash and below the content. */
+  .hero-scrim {
+    background-image: var(--hero-scrim);
+  }
+
+  /* Below `md` the headline spans the full width, so a 62% scrim would leave the end of
+     every line unbacked. Switch to a vertical one that covers the whole column. */
+  @media (max-width: 767px) {
+    .hero-scrim {
+      background-image: var(--hero-scrim-sm);
     }
-    body {
-        @apply bg-background text-foreground;
+  }
+
+  /* The one accent bloom a page is allowed. */
+  .bloom {
+    background-image: var(--bloom);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════════════
+   COMPONENT CLASSES — what is left of custom/general.css after 2026-09-18.
+
+   That file held 37 hand-written classes in 352 lines. Seventeen had zero remaining uses
+   once the literal-to-token conversion ran; another twelve were re-expressible as Tailwind
+   utilities and were replaced in the templates (`min-vh-60` → `min-h-[30vh] md:min-h-[60vh]`,
+   `yhn-dev-side` → `font-display`, and so on).
+
+   What survives is here instead, written with `@apply` and tokens rather than free-hand CSS,
+   so these classes now follow the theme like everything else. They earn their place because
+   each is a genuine multi-property component, not a colour alias.
+
+   `.no-underline` is NOT among them, and its removal is a fix rather than a tidy-up: it was
+   redefining a real Tailwind utility with `text-decoration: none !important`, so
+   `hover:underline` could never win anywhere both were applied.
+   ═══════════════════════════════════════════════════════════════════════════════════════ */
+@layer components {
+  /* Frosted panel. */
+  .bg-glass-1 { @apply bg-raised backdrop-blur-md; }
+
+  /* The brand gradient as one class, so a filled action never writes the stops itself. */
+  .bg-brand { background-image: linear-gradient(135deg, var(--brand-a) 0%, var(--brand-b) 100%); }
+
+  /* The navbar's glass: the link pill, the control pill, and the phone menu button. */
+  .glass-pill {
+    border: 1px solid var(--rule);
+    border-radius: 9999px;
+    background-color: var(--raised);
+    background-image: var(--panel-sheen);
+    box-shadow: var(--lit), var(--shadow-sm);
+    backdrop-filter: blur(12px);
+  }
+
+  /* A page whose first block is a cover marks it `data-under-chrome`, and the page is pulled
+     up by the bar's height so the artwork starts at the top of the viewport, behind the
+     transparent bar. Opt-in, because a page without artwork would only slide its heading
+     under the bar. The marked block clears the bar itself — centred content needs nothing. */
+  .site-container:has([data-under-chrome]) > main {
+    margin-top: calc(-1 * var(--chrome-top));
+  }
+
+  /* The AI link's ring in the navbar — the one link with its own treatment, because AI is
+     the studio's headline capability. A masked pseudo-element rather than a border, so the
+     ring can be a gradient and the pill keeps its own fill underneath. Brand stops only:
+     signal belongs to the wordmark. Quiet at rest; on hover it brightens, glows and sweeps. */
+  .nav-ai { position: relative; isolation: isolate; }
+  .nav-ai::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    padding: 1.5px;
+    border-radius: inherit;
+    background: linear-gradient(110deg, var(--brand-a), var(--brand-b), var(--brand-a)) 0 0 / 200% 100%;
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    opacity: 0.65;
+    transition: opacity 300ms;
+  }
+  .nav-ai:hover { box-shadow: var(--glow); }
+  .nav-ai:hover::before { opacity: 1; animation: navAiSweep 2.4s linear infinite; }
+
+  /* ── The effects layer ────────────────────────────────────────────────────────────────
+     Specified in the design note, mostly unbuilt until 2026-09-18. All static — the motion
+     budget is spent on the hero's one typing effect. */
+
+  /* A raised surface, as one name: fill, hairline, radius, lit edge and shadow together.
+     `.panel` exists so a card cannot be assembled slightly differently in each of the
+     seventeen places one appears. */
+  /* A CARD — a discrete object sitting in a grid — as one name: fill, sheen, hairline,
+     radius, lit edge and shadow.
+
+     Note it takes `--rule`, not `--panel-border`, in both themes. Those are different jobs:
+     `--panel-border` is transparent in light because a full-width *section* panel separated
+     by a line is what made the first light attempt look dated. A card is not that — it is an
+     object among other objects, and the admin dashboard's cards demonstrate that a hairline
+     at this weight defines them without drawing a box around the page. */
+  .panel {
+    background-color: var(--raised);
+    background-image: var(--panel-sheen);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-panel);
+    box-shadow: var(--lit), var(--shadow-md);
+  }
+
+  /* The lit edge on its own, for a surface that already has its own fill or border. */
+  .lit {
+    background-image: var(--panel-sheen);
+    box-shadow: var(--lit), var(--shadow-sm);
+  }
+
+  /* ── Light-mode texture ───────────────────────────────────────────────────────────────
+     The grey tone is kept exactly; what changes is how much a surface differs from the one
+     behind it. On a dark ground a 1px hairline is enough to separate two surfaces because
+     the eye reads the edge; on a pale ground the same hairline disappears and everything
+     flattens into one sheet. Light therefore needs a little more fill and a little more
+     shadow to say the same thing — not more colour. */
+
+  /* A pill. Eight different spellings existed — `bg-ink/3`, `bg-raised-solid/5`, `bg-well`,
+     bare borders — so chips in the same row could sit at three different depths. */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border-radius: 9999px;
+    border: 1px solid var(--rule);
+    background-color: var(--chip-bg);
+    box-shadow: var(--chip-shadow);
+    color: var(--ink-3);
+    padding: 0.2rem 0.6rem;
+    line-height: 1.4;
+  }
+
+  /* An alternating band. No hard edge and no second background colour — a faint fill and a
+     hairline that fades at both ends, which separates two sections without making the page
+     look striped. */
+  .section-alt {
+    position: relative;
+    background-color: var(--band);
+  }
+  .section-alt::before,
+  .section-alt::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--rule);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent);
+  }
+  .section-alt::before { top: 0; }
+  .section-alt::after { bottom: 0; }
+
+  /* A divider that fades before both ends instead of butting into the container edge. A
+     hairline that stops short reads as drawn; one that runs the full width reads as a table
+     rule. Applied to every bare `hr` in the base layer below. */
+  .rule-fade {
+    height: 1px;
+    border: 0;
+    background: var(--edge);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  }
+
+  /* One card per page may carry an accent ring — a gradient border drawn with
+     mask-composite, so it is a true 1px ring rather than a padded box. Use it on the single
+     most important block on a screen; two of them and neither reads as primary. */
+  .ring-accent {
+    position: relative;
+  }
+  .ring-accent::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(140deg, var(--brand-a), var(--brand-b) 45%, transparent 75%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* ── What survived custom/beauty.css ──────────────────────────────────────────────────
+     That file was 453 lines and 13 classes; 8 of them were used nowhere — `.cursor`, `.btn`,
+     `.floating`, `.nav-link`, `.nav-label`, `.nav-icon`, `.value-card` and
+     `.yhn-dev-side-gradient-1`, several of which styled a navbar that no longer exists. Five
+     were rendered then, rewritten onto tokens so the last theme-blind surface on the site
+     follows the theme like everything else. Two of them — `.hover-effect` and
+     `.footer-nav-link` — lost their last markup with the footer's redesign and went on
+     2026-10-15, with `.nice-border-shadow-*` and the `shimmer` keyframes.
+
+     `.yhn-dev-side-gradient-2` is NOT repeated here — it was already ported when general.css
+     was dismantled, and a second copy is exactly the duplication that pass existed to end. */
+
+  /* The 404 page's split-channel glitch. Kept because it is the one deliberate piece of
+     character on an error page, and because it is decorative it is skipped entirely under
+     reduced motion by the block further down. */
+  .glitch { position: relative; font-weight: 700; }
+  .glitch::before,
+  .glitch::after {
+    content: attr(data-glitch);
+    position: absolute;
+    top: 0;
+    width: 100%;
+    overflow: hidden;
+    clip-path: inset(0 0 100% 0);
+  }
+  .glitch::before { left: -2px; animation: noise-before 2s infinite linear alternate-reverse; }
+  .glitch::after  { left:  2px; animation: noise-after  1s infinite linear alternate-reverse; }
+
+  /* The breathing brand gradient, on the lab cards and the 404 headline. */
+  .text-brand-gradient-breathe {
+    font-weight: 800;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    background-image: linear-gradient(135deg, var(--brand-a) 0%, var(--brand-b) 55%, var(--signal) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+    animation: brandBreathGlow 3.6s ease-in-out infinite;
+  }
+
+  /* The brand gradient used on auth headings. */
+  .yhn-dev-side-gradient-2 {
+    background-image: linear-gradient(135deg, var(--brand-a) 0%, var(--brand-b) 55%, var(--signal) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* The hexagonal ground on the error pages, tinted from the theme rather than two fixed
+     near-blacks. */
+  /* The hexagonal ground, tinted from the theme rather than two fixed near-blacks.
+
+     SIX layers, and all six are load-bearing — the first port of this kept only three and
+     the pattern visibly broke: without the 30deg gradient each hexagon has one diagonal
+     instead of two, and without the 90deg one the tile edges stop blending, so the repeat
+     shows as a hard vertical seam every 64px. If this ever looks "cut", count the layers. */
+  .bg-small-honey-beehive {
+    background-color: var(--ground-a);
+    background-image:
+      radial-gradient(circle farthest-side at 0% 50%, var(--ground-a) 23.5%, #0000 0),
+      radial-gradient(circle farthest-side at 0% 50%, var(--ground-b) 24%, #0000 0),
+      linear-gradient(var(--ground-a) 14%, #0000 0, #0000 85%, var(--ground-a) 0),
+      linear-gradient(150deg, var(--ground-a) 24%, var(--ground-b) 0, var(--ground-b) 26%, #0000 0, #0000 74%, var(--ground-b) 0, var(--ground-b) 76%, var(--ground-a) 0),
+      linear-gradient(30deg, var(--ground-a) 24%, var(--ground-b) 0, var(--ground-b) 26%, #0000 0, #0000 74%, var(--ground-b) 0, var(--ground-b) 76%, var(--ground-a) 0),
+      linear-gradient(90deg, var(--ground-b) 2%, var(--ground-a) 0, var(--ground-a) 98%, var(--ground-b) 0);
+    background-position: 33.6px 48px, 30.4px 48px, 0 0, 0 0, 0 0, 0 0;
+    background-size: 64px 96px;
+  }
+}
+
+/* Decorative motion is suppressed wholesale under reduced motion. The list was five classes
+   that no longer exist — `.floating`, `.cursor`, `.value-card`, `.skill-badge`, `.btn`, all
+   removed with beauty.css — and it named none of the animations that actually run. */
+@media (prefers-reduced-motion: reduce) {
+  .glitch::before,
+  .glitch::after,
+  .text-brand-gradient-breathe,
+  .nav-ai:hover::before {
+    animation: none !important;
+    transition: none !important;
+  }
+  /* The glitch's offset layers are the effect; with the animation stopped they are just
+     two blurred copies of the text, so they go entirely. */
+  .glitch::before,
+  .glitch::after { display: none; }
+}
+
+@keyframes navAiSweep {
+  to { background-position: 200% 0; }
+}
+
+/* Keyframes for the five rules above, lifted verbatim from beauty.css. They are pure
+   motion and carry no colour, so nothing in them needed converting. */
+@keyframes brandBreathGlow {
+    0%, 100% {
+        opacity: 0.78;
+        filter: drop-shadow(0 0 0 rgba(116, 249, 242, 0));
     }
+    50% {
+        opacity: 1;
+        filter: drop-shadow(0 0 10px rgba(116, 249, 242, 0.25));
+    }
+}
+
+@keyframes noise-before {
+  0% {
+     clip: rect(61px, 9999px, 52px, 0);
+  }
+
+  5% {
+     clip: rect(33px, 9999px, 144px, 0);
+  }
+
+  10% {
+     clip: rect(121px, 9999px, 115px, 0);
+  }
+
+  15% {
+     clip: rect(144px, 9999px, 162px, 0);
+  }
+
+  20% {
+     clip: rect(62px, 9999px, 180px, 0);
+  }
+
+  25% {
+     clip: rect(34px, 9999px, 42px, 0);
+  }
+
+  30% {
+     clip: rect(147px, 9999px, 179px, 0);
+  }
+
+  35% {
+     clip: rect(99px, 9999px, 63px, 0);
+  }
+
+  40% {
+     clip: rect(188px, 9999px, 122px, 0);
+  }
+
+  45% {
+     clip: rect(154px, 9999px, 14px, 0);
+  }
+
+  50% {
+     clip: rect(63px, 9999px, 37px, 0);
+  }
+
+  55% {
+     clip: rect(161px, 9999px, 147px, 0);
+  }
+
+  60% {
+     clip: rect(109px, 9999px, 175px, 0);
+  }
+
+  65% {
+     clip: rect(157px, 9999px, 88px, 0);
+  }
+
+  70% {
+     clip: rect(173px, 9999px, 131px, 0);
+  }
+
+  75% {
+     clip: rect(62px, 9999px, 70px, 0);
+  }
+
+  80% {
+     clip: rect(24px, 9999px, 153px, 0);
+  }
+
+  85% {
+     clip: rect(138px, 9999px, 40px, 0);
+  }
+
+  90% {
+     clip: rect(79px, 9999px, 136px, 0);
+  }
+
+  95% {
+     clip: rect(25px, 9999px, 34px, 0);
+  }
+
+  100% {
+     clip: rect(173px, 9999px, 166px, 0);
+  }
+}
+
+@keyframes noise-after {
+  0% {
+     clip: rect(26px, 9999px, 33px, 0);
+  }
+
+  5% {
+     clip: rect(140px, 9999px, 198px, 0);
+  }
+
+  10% {
+     clip: rect(184px, 9999px, 89px, 0);
+  }
+
+  15% {
+     clip: rect(121px, 9999px, 6px, 0);
+  }
+
+  20% {
+     clip: rect(181px, 9999px, 99px, 0);
+  }
+
+  25% {
+     clip: rect(154px, 9999px, 133px, 0);
+  }
+
+  30% {
+     clip: rect(134px, 9999px, 169px, 0);
+  }
+
+  35% {
+     clip: rect(26px, 9999px, 187px, 0);
+  }
+
+  40% {
+     clip: rect(147px, 9999px, 137px, 0);
+  }
+
+  45% {
+     clip: rect(31px, 9999px, 52px, 0);
+  }
+
+  50% {
+     clip: rect(191px, 9999px, 109px, 0);
+  }
+
+  55% {
+     clip: rect(74px, 9999px, 54px, 0);
+  }
+
+  60% {
+     clip: rect(145px, 9999px, 75px, 0);
+  }
+
+  65% {
+     clip: rect(153px, 9999px, 198px, 0);
+  }
+
+  70% {
+     clip: rect(99px, 9999px, 136px, 0);
+  }
+
+  75% {
+     clip: rect(118px, 9999px, 192px, 0);
+  }
+
+  80% {
+     clip: rect(1px, 9999px, 83px, 0);
+  }
+
+  85% {
+     clip: rect(145px, 9999px, 98px, 0);
+  }
+
+  90% {
+     clip: rect(121px, 9999px, 154px, 0);
+  }
+
+  95% {
+     clip: rect(156px, 9999px, 44px, 0);
+  }
+
+  100% {
+     clip: rect(67px, 9999px, 122px, 0);
+  }
 }
