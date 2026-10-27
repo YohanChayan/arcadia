@@ -829,7 +829,11 @@ to an account with none, and the shell's `PasskeyOffer` turns it into a one-tap 
 the device has a built-in authenticator (`isUserVerifyingPlatformAuthenticatorAvailable`) and this
 browser has not declined ("not now" waits a week, "never" is for good; `lib/passkey-device.ts`,
 local storage, never the server). A browser that registered a passkey remembers it, and `/login`
-puts the passkey above Google there. The passkey URLs in the frontend are written out rather than imported from
+puts the passkey above Google there. Passkeys are bound to `APP_URL`'s host (the relying party), and
+their user handles to `PASSKEYS_USER_HANDLE_SECRET`, which falls back to `APP_KEY`: moving the host
+or rotating that secret strands every passkey made before it. Switching passkeys'
+`confirmPassword` off instead was rejected — a stolen session could then plant a passkey and keep
+the account. The passkey URLs in the frontend are written out rather than imported from
 Wayfinder, so a build never depends on the switch.
 
 **The account settings** (`pages/settings/*`, the kit's Profile and Security) render inside the
