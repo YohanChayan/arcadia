@@ -4,13 +4,14 @@
  * here on request, a site, or the guide's own words. A line whose source has gone says so and
  * offers nothing broken.
  *
- * A clip's "next", at its end, ticks the line and takes the reader to the one after it.
+ * A clip's "next", at its end, ticks the line and asks the page for the one after it — which may be
+ * in a folded stage, to open, or a locked one, to stop at.
  *
  * For a signed-in reader, its notes: a row under the line — under the video, never over it — with
  * how many there are at one edge and "add a note" at the other. Either opens them: in the side
  * panel on a wide screen, in a sheet on a phone (`useGuideNotes`).
  */
-import { computed, inject, ref } from 'vue'
+import { computed, inject } from 'vue'
 import { Check, ExternalLink, NotebookPen, Plus } from '@lucide/vue'
 import VideoEmbed from './VideoEmbed.vue'
 import { clipLabel as describeClip } from '@/lib/clock.js'
@@ -20,18 +21,15 @@ const props = defineProps({
     done: { type: Boolean, default: false },
 })
 
-const emit = defineEmits(['toggle'])
+const emit = defineEmits(['toggle', 'next'])
 
-const line = ref(null)
-
-// The clip is watched: done, and on to the next line of the guide, wherever it is.
+// The clip is watched: done, and on to the next line of the guide, wherever the page finds it.
 const next = () => {
     if (!props.done) {
         emit('toggle')
     }
 
-    const lines = [...document.querySelectorAll('[data-guide-line]')]
-    lines[lines.indexOf(line.value) + 1]?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    emit('next')
 }
 
 const isYoutube = computed(() => ['youtube_video', 'youtube_playlist'].includes(props.item.kind))
@@ -46,7 +44,7 @@ const noteCount = computed(() => notes?.countFor(target.value) ?? 0)
 </script>
 
 <template>
-    <li ref="line" data-guide-line class="flex list-none scroll-mt-24 gap-3 py-3">
+    <li :data-guide-line="item.key" class="flex list-none scroll-mt-24 gap-3 py-3">
         <button type="button" role="checkbox" :aria-checked="done" :aria-label="`${$t('arcadia.reader.mark_done')}: ${item.title}`"
                 class="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-md border-2 transition-colors"
                 :class="done ? 'border-guide-done bg-guide-done text-guide-on-accent' : 'border-guide-rule hover:border-guide-accent'"

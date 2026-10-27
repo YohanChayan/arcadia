@@ -192,4 +192,26 @@ class GuideReaderTest extends TestCase
 
         $this->assertSame(['video' => 'dQw4w9WgXcQ', 'start' => 163], app(GuidePresenter::class)->embed($item));
     }
+
+    public function test_a_line_says_roughly_how_long_it_takes_from_its_clip_else_its_brief(): void
+    {
+        $video = Item::query()->where('kind', ItemKind::YOUTUBE_VIDEO)->sole();
+        $practice = Item::query()->where('kind', ItemKind::PRACTICE)->sole();
+        $minutes = function () {
+            $version = $this->guide->latestVersion()->fresh();
+
+            return collect(app(GuidePresenter::class)->present($this->guide, $version)['stages'][0]['cards'][0]['items'])->pluck('minutes')->all();
+        };
+
+        $this->assertSame([null, null], $minutes());
+
+        // A clip with an end is its own length, whatever the brief says; a part minute is a minute.
+        $video->forceFill(['clip_start' => 840, 'clip_end' => 1090, 'brief' => ['duration' => '20 min']])->save();
+        $this->assertSame(5, $minutes()[0]);
+
+        foreach (['6 min' => 6, '8 min de lectura' => 8, '3:33' => 4, '—' => null, 'unos minutos' => null] as $duration => $expected) {
+            $practice->forceFill(['brief' => ['duration' => $duration]])->save();
+            $this->assertSame($expected, $minutes()[1], $duration);
+        }
+    }
 }

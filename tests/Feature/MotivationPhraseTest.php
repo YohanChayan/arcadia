@@ -18,7 +18,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 /**
- * Short motivation phrases: per language and moment, seeded twenty a language, shown to a reader
+ * Short motivation phrases: per language and moment, seeded twenty-four a language, shown to a reader
  * on "My guides" — one welcoming them, one per guide for where they stand — from the guide's own
  * choice when it made one, and kept by the owner in the editor.
  */
@@ -53,13 +53,13 @@ class MotivationPhraseTest extends TestCase
         $this->actingAs(User::factory()->withRole(Role::ALIAS_ADMIN)->create(['approved_at' => now()]));
     }
 
-    public function test_twenty_phrases_a_language_are_seeded_once_across_every_moment(): void
+    public function test_twenty_four_phrases_a_language_are_seeded_once_across_every_moment(): void
     {
         $this->seed(GuidePhraseSeeder::class);
         $this->seed(GuidePhraseSeeder::class);
 
         foreach (['es', 'en'] as $locale) {
-            $this->assertSame(20, Phrase::query()->where('locale', $locale)->count());
+            $this->assertSame(24, Phrase::query()->where('locale', $locale)->count());
 
             foreach (PhraseMoment::cases() as $moment) {
                 $this->assertTrue(Phrase::query()->where('locale', $locale)->where('moment', $moment)->exists(), "{$locale} {$moment->value}");
@@ -156,6 +156,27 @@ class MotivationPhraseTest extends TestCase
         $this->signInAsOwner();
         $this->flushSession();
         $this->get($url)->assertInertia(fn ($page) => $page->where('motivation', null));
+    }
+
+    public function test_the_guide_page_brings_its_reader_the_phrases_to_cheer_a_stage_and_the_guide(): void
+    {
+        Phrase::create(['locale' => 'es', 'moment' => PhraseMoment::STAGE_DONE, 'text' => 'Etapa superada, {name}.']);
+        Phrase::create(['locale' => 'es', 'moment' => PhraseMoment::STAGE_DONE, 'text' => 'Una menos.']);
+        $chosen = Phrase::create(['locale' => 'es', 'moment' => PhraseMoment::DONE, 'text' => 'Guía completa, {name}.']);
+        Phrase::create(['locale' => 'es', 'moment' => PhraseMoment::DONE, 'text' => 'No elegida.']);
+        Phrase::create(['locale' => 'en', 'moment' => PhraseMoment::STAGE_DONE, 'text' => 'Stage cleared.']);
+        $this->guide->phrases()->attach($chosen);
+
+        $url = "/guia/{$this->guide->link_token}";
+
+        // Every phrase it may show, worded for the reader: the guide's choice, else its language's.
+        $this->actingAs($this->ana)->get($url)->assertInertia(fn ($page) => $page
+            ->where('celebration.stage', ['Etapa superada, María.', 'Una menos.'])
+            ->where('celebration.done', ['Guía completa, María.']));
+
+        // The owner reading as-is is not cheered.
+        $this->signInAsOwner();
+        $this->get($url)->assertInertia(fn ($page) => $page->where('celebration', null));
     }
 
     public function test_the_owner_keeps_this_languages_phrases_and_chooses_a_guides(): void

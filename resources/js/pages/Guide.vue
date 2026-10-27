@@ -18,11 +18,23 @@
  * it, in collapsible toggles per stage and line (`NotesAside`); on a phone each line and stage
  * opens its notes in a sheet (`NotesSheet`). The owner and the preview get neither.
  *
+ * Stages fold, and for a reader of a guide that unlocks in order (`progress.unlockInOrder`) they
+ * open one after another. Nothing about it is stored: a stage is open when it is the first, when
+ * the one before it is open and complete, or when it or a later stage already holds a tick — so
+ * a later version that adds lines or stages behind a reader never shuts one they were in. The
+ * owner and the preview get no flag, and nothing locks. The last stage open to the reader starts
+ * expanded, the rest folded; with nothing locked, the first with a line left to do. A stage that
+ * opens during the visit unfolds.
+ *
+ * A tick that completes a stage in this visit — never on load, so a reload does not replay it —
+ * cheers at the stage's end: what the reader can now do (its goal), a phrase from `celebration`
+ * (a stage's, or the guide's on the last one) and the way on to the next stage.
+ *
  * A reader's first visit to the guide in a session brings a `motivation` phrase, popped up once
  * as a toast. The server sends it once per session; this browser also remembers it showed it, so
  * going Back to the page — which restores the props it had — does not show it twice.
  */
-import { computed, onMounted, provide, ref } from 'vue'
+import { computed, nextTick, onMounted, provide, ref, watch } from 'vue'
 import { useMediaQuery } from '@vueuse/core'
 import { toast } from 'vue-sonner'
 import { Eye, Palette } from '@lucide/vue'
@@ -46,7 +58,7 @@ const props = defineProps({
     appearance: { type: Object, default: () => ({}) },
     // { palette, accent, saveUrl, options } for a signed-in reader of this guide, else null.
     readerAppearance: { type: Object, default: null },
-    // { ticked, saveUrl } for a signed-in reader of this guide, else null.
+    // { ticked, saveUrl, unlockInOrder } for a signed-in reader of this guide, else null.
     progress: { type: Object, default: null },
     // { list, storeUrl, maxLength } — the reader's own notes — for a signed-in reader, else null.
     notes: { type: Object, default: null },
@@ -57,6 +69,8 @@ const props = defineProps({
     readerName: { type: String, default: null },
     // A phrase for where the reader stands on it, on their first visit in a session, else null.
     motivation: { type: String, default: null },
+    // { stage, done } — the phrases to cheer a stage, and the whole guide, completed here; else null.
+    celebration: { type: Object, default: null },
     pageTitle: String,
     noIndex: Boolean,
 })
@@ -85,6 +99,85 @@ const titleFor = target => target.kind === 'stage'
     : props.stages.flatMap(stage => stage.cards.flatMap(card => card.items)).find(item => item.key === target.key)?.title
 
 const keys = computed(() => props.stages.flatMap(stage => stage.cards.flatMap(card => card.items.map(item => item.key))))
+
+const stageKeys = computed(() => props.stages.map(stage => stage.cards.flatMap(card => card.items.map(item => item.key))))
+
+// Which stages are open to the reader, in order. Only a reader's own page carries the flag.
+const unlocked = computed(() => {
+    const ordered = Boolean(props.progress?.unlockInOrder)
+    const started = stageKeys.value.map(lines => progress.count(lines) > 0)
+
+    return stageKeys.value.reduce((open, lines, index) => {
+        const previous = stageKeys.value[index - 1]
+        const afterComplete = index === 0 || (open[index - 1] && progress.count(previous) === previous.length)
+
+        return [...open, !ordered || afterComplete || started.slice(index).some(Boolean)]
+    }, [])
+})
+
+const firstExpanded = () => {
+    if (props.progress?.unlockInOrder) {
+        return unlocked.value.lastIndexOf(true)
+    }
+
+    const unfinished = stageKeys.value.findIndex(lines => progress.count(lines) < lines.length)
+    return unfinished === -1 ? stageKeys.value.length - 1 : unfinished
+}
+
+const expanded = ref(new Set([props.stages[firstExpanded()]?.key]))
+
+const fold = key => {
+    const next = new Set(expanded.value)
+    next.has(key) ? next.delete(key) : next.add(key)
+    expanded.value = next
+}
+
+// A stage opened by a tick in this visit unfolds, ready for its first line.
+watch(unlocked, (now, before) => {
+    const opened = props.stages.filter((stage, index) => now[index] && !before[index])
+    if (opened.length) {
+        expanded.value = new Set([...expanded.value, ...opened.map(stage => stage.key)])
+    }
+})
+
+// The stage a tick just completed here, and the phrase to cheer it with.
+const complete = computed(() => stageKeys.value.map(lines => lines.length > 0 && progress.count(lines) === lines.length))
+const celebrating = ref(null)
+
+watch(complete, (now, before) => {
+    if (celebrating.value && !now[props.stages.findIndex(stage => stage.key === celebrating.value.key)]) {
+        celebrating.value = null
+    }
+
+    const index = now.findIndex((done, at) => done && !before[at])
+    if (index === -1) return
+
+    const guide = progress.count(keys.value) === keys.value.length
+    const phrases = (guide ? props.celebration?.done : props.celebration?.stage) ?? []
+    celebrating.value = { key: props.stages[index].key, guide, phrase: phrases[Math.floor(Math.random() * phrases.length)] ?? null }
+})
+
+// On to a stage: unfolded, and in view.
+const goToStage = async index => {
+    const stage = props.stages[index]
+    if (!stage) return
+
+    expanded.value = new Set([...expanded.value, stage.key])
+    await nextTick()
+    document.querySelector(`[data-stage-key="${CSS.escape(stage.key)}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
+
+// A clip's "next": the line after it, unfolding its stage — or nowhere, when that stage is locked.
+const lines = computed(() => props.stages.flatMap((stage, index) => stage.cards.flatMap(card => card.items.map(item => ({ key: item.key, stage: index })))))
+
+const goNext = async key => {
+    const after = lines.value[lines.value.findIndex(line => line.key === key) + 1]
+    if (!after || !unlocked.value[after.stage]) return
+
+    expanded.value = new Set([...expanded.value, props.stages[after.stage].key])
+    await nextTick()
+    document.querySelector(`[data-guide-line="${CSS.escape(after.key)}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
 
 onMounted(() => {
     if (!props.motivation) return
@@ -140,7 +233,10 @@ const after = computed(() => props.sections.filter(section => section.kind !== '
                 </section>
 
                 <div class="mt-8 flex flex-col gap-6">
-                    <ReaderStage v-for="(stage, index) in stages" :key="stage.key" :stage="stage" :number="index + 1" :progress="progress" />
+                    <ReaderStage v-for="(stage, index) in stages" :key="stage.key" :stage="stage" :number="index + 1" :progress="progress"
+                                 :expanded="expanded.has(stage.key)" :locked="!unlocked[index]"
+                                 :celebration="celebrating?.key === stage.key ? celebrating : null" :last="index === stages.length - 1"
+                                 @fold="fold(stage.key)" @next="goNext" @onward="goToStage(index + 1)" />
                 </div>
 
                 <section v-for="section in after" :key="section.key" class="mt-8">

@@ -227,4 +227,22 @@ class GuideProgressTest extends TestCase
                 ->where('guides.1.progress.links', ['done' => 1, 'total' => 1])
                 ->where('guides.1.progress.done', 1));
     }
+
+    public function test_only_the_reader_is_told_whether_its_stages_unlock_in_order(): void
+    {
+        $this->actingAs($this->ana)->get($this->link())
+            ->assertInertia(fn ($page) => $page->where('progress.unlockInOrder', true));
+
+        $this->guide->update(['unlock_in_order' => false]);
+
+        $this->actingAs($this->ana)->get($this->link())
+            ->assertInertia(fn ($page) => $page->where('progress.unlockInOrder', false));
+
+        // The owner reads every stage open: there is no flag to lock with.
+        $this->guide->update(['unlock_in_order' => true]);
+        $admin = User::factory()->withRole(Role::ALIAS_ADMIN)->create(['approved_at' => now()]);
+
+        $this->actingAs($admin)->get($this->link())
+            ->assertInertia(fn ($page) => $page->where('progress', null));
+    }
 }

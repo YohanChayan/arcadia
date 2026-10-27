@@ -27,9 +27,26 @@ class MotivationPicker
     /** For a guide's card: where the reader stands on it. Its `phrases` should be loaded. */
     public function forGuide(Guide $guide, PhraseMoment $moment, ?string $name): ?string
     {
+        return $this->pick($this->candidates($guide, $moment), $name);
+    }
+
+    /**
+     * Every phrase a guide may show at a moment, worded for the reader: for the page to pick
+     * from when the moment comes while it is open, as a stage completed by a tick.
+     *
+     * @return list<string>
+     */
+    public function allForGuide(Guide $guide, PhraseMoment $moment, ?string $name): array
+    {
+        return $this->candidates($guide, $moment)->map(fn (Phrase $phrase) => $phrase->forReader($name))->values()->all();
+    }
+
+    /** @return Collection<int, Phrase> the guide's own choice for the moment, else every one of its language */
+    private function candidates(Guide $guide, PhraseMoment $moment): Collection
+    {
         $chosen = $guide->phrases->where('moment', $moment);
 
-        return $this->pick($chosen->isNotEmpty() ? $chosen : $this->all($guide->locale)->where('moment', $moment), $name);
+        return $chosen->isNotEmpty() ? $chosen : $this->all($guide->locale)->where('moment', $moment);
     }
 
     /** @param  Collection<int, Phrase>  $phrases */

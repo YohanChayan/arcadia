@@ -117,6 +117,8 @@ class GuidePageController
             'progress' => $reader ? [
                 'ticked' => $reader->tickedKeys(),
                 'saveUrl' => route("{$site->locale()}.reader.progress", $reader),
+                // Only beside a reader's progress: the owner and the preview never see a stage locked.
+                'unlockInOrder' => $guide->unlock_in_order,
             ] : null,
             // Their own notes, on lines and stages. None for the owner: notes are a reader's.
             'notes' => $reader ? [
@@ -129,6 +131,11 @@ class GuidePageController
             // What the greeting calls them, highlighted. None for the owner reading as-is.
             'readerName' => $reader?->displayName(),
             'motivation' => $reader ? $this->motivationOnce($request, $guide, $reader, $version, $summary, $motivation) : null,
+            // What to cheer with when a tick completes a stage here — the guide too, on the last.
+            'celebration' => $reader ? [
+                'stage' => $motivation->allForGuide($guide, PhraseMoment::STAGE_DONE, $reader->displayName()),
+                'done' => $motivation->allForGuide($guide, PhraseMoment::DONE, $reader->displayName()),
+            ] : null,
         ])->toResponse($request);
     }
 

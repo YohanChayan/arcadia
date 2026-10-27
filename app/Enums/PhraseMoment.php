@@ -11,6 +11,8 @@ enum PhraseMoment: string
     case WELCOME = 'welcome';
     case START = 'start';
     case PROGRESS = 'progress';
+    /** A stage just completed, on the guide page — never the whole guide, which is `DONE`. */
+    case STAGE_DONE = 'stage_done';
     case ALMOST = 'almost';
     case DONE = 'done';
 

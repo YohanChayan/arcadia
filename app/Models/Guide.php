@@ -31,6 +31,7 @@ class Guide extends Model
         'counterpart_id',
         'status',
         'open_for_enrollment',
+        'unlock_in_order',
         'greeting',
         'pitch',
         'goals',
@@ -44,6 +45,7 @@ class Guide extends Model
         'default_palette' => Palette::class,
         'default_accent' => Accent::class,
         'open_for_enrollment' => 'boolean',
+        'unlock_in_order' => 'boolean',
         'prompt_values' => 'array',
         'curator_notes' => 'array',
         // Its own lines of text — what the reader will be able to do — never a shared term (ADR 0020).

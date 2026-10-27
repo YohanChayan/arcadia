@@ -9,6 +9,9 @@
  * draws on are chosen here too, by moment — only the moments a guide chooses for, as the server
  * sends them (not the welcome, which is every guide's); choosing none leaves it all of them.
  * "Suggest" picks a few per moment at random, on the form only — nothing is saved until the form is.
+ *
+ * "Unlock stages in order", on for a new guide: a reader opens each stage once the one before it
+ * is complete. Off, for a guide read as a reference, every stage is open.
  */
 import { useForm } from '@inertiajs/vue3'
 import { ArrowLeft, Check, Shuffle } from '@lucide/vue'
@@ -19,6 +22,7 @@ import { Field, FieldDescription, FieldError, FieldLabel } from '@/components/ui
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Switch } from '@/components/ui/switch'
 import { useEditorRoute } from '@/composables/useEditorRoute.js'
 
 const props = defineProps({
@@ -50,6 +54,7 @@ const form = useForm({
     // One goal per line in the box; sent as a list.
     goals: (props.guide?.goals ?? []).join('\n'),
     greeting: props.guide?.greeting ?? '',
+    unlock_in_order: props.guide?.unlock_in_order ?? true,
 })
 
 const phrasesFor = moment => props.phrases.filter(phrase => phrase.moment === moment)
@@ -193,6 +198,16 @@ const submit = () => {
                 <FieldError v-if="form.errors.greeting">{{ form.errors.greeting }}</FieldError>
                 <FieldDescription v-else>{{ $t('arcadia.editor.guides.fields.greeting_hint') }}</FieldDescription>
             </Field>
+
+            <div class="flex items-start justify-between gap-4">
+                <div class="min-w-0">
+                    <FieldLabel for="unlock_in_order">
+                        <Eyebrow as="span">{{ $t('arcadia.editor.guides.fields.unlock_in_order') }}</Eyebrow>
+                    </FieldLabel>
+                    <p class="mt-1 mb-0 text-sm text-ink-3">{{ $t('arcadia.editor.guides.fields.unlock_in_order_hint') }}</p>
+                </div>
+                <Switch id="unlock_in_order" v-model="form.unlock_in_order" />
+            </div>
         </div>
 
         <div class="mt-8 flex flex-wrap items-center gap-3 border-t border-rule pt-6">

@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 /**
  * Create or update a guide's description — what it is, not what is in it: title, level,
- * category, status, the greeting its reader sees first, its goals — its own lines of text — the
+ * category, status, the greeting its reader sees first, whether its stages unlock in order, its goals — its own lines of text — the
  * topics it is filed under and the motivation phrases it draws on. Its content lives in its versions and is edited there.
  *
  * The locale is the site's, given by the caller, and fixed once the guide exists: a Spanish
@@ -32,8 +32,9 @@ class SaveGuide
         array $goals,
         ?string $greeting = null,
         ?array $phraseIds = null,
+        ?bool $unlockInOrder = null,
     ): Guide {
-        return DB::transaction(function () use ($guide, $locale, $title, $level, $categoryId, $status, $topicIds, $goals, $greeting, $phraseIds) {
+        return DB::transaction(function () use ($guide, $locale, $title, $level, $categoryId, $status, $topicIds, $goals, $greeting, $phraseIds, $unlockInOrder) {
             $guide ??= new Guide(['locale' => $locale]);
 
             $guide->fill([
@@ -43,7 +44,10 @@ class SaveGuide
                 'status' => $status,
                 'greeting' => $greeting,
                 'goals' => Guide::goalLines($goals) ?: null,
-            ])->save();
+            ])
+                // Null leaves it as it was, the column's default on a new guide.
+                ->fill($unlockInOrder === null ? [] : ['unlock_in_order' => $unlockInOrder])
+                ->save();
 
             $guide->topics()->sync($topicIds);
             // Null leaves the choice as it was: a caller that does not offer it does not clear it.

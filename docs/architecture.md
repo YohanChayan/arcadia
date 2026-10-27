@@ -138,6 +138,25 @@ what else exists. It is `noindex`, with its own canonical.
   (`useGuideProgress`). Keyed by item key, so a reader moved to a new version keeps every tick on
   a line that survived; by guide id, not the token, so rotating a link keeps it too. The owner
   reading as-is and the editor's preview get no `progress`: their ticks last for the visit.
+- **Stages fold, and open in order** (`guides.unlock_in_order`, on by default, switched on the
+  guide's form). The switch reaches the page only inside a reader's `progress` (`unlockInOrder`),
+  so the owner reading as-is and the preview never see a lock. **The lock is derived in the page,
+  never stored**: a stage is open when it is the first, when the one before it is open and
+  complete, or when it or any later stage already holds a tick — so a later version that adds
+  lines or stages behind a reader never shuts a stage they were in, and nothing is migrated when
+  stages change. The last stage open to the reader starts expanded, the rest folded; with nothing
+  locked, the first with a line left. A locked stage still opens, to its lines under a layer that
+  takes no clicks (`inert`), with how many steps and roughly how long — each line's `minutes`,
+  from its clip's length, else its brief's `duration`, never `hint` — and the stage to finish
+  first. A clip's **next** unfolds the stage of the line after it, and stops at a locked one. The
+  server takes a tick on any line of the version all the same: the lock guides, it does not guard.
+- **A stage completed by a tick cheers** — in that visit only, so a reload never replays it. The
+  stage ends in a card: complete (the guide, on the last), "you can now" and the stage's goal, a
+  phrase, and the way on to the next stage, popping in unless the reader asked for less motion.
+  The phrases arrive with the page as `celebration` (`MotivationPicker::allForGuide()`): every one
+  the guide may show for `PhraseMoment::STAGE_DONE`, and for `DONE` on the last stage, worded for
+  the reader — the done phrases say the guide is finished, so a stage never uses them. None for the
+  owner or the preview, who get the card without a phrase.
 - **Its own components, its own colours.** `components/reader/` read only the
   `--guide-*` tokens (`app.css`), never `--accent` or a literal, and the page sets them on its
   root from its `appearance` prop — see § A guide's colours. **The one exception is the video's
@@ -333,13 +352,13 @@ Arcadia membership — and **not** `approved`, since the membership is a reader'
   the run, and how to keep it today or start one, once the reader has a guide.
 - **Motivation phrases** on the dashboard (`MotivationPicker`): one welcoming them under the
   title, and one on each readable guide's card for where they stand on it — `PhraseMoment`, from
-  its progress: not started, under way, nearly done (three quarters), done. One at random each
+  its progress: not started, under way, nearly done (three quarters), done. A sixth, **stage done**, is shown only on the guide page (§ The reader's page). One at random each
   visit, from the guide's own choice for that moment when it made one (`guide_phrase_guide`), else
   from every phrase of the language; none shown when there is none. `{name}` becomes the reader's
   name (`Phrase::forReader()`), or is taken out. Kept on the editor's **Frases** screen
   (`Editor\PhraseController`), short — up to `Phrase::MAX_LENGTH` — and chosen per guide in its
   form, for every moment but the welcome (`PhraseMoment::perGuide()`): the welcome greets all of a
-  reader's guides at once, so it always draws on every welcome phrase; `GuidePhraseSeeder` writes twenty a language, once. `MotivationPhraseTest` holds each rule.
+  reader's guides at once, so it always draws on every welcome phrase; `GuidePhraseSeeder` writes twenty-four a language, once. `MotivationPhraseTest` holds each rule.
 - **The same phrase on the guide page**, as a popup (`GuidePageController`, `motivation`): the
   phrase for where the reader stands on that guide, sent only on their first visit to it in a
   session — the session keeps `arcadia.motivated.<guide id>` — and shown once as a toast. The page

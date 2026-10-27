@@ -42,6 +42,8 @@ class GuideRequest extends FormRequest
             'phrase_ids.*' => ['integer', Rule::exists('guide_phrases', 'id')->where('locale', $locale)
                 ->whereIn('moment', array_map(fn (PhraseMoment $moment) => $moment->value, PhraseMoment::perGuide()))],
             'greeting' => ['nullable', 'string', 'max:2000'],
+            // Whether a reader opens its stages one after another.
+            'unlock_in_order' => ['sometimes', 'boolean'],
         ];
     }
 

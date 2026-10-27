@@ -231,4 +231,21 @@ class GuideEditorTest extends TestCase
                 ->has('lists.categories', 0)
                 ->missing('lists.goals'));
     }
+
+    public function test_stages_unlock_in_order_until_the_owner_switches_it_off(): void
+    {
+        $this->post('/es/editor/guides', ['title' => 'Excel', 'level' => 'basic', 'status' => 'draft'])->assertRedirect();
+        $guide = Guide::query()->sole();
+        $this->assertTrue($guide->unlock_in_order);
+
+        $this->put("/es/editor/guides/{$guide->id}", ['title' => 'Excel', 'level' => 'basic', 'status' => 'draft', 'unlock_in_order' => false])->assertRedirect();
+        $this->assertFalse($guide->fresh()->unlock_in_order);
+
+        $this->get("/es/editor/guides/{$guide->id}/edit")
+            ->assertInertia(fn ($page) => $page->where('guide.unlock_in_order', false));
+
+        // A save that does not send it leaves it as it was.
+        $this->put("/es/editor/guides/{$guide->id}", ['title' => 'Excel', 'level' => 'basic', 'status' => 'draft'])->assertRedirect();
+        $this->assertFalse($guide->fresh()->unlock_in_order);
+    }
 }

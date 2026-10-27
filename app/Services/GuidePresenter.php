@@ -59,7 +59,33 @@ class GuidePresenter
             'kind' => $item->kind->value,
             'embed' => $embed,
             'clip' => isset($embed['start']) ? ['start' => $embed['start'], 'end' => $embed['end'] ?? null] : null,
+            'minutes' => $this->minutes($item),
         ];
+    }
+
+    /**
+     * Roughly how long the line takes, for a locked stage's preview: the clip's length when it has
+     * an end, else the minutes its brief gives (`6 min`, `8 min de lectura`, `3:33`), else null.
+     * Only the number leaves the brief, which is never sent to a reader. Never `hint`, which is
+     * free text, and never the step length, which is the research's target, not the line's.
+     */
+    private function minutes(Item $item): ?int
+    {
+        if ($item->clip_start !== null && $item->clip_end !== null) {
+            return max(1, (int) ceil(($item->clip_end - $item->clip_start) / 60));
+        }
+
+        $duration = (string) data_get($item->brief, 'duration');
+
+        if (preg_match('/^\s*(\d+):(\d{2})\b/', $duration, $clock)) {
+            return max(1, (int) ceil(((int) $clock[1] * 60 + (int) $clock[2]) / 60));
+        }
+
+        if (preg_match('/^\s*(\d+)\s*min/i', $duration, $count)) {
+            return max(1, (int) $count[1]);
+        }
+
+        return null;
     }
 
     /**

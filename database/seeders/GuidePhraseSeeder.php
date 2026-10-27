@@ -7,7 +7,7 @@ use App\Models\Phrase;
 use Illuminate\Database\Seeder;
 
 /**
- * Twenty starter motivation phrases per language, spread over the moments they are shown at —
+ * Twenty-four starter motivation phrases per language, spread over the moments they are shown at —
  * short enough to be read in a glance. Idempotent by text: run again, it adds only what is not
  * there and never changes a phrase the owner edited — though one the owner deleted comes back.
  */
@@ -48,6 +48,12 @@ class GuidePhraseSeeder extends Seeder
                     'No pares ahora: ya agarraste ritmo.',
                     'Lo que hoy cuesta, mañana sale solo.',
                 ],
+                'stage_done' => [
+                    '¡Etapa superada, {name}! Vamos por la siguiente.',
+                    'Una etapa menos. Ya sabes hacer algo nuevo.',
+                    'Esto ya es tuyo. Sigue con la próxima.',
+                    'Bien hecho. La siguiente etapa te espera.',
+                ],
                 'almost' => [
                     '¡Ya casi! Te falta muy poco.',
                     'Estás a un empujón de terminar.',
@@ -79,6 +85,12 @@ class GuidePhraseSeeder extends Seeder
                     'Little by little, you get far.',
                     'Do not stop now: you have found your pace.',
                     'What is hard today comes easy tomorrow.',
+                ],
+                'stage_done' => [
+                    'Stage cleared, {name}! On to the next.',
+                    'One stage down. You can do something new now.',
+                    'This is yours now. Keep going.',
+                    'Well done. The next stage is waiting.',
                 ],
                 'almost' => [
                     'Almost there! Just a little left.',

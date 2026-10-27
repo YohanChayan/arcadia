@@ -104,6 +104,7 @@ class GuideController
                 'goals' => $guide->goals ?? [],
                 'phrase_ids' => $guide->phrases()->whereIn('moment', PhraseMoment::perGuide())->pluck('guide_phrases.id'),
                 'greeting' => $guide->greeting,
+                'unlock_in_order' => $guide->unlock_in_order,
                 'curator_notes' => $guide->curator_notes,
             ],
             // What researched it, when it was started from a request's prompt.
@@ -167,6 +168,7 @@ class GuideController
             $request->validated('goals', []),
             $request->validated('greeting'),
             $request->validated('phrase_ids', []),
+            $request->validated('unlock_in_order'),
         );
     }
 
