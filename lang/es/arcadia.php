@@ -339,6 +339,7 @@ return [
                 'readers' => 'Lectores',
                 'goals' => 'Metas',
                 'versions' => 'Versiones',
+                'released' => 'Publicadas',
                 'status' => 'Estado',
                 'created' => 'Creada',
                 'updated' => 'Actualizada',

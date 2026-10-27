@@ -37,7 +37,7 @@ class GuideEditorTest extends TestCase
 
     public function test_the_list_shows_only_this_sites_language(): void
     {
-        $this->guide('es', 'Excel para el trabajo');
+        $this->guide('es', 'Excel para el trabajo')->latestVersion()->release();
         $this->guide('en', 'Excel for work');
 
         $this->get('/es/editor/guides')
@@ -47,6 +47,7 @@ class GuideEditorTest extends TestCase
                 ->where('guides.total', 1)
                 ->where('guides.data.0.title', 'Excel para el trabajo')
                 ->where('guides.data.0.versions_count', 1)
+                ->where('guides.data.0.released_versions_count', 1)
                 ->where('guides.per_page', 12)
                 ->where('guides.data.0.cover', null)
                 ->missing('guides.data.0.images'));

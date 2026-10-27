@@ -1,8 +1,9 @@
 <script setup>
 /**
- * This site's guides, twelve to a page, as compact cards: the cover's wide crop across the top with
- * edit over its corner, what the guide is and its status below, then one block of its counts and what
- * its link's page brought in over 30 days — and its other actions and last update along the bottom.
+ * This site's guides, twelve to a page, as compact cards: the cover across the top under a dark wash
+ * with what the guide is and its status over it, edit hanging off the card's corner; then one row
+ * of its counts — released versions among them — a line of what its link's page brought in over
+ * 30 days, and its other actions along the bottom.
  */
 import { computed, ref } from 'vue'
 import { router } from '@inertiajs/vue3'
@@ -45,10 +46,12 @@ const presentationFor = guide => [
     { key: 'enrollments', value: guide.presentation.enrollments, tone: 'text-success' },
 ]
 
+// Released in the success tone while any is, so a guide with nothing out for readers stands out.
 const metricsFor = guide => [
     { key: 'readers', value: guide.readers_count },
     { key: 'goals', value: guide.goals?.length ?? 0 },
     { key: 'versions', value: guide.versions_count },
+    { key: 'released', value: guide.released_versions_count, tone: guide.released_versions_count ? 'text-success' : 'text-ink-4' },
 ]
 
 // The footer's links; edit sits in the card's corner instead.
@@ -142,66 +145,61 @@ const goToPage = page => router.get(editorRoute('guides.index'), query({ page })
         </Empty>
 
         <ul v-else class="m-0 grid list-none gap-3 p-0 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-            <li v-for="guide in guides.data" :key="guide.id" class="min-w-0">
-                <Card class="relative h-full gap-0 overflow-hidden py-0">
-                    <!-- The cover across the top in its wide crop, or a way to upload one while there is none. -->
-                    <Link :href="editorRoute('images.index', { guide: guide.id })"
-                          class="block aspect-[1200/630] border-b border-rule bg-raised no-underline"
-                          :aria-label="$t('arcadia.editor.images.action')" :title="$t('arcadia.editor.images.action')">
-                        <img v-if="guide.cover" :src="guide.cover" alt="" width="1200" height="630" loading="lazy" class="size-full object-cover">
-                        <span v-else class="flex size-full items-center justify-center text-ink-4">
-                            <ImageIcon :size="24" aria-hidden="true" />
-                        </span>
-                    </Link>
-
-                    <!-- Edit sits over the cover's corner, on its own ground so any image leaves it legible. -->
-                    <Link :href="editorRoute('guides.edit', guide.id)"
-                          :class="cn(buttonVariants({ variant: 'outline', size: 'icon-sm' }), 'absolute top-2 right-2 bg-card no-underline dark:bg-card dark:hover:bg-hover')"
-                          :aria-label="$t('arcadia.editor.guides.edit')" :title="$t('arcadia.editor.guides.edit')">
-                        <Pencil :size="14" aria-hidden="true" />
-                    </Link>
-
-                    <CardContent class="flex flex-1 flex-col gap-2.5 p-3">
-                        <div>
-                            <div class="flex items-center justify-between gap-2">
-                                <p class="m-0 min-w-0 truncate font-mono text-[11px] uppercase tracking-widest text-ink-4">
-                                    {{ guide.category?.name ?? '—' }} · {{ levelFor(guide.level) }}
-                                </p>
-                                <Badge :variant="statusFor(guide.status).tone" class="shrink-0">{{ statusFor(guide.status).label }}</Badge>
-                            </div>
+            <li v-for="guide in guides.data" :key="guide.id" class="relative min-w-0">
+                <!-- Edit hangs off the card's top-right corner, clear of the title. -->
+                <Link :href="editorRoute('guides.edit', guide.id)"
+                      :class="cn(buttonVariants({ variant: 'outline', size: 'icon-sm' }), 'absolute -top-2 -right-2 z-10 rounded-full bg-card no-underline shadow-sm dark:bg-card dark:hover:bg-hover')"
+                      :aria-label="$t('arcadia.editor.guides.edit')" :title="$t('arcadia.editor.guides.edit')">
+                    <Pencil :size="14" aria-hidden="true" />
+                </Link>
+                <Card class="h-full gap-0 overflow-hidden py-0">
+                    <!-- The cover across the top under a dark wash, so what the guide is reads over any image. -->
+                    <div class="relative aspect-[1200/630] border-b border-rule bg-raised">
+                        <img v-if="guide.cover" :src="guide.cover" alt="" width="1200" height="630" loading="lazy" class="absolute inset-0 size-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/20" aria-hidden="true" />
+                        <!-- The whole cover leads to its images; the title above it leads to the content. -->
+                        <Link :href="editorRoute('images.index', { guide: guide.id })"
+                              class="absolute inset-0 flex items-center justify-center text-white/60 no-underline"
+                              :aria-label="$t('arcadia.editor.images.action')" :title="$t('arcadia.editor.images.action')">
+                            <ImageIcon v-if="!guide.cover" :size="24" aria-hidden="true" />
+                        </Link>
+                        <Badge :variant="statusFor(guide.status).tone" class="absolute top-2 left-2">{{ statusFor(guide.status).label }}</Badge>
+                        <div class="pointer-events-none absolute inset-x-0 bottom-0 p-3">
+                            <p class="m-0 truncate font-mono text-[11px] uppercase tracking-widest text-white/75">
+                                {{ guide.category?.name ?? '—' }} · {{ levelFor(guide.level) }}
+                            </p>
                             <Link :href="editorRoute('content.show', { guide: guide.id })" :title="guide.title"
-                                  class="mt-1 line-clamp-2 font-display text-sm font-semibold leading-snug text-ink no-underline hover:text-accent">
+                                  class="pointer-events-auto mt-0.5 line-clamp-2 font-display text-sm font-semibold leading-snug text-white no-underline hover:underline">
                                 {{ guide.title }}
                             </Link>
-                            <!-- The two switches a reader needs — published, and a released version — when they disagree. -->
-                            <p v-if="guide.status === 'published' && !guide.has_release" class="mt-1 mb-0 text-xs text-warning">
-                                {{ $t('arcadia.editor.guides.state.no_release') }}
-                            </p>
-                            <p v-else-if="guide.status === 'draft' && guide.has_release" class="mt-1 mb-0 text-xs text-ink-4">
-                                {{ $t('arcadia.editor.guides.state.released_draft') }}
-                            </p>
                         </div>
+                    </div>
 
-                        <!-- The guide's own counts above, what its link's page brought in below, in one block. -->
-                        <div class="mt-auto overflow-hidden rounded-lg border border-rule">
-                            <dl class="m-0 grid grid-cols-3 gap-2 px-2.5 py-1.5">
+                    <CardContent class="flex flex-1 flex-col gap-3 p-3">
+                        <!-- The two switches a reader needs — published, and a released version — when they disagree. -->
+                        <p v-if="guide.status === 'published' && !guide.has_release" class="m-0 text-xs text-warning">
+                            {{ $t('arcadia.editor.guides.state.no_release') }}
+                        </p>
+                        <p v-else-if="guide.status === 'draft' && guide.has_release" class="m-0 text-xs text-ink-4">
+                            {{ $t('arcadia.editor.guides.state.released_draft') }}
+                        </p>
+
+                        <!-- The guide's own counts in one row, what its link's page brought in as one line below. -->
+                        <div class="mt-auto">
+                            <dl class="m-0 grid grid-cols-4 gap-2 rounded-lg border border-rule px-2.5 py-1.5">
                                 <div v-for="metric in metricsFor(guide)" :key="metric.key" class="min-w-0">
                                     <dt class="truncate text-[11px] text-ink-4">{{ $t(`arcadia.editor.guides.columns.${metric.key}`) }}</dt>
-                                    <dd class="m-0 font-mono text-sm tabular-nums text-ink">{{ metric.value }}</dd>
+                                    <dd class="m-0 font-mono text-sm tabular-nums" :class="metric.tone ?? 'text-ink'">{{ metric.value }}</dd>
                                 </div>
                             </dl>
-                            <div class="border-t border-rule bg-well px-2.5 py-1.5">
-                                <p class="m-0 flex items-baseline justify-between gap-2 text-[11px] text-ink-4">
-                                    <span class="truncate">{{ $t('arcadia.editor.guides.presentation') }}</span>
-                                    <span v-if="!guide.open_for_enrollment" class="shrink-0">{{ $t('arcadia.editor.home.presentations.closed') }}</span>
-                                </p>
-                                <dl class="m-0 mt-0.5 grid grid-cols-3 gap-2">
-                                    <div v-for="figure in presentationFor(guide)" :key="figure.key" class="min-w-0">
-                                        <dt class="truncate text-[11px] text-ink-4">{{ $t(`arcadia.editor.home.presentations.${figure.key}`) }}</dt>
-                                        <dd class="m-0 font-mono text-sm tabular-nums" :class="figure.tone">{{ figure.value }}</dd>
-                                    </div>
-                                </dl>
-                            </div>
+                            <p class="m-0 mt-1.5 flex flex-wrap items-baseline gap-x-2 px-0.5 text-[11px] text-ink-4">
+                                <span>{{ $t('arcadia.editor.guides.presentation') }}</span>
+                                <span v-for="figure in presentationFor(guide)" :key="figure.key">
+                                    <span class="font-mono tabular-nums" :class="figure.tone">{{ figure.value }}</span>
+                                    {{ $t(`arcadia.editor.home.presentations.${figure.key}`).toLowerCase() }}
+                                </span>
+                                <span v-if="!guide.open_for_enrollment">· {{ $t('arcadia.editor.home.presentations.closed') }}</span>
+                            </p>
                         </div>
                     </CardContent>
 

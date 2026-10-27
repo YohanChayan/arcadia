@@ -339,6 +339,7 @@ return [
                 'readers' => 'Readers',
                 'goals' => 'Goals',
                 'versions' => 'Versions',
+                'released' => 'Released',
                 'status' => 'Status',
                 'created' => 'Created',
                 'updated' => 'Updated',

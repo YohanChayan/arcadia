@@ -44,7 +44,8 @@ class GuideController
         $guides = $ofLocale()
             ->when($status, fn ($guides) => $guides->where('status', $status))
             ->with(['category:id,name', 'images' => fn ($images) => $images->where('slot', ImageSlot::COVER)])
-            ->withCount(['versions', 'readers'])
+            // Every version, and how many of them were released to readers.
+            ->withCount(['versions', 'readers', 'versions as released_versions_count' => fn ($versions) => $versions->whereNotNull('released_at')])
             ->withExists(['versions as has_release' => fn ($versions) => $versions->whereNotNull('released_at')])
             ->latest('updated_at')
             ->paginate(12)
