@@ -1,0 +1,12 @@
+# Production. Copy to /srv/platform/caddy/sites/ on the server, then reload Caddy. Point the DNS
+# record at the host first, so the first certificate attempt does not fail and back off.
+#
+# The HSTS header is the one the old server sent here — browsers hold it for a year, so it must not
+# lapse.
+arcadia.yhndevside.com {
+	encode zstd gzip
+
+	header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+
+	reverse_proxy arcadia-web:80
+}
