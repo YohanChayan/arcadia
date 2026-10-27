@@ -3,6 +3,7 @@
 import { inject, ref } from 'vue'
 import NodeForm from './NodeForm.vue'
 import NodeToolbar from './NodeToolbar.vue'
+import ActivityPanel from './ActivityPanel.vue'
 
 defineProps({
     section: { type: Object, required: true },
@@ -21,6 +22,8 @@ const editing = ref(false)
             <div class="text-xs font-medium uppercase tracking-wide text-accent">{{ content.label('sections', section.kind) }}</div>
             <div v-if="section.title" class="mt-1 font-medium text-ink">{{ section.title }}</div>
             <p class="mt-1 mb-0 whitespace-pre-line text-sm text-ink-2">{{ section.body }}</p>
+            <!-- "Must master" made into flip cards. -->
+            <ActivityPanel v-if="section.activity" node="sections" :row="section" class="mt-2" />
         </div>
         <NodeToolbar node="sections" :row="section" :first="first" :last="last" @edit="editing = true" />
     </div>

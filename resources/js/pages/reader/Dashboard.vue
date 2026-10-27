@@ -6,6 +6,8 @@
  * to make plain that progress is what they tick: a guide with nothing ticked says so. Changing
  * the colours repaints the card as they pick; it is saved only on Save.
  *
+ * "Continue": the next line to do — its stage and roughly how long — opening the guide on it.
+ *
  * Their streak — days in a row with a line ticked, across every guide — under the welcome, with
  * how to keep it today or start one; only once they have a guide to tick in.
  *
@@ -16,15 +18,16 @@
  */
 import { computed, ref } from 'vue'
 import { usePage } from '@inertiajs/vue3'
-import { BookOpen, Dumbbell, Flag, Flame, Link2, Palette, PlayCircle } from '@lucide/vue'
+import { BookOpen, ChevronRight, Dumbbell, Flag, Flame, Link2, Palette, PlayCircle } from '@lucide/vue'
 import SeoHead from '@/components/common/SeoHead.vue'
 import ReaderColoursSheet from '@/components/ReaderColoursSheet.vue'
 import { appearanceTokens } from '@/lib/appearance.js'
 
 const props = defineProps({
     email: { type: String, required: true },
-    // [{ reader, title, level, palette, accent, url, progress }] — url and progress are null until
-    // it can be read; progress is { done, total, videos, links, practices, stages: { done, total }, last_ticked_at }.
+    // [{ reader, title, level, palette, accent, url, continueUrl, progress }] — url and progress are
+    // null until it can be read; progress is { done, total, videos, links, practices,
+    // stages: { done, total }, last_ticked_at, next: { key, title, stage, stage_title, minutes } | null }.
     guides: { type: Array, required: true },
     // A short phrase welcoming them, or null.
     welcome: { type: String, default: null },
@@ -131,6 +134,22 @@ const tallies = progress => [
                                 ? $t('arcadia.my_guides.progress.last', { date: formatDate(guide.progress.last_ticked_at) })
                                 : $t('arcadia.my_guides.progress.none') }}
                         </p>
+
+                        <!-- The line to do next, one tap away. -->
+                        <a v-if="guide.continueUrl" :href="guide.continueUrl"
+                           class="mt-4 flex items-center gap-3 rounded-xl border border-guide-rule bg-guide-surface p-3 no-underline hover:border-guide-accent">
+                            <PlayCircle :size="22" class="shrink-0 text-guide-accent" aria-hidden="true" />
+                            <span class="min-w-0 flex-1">
+                                <span class="block font-mono text-[11px] uppercase tracking-widest text-guide-accent">
+                                    {{ $t(guide.progress.done ? 'arcadia.my_guides.continue.next' : 'arcadia.my_guides.continue.first') }}
+                                </span>
+                                <span class="mt-0.5 block truncate font-semibold text-guide-ink">{{ guide.progress.next.title }}</span>
+                                <span class="block truncate text-xs text-guide-ink-soft">
+                                    {{ $t('arcadia.reader.stage', { number: guide.progress.next.stage }) }} · {{ guide.progress.next.stage_title }}<template v-if="guide.progress.next.minutes"> · {{ $t('arcadia.reader.stage_minutes', { minutes: guide.progress.next.minutes }) }}</template>
+                                </span>
+                            </span>
+                            <ChevronRight :size="18" class="shrink-0 text-guide-ink-soft" aria-hidden="true" />
+                        </a>
                     </div>
                 </div>
                 <div class="flex flex-wrap gap-2 border-t border-guide-rule p-4">

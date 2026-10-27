@@ -27,6 +27,8 @@ const props = defineProps({
     choices: { type: Object, required: true },
     // Values to start from, by variable name — ahead of each variable's own default.
     initial: { type: Object, default: () => ({}) },
+    // The guide an activity prompt is opened on: the server puts its content in.
+    guideId: { type: Number, default: null },
 })
 
 const emit = defineEmits(['copied'])
@@ -77,6 +79,7 @@ const render = () => {
             const { data } = await window.axios.post(editorRoute('prompts.fill', props.templateId), {
                 version_id: props.version.id,
                 values: { ...values },
+                ...(props.guideId ? { guide_id: props.guideId } : {}),
             })
             // An older answer arriving after a newer request is dropped.
             if (mine === ticket) {

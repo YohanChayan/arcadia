@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import NodeForm from './NodeForm.vue'
 import NodeToolbar from './NodeToolbar.vue'
 import CardBlock from './CardBlock.vue'
+import ActivityPanel from './ActivityPanel.vue'
 
 defineProps({
     stage: { type: Object, required: true },
@@ -31,6 +32,8 @@ const addingCard = ref(false)
             </div>
             <NodeToolbar node="stages" :row="stage" :first="first" :last="last" @edit="editing = true" />
         </div>
+        <!-- Its mini-game, under its title. -->
+        <ActivityPanel v-if="!editing && stage.activity" node="stages" :row="stage" class="mt-3" />
 
         <div class="mt-4 flex flex-col gap-3">
             <CardBlock v-for="(card, index) in stage.cards" :key="card.id" :card="card"

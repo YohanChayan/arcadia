@@ -18,6 +18,11 @@ class Stage extends Model
 
     protected $fillable = ['title', 'goal', 'position'];
 
+    protected $casts = [
+        // Not fillable: only the additive import writes it (`ActivityFamily`).
+        'activity' => 'array',
+    ];
+
     public function version(): BelongsTo
     {
         return $this->belongsTo(Version::class);

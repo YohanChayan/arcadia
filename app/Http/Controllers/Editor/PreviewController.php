@@ -38,7 +38,7 @@ class PreviewController
         $accent = Accent::tryFrom((string) $request->query('accent')) ?? $reader?->accent ?? $guide->default_accent;
 
         return Inertia::render('Guide', [
-            ...$presenter->present($guide, $version),
+            ...$presenter->present($guide, $version, withAnswers: true),
             'preview' => true,
             'appearance' => Appearance::tokens($palette, $accent),
             // As that reader is greeted, when the preview is theirs.

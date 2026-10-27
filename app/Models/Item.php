@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ActivityFamily;
 use App\Enums\ItemKind;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -29,6 +30,8 @@ class Item extends Model
         'is_available' => 'boolean',
         // What the line teaches, for the owner: see `BRIEF_FIELDS`. Never sent to a reader.
         'brief' => 'array',
+        // Not fillable: only the additive import writes it (`ActivityFamily`).
+        'activity' => 'array',
         // The part of a YouTube video the line plays, in seconds from the video's start: see `VideoClip`.
         'clip_start' => 'integer',
         'clip_end' => 'integer',
@@ -54,6 +57,44 @@ class Item extends Model
                 $item->forceFill(array_fill_keys(self::CLIP_FIELDS, null));
             }
         });
+    }
+
+    /**
+     * Roughly how long the line takes, for a locked stage's preview and "My guides": the clip's length when it has
+     * an end, else the minutes its brief gives (`6 min`, `8 min de lectura`, `3:33`), else null.
+     * Only the number leaves the brief, which is never sent to a reader. Never `hint`, which is
+     * free text, and never the step length, which is the research's target, not the line's.
+     */
+    /**
+     * Its quick check, when it carries a valid one (`ActivityFamily`): answers included, for the
+     * server to check a reader's against. Null on any other line.
+     *
+     * @return array{family: string, questions: list<array<string, mixed>>}|null
+     */
+    public function quickCheck(): ?array
+    {
+        return (ActivityFamily::forPage($this->activity, $this, withAnswers: true)['family'] ?? null) === ActivityFamily::QUICK_CHECK->value
+            ? $this->activity
+            : null;
+    }
+
+    public function minutes(): ?int
+    {
+        if ($this->clip_start !== null && $this->clip_end !== null) {
+            return max(1, (int) ceil(($this->clip_end - $this->clip_start) / 60));
+        }
+
+        $duration = (string) data_get($this->brief, 'duration');
+
+        if (preg_match('/^\s*(\d+):(\d{2})\b/', $duration, $clock)) {
+            return max(1, (int) ceil(((int) $clock[1] * 60 + (int) $clock[2]) / 60));
+        }
+
+        if (preg_match('/^\s*(\d+)\s*min/i', $duration, $count)) {
+            return max(1, (int) $count[1]);
+        }
+
+        return null;
     }
 
     public function card(): BelongsTo

@@ -87,6 +87,58 @@ step length — its research prompt's `step_minutes`, else the host's setting �
 `GuidePresenter` lists the fields a reader gets. A line written by hand has none; it cannot be
 edited in the editor yet.
 
+## A node can carry an activity
+
+`guide_items`, `guide_stages` and `guide_sections` each have an `activity` JSON column: something
+for the reader to do with the content, beyond ticking it. Its `family` (`ActivityFamily`) says
+what it is, and each belongs on one kind of node — a **quick check** on a video line, the
+**extras** of a practice line (hint, example, easy/hard), a **mini-game** on a stage, the **flip
+cards** of the "must master" section. The enum's docblock holds each family's fields.
+
+- **A column on the node, not a table of its own**, so it comes for free with everything a node
+  already gets: copied into a new version by `DraftNextVersion`, frozen by a release
+  (`FrozenOnceReleased`), deleted with its node, and compared by `VersionDiff`, where Compare
+  shows it as its family and how many entries. A table of its own would need every one of those
+  written, and a missed copy would empty the next version without a word. It is not in
+  `FixItemEverywhere`'s list: a wrong activity in a released version is a new version's job.
+- **Not fillable.** Only the additive import writes it.
+- **The page is an allowlist** (`ActivityFamily::forPage()`, from `GuidePresenter`): nothing for a
+  family it does not know or one on the wrong kind of node, never `evidence` — the brief's words
+  an entry rests on, for the owner — and never a quick check's `correct` or `explanation` to a
+  reader, whose answer is checked on the server because a right one earns the tick. The owner
+  reading as-is and the preview get them (`withAnswers`), since their page has no reader to tick
+  for. `GuideActivityTest` holds each rule.
+
+**Activities arrive by their own import** (`Editor\ActivityImportController`, "Importar
+actividades" on a draft's content screen): the AI's answer to an activity prompt, as a `.json`
+file, `{ "family": …, "activities": [{ "key": …, …its fields }] }`. Unlike the content import it
+never builds or replaces content — it only attaches, and shares nothing with it but
+`GuideImport::extract()`, which finds the JSON however the AI wrapped it.
+
+- **Checked first, against the draft** (`ActivityImport`, `…/activities/import/preview`): every
+  `key` must be a node this draft has, of the kind the family belongs on, used once; each family's
+  fields are checked, and a quick check's `correct` must be one of its options, a fill-in must
+  have its `___`. Each problem is reported at its place ("Actividad 2 · pregunta 1 · correct"),
+  and nothing is written.
+- **Attached all at once** (`AttachActivities`): only `activity` is written, never a node's own
+  fields. The draft's activities of that family are replaced as a whole — importing a family again
+  leaves no stale one — and every other family is left alone. Only each family's fields are kept,
+  and a flip card is given its own key here, never the AI's. A released version answers 409.
+- **Reviewed in place** (`ActivityPanel`, under its node): everything, the answers and evidence
+  included. On a draft the owner rewords it (`RewordActivity`) — its text only, at the places it
+  already has: no question added or dropped, no correct option moved, no card's key changed — or
+  removes it. `GuideActivityImportTest` holds each rule.
+
+**A quick check earns its line's tick.** On the guide page a video that carries one shows its
+questions under it (`QuickCheck`). A reader's answers go to `PUT {reader}/check`
+(`Reader\QuickCheckController`, `progress.checkUrl`), checked against the stored answers: all
+right, the line is ticked through `Reader::tick()`; any wrong, nothing is ticked and each question
+missed comes back with its explanation, to try again — there is no skip. **It is the only way such
+a line is ticked**: `ProgressController` refuses to tick it (422), though clearing it is still the
+reader's to do, and on the page its checkbox and its clip's **next** take the reader to the
+questions until they are answered. The owner reading as-is and the preview are sent the answers
+(`withAnswers`) and check them in the page, for the visit. `GuideQuickCheckTest` holds each rule.
+
 ## Reached by link, and listed while open
 
 A guide's `link_token` — 24 lowercase characters, minted on creation, never taken from input,
@@ -146,7 +198,7 @@ what else exists. It is `noindex`, with its own canonical.
   lines or stages behind a reader never shuts a stage they were in, and nothing is migrated when
   stages change. The last stage open to the reader starts expanded, the rest folded; with nothing
   locked, the first with a line left. A locked stage still opens, to its lines under a layer that
-  takes no clicks (`inert`), with how many steps and roughly how long — each line's `minutes`,
+  takes no clicks (`inert`), with how many steps and roughly how long — each line's `minutes` (`Item::minutes()`),
   from its clip's length, else its brief's `duration`, never `hint` — and the stage to finish
   first. A clip's **next** unfolds the stage of the line after it, and stops at a locked one. The
   server takes a tick on any line of the version all the same: the lock guides, it does not guard.
@@ -345,6 +397,10 @@ Arcadia membership — and **not** `approved`, since the membership is a reader'
   line's key, as the guide page counts): lines, videos, links and practices done of total, stages
   finished, and the last tick — or a line saying nothing is ticked yet, because progress is only
   what they tick. A reader removed from every guide still reaches it, to an empty list.
+- **Continue** (`progress.next`, `continueUrl`): the first line not ticked, in stage, card and line
+  order — its title, its stage's number and title, and its minutes — opening the guide at
+  `#line-<key>`, where the page unfolds that stage and scrolls to the line when it is open to the
+  reader. None once every line is ticked.
 - **The streak** (`ReadingStreak`, `streak`): days in a row with at least one line ticked, across
   every guide on the account, by **America/Caracas** day — the app clock is UTC, which would end
   a reader's day at 20:00. Read from `guide_ticks`, so unticking a line takes its day with it. It
@@ -607,6 +663,20 @@ and keeps the prompt here (`guide_prompt_templates` → `guide_prompt_versions` 
   guide's own subject; its **goals become the cards, as results**, the only
   other text the model words itself. The same `{{?name}}` lines, the same proportion rule, the
   same seeding rule. Not in `DatabaseSeeder`.
+
+- **`QuickCheckPromptTemplateSeeder`** writes a fifth, "Actividades — preguntas rápidas"
+  (`PromptTemplate::QUICK_CHECK`): one to three questions per video, for the quick checks
+  (§ A node can carry an activity). Its answer comes back through "Importar actividades", in the
+  shape that import checks, each video by its `key`. **The guide's content is not a variable**:
+  its videos — key, stage, title, the brief's summary and topics, the clip — are tens of thousands
+  of characters, past any field's 5000. The template writes `{{guide_content}}`
+  (`PromptRenderer::CONTENT`, a name no variable may take), and a fill request naming a guide
+  (`guide_id`) has the server put that family's slice of its latest version there
+  (`ActivityPromptContent`) — last, so braces in a guide's text are never read as a placeholder.
+  Opened anywhere else, it says where the content will go. Only videos with a brief are given: the
+  AI cannot watch a video, so a question rests on the brief alone and quotes it as `evidence`. A
+  guide's **Content** screen offers every activity prompt there is, filled from the guide, and
+  copying records nothing. Idempotent by name; not in `DatabaseSeeder`. `QuickCheckPromptTest`.
 
 - **A guide started from a request** ("Crear guía", `InquiryGuideController` →
   `StartGuideFromInquiry`) is a draft made through `SaveGuide`: titled by the prompt's `topic`, at

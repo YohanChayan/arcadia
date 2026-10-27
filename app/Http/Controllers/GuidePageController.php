@@ -96,7 +96,8 @@ class GuidePageController
         $reader = $reader?->trashed() ? null : $reader;
 
         return Inertia::render('Guide', [
-            ...$presenter->present($guide, $version),
+            // A quick check's answers only for the owner reading as-is: a reader's is checked here.
+            ...$presenter->present($guide, $version, withAnswers: $reader === null),
             'preview' => false,
             'pageTitle' => $guide->title,
             // Shared by link, never listed: nothing here for a search engine.
@@ -117,6 +118,8 @@ class GuidePageController
             'progress' => $reader ? [
                 'ticked' => $reader->tickedKeys(),
                 'saveUrl' => route("{$site->locale()}.reader.progress", $reader),
+                // Where a quick check is answered: a right answer ticks its line there.
+                'checkUrl' => route("{$site->locale()}.reader.check", $reader),
                 // Only beside a reader's progress: the owner and the preview never see a stage locked.
                 'unlockInOrder' => $guide->unlock_in_order,
             ] : null,

@@ -19,6 +19,8 @@ const props = defineProps({
     initial: { type: Object, default: () => ({}) },
     // The version to open on, when it is still one of the template's; the latest otherwise.
     versionId: { type: Number, default: null },
+    // The guide an activity prompt is opened on, passed to the filler.
+    guideId: { type: Number, default: null },
 })
 
 defineEmits(['copied'])
@@ -42,7 +44,7 @@ const fieldId = `prompt-${props.prompt.id}-version`
                 </SelectContent>
             </Select>
         </Field>
-        <PromptFiller v-if="version" :key="version.id" :template-id="prompt.id" :version="version" :choices="choices" :initial="initial"
+        <PromptFiller v-if="version" :key="version.id" :template-id="prompt.id" :version="version" :choices="choices" :initial="initial" :guide-id="guideId"
                       @copied="payload => $emit('copied', payload)" />
     </div>
 </template>

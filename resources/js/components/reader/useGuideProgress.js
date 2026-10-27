@@ -11,6 +11,10 @@ import { trans } from 'laravel-vue-i18n'
  *
  * Without `progress` — the owner reading as-is, or the editor's preview — ticks last for the
  * visit and are written nowhere.
+ *
+ * A line with a quick check is ticked by answering it (`check`): the server checks a reader's
+ * answers at `progress.checkUrl` and ticks the line when all are right. The owner and the preview
+ * are sent the answers with the page, so it checks them here, for the visit.
  */
 export const useGuideProgress = progress => {
     const done = ref(new Set(progress?.ticked ?? []))
@@ -33,8 +37,28 @@ export const useGuideProgress = progress => {
         })
     }
 
+    // { passed, results: [{ correct, explanation? }] } for one answer per question.
+    const check = async (key, answers, questions) => {
+        let outcome
+
+        if (progress?.checkUrl) {
+            outcome = (await window.axios.put(progress.checkUrl, { key, answers })).data
+        } else {
+            const results = questions.map((question, index) => answers[index] === question.correct
+                ? { correct: true }
+                : { correct: false, explanation: question.explanation })
+            outcome = { passed: results.every(result => result.correct), results }
+        }
+
+        if (outcome.passed) {
+            mark(key, true)
+        }
+
+        return outcome
+    }
+
     const isDone = key => done.value.has(key)
     const count = keys => keys.filter(key => done.value.has(key)).length
 
-    return { isDone, toggle, count }
+    return { isDone, toggle, count, check }
 }

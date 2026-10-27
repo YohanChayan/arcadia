@@ -34,7 +34,7 @@ class PromptVariableRequest extends FormRequest
             'name' => [
                 'required', 'string', 'max:40', 'regex:/^[a-z][a-z0-9_]*$/',
                 // Every form carries the extra instructions under this name already.
-                Rule::notIn([PromptRenderer::EXTRA]),
+                Rule::notIn([PromptRenderer::EXTRA, PromptRenderer::CONTENT]),
                 Rule::unique('guide_prompt_variables', 'name')
                     ->where('version_id', $template->latestVersion()->id)
                     ->ignore($this->route('variable')),

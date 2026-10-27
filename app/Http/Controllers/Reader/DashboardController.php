@@ -20,7 +20,7 @@ use Inertia\Response;
 /**
  * A reader's own guides in this language — every guide assigned to their account, each in their
  * colours, with its link once it can be read, where they stand on it (`GuideProgressSummary`),
- * a short phrase for that moment and one to welcome them (`MotivationPicker`), their run of days
+ * the line to continue with, opened on it, a short phrase for that moment and one to welcome them (`MotivationPicker`), their run of days
  * with a tick (`ReadingStreak`), and the colours to change. A reader removed from every guide still gets here, to an empty list.
  */
 class DashboardController
@@ -47,6 +47,10 @@ class DashboardController
             'guides' => $readers->map(function (Reader $reader) use ($site, $summary, $motivation) {
                 // Null until there is a release to read — nothing to count yet, nothing to cheer.
                 $progress = ($version = $reader->guide->releasedVersion()) ? $summary->for($reader, $version) : null;
+                // Only a published guide with a release opens; until then it is being prepared.
+                $url = $reader->guide->status === GuideStatus::PUBLISHED && $reader->guide->has_release
+                    ? $site->guideUrl($reader->guide->link_token, $reader->guide->locale)
+                    : null;
 
                 return [
                     'reader' => $reader->id,
@@ -61,10 +65,9 @@ class DashboardController
                     'level' => $reader->guide->level->label(),
                     'palette' => ($reader->palette ?? Palette::ARCADIA)->value,
                     'accent' => ($reader->accent ?? Accent::OWN)->value,
-                    // Only a published guide with a release opens; until then it is being prepared.
-                    'url' => $reader->guide->status === GuideStatus::PUBLISHED && $reader->guide->has_release
-                        ? $site->guideUrl($reader->guide->link_token, $reader->guide->locale)
-                        : null,
+                    'url' => $url,
+                    // The guide opened on the line to continue with (`progress.next`), its stage unfolded.
+                    'continueUrl' => $url && $progress['next'] ? "{$url}#line-{$progress['next']['key']}" : null,
                 ];
             })->values(),
             'appearanceOptions' => Appearance::options(),

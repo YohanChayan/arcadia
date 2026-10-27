@@ -18,6 +18,8 @@ class FillPromptRequest extends FormRequest
             'version_id' => ['required', 'integer'],
             'values' => ['present', 'array'],
             'values.*' => ['nullable', 'string', 'max:5000'],
+            // An activity prompt opened on a guide: its content is put in by the server.
+            'guide_id' => ['nullable', 'integer'],
         ];
     }
 }

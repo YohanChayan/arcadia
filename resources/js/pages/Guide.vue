@@ -26,6 +26,9 @@
  * expanded, the rest folded; with nothing locked, the first with a line left to do. A stage that
  * opens during the visit unfolds.
  *
+ * Opened as `#line-<key>` — "Continue" on "My guides" — the page unfolds that line's stage and
+ * scrolls to it, when the stage is open to the reader.
+ *
  * A tick that completes a stage in this visit — never on load, so a reload does not replay it —
  * cheers at the stage's end: what the reader can now do (its goal), a phrase from `celebration`
  * (a stage's, or the guide's on the last one) and the way on to the next stage.
@@ -86,6 +89,8 @@ const tokens = computed(() => picking.value && props.readerAppearance
 const seo = computed(() => ({ pageTitle: props.pageTitle, noIndex: props.noIndex }))
 
 const progress = useGuideProgress(props.progress)
+// A line's quick check answers through it.
+provide('guideProgress', progress)
 
 const notes = useGuideNotes(props.notes)
 provide('guideNotes', notes)
@@ -180,6 +185,15 @@ const goNext = async key => {
 }
 
 onMounted(() => {
+    const hash = window.location.hash
+    if (hash.startsWith('#line-')) {
+        const line = lines.value.find(line => line.key === decodeURIComponent(hash.slice('#line-'.length)))
+        // Unfolded now, the line is rendered before Inertia looks for the anchor and scrolls to it.
+        if (line && unlocked.value[line.stage]) {
+            expanded.value = new Set([...expanded.value, props.stages[line.stage].key])
+        }
+    }
+
     if (!props.motivation) return
 
     // Storage can be blocked or absent (a private window): then the server's once is enough.

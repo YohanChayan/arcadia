@@ -6,6 +6,7 @@ use App\Http\Controllers\Reader\DeviceController;
 use App\Http\Controllers\Reader\HelpController;
 use App\Http\Controllers\Reader\NoteController;
 use App\Http\Controllers\Reader\ProgressController;
+use App\Http\Controllers\Reader\QuickCheckController;
 use App\Services\ArcadiaSite;
 use Illuminate\Support\Facades\Route;
 
@@ -38,6 +39,10 @@ foreach ($site->locales() as $locale) {
 
             Route::put('/{reader}/progress', ProgressController::class)
                 ->whereNumber('reader')->name('progress');
+
+            // A video's quick check, answered: a right answer ticks it.
+            Route::put('/{reader}/check', QuickCheckController::class)
+                ->whereNumber('reader')->middleware('throttle:60,1')->name('check');
 
             // Their own notes, on a line or a stage.
             Route::post('/{reader}/notes', [NoteController::class, 'store'])

@@ -27,10 +27,10 @@ class VersionDiff
 {
     /** The fields compared, per kind of node. Position is not one: order is `reordered`. */
     private const FIELDS = [
-        'sections' => ['kind', 'title', 'body'],
-        'stages' => ['title', 'goal'],
+        'sections' => ['kind', 'title', 'body', 'activity'],
+        'stages' => ['title', 'goal', 'activity'],
         'cards' => ['kind', 'byline', 'description', 'quote', 'closing_note'],
-        'items' => ['kind', 'title', 'url', 'hint', 'body', 'is_preview', 'is_available', 'clip_start', 'clip_end'],
+        'items' => ['kind', 'title', 'url', 'hint', 'body', 'is_preview', 'is_available', 'clip_start', 'clip_end', 'activity'],
     ];
 
     /**

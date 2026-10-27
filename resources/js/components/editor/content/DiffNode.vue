@@ -5,7 +5,7 @@
  * Unchanged nodes with nothing changed under them are folded unless asked for.
  */
 import { computed } from 'vue'
-import { trans } from 'laravel-vue-i18n'
+import { trans, transChoice } from 'laravel-vue-i18n'
 import { Badge } from '@/components/ui/badge'
 
 const props = defineProps({
@@ -38,8 +38,17 @@ const STATUS_TONE = {
     unchanged: 'border-rule',
 }
 
+// An activity is a whole JSON: said by its family and how many questions, cards, pairs or steps.
+const activitySummary = activity => {
+    const count = ['questions', 'cards', 'pairs', 'steps'].map(list => activity[list]?.length ?? 0).find(length => length > 0) ?? 1
+    const family = trans(`arcadia.editor.activities.families.${activity.family}`)
+
+    return transChoice('arcadia.editor.activities.summary', count, { family, count })
+}
+
 const show = (field, value) => {
     if (value === null || value === '' || value === undefined) return '—'
+    if (field === 'activity') return activitySummary(value)
     if (value === true) return trans('arcadia.editor.content.fields.yes')
     if (value === false) return trans('arcadia.editor.content.fields.no')
     // A kind is stored as its code; show its label.

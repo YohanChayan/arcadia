@@ -2,6 +2,8 @@
 
 use App\Enums\ContentNode;
 use App\Enums\Vocabulary;
+use App\Http\Controllers\Editor\ActivityController;
+use App\Http\Controllers\Editor\ActivityImportController;
 use App\Http\Controllers\Editor\AppearanceController;
 use App\Http\Controllers\Editor\CompareController;
 use App\Http\Controllers\Editor\ContentController;
@@ -128,6 +130,15 @@ foreach ($site->locales() as $locale) {
             // An AI's answer into the draft: checked and summarised first, then written.
             Route::post('/guides/{guide:id}/import/preview', [ImportController::class, 'preview'])->name('import.preview');
             Route::post('/guides/{guide:id}/import', [ImportController::class, 'store'])->name('import.store');
+
+            // An AI's answer to an activity prompt, attached to the draft's nodes by their keys —
+            // checked first, then attached — and the owner's review of each: reworded, or removed.
+            Route::post('/guides/{guide:id}/activities/import/preview', [ActivityImportController::class, 'preview'])->name('activities.import.preview');
+            Route::post('/guides/{guide:id}/activities/import', [ActivityImportController::class, 'store'])->name('activities.import.store');
+            Route::put('/guides/{guide:id}/activities/{node}/{id}', [ActivityController::class, 'update'])
+                ->where(['node' => 'items|stages|sections', 'id' => '[0-9]+'])->name('activities.update');
+            Route::delete('/guides/{guide:id}/activities/{node}/{id}', [ActivityController::class, 'destroy'])
+                ->where(['node' => 'items|stages|sections', 'id' => '[0-9]+'])->name('activities.destroy');
 
             // The research prompt copied from its content screen: recorded on the guide, and its
             // version frozen.

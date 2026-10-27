@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Editor;
 
 use App\Actions\AppendContent;
 use App\Actions\MoveContent;
+use App\Enums\ActivityFamily;
 use App\Enums\CardKind;
 use App\Enums\ChangeKind;
 use App\Enums\ContentNode;
@@ -84,6 +85,18 @@ class ContentController
                 'versionId' => $guide->prompt_version_id,
                 'values' => $options->researchValues($guide),
             ],
+            // The activity prompts there are, each filled from the guide — its content put in by
+            // the server — to bring their answers back with "Importar actividades".
+            'activityPrompts' => collect(ActivityFamily::cases())
+                ->filter(fn (ActivityFamily $family) => $family->template() !== null)
+                ->map(fn (ActivityFamily $family) => [
+                    'family' => $family->value,
+                    'label' => $family->label(),
+                    'prompt' => $options->template($family->template()),
+                    'values' => ['title' => $guide->title, 'level' => $guide->level->value, 'language' => $guide->locale],
+                ])
+                ->filter(fn (array $activity) => $activity['prompt'] !== null)
+                ->values(),
             'choices' => $options->choices($guide->locale),
             'linkKinds' => array_values(array_map(
                 fn (ItemKind $kind) => $kind->value,

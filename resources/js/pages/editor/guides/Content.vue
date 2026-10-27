@@ -18,7 +18,7 @@
  */
 import { provide, ref } from 'vue'
 import { router } from '@inertiajs/vue3'
-import { CircleCheck, Plus, Lock, Rocket, CopyPlus, History, GitCompare, Eye, FileJson, ScrollText } from '@lucide/vue'
+import { CircleCheck, Plus, Lock, Rocket, CopyPlus, History, GitCompare, Eye, FileJson, ScrollText, Sparkles } from '@lucide/vue'
 import PageHeader from '@/components/common/PageHeader.vue'
 import Eyebrow from '@/components/common/Eyebrow.vue'
 import EditorTitle from '@/components/editor/EditorTitle.vue'
@@ -34,6 +34,7 @@ import StageBlock from '@/components/editor/content/StageBlock.vue'
 import VersionChanges from '@/components/editor/content/VersionChanges.vue'
 import FixDialog from '@/components/editor/content/FixDialog.vue'
 import ImportDialog from '@/components/editor/content/ImportDialog.vue'
+import ActivityImportDialog from '@/components/editor/content/ActivityImportDialog.vue'
 import VersionedPromptFiller from '@/components/editor/prompts/VersionedPromptFiller.vue'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useEditorRoute } from '@/composables/useEditorRoute.js'
@@ -54,6 +55,8 @@ const props = defineProps({
     // versionId: the one last copied for this guide, values: what its blanks start filled with } —
     // and the choices of its level, language and category.
     research: { type: Object, required: true },
+    // [{ family, label, prompt, values }] — each activity prompt there is, filled from the guide.
+    activityPrompts: { type: Array, default: () => [] },
     choices: { type: Object, required: true },
 })
 
@@ -65,8 +68,9 @@ const deleting = ref(false)
 // Only the latest version, while still a draft, is edited.
 const editable = props.version.latest && !props.version.released
 
-// The AI's answer, brought into this draft.
+// The AI's answer, brought into this draft — its content, or activities on what is there.
 const importing = ref(false)
+const importingActivities = ref(false)
 
 const guide = props.guide.id
 const route = (action, ...args) => {
@@ -96,6 +100,7 @@ provide('content', {
     linkKinds: props.linkKinds,
     stepLength: props.stepLength,
     route,
+    activityRoute: (action, node, id) => editorRoute(`activities.${action}`, { guide, node, id }),
     label: (list, value) => props.kinds[list].find(option => option.value === value)?.label ?? value,
     move: (node, row, direction) => router.post(route('move', node, row.id, direction), {}, { preserveScroll: true }),
     requestDelete: (node, row) => (pendingDelete.value = { node, row }),
@@ -134,6 +139,9 @@ const release = () => {
     })
 }
 const draftNext = () => router.post(editorRoute('versions.store', { guide }))
+
+// An activity prompt's popup: the one open, or null. Copying it records nothing.
+const activityPrompt = ref(null)
 
 // The research prompt's popup, and what recording the last copy said.
 const researching = ref(false)
@@ -216,12 +224,33 @@ const recordResearch = payload => {
                     <FileJson :size="14" aria-hidden="true" />
                     {{ $t('arcadia.editor.import.action') }}
                 </Button>
+                <Button v-for="activity in activityPrompts" :key="activity.family" type="button" variant="outline" size="sm" @click="activityPrompt = activity">
+                    <ScrollText :size="14" aria-hidden="true" />
+                    {{ $t('arcadia.editor.activity_import.prompt', { family: activity.label }) }}
+                </Button>
+                <Button v-if="editable" type="button" variant="outline" size="sm" @click="importingActivities = true">
+                    <Sparkles :size="14" aria-hidden="true" />
+                    {{ $t('arcadia.editor.activity_import.action') }}
+                </Button>
             </div>
         </div>
 
         <ImportDialog v-if="editable" v-model:open="importing" :guide-id="guide" />
+        <ActivityImportDialog v-if="editable" v-model:open="importingActivities" :guide-id="guide" />
 
         <!-- The research prompt, filled from the guide: copy it into ChatGPT or Gemini, then import the answer. -->
+        <!-- An activity prompt, filled from the guide, its content put in by the server. -->
+        <Dialog :open="activityPrompt !== null" @update:open="isOpen => { if (!isOpen) activityPrompt = null }">
+            <DialogContent class="w-[calc(100%-2rem)] max-w-5xl">
+                <DialogHeader>
+                    <DialogTitle>{{ activityPrompt?.label }}</DialogTitle>
+                    <DialogDescription>{{ $t('arcadia.editor.activity_import.prompt_hint') }}</DialogDescription>
+                </DialogHeader>
+                <VersionedPromptFiller v-if="activityPrompt" :prompt="activityPrompt.prompt" :choices="choices"
+                                       :initial="activityPrompt.values" :guide-id="guide" />
+            </DialogContent>
+        </Dialog>
+
         <Dialog v-model:open="researching">
             <DialogContent class="w-[calc(100%-2rem)] max-w-5xl">
                 <DialogHeader>

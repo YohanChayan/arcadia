@@ -31,6 +31,12 @@ class PromptTemplate extends Model
      */
     public const GUIDE_FLYER = 'Flyer de guía — imagen';
 
+    /**
+     * The quick-check prompt's name (`QuickCheckPromptTemplateSeeder`): a guide's Content screen
+     * offers it filled from the guide, its videos put in by the server (`ActivityPromptContent`).
+     */
+    public const QUICK_CHECK = 'Actividades — preguntas rápidas';
+
     protected $table = 'guide_prompt_templates';
 
     protected $fillable = ['name', 'description'];

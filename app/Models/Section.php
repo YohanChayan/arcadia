@@ -20,6 +20,8 @@ class Section extends Model
 
     protected $casts = [
         'kind' => SectionKind::class,
+        // Not fillable: only the additive import writes it (`ActivityFamily`).
+        'activity' => 'array',
     ];
 
     public function version(): BelongsTo

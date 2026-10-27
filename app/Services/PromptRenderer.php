@@ -24,6 +24,11 @@ use Illuminate\Support\Collection;
  * Every fill-in form also offers "Instrucciones extra", whatever the template declares: a
  * one-off line for this research ("only sources in Spanish"), added at the end under its own
  * heading and kept with the other values (`EXTRA`), so a record still reproduces the exact text.
+ *
+ * An activity prompt also takes `{{guide_content}}` (`CONTENT`): a guide's content, which no form
+ * field could carry — tens of thousands of characters. The server fills it, from the guide the
+ * prompt was opened on (`ActivityPromptContent`); opened anywhere else, it says where it will go.
+ * It is put in last, so nothing in a guide's text is ever read as a placeholder.
  */
 class PromptRenderer
 {
@@ -37,11 +42,15 @@ class PromptRenderer
     /** The value every form carries besides the declared ones. No variable may take its name. */
     public const EXTRA = 'extra_instructions';
 
+    /** Where an activity prompt takes a guide's content, filled by the server. No variable may take its name. */
+    public const CONTENT = 'guide_content';
+
     /**
      * @param  array<string, mixed>  $values  by variable name
+     * @param  string|null  $content  a guide's content for `{{guide_content}}`, or null when none was named
      * @return array{prompt: string, missing: list<string>, undeclared: list<string>}
      */
-    public function render(PromptVersion $version, array $values): array
+    public function render(PromptVersion $version, array $values, ?string $content = null): array
     {
         $variables = $version->variables->keyBy('name');
         $missing = [];
@@ -57,6 +66,10 @@ class PromptRenderer
         }
 
         $prompt = $this->dropEmptyLines($prompt, $variables, $values);
+
+        // Held out of the placeholder pass by a marker no template writes, and put in at the end.
+        $marker = "\u{E000}".self::CONTENT."\u{E000}";
+        $prompt = preg_replace('/\{\{\s*'.self::CONTENT.'\s*\}\}/', $marker, $prompt);
 
         $prompt = preg_replace_callback(self::PLACEHOLDER, function (array $match) use ($variables, $values, &$missing, &$undeclared) {
             $name = $match[1];
@@ -83,6 +96,8 @@ class PromptRenderer
             return $this->words($variable, $value);
         }, $prompt);
 
+        $prompt = str_replace($marker, $content ?? __('arcadia.editor.prompts.fill.content_elsewhere'), $prompt);
+
         // A required blank no section uses is still a blank the owner was asked for.
         foreach ($variables as $name => $variable) {
             if ($variable->required && trim((string) ($values[$name] ?? '')) === '') {
@@ -102,7 +117,8 @@ class PromptRenderer
     {
         preg_match_all(self::PLACEHOLDER, $version->sections->pluck('body')->implode("\n"), $matches);
 
-        return array_values(array_unique($matches[1]));
+        // The guide's content is the server's to fill, never a variable's.
+        return array_values(array_diff(array_unique($matches[1]), [self::CONTENT]));
     }
 
     /**

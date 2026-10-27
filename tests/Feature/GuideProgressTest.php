@@ -245,4 +245,38 @@ class GuideProgressTest extends TestCase
         $this->actingAs($admin)->get($this->link())
             ->assertInertia(fn ($page) => $page->where('progress', null));
     }
+
+    public function test_the_dashboard_offers_the_next_line_in_the_guides_order_and_opens_the_guide_on_it(): void
+    {
+        $guide = Guide::create(['locale' => 'es', 'title' => 'Sheets', 'level' => Level::BASIC, 'status' => GuideStatus::PUBLISHED]);
+        $version = $guide->latestVersion();
+        // Written out of order: the order is the positions', never the ids'.
+        $later = $version->stages()->create(['title' => 'Tablas', 'position' => 2])
+            ->cards()->create(['kind' => CardKind::SOURCE, 'position' => 1])
+            ->items()->create(['kind' => ItemKind::PRACTICE, 'title' => 'Tu tabla', 'body' => 'x', 'position' => 1]);
+        $card = $version->stages()->create(['title' => 'Fórmulas', 'position' => 1])
+            ->cards()->create(['kind' => CardKind::SOURCE, 'position' => 1]);
+        $second = $card->items()->create(['kind' => ItemKind::YOUTUBE_VIDEO, 'title' => 'Suma', 'url' => 'https://youtu.be/dQw4w9WgXcQ', 'position' => 2]);
+        $second->forceFill(['brief' => ['duration' => '6 min']])->save();
+        $first = $card->items()->create(['kind' => ItemKind::PRACTICE, 'title' => 'Intro', 'body' => 'x', 'position' => 1]);
+        $version->release();
+        $reader = $guide->readers()->create(['email' => 'ana@gmail.com', 'user_id' => $this->ana->id]);
+
+        $dashboard = fn () => $this->actingAs($this->ana)->get('/es/mis-guias');
+
+        $dashboard()->assertInertia(fn ($page) => $page
+            ->where('guides.1.progress.next', ['key' => $first->key, 'title' => 'Intro', 'stage' => 1, 'stage_title' => 'Fórmulas', 'minutes' => null])
+            ->where('guides.1.continueUrl', fn ($url) => str_ends_with($url, "/guia/{$guide->link_token}#line-{$first->key}")));
+
+        $this->tick($first->key, reader: $reader);
+        $dashboard()->assertInertia(fn ($page) => $page
+            ->where('guides.1.progress.next', ['key' => $second->key, 'title' => 'Suma', 'stage' => 1, 'stage_title' => 'Fórmulas', 'minutes' => 6]));
+
+        $this->tick($second->key, reader: $reader);
+        $dashboard()->assertInertia(fn ($page) => $page->where('guides.1.progress.next.stage', 2)->where('guides.1.progress.next.key', $later->key));
+
+        // All done: nothing to continue with.
+        $this->tick($later->key, reader: $reader);
+        $dashboard()->assertInertia(fn ($page) => $page->where('guides.1.progress.next', null)->where('guides.1.continueUrl', null));
+    }
 }

@@ -5,11 +5,13 @@
  *
  * A link with a brief — what it teaches, from the research — shows it under a toggle, with the
  * way to a replacement (`ItemBrief`); a line whose source has gone shows it open. A clipped
- * video shows its clip and the evidence for it, which is what the owner reviews.
+ * video shows its clip and the evidence for it, which is what the owner reviews. Its activity, when
+ * it has one, is under it (`ActivityPanel`).
  */
 import { computed, inject, ref } from 'vue'
 import { ChevronDown, ExternalLink, Wrench } from '@lucide/vue'
 import ItemBrief from './ItemBrief.vue'
+import ActivityPanel from './ActivityPanel.vue'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import NodeForm from './NodeForm.vue'
@@ -71,5 +73,7 @@ const showBrief = ref(!props.item.is_available)
             </button>
             <ItemBrief v-if="showBrief" :item="item" class="mt-1.5" />
         </div>
+
+        <ActivityPanel v-if="item.activity" node="items" :row="item" class="mt-1.5" />
     </div>
 </template>

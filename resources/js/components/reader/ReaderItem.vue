@@ -7,13 +7,18 @@
  * A clip's "next", at its end, ticks the line and asks the page for the one after it — which may be
  * in a folded stage, to open, or a locked one, to stop at.
  *
+ * A video with a quick check (`QuickCheck`, under it) is ticked only by answering it: its checkbox
+ * and its clip's "next" take the reader to the questions instead, until they are answered right.
+ * Unticking it is still theirs to do.
+ *
  * For a signed-in reader, its notes: a row under the line — under the video, never over it — with
  * how many there are at one edge and "add a note" at the other. Either opens them: in the side
  * panel on a wide screen, in a sheet on a phone (`useGuideNotes`).
  */
-import { computed, inject } from 'vue'
+import { computed, inject, ref } from 'vue'
 import { Check, ExternalLink, NotebookPen, Plus } from '@lucide/vue'
 import VideoEmbed from './VideoEmbed.vue'
+import QuickCheck from './QuickCheck.vue'
 import { clipLabel as describeClip } from '@/lib/clock.js'
 
 const props = defineProps({
@@ -23,8 +28,23 @@ const props = defineProps({
 
 const emit = defineEmits(['toggle', 'next'])
 
-// The clip is watched: done, and on to the next line of the guide, wherever the page finds it.
+const asks = computed(() => props.item.activity?.family === 'quick_check' && props.item.activity.questions?.length > 0)
+
+// The questions, brought into view: what ticks a line that asks.
+const line = ref(null)
+const toQuestions = () => line.value?.querySelector('[data-quick-check]')?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+
+const tap = () => (asks.value && !props.done ? toQuestions() : emit('toggle'))
+
+// The clip is watched: done, and on to the next line of the guide, wherever the page finds it —
+// or, for a line that asks, on to its questions.
 const next = () => {
+    if (asks.value && !props.done) {
+        toQuestions()
+
+        return
+    }
+
     if (!props.done) {
         emit('toggle')
     }
@@ -44,11 +64,13 @@ const noteCount = computed(() => notes?.countFor(target.value) ?? 0)
 </script>
 
 <template>
-    <li :data-guide-line="item.key" class="flex list-none scroll-mt-24 gap-3 py-3">
+    <li ref="line" :id="`line-${item.key}`" :data-guide-line="item.key" class="flex list-none scroll-mt-24 gap-3 py-3">
+        <!-- Its id is the anchor "Continue" opens the guide at: Inertia scrolls to it on load, and to
+             the top when nothing has the id. -->
         <button type="button" role="checkbox" :aria-checked="done" :aria-label="`${$t('arcadia.reader.mark_done')}: ${item.title}`"
                 class="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-md border-2 transition-colors"
                 :class="done ? 'border-guide-done bg-guide-done text-guide-on-accent' : 'border-guide-rule hover:border-guide-accent'"
-                @click="$emit('toggle')">
+                @click="tap">
             <Check v-if="done" :size="14" :stroke-width="3" aria-hidden="true" />
         </button>
 
@@ -67,6 +89,7 @@ const noteCount = computed(() => notes?.countFor(target.value) ?? 0)
                     <ExternalLink :size="14" aria-hidden="true" />
                     {{ isYoutube ? $t('arcadia.reader.open_youtube') : $t('arcadia.reader.open_site') }}
                 </a>
+                <QuickCheck v-if="asks" :line-key="item.key" :questions="item.activity.questions" :done="done" @next="emit('next')" />
             </template>
 
             <div v-if="notes?.enabled" class="mt-2 flex items-center justify-between gap-3 text-xs">
