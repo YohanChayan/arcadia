@@ -115,7 +115,7 @@ watch(() => props.celebration, async celebration => {
                     <blockquote v-if="card.quote" class="mt-3 mb-0 border-l-2 border-guide-accent pl-3 text-sm italic text-guide-ink-soft">{{ card.quote }}</blockquote>
 
                     <ul class="mt-2 mb-0 divide-y divide-guide-rule p-0">
-                        <ReaderItem v-for="item in card.items" :key="item.key" :item="item"
+                        <ReaderItem v-for="item in card.items" :key="item.key" :item="item" :locked="locked"
                                     :done="progress.isDone(item.key)" @toggle="progress.toggle(item.key)" @next="$emit('next', item.key)" />
                     </ul>
 

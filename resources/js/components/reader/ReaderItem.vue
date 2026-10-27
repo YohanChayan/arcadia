@@ -11,6 +11,8 @@
  * and its clip's "next" take the reader to the questions instead, until they are answered right.
  * Unticking it is still theirs to do.
  *
+ * In a locked stage (`locked`) it is shown, not used: its checkbox and its questions are disabled.
+ *
  * For a signed-in reader, its notes: a row under the line — under the video, never over it — with
  * how many there are at one edge and "add a note" at the other. Either opens them: in the side
  * panel on a wide screen, in a sheet on a phone (`useGuideNotes`).
@@ -24,6 +26,7 @@ import { clipLabel as describeClip } from '@/lib/clock.js'
 const props = defineProps({
     item: { type: Object, required: true },
     done: { type: Boolean, default: false },
+    locked: { type: Boolean, default: false },
 })
 
 const emit = defineEmits(['toggle', 'next'])
@@ -70,7 +73,7 @@ const noteCount = computed(() => notes?.countFor(target.value) ?? 0)
         <button type="button" role="checkbox" :aria-checked="done" :aria-label="`${$t('arcadia.reader.mark_done')}: ${item.title}`"
                 class="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-md border-2 transition-colors"
                 :class="done ? 'border-guide-done bg-guide-done text-guide-on-accent' : 'border-guide-rule hover:border-guide-accent'"
-                @click="tap">
+                :disabled="locked" @click="tap">
             <Check v-if="done" :size="14" :stroke-width="3" aria-hidden="true" />
         </button>
 
@@ -89,7 +92,7 @@ const noteCount = computed(() => notes?.countFor(target.value) ?? 0)
                     <ExternalLink :size="14" aria-hidden="true" />
                     {{ isYoutube ? $t('arcadia.reader.open_youtube') : $t('arcadia.reader.open_site') }}
                 </a>
-                <QuickCheck v-if="asks" :line-key="item.key" :questions="item.activity.questions" :done="done" @next="emit('next')" />
+                <QuickCheck v-if="asks" :line-key="item.key" :questions="item.activity.questions" :done="done" :locked="locked" @next="emit('next')" />
             </template>
 
             <div v-if="notes?.enabled" class="mt-2 flex items-center justify-between gap-3 text-xs">

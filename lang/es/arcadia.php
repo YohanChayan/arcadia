@@ -1003,6 +1003,7 @@ return [
             'next' => 'Siguiente',
             'answered' => 'Ya la respondiste.',
             'answer_first' => 'Responde la pregunta rápida para marcar este video.',
+            'locked' => 'Desbloquea esta etapa para responderla.',
             'failed' => 'No se pudo comprobar tu respuesta. Inténtalo de nuevo.',
         ],
         'guide_complete' => '¡Guía completa!',

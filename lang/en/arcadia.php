@@ -1002,6 +1002,7 @@ return [
             'next' => 'Next',
             'answered' => 'You already answered it.',
             'answer_first' => 'Answer the quick check to mark this video.',
+            'locked' => 'Unlock this stage to answer it.',
             'failed' => 'Your answer could not be checked. Try again.',
         ],
         'guide_complete' => 'Guide complete!',
