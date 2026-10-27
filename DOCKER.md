@@ -5,7 +5,9 @@ One image, two targets (`Dockerfile`):
 | Target | Used by | Code |
 |---|---|---|
 | `dev` | `docker-compose.yml`, on your machine | mounted — an edit is live |
-| `prod` | the server's compose file | baked in, with the built client and SSR bundles |
+| `prod` | `compose.prod.yml`, on the server: `arc-app`, `arc-queue` | baked in, with the built client and SSR bundles |
+| `web` | `compose.prod.yml`, on the server: nginx | `public/` only, copied from `prod` |
+| `ssr` | `compose.prod.yml`, on the server: `arc-ssr` | the SSR bundle and its runtime `node_modules` |
 
 Both start from `base`: PHP 8.5.12 (what production runs) with `pdo_mysql`, `intl`, `gd`
 (JPEG, WebP, FreeType), `exif`, `zip`, `bcmath`, `pcntl`, production's upload limits, Composer and
@@ -81,11 +83,105 @@ The script is the local twin of the server's `/usr/local/sbin/agent-ro-grants`.
 The scripts run only when the volume is new. To start the database over:
 `docker compose down -v` (it deletes the data).
 
+## Production
+
+`compose.prod.yml` runs Arcadia on a host that already provides the shared platform: **one
+Caddy** (TLS, on the external `edge` network) and **one MySQL** (on the external `db` network),
+each project in its own stack under `/srv/apps/<project>`. It has the same shape as
+yhn-dev-side's, which runs beside it.
+
+```
+  Caddy (platform) ──edge──► arcadia-web (nginx: public/, /build cached a year)
+                                  │ fastcgi
+                                  ▼
+                              arc-app (PHP-FPM) · arc-queue ──db──► platform MySQL
+                                  │ http :13714
+                                  ▼
+                              arc-ssr (node bootstrap/ssr/ssr.js)
+```
+
+All three images come from the one `Dockerfile`, by target. The code, `vendor/` and both bundles
+are baked in; nothing is bind-mounted. Only `storage/` is a volume, shared by the PHP containers
+and mounted read-only into nginx for `public/storage`.
+
+What to know about it:
+
+- **No `ports:` anywhere.** Docker bypasses the host firewall, so a published port is public.
+  Caddy reaches `arcadia-web` by container name over `edge`; no other service joins `edge`.
+- **Service names are prefixed** (`arc-app`, …). Every stack on the host shares `edge` and `db`,
+  and a service name is a DNS name on every network it joins — two stacks with an `app` would
+  answer for each other.
+- **The database host is `platform-mysql-1`**, the container's name, not the `mysql` alias,
+  which another stack could also claim.
+- **Configuration is `.env` through `env_file`**, copied from `docker/prod/env.example`. Compose
+  reads it, not Laravel's dotenv: write values literally, never `${OTHER}`. It is read when a
+  container is **created**, so after editing it run `up -d`, not `restart`.
+- **Each PHP container caches for itself.** `docker/prod/entrypoint.sh` runs `php artisan
+  optimize` on every start, because app and queue have separate filesystems.
+- **All PHP containers run as `www-data`**, so `docker compose exec` does too. Migrations are a
+  deploy step, never run on start.
+- **Cache, sessions and queue are the database**: the PHP containers share them without Redis.
+- **No scheduler**: Arcadia schedules nothing. Add an `arc-scheduler` like the studio's
+  `yhn-scheduler` the day `routes/console.php` schedules something.
+- **Behind the proxy** the app trusts `X-Forwarded-*` from private addresses only
+  (`bootstrap/app.php`). Without that, every link it builds would be `http://`, and every
+  visitor would share Caddy's address for rate limiting.
+- Images are built **on the server**. The Vite build is the heaviest step; on a small host,
+  build while traffic is low.
+
+### First deploy
+
+The database and its user are created once in the platform MySQL, as root:
+
+```sql
+CREATE DATABASE arcadia CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER 'arcadia'@'%' IDENTIFIED BY '…';
+GRANT ALL PRIVILEGES ON arcadia.* TO 'arcadia'@'%';
+```
+
+Then, in a checkout of this repository at `/srv/apps/arcadia`:
+
+```bash
+cp docker/prod/env.example .env && chmod 600 .env        # fill it in; APP_KEY below
+
+docker compose -f compose.prod.yml build
+docker compose -f compose.prod.yml run --rm --no-deps --entrypoint php arc-app artisan key:generate --show
+#   paste the key into .env as APP_KEY
+
+docker compose -f compose.prod.yml up -d
+docker compose -f compose.prod.yml exec arc-app php artisan migrate --force --seed
+```
+
+**`UserSeeder` creates the owner with a password committed to this repository.** Change it
+before the host is reachable.
+
+The Caddy site file is `docker/prod/caddy/<host>.caddy`: it goes into the platform's
+`caddy/sites/` once DNS points at the host, followed by a Caddy reload.
+
+### Updating
+
+Bring the checkout to the new commit, then:
+
+```bash
+docker compose -f compose.prod.yml build
+docker compose -f compose.prod.yml up -d
+docker compose -f compose.prod.yml exec arc-app php artisan migrate --force
+```
+
+`up -d` recreates every container whose image changed, which re-runs `optimize` in each.
+
 ## Traps
 
 - **PHP 8.5 has OPcache built in.** Listing `opcache` in `docker-php-ext-install` fails the
   build.
 - **nginx re-resolves `app` every 10 seconds** (`docker/nginx/default.conf`). A name resolved
   once at startup keeps the address of a container that has since been recreated — a 502.
+- **The SSR bundle is not self-contained.** It imports `vue`, `@inertiajs/vue3` and the other
+  runtime dependencies from `node_modules`, so `ssr` carries them, pruned of dev dependencies.
+  Moving a package the SSR imports into `devDependencies` breaks the server render in production
+  only.
+- **Locally, the production stack and this one share the project name `arcadia`** (this one
+  takes the folder's name). `compose.prod.yml` is for the server; run it here only from another
+  directory, or the two stacks list as one.
 - **`node_modules` lives in a volume**, not your machine's folder: the native binaries of
   Rolldown, Lightning CSS and Tailwind are per platform, and a macOS install cannot load in Linux.

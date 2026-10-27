@@ -30,6 +30,11 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->encryptCookies(except: ['sidebar_state']);
 
+        // In production Caddy terminates TLS and reaches the app across a Docker network, so the
+        // scheme and the visitor's address arrive as X-Forwarded-* headers. Only private ranges
+        // are trusted: nothing outside the server can reach the app without passing Caddy.
+        $middleware->trustProxies(at: ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16']);
+
         // Before routing, so `/es/guias/` is one 301 away from its page. See the class.
         $middleware->prepend(RemoveTrailingSlash::class);
 

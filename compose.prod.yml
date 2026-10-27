@@ -1,0 +1,88 @@
+# =============================================================================
+#  Arcadia — production stack, for a host running the shared platform: one
+#  Caddy on the external `edge` network, one MySQL on the external `db`
+#  network. The same shape as yhn-dev-side's. See DOCKER.md § Production.
+#
+#    docker compose -f compose.prod.yml build
+#    docker compose -f compose.prod.yml up -d
+#
+#  No service publishes a port: Docker bypasses the host firewall, so a
+#  `ports:` line here would be public. Caddy reaches `arcadia-web` over
+#  `edge`; nothing else joins `edge`.
+#
+#  Service names are prefixed: every stack on the host shares `edge` and `db`,
+#  and each service name becomes a DNS name on every network it joins.
+# =============================================================================
+
+name: arcadia
+
+x-php: &php
+  image: arcadia-app
+  restart: unless-stopped
+  user: www-data
+  env_file: .env
+  volumes:
+    - storage:/var/www/storage
+  networks:
+    - internal
+    - db
+
+services:
+  # ---- PHP-FPM ---------------------------------------------------------
+  arc-app:
+    <<: *php
+    build:
+      context: .
+      target: prod
+    mem_limit: 512m
+
+  # ---- Queue worker ----------------------------------------------------
+  #  Every mail goes out through a queued job (`App\Enums\QueueName`).
+  #  `queue:work`, not `queue:listen`: the code only changes with a new image.
+  arc-queue:
+    <<: *php
+    command: ["php", "artisan", "queue:work", "--queue=arcadia", "--tries=3", "--backoff=10", "--max-time=3600"]
+    mem_limit: 256m
+    depends_on:
+      - arc-app
+
+  #  No scheduler: Arcadia schedules nothing (routes/console.php).
+
+  # ---- Inertia SSR -----------------------------------------------------
+  #  Reached by the app as http://arc-ssr:13714 (INERTIA_SSR_URL).
+  arc-ssr:
+    image: arcadia-ssr
+    build:
+      context: .
+      target: ssr
+    restart: unless-stopped
+    mem_limit: 256m
+    networks:
+      - internal
+
+  # ---- nginx: the only service Caddy talks to --------------------------
+  arc-web:
+    image: arcadia-web
+    build:
+      context: .
+      target: web
+    container_name: arcadia-web
+    restart: unless-stopped
+    mem_limit: 64m
+    volumes:
+      - storage:/var/www/storage:ro
+    networks:
+      - internal
+      - edge
+    depends_on:
+      - arc-app
+
+volumes:
+  storage:
+
+networks:
+  internal: {}
+  edge:
+    external: true
+  db:
+    external: true

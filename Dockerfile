@@ -2,7 +2,10 @@
 #  Arcadia — one image, two targets
 #
 #    dev   the local stack (docker-compose.yml): code mounted, edits are live
-#    prod  the server (the production compose): code and built assets baked in
+#    prod  PHP-FPM with the code and both bundles baked in (compose.prod.yml:
+#          arc-app, arc-queue)
+#    web   nginx with `public/` baked in, handing PHP to arc-app
+#    ssr   Node running the Inertia SSR bundle (arc-ssr)
 #
 #  Both start from `base`, so local and production run the same PHP with the
 #  same extensions and limits.
@@ -57,7 +60,11 @@ RUN npm ci
 
 COPY . .
 RUN composer dump-autoload --optimize --no-dev \
-    && npm run build:ssr
+    && npm run build:ssr \
+    && npm prune --omit=dev
+
+# The SSR bundle imports `vue`, `@inertiajs/vue3` and the rest from `node_modules`
+# instead of inlining them, so `ssr` carries the runtime dependencies, pruned here.
 
 # ---- prod: the code, its vendor and the built assets ----------------------------
 FROM base AS prod
@@ -70,9 +77,38 @@ RUN composer install --no-dev --no-scripts --no-autoloader --no-interaction --pr
 
 COPY . .
 COPY --from=assets /var/www/public/build ./public/build
+# Inertia checks the SSR bundle exists before it calls arc-ssr, so it is here too.
 COPY --from=assets /var/www/bootstrap/ssr ./bootstrap/ssr
 
+# `public/storage` is what `storage:link` would make, relative so it resolves in
+# `web` too, where the same volume is mounted at the same path.
 RUN composer dump-autoload --optimize --no-dev \
+    && ln -s ../storage/app/public public/storage \
     && chown -R www-data:www-data storage bootstrap/cache
 
+COPY docker/prod/entrypoint.sh /usr/local/bin/entrypoint
+COPY docker/prod/php-fpm.conf /usr/local/etc/php-fpm.d/zzz-pool.conf
+ENTRYPOINT ["entrypoint"]
+CMD ["php-fpm"]
+
 USER www-data
+
+# ---- web: nginx in front of arc-app, serving the built `public/` -------------
+FROM nginx:stable-alpine AS web
+
+COPY docker/prod/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=prod /var/www/public /var/www/public
+
+# ---- ssr: the Inertia render server ------------------------------------------
+#  `package.json` carries `"type": "module"`, which ssr.js needs.
+FROM node:22-bookworm-slim AS ssr
+
+WORKDIR /var/www
+
+COPY --from=assets /var/www/package.json ./package.json
+COPY --from=assets /var/www/node_modules ./node_modules
+COPY --from=assets /var/www/bootstrap/ssr ./bootstrap/ssr
+
+USER node
+EXPOSE 13714
+CMD ["node", "bootstrap/ssr/ssr.js"]
