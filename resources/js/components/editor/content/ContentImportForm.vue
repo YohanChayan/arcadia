@@ -1,12 +1,13 @@
 <script setup>
 /**
- * "Importar resultado de la IA": the AI's answer uploaded as a `.json` file — the server only reads
+ * The guide-content form of "Importar respuesta" (`ImportAnswerDialog`): the research AI's answer uploaded as a `.json` file — the server only reads
  * it, never keeps it — checked with nothing written — every problem at its place in the guide, or
  * a summary of what will be created — and then, on confirmation, written into this draft.
  *
  * A draft that already has content is replaced only when the owner ticks that it should be;
  * the guide's title, level and goals are taken from the answer only when asked. The guide stays
- * a draft either way.
+ * a draft either way. A file that looks like an activities answer is said to be (`kind`), for the
+ * dialog to offer the other form.
  */
 import { ref, watch } from 'vue'
 import { router } from '@inertiajs/vue3'
@@ -15,14 +16,14 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 import { Spinner } from '@/components/ui/spinner'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { useEditorRoute } from '@/composables/useEditorRoute.js'
+import { sniffAnswerKind } from './answerKind.js'
 
 const props = defineProps({
     guideId: { type: Number, required: true },
 })
 
-const open = defineModel('open', { type: Boolean, default: false })
+const emit = defineEmits(['done', 'kind'])
 
 const editorRoute = useEditorRoute()
 
@@ -37,20 +38,11 @@ const failed = ref('')
 // The file's own refusal (not .json, too large), as the server words it.
 const fileError = ref('')
 
-watch(open, isOpen => {
-    if (isOpen) {
-        file.value = null
-        preview.value = null
-        failed.value = ''
-        fileError.value = ''
-        replace.value = false
-    }
-})
-
-// A changed file has not been checked yet.
-watch(file, () => {
+// A changed file has not been checked yet — and may be the other kind of answer.
+watch(file, async chosen => {
     preview.value = null
     fileError.value = ''
+    emit('kind', chosen ? await sniffAnswerKind(chosen) : null)
 })
 
 const fileInput = ref(null)
@@ -90,7 +82,7 @@ const confirm = () => {
         apply_details: applyDetails.value,
     }, {
         preserveScroll: true,
-        onSuccess: () => { open.value = false },
+        onSuccess: () => emit('done'),
         onError: errors => {
             fileError.value = errors.file ?? ''
             failed.value = fileError.value ? '' : 'import'
@@ -101,12 +93,8 @@ const confirm = () => {
 </script>
 
 <template>
-    <Dialog v-model:open="open">
-        <DialogContent class="w-[calc(100%-2rem)] max-w-3xl">
-            <DialogHeader>
-                <DialogTitle>{{ $t('arcadia.editor.import.title') }}</DialogTitle>
-                <DialogDescription>{{ $t('arcadia.editor.import.lead') }}</DialogDescription>
-            </DialogHeader>
+    <div class="flex flex-col gap-4">
+            <p class="m-0 text-sm text-ink-3">{{ $t('arcadia.editor.import.lead') }}</p>
 
             <div>
                 <input ref="fileInput" type="file" accept=".json,application/json" class="hidden" @change="pick">
@@ -190,13 +178,11 @@ const confirm = () => {
 
             <p v-if="failed === 'import'" class="m-0 text-sm text-danger">{{ $t('arcadia.editor.import.errors.import_failed') }}</p>
 
-            <DialogFooter>
-                <Button type="button" variant="ghost" @click="open = false">{{ $t('arcadia.editor.cancel') }}</Button>
+            <div class="flex justify-end">
                 <Button type="button" variant="brand" :disabled="!preview?.summary || (preview.has_content && !replace) || importing" @click="confirm">
                     <Spinner v-if="importing" class="size-3.5" />
                     {{ $t('arcadia.editor.import.confirm') }}
                 </Button>
-            </DialogFooter>
-        </DialogContent>
-    </Dialog>
+            </div>
+    </div>
 </template>

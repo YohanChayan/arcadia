@@ -52,6 +52,9 @@ class HandleInertiaRequests extends Middleware
                 'error' => session('error'),
             ],
 
+            // Set once by a Google sign-in (`GoogleController`); the shell shows the offer.
+            'offerPasskey' => fn () => (bool) session('offer_passkey'),
+
             // The request's language, never the account's: the URL decides, and the editor's
             // locale-named routes must match the page. A closure, so it is read after the route
             // group has set the language.

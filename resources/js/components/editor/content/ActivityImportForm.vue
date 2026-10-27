@@ -1,23 +1,24 @@
 <script setup>
 /**
- * "Importar actividades": the AI's answer to an activity prompt, uploaded as its `.json` file — the
+ * The activities form of "Importar respuesta" (`ImportAnswerDialog`): the AI's answer to an activity prompt, uploaded as its `.json` file — the
  * server only reads it — checked against this draft's keys with nothing written, every problem at
  * its place, or a summary of what it attaches and what of its family it replaces; then, on
- * confirmation, attached. The draft's content itself is never changed.
+ * confirmation, attached. The draft's content itself is never changed. A file that looks like a
+ * guide-content answer is said to be (`kind`), for the dialog to offer the other form.
  */
 import { ref, watch } from 'vue'
 import { router } from '@inertiajs/vue3'
 import { CircleCheck, FileJson, FileUp, TriangleAlert } from '@lucide/vue'
 import { Button } from '@/components/ui/button'
 import { Spinner } from '@/components/ui/spinner'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { useEditorRoute } from '@/composables/useEditorRoute.js'
+import { sniffAnswerKind } from './answerKind.js'
 
 const props = defineProps({
     guideId: { type: Number, required: true },
 })
 
-const open = defineModel('open', { type: Boolean, default: false })
+const emit = defineEmits(['done', 'kind'])
 
 const editorRoute = useEditorRoute()
 
@@ -29,19 +30,11 @@ const preview = ref(null)
 const failed = ref('')
 const fileError = ref('')
 
-watch(open, isOpen => {
-    if (isOpen) {
-        file.value = null
-        preview.value = null
-        failed.value = ''
-        fileError.value = ''
-    }
-})
-
-// A changed file has not been checked yet.
-watch(file, () => {
+// A changed file has not been checked yet — and may be the other kind of answer.
+watch(file, async chosen => {
     preview.value = null
     fileError.value = ''
+    emit('kind', chosen ? await sniffAnswerKind(chosen) : null)
 })
 
 const fileInput = ref(null)
@@ -77,7 +70,7 @@ const confirm = () => {
     importing.value = true
     router.post(editorRoute('activities.import.store', props.guideId), { file: file.value }, {
         preserveScroll: true,
-        onSuccess: () => { open.value = false },
+        onSuccess: () => emit('done'),
         onError: errors => {
             fileError.value = errors.file ?? ''
             failed.value = fileError.value ? '' : 'import'
@@ -88,12 +81,8 @@ const confirm = () => {
 </script>
 
 <template>
-    <Dialog v-model:open="open">
-        <DialogContent class="w-[calc(100%-2rem)] max-w-2xl">
-            <DialogHeader>
-                <DialogTitle>{{ $t('arcadia.editor.activity_import.title') }}</DialogTitle>
-                <DialogDescription>{{ $t('arcadia.editor.activity_import.lead') }}</DialogDescription>
-            </DialogHeader>
+    <div class="flex flex-col gap-4">
+            <p class="m-0 text-sm text-ink-3">{{ $t('arcadia.editor.activity_import.lead') }}</p>
 
             <div>
                 <input ref="fileInput" type="file" accept=".json,application/json" class="hidden" @change="pick">
@@ -150,13 +139,11 @@ const confirm = () => {
 
             <p v-if="failed === 'import'" class="m-0 text-sm text-danger">{{ $t('arcadia.editor.activity_import.errors.import_failed') }}</p>
 
-            <DialogFooter>
-                <Button type="button" variant="ghost" @click="open = false">{{ $t('arcadia.editor.cancel') }}</Button>
+            <div class="flex justify-end">
                 <Button type="button" variant="brand" :disabled="!preview?.summary || importing" @click="confirm">
                     <Spinner v-if="importing" class="size-3.5" />
                     {{ $t('arcadia.editor.activity_import.confirm') }}
                 </Button>
-            </DialogFooter>
-        </DialogContent>
-    </Dialog>
+            </div>
+    </div>
 </template>

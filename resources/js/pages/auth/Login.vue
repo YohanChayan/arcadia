@@ -12,8 +12,9 @@
  * in, so the page says so first and offers the way out: Chrome on Android, the link to paste
  * elsewhere. Detected from the user agent after mount, so the server-rendered page never guesses.
  *
- * A passkey is the third way in, for an account that added one in Settings › Security — shown only
- * while `PASSKEYS_ENABLED` is on and the browser supports passkeys.
+ * A passkey is the third way in, for an account that added one — offered after a Google sign-in
+ * (`PasskeyOffer`) or in Settings › Security — shown only while `PASSKEYS_ENABLED` is on and the
+ * browser supports passkeys. On a browser that registered one, it comes first, above Google.
  *
  * It sits in Arcadia's sign-in frame (`ArcadiaAuthFrame`): the landing's photograph, the way back home,
  * the card and the mark.
@@ -30,6 +31,7 @@ import { Spinner } from '@/components/ui/spinner'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 import PasskeyVerify from '@/components/PasskeyVerify.vue'
+import { passkeyRegisteredHere } from '@/lib/passkey-device'
 
 const props = defineProps({
     pageTitle: String,
@@ -50,8 +52,12 @@ const error = computed(() => page.props.message?.error)
 const inApp = ref(false)
 const android = ref(false)
 const copied = ref(false)
+// This browser made a passkey: the quickest way back in goes first. Read after mount, like the
+// in-app check, so the server-rendered page shows the usual order.
+const passkeyFirst = ref(false)
 
 onMounted(() => {
+    passkeyFirst.value = props.canUsePasskeys && passkeyRegisteredHere()
     const agent = navigator.userAgent
     inApp.value = /; wv\)|WhatsApp|FBAN|FBAV|Instagram|Line\//i.test(agent)
     android.value = /Android/i.test(agent)
@@ -109,10 +115,13 @@ const submit = () => {
 
         <p v-if="error" class="mt-6 mb-0 rounded-control border border-danger/30 bg-danger/5 p-3 text-sm text-ink" role="alert">{{ error }}</p>
 
+        <PasskeyVerify v-if="passkeyFirst" class="mt-6" :label="$t('arcadia.auth.passkey.sign_in')"
+                       :loading-label="$t('arcadia.auth.passkey.signing_in')" :separator="$t('arcadia.auth.passkey.or')" />
+
         <!-- A plain link, not a fetch: the browser goes to Google and comes back here. Google's
              branding fixes the button's white, its text colour and its four-colour mark. -->
-        <a href="/auth/google"
-           class="mt-6 flex min-h-12 w-full items-center justify-center gap-3 rounded-control bg-white px-4 py-3 text-base font-semibold text-[#1F1F1F] no-underline shadow-sm hover:bg-white/90">
+        <a href="/auth/google" :class="passkeyFirst ? '' : 'mt-6'"
+           class="flex min-h-12 w-full items-center justify-center gap-3 rounded-control bg-white px-4 py-3 text-base font-semibold text-[#1F1F1F] no-underline shadow-sm hover:bg-white/90">
             <svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true">
                 <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z" />
                 <path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z" />
@@ -124,7 +133,7 @@ const submit = () => {
         <p class="mt-2 mb-0 text-center text-xs text-ink-4">{{ $t('arcadia.auth.google.hint') }}</p>
 
         <!-- Only for an account that added one in Settings, and only where the browser can. -->
-        <PasskeyVerify v-if="canUsePasskeys" class="mt-6" :label="$t('arcadia.auth.passkey.sign_in')"
+        <PasskeyVerify v-if="canUsePasskeys && !passkeyFirst" class="mt-6" :label="$t('arcadia.auth.passkey.sign_in')"
                        :loading-label="$t('arcadia.auth.passkey.signing_in')" :separator="$t('arcadia.auth.passkey.or')" />
 
         <button type="button" class="group mx-auto mt-6 flex items-center gap-1 text-xs font-medium text-accent underline-offset-4 decoration-accent/50 transition hover:underline hover:brightness-125 focus-visible:underline"

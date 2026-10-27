@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Enums\ActivityFamily;
 use App\Enums\ItemKind;
+use App\Enums\SectionKind;
 use App\Models\Item;
 use App\Models\Stage;
 use App\Models\Version;
@@ -18,6 +19,8 @@ use App\Models\Version;
  * - a quick check, the video lines — their title, stage, the brief's summary and the topics it
  *   `covers`, and the clip that plays. The research AI cannot watch a video, so the brief is all a
  *   question can honestly rest on; a video without one is left out.
+ * - flip cards, the "must master" list — its key and its text — and, for context, each stage's
+ *   title and what the reader can do when they finish it. Nothing when there is no such list.
  *
  * The other families' slices come with their prompts; until then they have none.
  */
@@ -27,6 +30,7 @@ class ActivityPromptContent
     {
         $slice = match ($family) {
             ActivityFamily::QUICK_CHECK => $this->videos($version),
+            ActivityFamily::FLIP_CARDS => $this->mustMaster($version),
             default => null,
         };
 
@@ -49,6 +53,20 @@ class ActivityPromptContent
                 ], fn ($value) => $value !== null)))
             ->values()
             ->all();
+    }
+
+    /** @return array<string, mixed>|null */
+    private function mustMaster(Version $version): ?array
+    {
+        $section = $version->sections()->where('kind', SectionKind::MUST_MASTER)->first();
+
+        return $section ? [
+            'must_master' => ['key' => $section->key, 'text' => $section->body],
+            'stages' => $version->stages()->get()->values()->map(fn (Stage $stage, int $index) => array_filter([
+                'stage' => ($index + 1).' · '.$stage->title,
+                'goal' => $stage->goal,
+            ]))->all(),
+        ] : null;
     }
 
     private function clock(int $seconds): string

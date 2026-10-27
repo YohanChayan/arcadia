@@ -41,6 +41,8 @@ const minutes = computed(() => {
 })
 
 // The stage's own notes, for a signed-in reader: a button at the header's edge.
+const noteMarks = inject('guideNoteMarks', new Set())
+
 const notes = inject('guideNotes', null)
 const target = computed(() => ({ kind: 'stage', key: props.stage.key }))
 const noteCount = computed(() => notes?.countFor(target.value) ?? 0)
@@ -69,6 +71,8 @@ watch(() => props.celebration, async celebration => {
                             {{ $t('arcadia.reader.locked') }}
                         </span>
                         <span v-else-if="keys.length" class="normal-case tracking-normal text-guide-ink-soft">{{ done }}/{{ keys.length }}</span>
+                        <!-- The owner's view of a reader: they wrote a note on this stage. -->
+                        <NotebookPen v-if="noteMarks.has(`stage:${stage.key}`)" :size="12" class="text-guide-accent" :aria-label="$t('arcadia.reader.has_notes')" />
                     </span>
                     <span class="mt-1 block font-display text-xl font-semibold text-guide-ink sm:text-2xl">{{ stage.title }}</span>
                 </span>

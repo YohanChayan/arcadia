@@ -10,7 +10,7 @@ use Illuminate\Database\Seeder;
 /**
  * The quick-check prompt: what the owner gives ChatGPT or Gemini to write one to three questions
  * for each video of a guide — the ones a reader answers right to tick it (`ActivityFamily`). Its
- * answer is imported with "Importar actividades" (`ActivityImport`), and it is written to the
+ * answer is imported with "Importar respuesta" → Actividades (`ActivityImport`), and it is written to the
  * shape that import checks: the family, then each video by its `key`, exactly as it was given.
  *
  * The videos come in `{{guide_content}}`, put in by the server from the guide the prompt is opened
@@ -26,7 +26,7 @@ class QuickCheckPromptTemplateSeeder extends Seeder
 {
     public const NAME = PromptTemplate::QUICK_CHECK;
 
-    private const DESCRIPTION = 'Preguntas rápidas para cada video de una guía, para ChatGPT o Gemini: de 1 a 3 por video, basadas solo en su resumen. Se importan con «Importar actividades».';
+    private const DESCRIPTION = 'Preguntas rápidas para cada video de una guía, para ChatGPT o Gemini: de 1 a 3 por video, basadas solo en su resumen. Se importan con «Importar respuesta» → Actividades.';
 
     public function run(): void
     {

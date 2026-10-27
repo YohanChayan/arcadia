@@ -11,7 +11,8 @@
  * and its clip's "next" take the reader to the questions instead, until they are answered right.
  * Unticking it is still theirs to do.
  *
- * In a locked stage (`locked`) it is shown, not used: its checkbox and its questions are disabled.
+ * In a locked stage (`locked`) it is shown, not used: its checkbox and its questions are disabled —
+ * as in the owner's read-only view of a reader, where it also marks a line the reader has notes on.
  *
  * For a signed-in reader, its notes: a row under the line — under the video, never over it — with
  * how many there are at one edge and "add a note" at the other. Either opens them: in the side
@@ -61,6 +62,11 @@ const isLink = computed(() => isYoutube.value || props.item.kind === 'external_s
 // Which part of the video plays, said before the reader commits to it.
 const clipLabel = computed(() => describeClip(props.item.clip?.start, props.item.clip?.end))
 
+const progress = inject('guideProgress', null)
+const readOnly = computed(() => Boolean(progress?.readOnly))
+const noteMarks = inject('guideNoteMarks', new Set())
+const hasNotes = computed(() => noteMarks.has(`item:${props.item.key}`))
+
 const notes = inject('guideNotes', null)
 const target = computed(() => ({ kind: 'item', key: props.item.key }))
 const noteCount = computed(() => notes?.countFor(target.value) ?? 0)
@@ -73,12 +79,17 @@ const noteCount = computed(() => notes?.countFor(target.value) ?? 0)
         <button type="button" role="checkbox" :aria-checked="done" :aria-label="`${$t('arcadia.reader.mark_done')}: ${item.title}`"
                 class="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-md border-2 transition-colors"
                 :class="done ? 'border-guide-done bg-guide-done text-guide-on-accent' : 'border-guide-rule hover:border-guide-accent'"
-                :disabled="locked" @click="tap">
+                :disabled="locked || readOnly" @click="tap">
             <Check v-if="done" :size="14" :stroke-width="3" aria-hidden="true" />
         </button>
 
         <div class="min-w-0 flex-1">
             <p class="m-0 font-medium" :class="done ? 'text-guide-ink-soft line-through decoration-guide-rule' : 'text-guide-ink'">{{ item.title }}</p>
+            <!-- The owner's view of a reader: where they wrote a note, never what it says. -->
+            <p v-if="hasNotes" class="mt-0.5 mb-0 inline-flex items-center gap-1 text-xs text-guide-accent">
+                <NotebookPen :size="12" aria-hidden="true" />
+                {{ $t('arcadia.reader.has_notes') }}
+            </p>
             <p v-if="clipLabel" class="mt-0.5 mb-0 font-mono text-xs text-guide-ink-soft">{{ clipLabel }}</p>
             <p v-if="item.hint" class="mt-0.5 mb-0 text-sm text-guide-ink-soft">{{ item.hint }}</p>
             <p v-if="item.body" class="mt-1 mb-0 whitespace-pre-line text-sm text-guide-ink">{{ item.body }}</p>

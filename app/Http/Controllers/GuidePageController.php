@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Enums\Accent;
 use App\Enums\AccessRequestStatus;
+use App\Enums\ActivityFamily;
 use App\Enums\GuideStatus;
 use App\Enums\Palette;
 use App\Enums\PhraseMoment;
 use App\Http\Middleware\RecogniseDevice;
 use App\Models\AccessRequest;
+use App\Models\ActivityState;
 use App\Models\Guide;
 use App\Models\Note;
 use App\Models\Reader;
@@ -129,6 +131,14 @@ class GuidePageController
                     ->oldest()->get()->map(fn (Note $note) => $note->toReader()),
                 'storeUrl' => route("{$site->locale()}.reader.notes.store", $reader),
                 'maxLength' => Note::MAX_LENGTH,
+            ] : null,
+            // Their answers to the flip cards — known or not yet, and when — and where to save one.
+            // None for the owner: their deck lasts for the visit.
+            'cards' => $reader ? [
+                'states' => ActivityState::query()->where('user_id', $reader->user_id)->where('guide_id', $reader->guide_id)
+                    ->where('family', ActivityFamily::FLIP_CARDS->value)->get()
+                    ->mapWithKeys(fn (ActivityState $state) => [$state->target_key => ['state' => $state->state, 'at' => $state->updated_at]]),
+                'saveUrl' => route("{$site->locale()}.reader.cards", $reader),
             ] : null,
             'myGuidesUrl' => $reader ? $site->readerPath() : null,
             // What the greeting calls them, highlighted. None for the owner reading as-is.

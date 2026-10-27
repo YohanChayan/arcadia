@@ -7,7 +7,8 @@
  * skip. Right, it says so and offers the next line.
  *
  * Answered once, it folds to a line saying so. In a locked stage (`locked`) its questions are
- * shown, to see what is coming, and cannot be answered.
+ * shown, to see what is coming, and cannot be answered — nor in the owner's read-only view of a
+ * reader (`progress.readOnly`).
  */
 import { computed, inject, ref } from 'vue'
 import { trans } from 'laravel-vue-i18n'
@@ -25,6 +26,8 @@ const props = defineProps({
 const emit = defineEmits(['next'])
 
 const progress = inject('guideProgress')
+// Shown, not answered: a locked stage, or the owner viewing as a reader.
+const idle = computed(() => props.locked || Boolean(progress?.readOnly))
 
 const chosen = ref(props.questions.map(() => null))
 // The last check's outcome: { passed, results } or null before one.
@@ -34,7 +37,7 @@ const checking = ref(false)
 const ready = computed(() => chosen.value.every(option => option !== null))
 
 const pick = (question, option) => {
-    if (outcome.value || props.locked) return
+    if (outcome.value || idle.value) return
     chosen.value = chosen.value.map((current, index) => index === question ? option : current)
 }
 
@@ -61,7 +64,7 @@ const tone = (question, option) => {
 
     if (picked && result) return result.correct ? 'border-guide-done bg-guide-done/15 text-guide-ink' : 'border-guide-accent bg-guide-surface text-guide-ink-soft line-through'
     if (picked) return 'border-guide-accent bg-guide-accent/15 text-guide-ink'
-    return props.locked ? 'border-guide-rule text-guide-ink' : 'border-guide-rule text-guide-ink hover:border-guide-accent'
+    return idle.value ? 'border-guide-rule text-guide-ink' : 'border-guide-rule text-guide-ink hover:border-guide-accent'
 }
 </script>
 
@@ -79,13 +82,13 @@ const tone = (question, option) => {
         </p>
 
         <template v-else>
-            <p v-if="!outcome" class="mt-1 mb-0 text-sm text-guide-ink-soft">{{ $t(locked ? 'arcadia.reader.quick_check.locked' : 'arcadia.reader.quick_check.lead') }}</p>
+            <p v-if="!outcome" class="mt-1 mb-0 text-sm text-guide-ink-soft">{{ $t(progress?.readOnly ? 'arcadia.reader.quick_check.read_only' : locked ? 'arcadia.reader.quick_check.locked' : 'arcadia.reader.quick_check.lead') }}</p>
 
             <fieldset v-for="(question, q) in questions" :key="q" class="m-0 mt-3 border-0 p-0">
                 <legend class="mb-2 p-0 font-medium text-guide-ink">{{ question.prompt }}</legend>
                 <div class="flex flex-col gap-2" role="radiogroup">
                     <button v-for="(option, o) in question.options" :key="o" type="button" role="radio"
-                            :aria-checked="chosen[q] === o" :disabled="Boolean(outcome) || locked"
+                            :aria-checked="chosen[q] === o" :disabled="Boolean(outcome) || idle"
                             class="rounded-lg border-2 px-3 py-2 text-left text-sm transition-colors disabled:cursor-not-allowed" :class="tone(q, o)"
                             @click="pick(q, o)">
                         {{ option }}
@@ -98,7 +101,7 @@ const tone = (question, option) => {
                 </p>
             </fieldset>
 
-            <div v-if="!locked" class="mt-4 flex flex-wrap items-center gap-3" aria-live="polite">
+            <div v-if="!idle" class="mt-4 flex flex-wrap items-center gap-3" aria-live="polite">
                 <button v-if="!outcome" type="button" :disabled="!ready || checking" @click="submit"
                         class="rounded-full bg-guide-accent px-5 py-2 text-sm font-semibold text-guide-on-accent disabled:opacity-50">
                     {{ $t('arcadia.reader.quick_check.check') }}

@@ -14,6 +14,7 @@ use App\Models\Reader;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Queue;
 use Laravel\Socialite\Facades\Socialite;
@@ -111,6 +112,50 @@ class GuideSignInGateTest extends TestCase
 
         $this->google('ana@gmail.com');
         $this->get('/auth/google/callback')->assertRedirect('/es/mis-guias');
+    }
+
+    public function test_a_google_sign_in_confirms_so_a_reader_with_no_password_may_add_a_passkey(): void
+    {
+        $this->guide->readers()->create(['email' => 'ana@gmail.com']);
+
+        $this->google('ana@gmail.com');
+        $this->get('/auth/google/callback');
+
+        // A Google-made account's password is random and known to nobody; Google stands in for it.
+        $this->get('/user/passkeys/options')->assertOk();
+        $this->get('/settings/security')->assertOk();
+    }
+
+    public function test_a_google_sign_in_offers_a_passkey_once_to_an_account_with_none(): void
+    {
+        $this->guide->readers()->create(['email' => 'ana@gmail.com']);
+
+        $this->google('ana@gmail.com');
+        $this->get('/auth/google/callback');
+
+        $this->get('/es/mis-guias')->assertInertia(fn ($page) => $page->where('offerPasskey', true));
+        $this->get('/es/mis-guias')->assertInertia(fn ($page) => $page->where('offerPasskey', false));
+    }
+
+    public function test_an_account_that_already_has_a_passkey_is_not_offered_one(): void
+    {
+        $this->guide->readers()->create(['email' => 'ana@gmail.com']);
+        $this->google('ana@gmail.com');
+        $this->get('/auth/google/callback');
+        $user = User::firstWhere('email', 'ana@gmail.com');
+        $user->passkeys()->create(['name' => 'iPhone', 'credential_id' => 'abc', 'credential' => []]);
+        Auth::logout();
+
+        $this->get('/auth/google/callback');
+
+        $this->get('/es/mis-guias')->assertInertia(fn ($page) => $page->where('offerPasskey', false));
+    }
+
+    public function test_without_a_google_sign_in_adding_a_passkey_still_asks_to_confirm(): void
+    {
+        $this->actingAs(User::factory()->withRole(Role::ALIAS_READER)->create())
+            ->get('/user/passkeys/options')
+            ->assertRedirect(route('password.confirm'));
     }
 
     public function test_anyone_verified_gets_an_account_and_reads_nothing_not_assigned(): void

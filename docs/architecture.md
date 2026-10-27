@@ -110,7 +110,7 @@ cards** of the "must master" section. The enum's docblock holds each family's fi
   for. `GuideActivityTest` holds each rule.
 
 **Activities arrive by their own import** (`Editor\ActivityImportController`, "Importar
-actividades" on a draft's content screen): the AI's answer to an activity prompt, as a `.json`
+respuesta" → *Actividades* on a draft's content screen): the AI's answer to an activity prompt, as a `.json`
 file, `{ "family": …, "activities": [{ "key": …, …its fields }] }`. Unlike the content import it
 never builds or replaces content — it only attaches, and shares nothing with it but
 `GuideImport::extract()`, which finds the JSON however the AI wrapped it.
@@ -138,6 +138,19 @@ a line is ticked**: `ProgressController` refuses to tick it (422), though cleari
 reader's to do, and on the page its checkbox and its clip's **next** take the reader to the
 questions until they are answered. The owner reading as-is and the preview are sent the answers
 (`withAnswers`) and check them in the page, for the visit. `GuideQuickCheckTest` holds each rule.
+
+**"Must master" can be a deck of flip cards** (`FlipDeck`, in place of its prose, which stays
+folded under it): read the front, turn it, say "me la sabía" or "aún no". Nothing is ticked or
+locked by it. A reader's answer is kept on their account by the card's own key
+(`guide_activity_states`, `ActivityState`; `PUT {reader}/cards`, `Reader\FlipCardController`),
+one row per card, replaced when answered again — so it survives a new version as a tick does. The
+page deals only what is due: a card never answered, or left at "aún no" on an earlier Caracas
+day; a known one stays known, and "Repasar todas" deals them all again. The owner and the preview
+play it for the visit. The deck is written by "Actividades — tarjetas"
+(`FlipCardsPromptTemplateSeeder`, `PromptTemplate::FLIP_CARDS`), filled with the list and each
+stage's goal, in three kinds of card on one front/back shape — a concept, a rule, a situation, the
+last for guides about people and selling — and never forced: fewer than three honest cards, and
+it answers that there are none. `GuideFlipCardsTest` holds each rule.
 
 ## Reached by link, and listed while open
 
@@ -256,6 +269,16 @@ presentation shown adds one to the guide's counter for the day, once per browser
 never for a reader taken off it — the owner and readers are shown the guide, not this page — nor
 for a link-preview fetcher or crawler, by user agent. No IP, no extra cookie, no analytics tool;
 the privacy note says so (§ Visits to a guide's page).
+
+**The owner can view the guide as one reader sees it** (`Editor\ReaderViewController`, "Ver como
+este lector" on a Readers row, `/editor/guides/{id}/readers/{reader}/view`): the released version
+they read, in their colours, greeted by their name, with their ticks and their stages locked as
+theirs are — **read only by construction**: it is sent no address to save a tick, answer a quick
+check, write a note or change a colour (`progress.readOnly`), and no motivation phrase, which would
+spend theirs. Of their notes it shows only where there are some (`noteMarks`), never what they
+say, so "only you see them" stays true; the privacy note says the author sees which lines were
+ticked and where there are notes. Only a reader of the guide with an account, not a removed one,
+once it has a release. The general Preview is unchanged. `ReaderViewTest` holds each rule.
 
 **Looking spends no device slot.** The guide route carries no `arcadia.device`: the controller runs
 `RecogniseDevice::check()` only for a reader about to read, so a stranger viewing an advert is not
@@ -588,7 +611,7 @@ and keeps the prompt here (`guide_prompt_templates` → `guide_prompt_versions` 
   required one left empty, and an undeclared placeholder, stay visible and are listed. The
   preview is `POST /editor/prompts/{id}/fill` (`PromptFillController`, `FilledPromptResource`),
   debounced by the form, and changes nothing.
-- **From a guide's content screen**, "Prompt de investigación" opens the research template
+- **From a guide's content screen**, "Prompts" → "Prompt de investigación" opens the research template
   (`PromptTemplate::RESEARCH`) in a popup, in whichever of its versions the owner picks
   (`VersionedPromptFiller`). Never copied, it opens on the latest, its variables filled by name
   from the guide and the request it answers (`PromptFormOptions::researchValues()`: `topic`,
@@ -666,7 +689,7 @@ and keeps the prompt here (`guide_prompt_templates` → `guide_prompt_versions` 
 
 - **`QuickCheckPromptTemplateSeeder`** writes a fifth, "Actividades — preguntas rápidas"
   (`PromptTemplate::QUICK_CHECK`): one to three questions per video, for the quick checks
-  (§ A node can carry an activity). Its answer comes back through "Importar actividades", in the
+  (§ A node can carry an activity). Its answer comes back through "Importar respuesta" → *Actividades*, in the
   shape that import checks, each video by its `key`. **The guide's content is not a variable**:
   its videos — key, stage, title, the brief's summary and topics, the clip — are tens of thousands
   of characters, past any field's 5000. The template writes `{{guide_content}}`
@@ -691,9 +714,20 @@ and keeps the prompt here (`guide_prompt_templates` → `guide_prompt_versions` 
 ## Importing an AI's answer
 
 The research comes back as **JSON** in the shape of the template's output contract, uploaded
-as a **`.json` file** (500 KB at most) on the content screen of a guide's **draft** ("Importar de
-la IA", `Editor\ImportController`). The file is only read for its answer, never stored; both the
-check and the write receive it. A released version answers 409.
+as a **`.json` file** (500 KB at most) on the content screen of a guide's **draft** ("Importar
+respuesta" → *Contenido de la guía*, `Editor\ImportController`). The file is only read for its
+answer, never stored; both the check and the write receive it. A released version answers 409.
+
+**One door for every answer, one for every prompt.** The content screen's AI group has two
+buttons. **Prompts** (`PromptsDialog`) lists the research prompt and each activity prompt there is,
+the chosen one filled from the guide beside the list; copying the research prompt records it, as
+before, and an activity prompt records nothing. **Importar respuesta** (`ImportAnswerDialog`) asks
+what the answer is — the guide's content or activities — and shows that kind's own form
+(`ContentImportForm`, `ActivityImportForm`): the two are different writes, with their own options,
+check and endpoint, and never share a form. A file that looks like the other kind (`"family"` or
+`"stages"` in it, read in the browser) says so, with the way to switch; the guess decides nothing.
+With the latest version released, it says there is nothing to import into and offers to draft the
+next version.
 
 - **Checked before anything is written** (`GuideImport`, `POST …/import/preview`). It finds the
   object however an AI wraps it — a ```json fence, a sentence before or after — and reports every
@@ -785,7 +819,17 @@ it before the user is signed in, never after:
 **Passkeys are optional twice.** `PASSKEYS_ENABLED` (default on) adds Fortify's passkey feature,
 and with it the routes; every passkey control — the sign-in button, the password confirmation,
 Settings › Security, `.well-known/passkey-endpoints` — follows `Features::enabled()`. Each user then
-chooses to add one. The passkey URLs in the frontend are written out rather than imported from
+chooses to add one.
+
+**A Google sign-in stands in for a password confirmation.** Adding a passkey needs a confirmed
+password, and a Google-made account's password is random and known to nobody, so
+`GoogleController` marks the session confirmed for the usual window (`auth.password_timeout`).
+Changing the password still asks for the current one. The same callback flashes `offer_passkey`
+to an account with none, and the shell's `PasskeyOffer` turns it into a one-tap sheet — only where
+the device has a built-in authenticator (`isUserVerifyingPlatformAuthenticatorAvailable`) and this
+browser has not declined ("not now" waits a week, "never" is for good; `lib/passkey-device.ts`,
+local storage, never the server). A browser that registered a passkey remembers it, and `/login`
+puts the passkey above Google there. The passkey URLs in the frontend are written out rather than imported from
 Wayfinder, so a build never depends on the switch.
 
 **The account settings** (`pages/settings/*`, the kit's Profile and Security) render inside the

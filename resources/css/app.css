@@ -889,6 +889,25 @@
   .glitch::after { display: none; }
 }
 
+/* A flip card: two faces back to back, turned on tap — or simply swapped for a reader who asked
+   for less motion. The faces share one grid cell, so the card is as tall as its longer side. While
+   it turns, its text fades out and back: no side is ever read mirrored, half-way round. */
+.flip-card { perspective: 1200px; }
+.flip-card-inner { display: grid; transition: transform 450ms ease; transform-style: preserve-3d; }
+.flip-card.is-flipped .flip-card-inner { transform: rotateY(180deg); }
+.flip-card-face { grid-area: 1 / 1; display: flex; flex-direction: column; justify-content: center; min-height: 9rem; padding: 1.25rem; -webkit-backface-visibility: hidden; backface-visibility: hidden; }
+.flip-card-face > * { transition: opacity 120ms ease; }
+.flip-card.is-turning .flip-card-face > * { opacity: 0; }
+.flip-card-back { transform: rotateY(180deg); }
+
+@media (prefers-reduced-motion: reduce) {
+  .flip-card-inner { transition: none; transform: none !important; }
+  .flip-card-face { -webkit-backface-visibility: visible; backface-visibility: visible; transform: none; }
+  .flip-card .flip-card-back { visibility: hidden; }
+  .flip-card.is-flipped .flip-card-back { visibility: visible; }
+  .flip-card.is-flipped .flip-card-face:not(.flip-card-back) { visibility: hidden; }
+}
+
 /* A stage completed by a tick: its card pops in, once — and simply appears for a reader who asked
    for less motion. */
 .stage-cheer { animation: stageCheer 600ms cubic-bezier(0.2, 1.4, 0.4, 1) both; }

@@ -15,6 +15,8 @@ import { trans } from 'laravel-vue-i18n'
  * A line with a quick check is ticked by answering it (`check`): the server checks a reader's
  * answers at `progress.checkUrl` and ticks the line when all are right. The owner and the preview
  * are sent the answers with the page, so it checks them here, for the visit.
+ *
+ * `progress.readOnly` — the owner viewing as one reader — shows their ticks and changes none.
  */
 export const useGuideProgress = progress => {
     const done = ref(new Set(progress?.ticked ?? []))
@@ -25,7 +27,11 @@ export const useGuideProgress = progress => {
         done.value = next
     }
 
+    const readOnly = Boolean(progress?.readOnly)
+
     const toggle = key => {
+        if (readOnly) return
+
         const value = !done.value.has(key)
         mark(key, value)
 
@@ -39,6 +45,8 @@ export const useGuideProgress = progress => {
 
     // { passed, results: [{ correct, explanation? }] } for one answer per question.
     const check = async (key, answers, questions) => {
+        if (readOnly) return null
+
         let outcome
 
         if (progress?.checkUrl) {
@@ -60,5 +68,5 @@ export const useGuideProgress = progress => {
     const isDone = key => done.value.has(key)
     const count = keys => keys.filter(key => done.value.has(key)).length
 
-    return { isDone, toggle, count, check }
+    return { isDone, toggle, count, check, readOnly }
 }

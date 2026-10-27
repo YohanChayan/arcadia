@@ -7,6 +7,7 @@ use App\Services\ArcadiaSite;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Fortify\Features;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\Two\AbstractProvider;
 use Symfony\Component\HttpFoundation\RedirectResponse as SymfonyRedirect;
@@ -17,7 +18,8 @@ use Throwable;
  *
  * It keeps Socialite's `state` check (not stateless), so a callback this browser did not start is
  * refused. Who may come in is `AdmitGoogleAccount`'s, asked before anything is written; then it lands where they meant to
- * go — the guide they tapped — else their own home.
+ * go — the guide they tapped — else their own home. The sign-in also counts as a password
+ * confirmation for the usual window, so a reader can add a passkey without a password.
  *
  * Google's console needs the callback as an authorised redirect URI:
  * `https://arcadia.yhndevside.com/auth/google/callback`.
@@ -56,6 +58,17 @@ class GoogleController
 
         Auth::login($user, remember: true);
         $request->session()->regenerate();
+
+        // Google stands in for a password confirmation: a Google-made account's password is
+        // random and known to nobody, so without this it could never add a passkey.
+        $request->session()->passwordConfirmed();
+
+        // The page they land on offers a passkey, so the next sign-in skips Google. Once, and
+        // never to an account that already has one; whether this device can hold one is the
+        // browser's to say (`PasskeyOffer.vue`).
+        if (Features::enabled(Features::passkeys()) && ! $user->hasPasskeysEnabled()) {
+            $request->session()->flash('offer_passkey', true);
+        }
 
         return redirect()->intended($site->homeAfterSignIn($user));
     }

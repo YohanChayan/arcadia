@@ -24,6 +24,7 @@ use App\Http\Controllers\Editor\PromptTemplateController;
 use App\Http\Controllers\Editor\PromptVariableController;
 use App\Http\Controllers\Editor\PromptVersionController;
 use App\Http\Controllers\Editor\ReaderController;
+use App\Http\Controllers\Editor\ReaderViewController;
 use App\Http\Controllers\Editor\SettingsController;
 use App\Http\Controllers\Editor\VersionController;
 use App\Http\Controllers\Editor\VocabularyController;
@@ -73,6 +74,9 @@ foreach ($site->locales() as $locale) {
             Route::put('/guides/{guide:id}/readers/{reader}/name', [ReaderController::class, 'rename'])
                 ->whereNumber('reader')->name('readers.rename');
             // Tell a reader again, by email, that the guide is theirs.
+            // The guide as one reader sees it, their ticks included — read only.
+            Route::get('/guides/{guide:id}/readers/{reader}/view', ReaderViewController::class)
+                ->whereNumber('reader')->name('readers.view');
             Route::post('/guides/{guide:id}/readers/{reader}/notify', [ReaderController::class, 'notify'])
                 ->whereNumber('reader')->middleware('throttle:20,10')->name('readers.notify');
             // Enrollment: whether the guide takes requests, and the requests — approve, decline, and

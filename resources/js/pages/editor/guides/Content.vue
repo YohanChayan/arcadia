@@ -18,7 +18,7 @@
  */
 import { provide, ref } from 'vue'
 import { router } from '@inertiajs/vue3'
-import { CircleCheck, Plus, Lock, Rocket, CopyPlus, History, GitCompare, Eye, FileJson, ScrollText, Sparkles } from '@lucide/vue'
+import { Plus, Lock, Rocket, CopyPlus, History, GitCompare, Eye, FileJson, ScrollText } from '@lucide/vue'
 import PageHeader from '@/components/common/PageHeader.vue'
 import Eyebrow from '@/components/common/Eyebrow.vue'
 import EditorTitle from '@/components/editor/EditorTitle.vue'
@@ -33,9 +33,8 @@ import SectionRow from '@/components/editor/content/SectionRow.vue'
 import StageBlock from '@/components/editor/content/StageBlock.vue'
 import VersionChanges from '@/components/editor/content/VersionChanges.vue'
 import FixDialog from '@/components/editor/content/FixDialog.vue'
-import ImportDialog from '@/components/editor/content/ImportDialog.vue'
-import ActivityImportDialog from '@/components/editor/content/ActivityImportDialog.vue'
-import VersionedPromptFiller from '@/components/editor/prompts/VersionedPromptFiller.vue'
+import ImportAnswerDialog from '@/components/editor/content/ImportAnswerDialog.vue'
+import PromptsDialog from '@/components/editor/content/PromptsDialog.vue'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useEditorRoute } from '@/composables/useEditorRoute.js'
 
@@ -70,7 +69,6 @@ const editable = props.version.latest && !props.version.released
 
 // The AI's answer, brought into this draft — its content, or activities on what is there.
 const importing = ref(false)
-const importingActivities = ref(false)
 
 const guide = props.guide.id
 const route = (action, ...args) => {
@@ -140,18 +138,15 @@ const release = () => {
 }
 const draftNext = () => router.post(editorRoute('versions.store', { guide }))
 
-// An activity prompt's popup: the one open, or null. Copying it records nothing.
-const activityPrompt = ref(null)
-
-// The research prompt's popup, and what recording the last copy said.
-const researching = ref(false)
+// Every prompt, in one popup; and what recording the last research copy said.
+const prompting = ref(false)
 const researchRecorded = ref(false)
 const researchError = ref('')
 
-const openResearch = () => {
+const openPrompts = () => {
     researchRecorded.value = false
     researchError.value = ''
-    researching.value = true
+    prompting.value = true
 }
 
 const recordResearch = payload => {
@@ -213,59 +208,23 @@ const recordResearch = payload => {
                 </Link>
             </div>
 
-            <!-- In the order the work goes: copy the prompt, then bring the AI's answer in. -->
+            <!-- The AI's part, in the order the work goes: copy a prompt, then bring its answer in. -->
             <div role="group" :aria-label="$t('arcadia.editor.content.toolbar.research')" class="flex flex-wrap items-center gap-2">
                 <Eyebrow as="span" class="mr-1 hidden sm:inline">{{ $t('arcadia.editor.content.toolbar.research') }}</Eyebrow>
-                <Button type="button" variant="outline" size="sm" @click="openResearch">
+                <Button type="button" variant="outline" size="sm" @click="openPrompts">
                     <ScrollText :size="14" aria-hidden="true" />
-                    {{ $t('arcadia.editor.content.research.action') }}
+                    {{ $t('arcadia.editor.prompts_hub.action') }}
                 </Button>
-                <Button v-if="editable" type="button" variant="outline" size="sm" @click="importing = true">
+                <Button v-if="version.latest" type="button" variant="outline" size="sm" @click="importing = true">
                     <FileJson :size="14" aria-hidden="true" />
-                    {{ $t('arcadia.editor.import.action') }}
-                </Button>
-                <Button v-for="activity in activityPrompts" :key="activity.family" type="button" variant="outline" size="sm" @click="activityPrompt = activity">
-                    <ScrollText :size="14" aria-hidden="true" />
-                    {{ $t('arcadia.editor.activity_import.prompt', { family: activity.label }) }}
-                </Button>
-                <Button v-if="editable" type="button" variant="outline" size="sm" @click="importingActivities = true">
-                    <Sparkles :size="14" aria-hidden="true" />
-                    {{ $t('arcadia.editor.activity_import.action') }}
+                    {{ $t('arcadia.editor.answer_import.action') }}
                 </Button>
             </div>
         </div>
 
-        <ImportDialog v-if="editable" v-model:open="importing" :guide-id="guide" />
-        <ActivityImportDialog v-if="editable" v-model:open="importingActivities" :guide-id="guide" />
-
-        <!-- The research prompt, filled from the guide: copy it into ChatGPT or Gemini, then import the answer. -->
-        <!-- An activity prompt, filled from the guide, its content put in by the server. -->
-        <Dialog :open="activityPrompt !== null" @update:open="isOpen => { if (!isOpen) activityPrompt = null }">
-            <DialogContent class="w-[calc(100%-2rem)] max-w-5xl">
-                <DialogHeader>
-                    <DialogTitle>{{ activityPrompt?.label }}</DialogTitle>
-                    <DialogDescription>{{ $t('arcadia.editor.activity_import.prompt_hint') }}</DialogDescription>
-                </DialogHeader>
-                <VersionedPromptFiller v-if="activityPrompt" :prompt="activityPrompt.prompt" :choices="choices"
-                                       :initial="activityPrompt.values" :guide-id="guide" />
-            </DialogContent>
-        </Dialog>
-
-        <Dialog v-model:open="researching">
-            <DialogContent class="w-[calc(100%-2rem)] max-w-5xl">
-                <DialogHeader>
-                    <DialogTitle>{{ $t('arcadia.editor.content.research.title') }}</DialogTitle>
-                    <DialogDescription>{{ research.prompt ? $t('arcadia.editor.content.research.hint') : $t('arcadia.editor.content.research.missing') }}</DialogDescription>
-                </DialogHeader>
-                <p v-if="researchRecorded" class="m-0 flex items-center gap-1.5 text-sm text-success">
-                    <CircleCheck :size="15" aria-hidden="true" />
-                    {{ $t('arcadia.editor.content.research.recorded') }}
-                </p>
-                <p v-if="researchError" class="m-0 text-sm text-danger">{{ researchError }}</p>
-                <VersionedPromptFiller v-if="research.prompt" :prompt="research.prompt" :version-id="research.versionId"
-                                       :choices="choices" :initial="research.values" @copied="recordResearch" />
-            </DialogContent>
-        </Dialog>
+        <PromptsDialog v-model:open="prompting" :guide-id="guide" :research="research" :activity-prompts="activityPrompts" :choices="choices"
+                       :research-recorded="researchRecorded" :research-error="researchError" @copied-research="recordResearch" />
+        <ImportAnswerDialog v-if="version.latest" v-model:open="importing" :guide-id="guide" :editable="editable" />
 
         <p v-if="!version.latest" class="panel mb-6 flex flex-wrap items-center gap-2 p-4 text-sm text-ink-2">
             <History :size="16" class="shrink-0 text-accent" aria-hidden="true" />

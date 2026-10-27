@@ -33,6 +33,10 @@
  * cheers at the stage's end: what the reader can now do (its goal), a phrase from `celebration`
  * (a stage's, or the guide's on the last one) and the way on to the next stage.
  *
+ * Viewed by the owner as one reader (`viewingAs`, `Editor\ReaderViewController`): their ticks and
+ * locks, read only (`progress.readOnly`) — nothing can be ticked or answered — and of their notes
+ * only where there are some (`noteMarks`), never what they say.
+ *
  * A reader's first visit to the guide in a session brings a `motivation` phrase, popped up once
  * as a toast. The server sends it once per session; this browser also remembers it showed it, so
  * going Back to the page — which restores the props it had — does not show it twice.
@@ -51,6 +55,7 @@ import { useGuideNotes } from '@/components/reader/useGuideNotes.js'
 import NotesAside from '@/components/reader/NotesAside.vue'
 import NotesSheet from '@/components/reader/NotesSheet.vue'
 import ReaderGreeting from '@/components/reader/ReaderGreeting.vue'
+import FlipDeck from '@/components/reader/FlipDeck.vue'
 
 const props = defineProps({
     guide: { type: Object, required: true },
@@ -74,6 +79,12 @@ const props = defineProps({
     motivation: { type: String, default: null },
     // { stage, done } — the phrases to cheer a stage, and the whole guide, completed here; else null.
     celebration: { type: Object, default: null },
+    // { states, saveUrl } — a reader's answers to the flip cards, and where to save one; else null.
+    cards: { type: Object, default: null },
+    // Whose view this is, when the owner views the guide as one reader; else null.
+    viewingAs: { type: String, default: null },
+    // ["item:key", "stage:key"] — where that reader has notes, in the owner's view of them.
+    noteMarks: { type: Array, default: () => [] },
     pageTitle: String,
     noIndex: Boolean,
 })
@@ -91,6 +102,8 @@ const seo = computed(() => ({ pageTitle: props.pageTitle, noIndex: props.noIndex
 const progress = useGuideProgress(props.progress)
 // A line's quick check answers through it.
 provide('guideProgress', progress)
+// Where a reader has notes, for the owner's view of them: a mark, never the text.
+provide('guideNoteMarks', new Set(props.noteMarks))
 
 const notes = useGuideNotes(props.notes)
 provide('guideNotes', notes)
@@ -216,6 +229,10 @@ const after = computed(() => props.sections.filter(section => section.kind !== '
     <div class="min-h-screen bg-guide-ground" :style="tokens">
         <div :class="notes.enabled ? 'lg:mx-auto lg:grid lg:max-w-6xl lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-8 lg:px-6' : ''">
             <div class="relative mx-auto max-w-3xl px-4 pb-20 pt-8 sm:px-6 sm:pt-12" :class="notes.enabled ? 'lg:mx-0 lg:w-full lg:px-0' : ''">
+                <p v-if="viewingAs" class="mb-6 flex items-center gap-2 rounded-xl border border-guide-accent bg-guide-surface px-4 py-3 text-sm text-guide-ink">
+                    <Eye :size="16" class="shrink-0 text-guide-accent" aria-hidden="true" />
+                    {{ $t('arcadia.reader.viewing_as', { name: viewingAs }) }}
+                </p>
                 <p v-if="preview" class="mb-6 flex items-center gap-2 rounded-xl border border-guide-accent bg-guide-surface px-4 py-3 text-sm text-guide-ink">
                     <Eye :size="16" class="shrink-0 text-guide-accent" aria-hidden="true" />
                     {{ $t('arcadia.reader.preview', { number: version }) }}
@@ -255,7 +272,15 @@ const after = computed(() => props.sections.filter(section => section.kind !== '
 
                 <section v-for="section in after" :key="section.key" class="mt-8">
                     <h2 class="m-0 font-display text-lg font-semibold text-guide-ink">{{ section.title || $t(`arcadia.editor.content.section_kinds.${section.kind}`) }}</h2>
-                    <p class="mt-2 mb-0 whitespace-pre-line text-guide-ink-soft">{{ section.body }}</p>
+                    <!-- "Must master" as flip cards, when it has them; the list stays, folded under them. -->
+                    <template v-if="section.activity?.family === 'flip_cards' && section.activity.cards.length">
+                        <FlipDeck :cards="section.activity.cards" :saved="cards" />
+                        <details class="mt-3">
+                            <summary class="cursor-pointer text-sm text-guide-ink-soft hover:text-guide-accent">{{ $t('arcadia.reader.cards.list') }}</summary>
+                            <p class="mt-2 mb-0 whitespace-pre-line text-guide-ink-soft">{{ section.body }}</p>
+                        </details>
+                    </template>
+                    <p v-else class="mt-2 mb-0 whitespace-pre-line text-guide-ink-soft">{{ section.body }}</p>
                 </section>
 
                 <footer class="mt-16 border-t border-guide-rule pt-6 text-center text-xs text-guide-ink-soft">

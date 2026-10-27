@@ -103,8 +103,6 @@ return [
             ],
         ],
         'import' => [
-            'action' => 'Import from AI',
-            'title' => 'Import the AI\'s answer',
             'lead' => 'Upload the .json file with your AI\'s answer. It is checked first; nothing is written until you confirm.',
             'file' => 'Pick a .json file',
             'drop' => 'Drop the .json file here',
@@ -535,6 +533,7 @@ return [
             ],
             'account' => ['yes' => 'Has an account', 'no' => 'Not signed in yet'],
             'empty' => ['title' => 'No readers yet', 'hint' => 'Add the Google email of the person this guide is for.'],
+            'view' => ['action' => 'View as this reader'],
             'remove' => [
                 'action' => 'Remove reader',
                 'title' => 'Remove this reader?',
@@ -584,7 +583,6 @@ return [
             // The research prompt, opened from the toolbar to research the guide again.
             'research' => [
                 'action' => 'Research prompt',
-                'title' => 'Research prompt',
                 'hint' => 'Filled from what the guide and its request say. Pick the version, copy it into ChatGPT or Gemini, then import the answer.',
                 'missing' => 'The research prompt template does not exist yet: run its seeder (PromptTemplateSeeder).',
                 'recorded' => 'Saved on the guide. This version can no longer change.',
@@ -724,12 +722,30 @@ return [
                 'fixed' => '{1} Fixed in 1 version.|[2,*] Fixed in :count versions.',
             ],
         ],
+        // The content screen's two AI doors: every prompt (`PromptsDialog`), every answer (`ImportAnswerDialog`).
+        'prompts_hub' => [
+            'action' => 'Prompts',
+            'title' => 'Prompts for this guide',
+            'lead' => 'Each one filled from this guide. Copy it into ChatGPT or Gemini, save the answer as a .json file, and bring it back with «Import answer».',
+            'content' => 'Content',
+            'activities' => 'Activities',
+        ],
+        'answer_import' => [
+            'action' => 'Import answer',
+            'title' => 'Import the AI\'s answer',
+            'lead' => 'Choose what the answer is: each kind has its own form and check.',
+            'kind' => 'Kind of answer',
+            'kinds' => [
+                'content' => 'Guide content',
+                'activities' => 'Activities',
+            ],
+            'looks_like' => 'This file looks like :kind.',
+            'switch' => 'Switch',
+            'no_draft' => 'The latest version is released, and a released version is not changed: draft the next one to import into. It copies this one, with every line\'s key kept.',
+        ],
         // An AI's answer to an activity prompt, attached to a draft (`ActivityImportController`).
         'activity_import' => [
-            'action' => 'Import activities',
-            'prompt' => 'Prompt: :family',
             'prompt_hint' => 'Filled from this guide, its content included. Copy it into ChatGPT or Gemini, save the answer as a .json file, and bring it back with «Import activities» on the draft.',
-            'title' => 'Import activities from the AI',
             'lead' => 'The answer to an activity prompt, as its .json file. It is attached to this draft\'s lines, stages or sections by their keys; nothing else changes.',
             'drop' => 'Drop the .json file here, or choose it.',
             'file' => 'Choose file',
@@ -991,6 +1007,21 @@ return [
         'stage' => 'Stage :number',
         'when_done' => 'When you finish:',
         'stage_complete' => 'Stage complete!',
+        // The "must master" list as flip cards (`FlipDeck`).
+        'cards' => [
+            'title' => 'Flip cards',
+            'known' => ':known of :total known',
+            'turn' => 'Tap to turn it',
+            'knew' => 'I knew it',
+            'not_yet' => 'Not yet',
+            'done' => 'You know :known of :total.',
+            'tomorrow' => 'The ones at «Not yet» come back tomorrow.',
+            'again' => 'Go through them all again',
+            'list' => 'See the whole list',
+            'failed' => 'Your answer could not be saved.',
+        ],
+        'viewing_as' => 'You are viewing this guide as :name sees it: their ticks, read only.',
+        'has_notes' => 'Has notes',
         // A video's quick check (`QuickCheck`): answered right, it ticks the line.
         'quick_check' => [
             'title' => 'Quick check',
@@ -1003,6 +1034,7 @@ return [
             'answered' => 'You already answered it.',
             'answer_first' => 'Answer the quick check to mark this video.',
             'locked' => 'Unlock this stage to answer it.',
+            'read_only' => 'Read-only view: only the reader answers it.',
             'failed' => 'Your answer could not be checked. Try again.',
         ],
         'guide_complete' => 'Guide complete!',
@@ -1341,7 +1373,7 @@ return [
     ],
     'privacy' => [
         'title' => 'Privacy',
-        'updated' => 'Updated 18 October 2026',
+        'updated' => 'Updated 27 October 2026',
         'lead' => 'This site keeps as little as it can while making sure only you open your guides. No analytics tools and no advertising.',
         'sections' => [
             'account' => [
@@ -1350,7 +1382,7 @@ return [
             ],
             'progress' => [
                 'title' => 'Your progress and notes, on your account',
-                'body' => 'What you tick as done is saved with your account — which line of which guide, and when — so you find it on any phone or computer you sign in on. The notes you write on a guide are kept the same way, for you alone. Nobody else who reads the same guide sees your progress or your notes. They are deleted with your account.',
+                'body' => 'What you tick as done is saved with your account — which line of which guide, and when — so you find it on any phone or computer you sign in on. The notes you write on a guide are kept the same way, for you alone. Nobody else who reads the same guide sees your progress or your notes. The guide\'s author sees which lines you ticked and where you have notes, to follow your progress, but never what your notes say. They are deleted with your account.',
             ],
             'cookies' => [
                 'title' => 'Four technical cookies',
@@ -1443,6 +1475,14 @@ return [
             'name_hint' => 'A name helps you recognise it later.',
             'registering' => 'Registering…',
             'register' => 'Register passkey',
+            'offer' => [
+                'title' => 'Sign in faster next time',
+                'lead' => 'Add a passkey and next time you sign in with your fingerprint, face or screen lock. No password, no Google.',
+                'add' => 'Add passkey',
+                'later' => 'Not now',
+                'never' => "Don't ask again",
+                'added' => 'Passkey added. Next time, sign in with it.',
+            ],
         ],
         'confirm' => [
             'title' => 'Confirm your password',

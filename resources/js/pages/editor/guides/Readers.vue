@@ -17,7 +17,7 @@
 import { computed, ref } from 'vue'
 import { router, useForm } from '@inertiajs/vue3'
 import { trans } from 'laravel-vue-i18n'
-import { Check, Laptop, Mail, Palette, Pencil, Send, Trash2, UserPlus, X } from '@lucide/vue'
+import { Check, Eye, Laptop, Mail, Palette, Pencil, Send, Trash2, UserPlus, X } from '@lucide/vue'
 import PageHeader from '@/components/common/PageHeader.vue'
 import EditorTitle from '@/components/editor/EditorTitle.vue'
 import EditorBreadcrumb from '@/components/editor/EditorBreadcrumb.vue'
@@ -28,7 +28,7 @@ import AppearanceDialog from '@/components/editor/AppearanceDialog.vue'
 import DevicesDialog from '@/components/editor/DevicesDialog.vue'
 import RequestNote from '@/components/editor/RequestNote.vue'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 import { Field, FieldDescription, FieldError, FieldLabel } from '@/components/ui/field'
@@ -353,6 +353,12 @@ const confirmRemove = () => {
                 </td>
                 <td class="px-4 py-3 align-top text-right font-mono text-xs text-ink-4">{{ formatDate(row.created_at) }}</td>
                 <td class="px-4 py-3 align-top text-right whitespace-nowrap">
+                    <!-- The guide as they see it, their ticks included: read only, in a tab of its own. -->
+                    <a v-if="row.user_id && released" :href="editorRoute('readers.view', { guide: guide.id, reader: row.id })" target="_blank" rel="noopener"
+                       :class="buttonVariants({ variant: 'ghost', size: 'icon-sm' })"
+                       :aria-label="`${$t('arcadia.editor.readers.view.action')}: ${row.email}`" :title="$t('arcadia.editor.readers.view.action')">
+                        <Eye :size="14" aria-hidden="true" />
+                    </a>
                     <Button type="button" variant="ghost-danger" size="icon-sm" @click="pendingRemove = row"
                             :aria-label="$t('arcadia.editor.readers.remove.action')" :title="$t('arcadia.editor.readers.remove.action')">
                         <Trash2 :size="14" aria-hidden="true" />

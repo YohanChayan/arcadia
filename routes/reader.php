@@ -3,6 +3,7 @@
 use App\Http\Controllers\Reader\AppearanceController;
 use App\Http\Controllers\Reader\DashboardController;
 use App\Http\Controllers\Reader\DeviceController;
+use App\Http\Controllers\Reader\FlipCardController;
 use App\Http\Controllers\Reader\HelpController;
 use App\Http\Controllers\Reader\NoteController;
 use App\Http\Controllers\Reader\ProgressController;
@@ -43,6 +44,10 @@ foreach ($site->locales() as $locale) {
             // A video's quick check, answered: a right answer ticks it.
             Route::put('/{reader}/check', QuickCheckController::class)
                 ->whereNumber('reader')->middleware('throttle:60,1')->name('check');
+
+            // A flip card of the guide's deck: known, or not yet.
+            Route::put('/{reader}/cards', FlipCardController::class)
+                ->whereNumber('reader')->middleware('throttle:120,1')->name('cards');
 
             // Their own notes, on a line or a stage.
             Route::post('/{reader}/notes', [NoteController::class, 'store'])

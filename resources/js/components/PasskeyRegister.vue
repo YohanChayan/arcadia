@@ -5,40 +5,20 @@ import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { defaultPasskeyName, rememberPasskeyRegistered } from '@/lib/passkey-device';
 
 const emit = defineEmits<{
     success: [];
 }>();
 
-const getDefaultPasskeyName = () => {
-    const ua = navigator.userAgent;
-
-    const browser = [
-        { pattern: /Edg|Edge/, name: 'Edge' },
-        { pattern: /OPR|Opera|OPiOS/, name: 'Opera' },
-        { pattern: /Firefox|FxiOS/, name: 'Firefox' },
-        { pattern: /Chrome|CriOS/, name: 'Chrome' },
-        { pattern: /Safari/, name: 'Safari' },
-    ].find(({ pattern }) => pattern.test(ua))?.name;
-
-    const os = [
-        { pattern: /iPhone/, name: 'iPhone' },
-        { pattern: /iPad|Macintosh(?=.*Mobile)/, name: 'iPad' },
-        { pattern: /Android/, name: 'Android' },
-        { pattern: /Mac/, name: 'Mac' },
-        { pattern: /Windows/, name: 'Windows' },
-    ].find(({ pattern }) => pattern.test(ua))?.name;
-
-    return [browser, os].filter(Boolean).join(' · ') || '';
-};
-
-const name = ref(getDefaultPasskeyName());
+const name = ref(defaultPasskeyName());
 const showForm = ref(false);
 
 const { register, isLoading, error, isSupported } = usePasskeyRegister({
     onSuccess: () => {
         name.value = '';
         showForm.value = false;
+        rememberPasskeyRegistered();
         emit('success');
     },
 });

@@ -103,8 +103,6 @@ return [
             ],
         ],
         'import' => [
-            'action' => 'Importar de la IA',
-            'title' => 'Importar el resultado de la IA',
             'lead' => 'Sube el archivo .json con la respuesta de tu IA. Primero se revisa; no se escribe nada hasta que confirmes.',
             'file' => 'Elegir archivo .json',
             'drop' => 'Arrastra aquí el archivo .json',
@@ -536,6 +534,7 @@ return [
             ],
             'account' => ['yes' => 'Tiene cuenta', 'no' => 'Aún no ha entrado'],
             'empty' => ['title' => 'Aún no hay lectores', 'hint' => 'Añade el correo de Google de la persona para quien es esta guía.'],
+            'view' => ['action' => 'Ver como este lector'],
             'remove' => [
                 'action' => 'Quitar lector',
                 'title' => '¿Quitar a este lector?',
@@ -585,7 +584,6 @@ return [
             // The research prompt, opened from the toolbar to research the guide again.
             'research' => [
                 'action' => 'Prompt de investigación',
-                'title' => 'Prompt de investigación',
                 'hint' => 'Rellenado con lo que dice la guía y su solicitud. Elige la versión, cópialo en ChatGPT o Gemini e importa la respuesta.',
                 'missing' => 'Aún no existe la plantilla del prompt de investigación: ejecuta su seeder (PromptTemplateSeeder).',
                 'recorded' => 'Guardado en la guía. Esta versión ya no se puede cambiar.',
@@ -725,12 +723,30 @@ return [
                 'fixed' => '{1} Corregida en 1 versión.|[2,*] Corregida en :count versiones.',
             ],
         ],
+        // The content screen's two AI doors: every prompt (`PromptsDialog`), every answer (`ImportAnswerDialog`).
+        'prompts_hub' => [
+            'action' => 'Prompts',
+            'title' => 'Prompts de esta guía',
+            'lead' => 'Cada uno lleno con esta guía. Cópialo en ChatGPT o Gemini, guarda la respuesta como archivo .json y tráela con «Importar respuesta».',
+            'content' => 'Contenido',
+            'activities' => 'Actividades',
+        ],
+        'answer_import' => [
+            'action' => 'Importar respuesta',
+            'title' => 'Importar la respuesta de la IA',
+            'lead' => 'Elige qué es la respuesta: cada tipo tiene su propio formulario y su revisión.',
+            'kind' => 'Tipo de respuesta',
+            'kinds' => [
+                'content' => 'Contenido de la guía',
+                'activities' => 'Actividades',
+            ],
+            'looks_like' => 'Este archivo parece de :kind.',
+            'switch' => 'Cambiar',
+            'no_draft' => 'La última versión está publicada, y una versión publicada no se cambia: crea la siguiente para importar en ella. Copia esta, con la clave de cada línea igual.',
+        ],
         // An AI's answer to an activity prompt, attached to a draft (`ActivityImportController`).
         'activity_import' => [
-            'action' => 'Importar actividades',
-            'prompt' => 'Prompt: :family',
             'prompt_hint' => 'Lleno con esta guía, su contenido incluido. Cópialo en ChatGPT o Gemini, guarda la respuesta como archivo .json y tráela con «Importar actividades» en el borrador.',
-            'title' => 'Importar actividades de la IA',
             'lead' => 'La respuesta a un prompt de actividades, en su archivo .json. Se agrega a los ítems, etapas o secciones de este borrador por sus claves; nada más cambia.',
             'drop' => 'Suelta aquí el archivo .json, o elígelo.',
             'file' => 'Elegir archivo',
@@ -992,6 +1008,21 @@ return [
         'stage' => 'Etapa :number',
         'when_done' => 'Al terminar:',
         'stage_complete' => '¡Etapa completa!',
+        // The "must master" list as flip cards (`FlipDeck`).
+        'cards' => [
+            'title' => 'Tarjetas',
+            'known' => ':known de :total te las sabes',
+            'turn' => 'Toca para voltearla',
+            'knew' => 'Me la sabía',
+            'not_yet' => 'Aún no',
+            'done' => 'Te sabes :known de :total.',
+            'tomorrow' => 'Las de «Aún no» vuelven mañana.',
+            'again' => 'Repasar todas',
+            'list' => 'Ver la lista completa',
+            'failed' => 'No se pudo guardar tu respuesta.',
+        ],
+        'viewing_as' => 'Estás viendo la guía como la ve :name: sus marcas, solo lectura.',
+        'has_notes' => 'Tiene notas',
         // A video's quick check (`QuickCheck`): answered right, it ticks the line.
         'quick_check' => [
             'title' => 'Pregunta rápida',
@@ -1004,6 +1035,7 @@ return [
             'answered' => 'Ya la respondiste.',
             'answer_first' => 'Responde la pregunta rápida para marcar este video.',
             'locked' => 'Desbloquea esta etapa para responderla.',
+            'read_only' => 'Vista de solo lectura: solo el lector la responde.',
             'failed' => 'No se pudo comprobar tu respuesta. Inténtalo de nuevo.',
         ],
         'guide_complete' => '¡Guía completa!',
@@ -1343,7 +1375,7 @@ return [
     ],
     'privacy' => [
         'title' => 'Privacidad',
-        'updated' => 'Actualizado el 18 de octubre de 2026',
+        'updated' => 'Actualizado el 27 de octubre de 2026',
         'lead' => 'Este sitio guarda lo mínimo para que solo tú abras tus guías. Sin herramientas de analítica ni publicidad.',
         'sections' => [
             'account' => [
@@ -1352,7 +1384,7 @@ return [
             ],
             'progress' => [
                 'title' => 'Tu avance y tus notas, en tu cuenta',
-                'body' => 'Lo que marcas como hecho se guarda con tu cuenta —qué línea de qué guía, y cuándo—, así lo encuentras en cualquier teléfono o computadora donde entres. Las notas que escribes en una guía se guardan igual, solo para ti. Nadie más que lea la misma guía ve ni tu avance ni tus notas. Se borran con tu cuenta.',
+                'body' => 'Lo que marcas como hecho se guarda con tu cuenta —qué línea de qué guía, y cuándo—, así lo encuentras en cualquier teléfono o computadora donde entres. Las notas que escribes en una guía se guardan igual, solo para ti. Nadie más que lea la misma guía ve ni tu avance ni tus notas. Quien prepara la guía ve qué líneas marcaste y en cuáles tienes notas, para acompañar tu avance, pero nunca lo que dicen tus notas. Se borran con tu cuenta.',
             ],
             'cookies' => [
                 'title' => 'Cuatro cookies técnicas',
@@ -1445,6 +1477,14 @@ return [
             'name_hint' => 'Un nombre te ayuda a reconocerla después.',
             'registering' => 'Registrando…',
             'register' => 'Registrar llave',
+            'offer' => [
+                'title' => 'Entra más rápido la próxima vez',
+                'lead' => 'Agrega una llave de acceso y la próxima vez entra con tu huella, tu rostro o el bloqueo de pantalla. Sin contraseña y sin Google.',
+                'add' => 'Agregar llave de acceso',
+                'later' => 'Ahora no',
+                'never' => 'No volver a preguntar',
+                'added' => 'Llave agregada. La próxima vez, entra con ella.',
+            ],
         ],
         'confirm' => [
             'title' => 'Confirma tu contraseña',

@@ -90,6 +90,7 @@ enum ActivityFamily: string
     {
         return match ($this) {
             self::QUICK_CHECK => PromptTemplate::QUICK_CHECK,
+            self::FLIP_CARDS => PromptTemplate::FLIP_CARDS,
             default => null,
         };
     }

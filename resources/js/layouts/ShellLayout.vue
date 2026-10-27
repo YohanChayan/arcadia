@@ -1,12 +1,14 @@
 <script setup>
 /**
  * Every Arcadia page's outer frame: the shell `shellFor` names for it, the canonical link the
- * page's props carry, and the toaster. Assigned centrally by `app.js`, never by the page.
+ * page's props carry, the toaster, and the passkey offer after a Google sign-in. Assigned
+ * centrally by `app.js`, never by the page.
  */
 import { computed } from 'vue'
 import { usePage } from '@inertiajs/vue3'
 import 'vue-sonner/style.css'
 import { Toaster } from '@/components/ui/sonner'
+import PasskeyOffer from '@/components/PasskeyOffer.vue'
 import PublicLayout from './PublicLayout.vue'
 import EditorLayout from './EditorLayout.vue'
 import ReaderLayout from './ReaderLayout.vue'
@@ -32,6 +34,8 @@ const canonicalUrl = computed(() => page.props.canonicalUrl)
         <component :is="shell">
             <slot />
         </component>
+
+        <PasskeyOffer v-if="page.props.user" />
 
         <!-- Arcadia is dark only (ADR 0019). -->
         <Toaster :richColors="true" theme="dark" :toastOptions="{ style: { zIndex: 9999 } }" />

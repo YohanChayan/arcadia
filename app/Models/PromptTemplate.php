@@ -37,6 +37,9 @@ class PromptTemplate extends Model
      */
     public const QUICK_CHECK = 'Actividades — preguntas rápidas';
 
+    /** The flip-card prompt's name (`FlipCardsPromptTemplateSeeder`), offered beside it. */
+    public const FLIP_CARDS = 'Actividades — tarjetas';
+
     protected $table = 'guide_prompt_templates';
 
     protected $fillable = ['name', 'description'];

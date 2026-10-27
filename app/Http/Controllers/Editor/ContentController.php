@@ -86,7 +86,7 @@ class ContentController
                 'values' => $options->researchValues($guide),
             ],
             // The activity prompts there are, each filled from the guide — its content put in by
-            // the server — to bring their answers back with "Importar actividades".
+            // the server — to bring their answers back with "Importar respuesta" → Actividades.
             'activityPrompts' => collect(ActivityFamily::cases())
                 ->filter(fn (ActivityFamily $family) => $family->template() !== null)
                 ->map(fn (ActivityFamily $family) => [
