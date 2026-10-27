@@ -856,6 +856,12 @@ return [
             'last' => 'Last ticked :date. Tick each video or link when you finish it to keep track.',
             'none' => 'Nothing ticked yet. Tick each video or link as done when you finish it: that is how your progress is kept.',
         ],
+        // Days in a row with a line ticked (`ReadingStreak`): the run, then how to keep or start it.
+        'streak' => [
+            'days' => '{1} :count day in a row|[2,*] :count days in a row',
+            'keep' => 'Tick one line today to keep it going.',
+            'start' => 'Tick one line today to start your streak.',
+        ],
         'empty' => ['title' => 'No guides yet', 'hint' => 'When a guide is shared with you, it will appear here.'],
         'colours' => [
             'action' => 'Colours',

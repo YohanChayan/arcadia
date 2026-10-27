@@ -12,6 +12,7 @@ use App\Services\Appearance;
 use App\Services\ArcadiaSite;
 use App\Services\GuideProgressSummary;
 use App\Services\MotivationPicker;
+use App\Services\ReadingStreak;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -19,12 +20,12 @@ use Inertia\Response;
 /**
  * A reader's own guides in this language — every guide assigned to their account, each in their
  * colours, with its link once it can be read, where they stand on it (`GuideProgressSummary`),
- * a short phrase for that moment and one to welcome them (`MotivationPicker`), and the colours to
- * change. A reader removed from every guide still gets here, to an empty list.
+ * a short phrase for that moment and one to welcome them (`MotivationPicker`), their run of days
+ * with a tick (`ReadingStreak`), and the colours to change. A reader removed from every guide still gets here, to an empty list.
  */
 class DashboardController
 {
-    public function __invoke(Request $request, ArcadiaSite $site, GuideProgressSummary $summary, MotivationPicker $motivation): Response
+    public function __invoke(Request $request, ArcadiaSite $site, GuideProgressSummary $summary, MotivationPicker $motivation, ReadingStreak $streak): Response
     {
         $readers = Reader::query()
             ->where('user_id', $request->user()->id)
@@ -42,6 +43,7 @@ class DashboardController
         return Inertia::render('reader/Dashboard', [
             'email' => $request->user()->email,
             'welcome' => $motivation->welcome(app()->getLocale(), $name),
+            'streak' => $streak->for($request->user()),
             'guides' => $readers->map(function (Reader $reader) use ($site, $summary, $motivation) {
                 // Null until there is a release to read — nothing to count yet, nothing to cheer.
                 $progress = ($version = $reader->guide->releasedVersion()) ? $summary->for($reader, $version) : null;

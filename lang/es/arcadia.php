@@ -857,6 +857,12 @@ return [
             'last' => 'Última marca el :date. Marca cada video o enlace al terminarlo para llevar tu avance.',
             'none' => 'Aún no marcas nada. Marca cada video o enlace como hecho al terminarlo: así llevas tu avance.',
         ],
+        // Days in a row with a line ticked (`ReadingStreak`): the run, then how to keep or start it.
+        'streak' => [
+            'days' => '{1} :count día seguido|[2,*] :count días seguidos',
+            'keep' => 'Marca un paso hoy para no perder la racha.',
+            'start' => 'Marca un paso hoy y empieza tu racha.',
+        ],
         'empty' => ['title' => 'Aún no tienes guías', 'hint' => 'Cuando te compartan una guía, aparecerá aquí.'],
         'colours' => [
             'action' => 'Colores',

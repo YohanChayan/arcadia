@@ -82,6 +82,57 @@ class ReaderDashboardTest extends TestCase
                 ->where('noIndex', true));
     }
 
+    public function test_the_streak_counts_days_in_a_row_on_caracas_time_across_their_guides(): void
+    {
+        $excel = $this->assign($this->guide('Excel'));
+        $canva = $this->assign($this->guide('Canva'));
+
+        // A tick on Sunday, then a day missed. 02:00 UTC on Wednesday is 22:00 on Tuesday in
+        // Caracas: counted as Wednesday, the run would be one day, not two.
+        $this->travelTo('2026-10-18 15:00:00');
+        $excel->tick('a', true);
+        $this->travelTo('2026-10-21 02:00:00');
+        $canva->tick('b', true);
+        $this->travelTo('2026-10-21 15:00:00');
+        $excel->tick('c', true);
+        $excel->tick('d', true);
+
+        $this->actingAs($this->ana)->get('/es/mis-guias')
+            ->assertInertia(fn ($page) => $page->where('streak', ['days' => 2, 'today' => true]));
+    }
+
+    public function test_the_streak_stands_until_a_whole_day_passes_without_a_tick(): void
+    {
+        $reader = $this->assign($this->guide('Excel'));
+
+        $this->travelTo('2026-10-20 15:00:00');
+        $reader->tick('a', true);
+
+        // The next day, before ticking: yesterday still counts, and today is to do.
+        $this->travelTo('2026-10-21 15:00:00');
+        $this->actingAs($this->ana)->get('/es/mis-guias')
+            ->assertInertia(fn ($page) => $page->where('streak', ['days' => 1, 'today' => false]));
+
+        // A day missed ends it.
+        $this->travelTo('2026-10-22 15:00:00');
+        $this->actingAs($this->ana)->get('/es/mis-guias')
+            ->assertInertia(fn ($page) => $page->where('streak', ['days' => 0, 'today' => false]));
+    }
+
+    public function test_unticking_a_line_takes_its_day_out_of_the_streak(): void
+    {
+        $reader = $this->assign($this->guide('Excel'));
+
+        $this->travelTo('2026-10-20 15:00:00');
+        $reader->tick('a', true);
+        $this->travelTo('2026-10-21 15:00:00');
+        $reader->tick('b', true);
+        $reader->tick('a', false);
+
+        $this->actingAs($this->ana)->get('/es/mis-guias')
+            ->assertInertia(fn ($page) => $page->where('streak', ['days' => 1, 'today' => true]));
+    }
+
     public function test_a_reader_removed_from_every_guide_still_gets_an_empty_list(): void
     {
         $this->assign($this->guide('Excel'))->delete();

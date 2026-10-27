@@ -21,9 +21,9 @@ x-app-env: &app-env
   DB_USERNAME: ${DB_USERNAME:-arcadia_app}
   DB_PASSWORD: ${DB_PASSWORD:-arcadia}
   INERTIA_SSR_URL: http://ssr:13714
-  MAIL_MAILER: smtp
-  MAIL_HOST: mailpit
-  MAIL_PORT: 1025
+  MAIL_MAILER: ${MAIL_MAILER:-smtp}
+  MAIL_HOST: ${MAIL_HOST:-mailpit}
+  MAIL_PORT: ${MAIL_PORT:-1025}
 
 x-php: &php
   build:

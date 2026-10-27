@@ -326,6 +326,11 @@ Arcadia membership — and **not** `approved`, since the membership is a reader'
   line's key, as the guide page counts): lines, videos, links and practices done of total, stages
   finished, and the last tick — or a line saying nothing is ticked yet, because progress is only
   what they tick. A reader removed from every guide still reaches it, to an empty list.
+- **The streak** (`ReadingStreak`, `streak`): days in a row with at least one line ticked, across
+  every guide on the account, by **America/Caracas** day — the app clock is UTC, which would end
+  a reader's day at 20:00. Read from `guide_ticks`, so unticking a line takes its day with it. It
+  stands while today has no tick yet and ends once a whole day passes without one; the page shows
+  the run, and how to keep it today or start one, once the reader has a guide.
 - **Motivation phrases** on the dashboard (`MotivationPicker`): one welcoming them under the
   title, and one on each readable guide's card for where they stand on it — `PhraseMoment`, from
   its progress: not started, under way, nearly done (three quarters), done. One at random each

@@ -6,6 +6,9 @@
  * to make plain that progress is what they tick: a guide with nothing ticked says so. Changing
  * the colours repaints the card as they pick; it is saved only on Save.
  *
+ * Their streak — days in a row with a line ticked, across every guide — under the welcome, with
+ * how to keep it today or start one; only once they have a guide to tick in.
+ *
  * Short motivation phrases (`MotivationPicker`) — one welcoming them under the title, one on each
  * card for where they stand on that guide — to be read in a glance and left behind.
  *
@@ -13,7 +16,7 @@
  */
 import { computed, ref } from 'vue'
 import { usePage } from '@inertiajs/vue3'
-import { BookOpen, Dumbbell, Flag, Link2, Palette, PlayCircle } from '@lucide/vue'
+import { BookOpen, Dumbbell, Flag, Flame, Link2, Palette, PlayCircle } from '@lucide/vue'
 import SeoHead from '@/components/common/SeoHead.vue'
 import ReaderColoursSheet from '@/components/ReaderColoursSheet.vue'
 import { appearanceTokens } from '@/lib/appearance.js'
@@ -25,6 +28,8 @@ const props = defineProps({
     guides: { type: Array, required: true },
     // A short phrase welcoming them, or null.
     welcome: { type: String, default: null },
+    // { days, today } — days in a row with a tick, and whether today is one of them.
+    streak: { type: Object, required: true },
     appearanceOptions: { type: Object, required: true },
     pageTitle: String,
     noIndex: Boolean,
@@ -73,6 +78,16 @@ const tallies = progress => [
             <h1 class="m-0 font-display text-2xl font-bold text-ink sm:text-3xl">{{ $t('arcadia.my_guides.title') }}</h1>
             <p v-if="welcome" class="mt-2 mb-0 text-base font-medium text-accent">{{ welcome }}</p>
             <p class="mt-1 mb-0 truncate text-sm text-ink-3">{{ email }}</p>
+
+            <div v-if="guides.length" class="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                <span v-if="streak.days" class="inline-flex items-center gap-1.5 rounded-full border border-rule bg-well px-3 py-1 text-sm font-semibold text-ink">
+                    <Flame :size="16" class="text-accent" aria-hidden="true" />
+                    {{ $tChoice('arcadia.my_guides.streak.days', streak.days, { count: streak.days }) }}
+                </span>
+                <span v-if="!streak.today" class="text-sm text-ink-3">
+                    {{ $t(streak.days ? 'arcadia.my_guides.streak.keep' : 'arcadia.my_guides.streak.start') }}
+                </span>
+            </div>
         </header>
 
         <div v-if="guides.length" class="mt-8 flex flex-col gap-4">
