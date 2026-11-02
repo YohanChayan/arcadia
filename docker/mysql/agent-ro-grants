@@ -1,16 +1,24 @@
 #!/bin/bash
-# Grants `agent_ro` SELECT on every table of the database except `users`, one table at a time,
-# as production's `/usr/local/sbin/agent-ro-grants` does. MySQL cannot grant a whole database
-# minus one table, so a new table needs this run again — after every `migrate`.
+# Grants `agent_ro` SELECT on every table of the database except those in `excluded` — accounts,
+# passkeys and guide devices — one table at a time, as production's `/usr/local/sbin/agent-ro-grants`
+# does, and revokes SELECT on the excluded ones in case an earlier run granted it. MySQL cannot
+# grant a whole database minus some tables, so a new table needs this run again — after every `migrate`.
 #
 #   docker compose exec mysql agent-ro-grants
 set -euo pipefail
 
 db="${MYSQL_DATABASE}"
+excluded=(users passkeys guide_devices)
 run() { mysql -uroot -p"${MYSQL_ROOT_PASSWORD}" -N -e "$1"; }
 
-for table in $(run "SELECT table_name FROM information_schema.tables WHERE table_schema = '${db}' AND table_name <> 'users'"); do
+not_in="'$(IFS=,; echo "${excluded[*]}" | sed "s/,/','/g")'"
+
+for table in $(run "SELECT table_name FROM information_schema.tables WHERE table_schema = '${db}' AND table_name NOT IN (${not_in})"); do
     run "GRANT SELECT ON \`${db}\`.\`${table}\` TO 'agent_ro'@'%'"
 done
 
-echo "agent_ro may now read $(run "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = '${db}' AND table_name <> 'users'") tables of ${db} (never users)."
+for table in "${excluded[@]}"; do
+    run "REVOKE IF EXISTS SELECT ON \`${db}\`.\`${table}\` FROM 'agent_ro'@'%'"
+done
+
+echo "agent_ro may now read $(run "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = '${db}' AND table_name NOT IN (${not_in})") tables of ${db} (never ${excluded[*]})."
