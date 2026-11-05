@@ -4,8 +4,8 @@
 # The same three accounts as production:
 #   root         the default admin (locally with a password; on the server, socket only)
 #   arcadia_app  the application's own user: everything, on the `arcadia` database only
-#   agent_ro     read-only, for agents — SELECT on every table except `users`, `passkeys` and
-#                `guide_devices`, granted table by table by `agent-ro-grants` once the tables exist
+#   agent_ro     read-only, for agents — SELECT on every table except `users`, `passkeys`,
+#                `guide_devices`, `guide_readers` and `guide_inquiries`, granted table by table by `agent-ro-grants` once the tables exist
 set -euo pipefail
 
 mysql -uroot -p"${MYSQL_ROOT_PASSWORD}" <<SQL

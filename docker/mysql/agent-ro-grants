@@ -1,6 +1,6 @@
 #!/bin/bash
 # Grants `agent_ro` SELECT on every table of the database except those in `excluded` — accounts,
-# passkeys and guide devices — one table at a time, as production's `/usr/local/sbin/agent-ro-grants`
+# passkeys, guide devices, readers and inquiries — one table at a time, as production's `/usr/local/sbin/agent-ro-grants`
 # does, and revokes SELECT on the excluded ones in case an earlier run granted it. MySQL cannot
 # grant a whole database minus some tables, so a new table needs this run again — after every `migrate`.
 #
@@ -8,7 +8,7 @@
 set -euo pipefail
 
 db="${MYSQL_DATABASE}"
-excluded=(users passkeys guide_devices)
+excluded=(users passkeys guide_devices guide_readers guide_inquiries)
 run() { mysql -uroot -p"${MYSQL_ROOT_PASSWORD}" -N -e "$1"; }
 
 not_in="'$(IFS=,; echo "${excluded[*]}" | sed "s/,/','/g")'"

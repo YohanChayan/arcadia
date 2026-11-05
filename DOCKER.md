@@ -74,7 +74,7 @@ The same three as production, created on the volume's first start (`docker/mysql
 |---|---|
 | `root` | everything (locally with a password; on the server, the socket only) |
 | `arcadia_app` | everything on the `arcadia` database — the application's user |
-| `agent_ro` | `SELECT` on every table except `users`, `passkeys` and `guide_devices` |
+| `agent_ro` | `SELECT` on every table except `users`, `passkeys`, `guide_devices`, `guide_readers` and `guide_inquiries` |
 
 MySQL cannot grant a whole database minus some tables, so `agent_ro` is granted table by table
 (and the excluded tables revoked):
