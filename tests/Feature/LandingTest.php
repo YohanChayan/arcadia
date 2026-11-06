@@ -52,14 +52,14 @@ class LandingTest extends TestCase
                 ->where('pageTitle', fn ($title) => str_starts_with($title, 'Arcadia · '))
                 ->where('metaDescription', fn ($text) => str_contains($text, 'Arcadia'))
                 ->where('ogImageAlt', fn ($text) => str_starts_with($text, 'Arcadia — '))
-                ->where('ogImage', "/img/arcadia/og-arcadia-{$locale}.jpg")
+                ->where('ogImage', "/img/arcadia/og-arcadia-medida-{$locale}.jpg")
                 ->where('siteName', 'Arcadia')
                 ->where('noIndex', true));
 
             // A shared guide link previews as the sign-in, to a signed-out crawler: Arcadia's preview.
             $this->get('/login')->assertInertia(fn ($page) => $page
                 ->where('pageTitle', $signIn)
-                ->where('ogImage', "/img/arcadia/og-arcadia-{$locale}.jpg")
+                ->where('ogImage', "/img/arcadia/og-arcadia-medida-{$locale}.jpg")
                 ->where('siteName', 'Arcadia'));
         }
 

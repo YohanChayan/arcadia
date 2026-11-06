@@ -1,0 +1,72 @@
+{
+    "read": [
+        "auth_providers",
+        "guide_activity_states",
+        "guide_cards",
+        "guide_categories",
+        "guide_images",
+        "guide_items",
+        "guide_phrase_guide",
+        "guide_phrases",
+        "guide_prompt_sections",
+        "guide_prompt_templates",
+        "guide_prompt_variables",
+        "guide_prompt_versions",
+        "guide_sections",
+        "guide_settings",
+        "guide_stages",
+        "guide_ticks",
+        "guide_topic",
+        "guide_topics",
+        "guide_version_changes",
+        "guide_versions",
+        "guide_visits",
+        "memberships",
+        "migrations",
+        "roles"
+    ],
+    "columns": {
+        "failed_jobs": {
+            "allow": ["id", "uuid", "connection", "queue", "failed_at"],
+            "deny": ["payload", "exception"]
+        },
+        "guide_access_requests": {
+            "allow": ["id", "guide_id", "user_id", "status", "decided_at", "decided_by", "created_at", "updated_at"],
+            "deny": ["message", "owner_note"]
+        },
+        "guide_inquiries": {
+            "allow": ["id", "user_id", "locale", "contact_kind", "prompt_version_id", "prompted_at", "created_at", "updated_at"],
+            "deny": ["name", "contact", "topic", "purpose", "prompt_values"]
+        },
+        "guide_readers": {
+            "allow": ["id", "guide_id", "user_id", "palette", "accent", "appearance_by", "appearance_at", "assigned_by", "notify", "notified_at", "created_at", "updated_at", "deleted_at"],
+            "deny": ["email", "name"]
+        },
+        "guides": {
+            "allow": ["id", "locale", "title", "level", "goals", "category_id", "counterpart_id", "inquiry_id", "prompt_version_id", "curator_notes", "status", "open_for_enrollment", "unlock_in_order", "default_palette", "default_accent", "greeting", "pitch", "created_at", "updated_at"],
+            "deny": ["link_token", "prompt_values"]
+        },
+        "job_batches": {
+            "allow": ["id", "name", "total_jobs", "pending_jobs", "failed_jobs", "failed_job_ids", "cancelled_at", "created_at", "finished_at"],
+            "deny": ["options"]
+        },
+        "jobs": {
+            "allow": ["id", "queue", "attempts", "reserved_at", "available_at", "created_at"],
+            "deny": ["payload"]
+        },
+        "users": {
+            "allow": ["id", "email_verified_at", "approved_at", "created_at", "updated_at"],
+            "deny": ["name", "email", "password", "remember_token"]
+        }
+    },
+    "hidden": [
+        "cache",
+        "cache_locks",
+        "guide_devices",
+        "guide_notes",
+        "passkeys",
+        "password_reset_tokens",
+        "sessions",
+        "user_auth_providers"
+    ]
+}

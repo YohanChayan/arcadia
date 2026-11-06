@@ -1088,9 +1088,9 @@ return [
     ],
     'landing' => [
         'meta' => [
-            'title' => 'Arcadia · Step-by-step guides',
-            'description' => 'Tell Arcadia what you want to learn. We hand you a guide built from the best free videos, ordered into stages, to follow on your phone or your laptop.',
-            'image_alt' => 'Arcadia — learn today, build tomorrow. Personalized study guides to reach your goals.',
+            'title' => 'Arcadia · AI guides tailored to you',
+            'description' => 'Tell Arcadia your situation and what you want to learn. AI builds a guide tailored to you from the best free videos, ordered into stages, and a person reviews it before it reaches you.',
+            'image_alt' => 'Arcadia — AI guides with your name on it. Learn it your way, build tomorrow.',
         ],
         'nav' => [
             'how' => 'How it works',
@@ -1098,13 +1098,13 @@ return [
             'start' => 'Get your guide',
         ],
         'hero' => [
-            'title' => 'Learn today,',
+            'title' => 'Learn it your way,',
             'title_lead' => 'build',
             'title_accent' => 'tomorrow',
-            'lead' => 'Your goal, step by step.',
+            'lead' => 'Tell us your situation and AI builds your guide: the best free videos, in stages, toward your goal.',
             'cta' => 'Get your guide',
             'explore' => 'Explore guides',
-            'price_note' => 'made for you from the best free videos',
+            'price_note' => 'built by AI for your situation, from the best free videos',
             'quick' => [
                 'title' => 'What do you want to learn?',
                 'items' => ['excel' => 'Excel', 'english' => 'English', 'design' => 'Canva', 'social' => 'Community manager'],
@@ -1273,24 +1273,25 @@ return [
             ],
         ],
         'topics' => [
-            'title' => 'A guide for whatever you need',
-            'lead' => 'What people want to learn for work, for example:',
+            'title' => 'Sound familiar?',
+            'lead' => 'Every guide starts from a real situation, like these. Tap yours:',
+            // Said as the visitor would say it: the tile they recognise themselves in is the topic it asks with.
             'items' => [
-                'excel' => ['name' => 'Excel for that new job', 'hint' => 'The interview\'s Excel test, passed'],
-                'instagram' => ['name' => 'Sell on Instagram', 'hint' => 'Your business selling, not just posting'],
-                'english' => ['name' => 'English for remote work', 'hint' => 'English interviews and pay in dollars'],
-                'accounts' => ['name' => 'Your business\'s books', 'hint' => 'Costs, prices and profit, without the mess'],
-                'usdt' => ['name' => 'USDT and Binance P2P', 'hint' => 'Get paid and exchange without being scammed'],
-                'social' => ['name' => 'Community manager', 'hint' => 'Run a business\'s social media, and get paid for it'],
-                'design' => ['name' => 'Design with Canva', 'hint' => 'Your first clients as a designer'],
+                'excel' => ['name' => 'I have an interview and they will test my Excel', 'hint' => 'Walk into the test knowing how to solve it'],
+                'instagram' => ['name' => 'I post on Instagram, but I do not sell', 'hint' => 'Turn messages into sales'],
+                'english' => ['name' => 'I want remote work and English holds me back', 'hint' => 'English interviews and pay in dollars'],
+                'accounts' => ['name' => 'I sell, but I cannot tell if I am making money', 'hint' => 'Costs, prices and profit, without the mess'],
+                'usdt' => ['name' => 'I get paid in USDT and I am afraid of scams', 'hint' => 'Get paid and exchange on Binance P2P, calmly'],
+                'social' => ['name' => 'I run social media and want to get paid for it', 'hint' => 'Community manager for a real business'],
+                'design' => ['name' => 'I want my first design clients', 'hint' => 'With Canva, from zero'],
             ],
-            'other' => ['name' => 'Something else?', 'hint' => 'Anything. Tell us what.'],
+            'other' => ['name' => 'Yours is different?', 'hint' => 'Tell us your situation. Any at all.'],
         ],
         'how' => [
             'title' => 'How it works',
             'steps' => [
-                'ask' => ['title' => 'You tell us what you want to learn', 'body' => 'And what for: getting hired, getting better at your job, or starting something of your own.'],
-                'curate' => ['title' => 'We build your guide', 'body' => 'We search, compare and keep the best of what is free. We order it into stages, each with its own goal.'],
+                'ask' => ['title' => 'You tell us your situation', 'body' => 'What you want to learn, what for, and where you are starting from: that is what we tailor it to.'],
+                'curate' => ['title' => 'AI builds your guide', 'body' => 'It searches, compares and keeps the best of what is free for your situation, in stages, each with its own goal. A person reviews it before it reaches you.'],
                 'follow' => ['title' => 'You follow it on your phone or your laptop', 'body' => 'One link, no downloads. Sign in, tick as you go, and your progress follows you from one device to the other.'],
             ],
         ],
@@ -1314,8 +1315,8 @@ return [
             ],
         ],
         'request' => [
-            'title' => 'What do you want to learn?',
-            'body' => 'Tell Arcadia and we will build your guide.',
+            'title' => 'What is your situation?',
+            'body' => 'Tell Arcadia: AI builds a guide tailored to you, and a person reviews it.',
         ],
         'price' => [
             'only' => 'Just',
@@ -1323,11 +1324,11 @@ return [
         ],
         'ask' => [
             'open' => 'Get your guide',
-            'title' => 'What do you want to learn?',
-            'lead' => 'Your guide for just :price. One line is enough; we will write to you.',
-            'lead_unpriced' => 'One line is enough; we will write to you.',
-            'topic' => 'I want to learn…',
-            'topic_placeholder' => 'E.g. Excel for my interview',
+            'title' => 'What is your situation?',
+            'lead' => 'Your guide for just :price. One line, in your own words, is enough; we will write to you.',
+            'lead_unpriced' => 'One line, in your own words, is enough; we will write to you.',
+            'topic' => 'I want to learn… and what for',
+            'topic_placeholder' => 'E.g. Excel, the test is on Monday and I barely use it',
             'suggestions' => 'Or tap an idea',
             'purposes' => [
                 'job' => 'Getting hired',

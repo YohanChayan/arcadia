@@ -667,7 +667,10 @@ and keeps the prompt here (`guide_prompt_templates` → `guide_prompt_versions` 
   clase…) stay out of the image; six to ten **mini artefacts** — line icons on glass chips, a
   flat layer over the photo like the cards, a little of everything unless the owner names them —
   fill the background's gaps; and
-  "Arcadia" only signs it, small. Left blank, the headline and the results are the model's, by
+  "Arcadia" only signs it, small, over the site's line as a smaller tagline (`tagline`, "Guías con
+  IA, a tu medida" unless changed or emptied). The role tells the model a guide is made
+  with AI to the asker's measure and reviewed by a person; "a tu medida" stays out of the
+  headline, which still sells a result. Left blank, the headline and the results are the model's, by
   that formula. Unlike the cover it **carries text**: each quoted string is drawn exactly, and
   each optional text line is `{{?name}}`, so an empty price or contact never reaches the model —
   an early version asked it to skip a dash, and it drew the dash. It **starts filled** — the
@@ -684,7 +687,7 @@ and keeps the prompt here (`guide_prompt_templates` → `guide_prompt_versions` 
   guide promises**, written by the model from the title and goals unless the owner gives one —
   not the title, which names the topic — in the same decided tone, with mini artefacts of the
   guide's own subject; its **goals become the cards, as results**, the only
-  other text the model words itself. The same `{{?name}}` lines, the same proportion rule, the
+  other text the model words itself. The same role, signature and tagline, the same `{{?name}}` lines, the same proportion rule, the
   same seeding rule. Not in `DatabaseSeeder`.
 
 - **`QuickCheckPromptTemplateSeeder`** writes a fifth, "Actividades — preguntas rápidas"

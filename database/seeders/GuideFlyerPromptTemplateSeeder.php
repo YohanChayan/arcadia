@@ -38,6 +38,11 @@ use Illuminate\Database\Seeder;
  * forbidden, invites the thing. The warning now sits on the WhatsApp line itself, so with no
  * number the word never reaches the model.
  *
+ * **AI, made to measure** (2026-11-05), as the general flyer: the role says a guide is
+ * made with AI to the measure of whoever asks and reviewed by a person, and the signature
+ * carries the site's line as a small tagline (`tagline`). Never in the headline, which still sells
+ * this guide's result.
+ *
  * **Text drawn exactly, and an empty field never reaches the model**, as the general flyer learnt:
  * each optional text line is `{{?name}}`, which `PromptRenderer` drops whole when empty. The
  * headline, when the model writes it, and the goals are the only text it may word itself — no digit
@@ -56,10 +61,10 @@ class GuideFlyerPromptTemplateSeeder extends Seeder
 
     private const DESCRIPTION = 'El flyer de una guía para redes sociales, para ChatGPT o Gemini: el resultado que promete como titular, sus metas como logros alrededor de la persona que ya lo vive, con precio y contacto.';
 
-    private const VERSION_DESCRIPTION = 'Titular decidido con el resultado de la guía; capa de mini artefactos de su tema; WhatsApp solo si se llena.';
+    private const VERSION_DESCRIPTION = 'Guía creada con IA a la medida de quien la pide; lema bajo la firma; titular decidido con el resultado de la guía; capa de mini artefactos de su tema; WhatsApp solo si se llena.';
 
     /** What in the text section shows a version carries this seeder's current text. */
-    private const REVISION = 'mini artefactos';
+    private const REVISION = 'a la medida de quien las pide';
 
     public function run(): void
     {
@@ -119,6 +124,7 @@ class GuideFlyerPromptTemplateSeeder extends Seeder
             ['whatsapp', 'WhatsApp (sale como 0412-802-3555)', PromptVariableType::PHONE, false, null],
             ['email', 'Correo', PromptVariableType::TEXT, false, null],
             ['web', 'Web o usuario', PromptVariableType::TEXT, false, 'arcadia.yhndevside.com'],
+            ['tagline', 'Lema bajo la firma (vacío: sin lema)', PromptVariableType::TEXT, false, 'Guías con IA, a tu medida'],
             ['format', 'Formato (1:1, 4:5 o 9:16)', PromptVariableType::TEXT, false, '4:5'],
             ['language', 'Idioma del texto', PromptVariableType::LANGUAGE, true, 'es'],
             ['style', 'Estilo (vacío: fotografía realista)', PromptVariableType::TEXT, false, null],
@@ -135,7 +141,7 @@ Crea una sola imagen vertical para redes sociales, en proporción {{format}}. Si
 Todo el texto que aparezca en la imagen va en {{language}}.
 TXT],
             [PromptSectionKind::PERSONA, 'Tu rol', <<<'TXT'
-Eres el director de arte de Arcadia, un servicio de guías hechas a la medida de una situación concreta. Una guía de Arcadia no es un curso aburrido: es lo clave de un tema, lo que de verdad necesitas saber para crecer — en el trabajo, en lo personal o para emprender — y, con eso, transformarte.
+Eres el director de arte de Arcadia, un servicio de guías creadas con IA a la medida de quien las pide — su situación, su meta, desde dónde arranca — y revisadas por una persona. Una guía de Arcadia no es un curso aburrido: es lo clave de un tema, lo que de verdad necesitas saber para crecer — en el trabajo, en lo personal o para emprender — y, con eso, transformarte.
 
 Vas a crear el flyer de una guía en particular, para redes sociales, y una regla manda sobre todas las demás: la gente compra resultados, no procesos. Un gimnasio no vende horas de pesas: vende a alguien en forma, disfrutándolo. Este flyer no vende estudiar esta guía: vende lo que la persona tiene cuando la termina.
 
@@ -154,7 +160,7 @@ Mini artefactos: {{?artifacts}}
 
 Si no hay titular, escríbelo tú: el resultado que esta guía promete, con un verbo de transformación, de seis palabras como máximo — sacado del título y de las metas, no copiado del título.
 
-El tono del titular es de decisión total: energía, motivación, cero dudas — como quien ya decidió y va por ello. Frases cortas e imperativas, que se pueden partir con puntos. Nada tibio ni abstracto: nada de «lo clave», «lo que importa», «tu camino» ni «tu potencial», que suenan a folleto y no mueven a nadie. Como mucho un signo de exclamación. Por ejemplo, para «Excel para aprobar la prueba de la entrevista»: «Domina Excel. Aprueba esa prueba.»; para «Mantenimiento básico de tu carro»: «Tu carro, tus reglas»; para «Hacer tortas y postres para vender por encargo»: «Hornea. Vende. Hazlo tuyo.». Verbos que sirven: conviértete, consigue, logra, domina, transfórmate, desarróllate, crece, gana, aprueba, vende, arregla; y aprende, solo seguido de un resultado concreto. El resultado es el de esta guía: si no trata de trabajo, no lo conviertas en uno.
+El tono del titular es de decisión total: energía, motivación, cero dudas — como quien ya decidió y va por ello. Frases cortas e imperativas, que se pueden partir con puntos. Nada tibio ni abstracto: nada de «lo clave», «lo que importa», «tu camino» ni «tu potencial», que suenan a folleto y no mueven a nadie. «A tu medida» tampoco va en el titular: es el lema, y va en la firma. Como mucho un signo de exclamación. Por ejemplo, para «Excel para aprobar la prueba de la entrevista»: «Domina Excel. Aprueba esa prueba.»; para «Mantenimiento básico de tu carro»: «Tu carro, tus reglas»; para «Hacer tortas y postres para vender por encargo»: «Hornea. Vende. Hazlo tuyo.». Verbos que sirven: conviértete, consigue, logra, domina, transfórmate, desarróllate, crece, gana, aprueba, vende, arregla; y aprende, solo seguido de un resultado concreto. El resultado es el de esta guía: si no trata de trabajo, no lo conviertas en uno.
 
 Las metas se vuelven logros: cada una empieza por su verbo y dice lo que la persona ya puede hacer, de ocho palabras como máximo. Si las metas dicen —, escribe tú tres así, a partir del título y de qué trata.
 
@@ -167,7 +173,7 @@ Alrededor flotan tres tarjetas, como las de una app: rectángulos redondeados, a
 
 Encima de la foto, como una capa gráfica aparte — del mismo estilo que las tarjetas, nunca objetos dentro de la escena ni en las manos de la persona —, flotan entre seis y diez mini artefactos: cada uno, un icono de línea en el verde azulado del acento dentro de un pequeño círculo o píldora de vidrio, de entre el 4 % y el 7 % del ancho de la imagen. Si hay mini artefactos en «La guía», son esos; si no, los del tema de esta guía — sus herramientas, sus objetos, sus símbolos —, variados entre sí. Dos o tres, más grandes y nítidos, cerca de las tarjetas; el resto, más pequeños y apenas desenfocados, como un bokeh, para dar profundidad. Van solo en los huecos del fondo: nunca sobre la cara, el titular, las tarjetas ni la franja de abajo. Sin texto, sin números y sin marcas. Le dan textura y vida a la imagen; si alguno compite con la persona, sobra.
 
-Arriba, el titular: lo más grande de la imagen y lo primero que se lee; debajo, el subtítulo, si lo hay, más pequeño. Abajo, una franja limpia con los datos que haya en «Texto exacto» — precio, invitación, contacto —; si no hay ninguno, no hay franja. En una esquina, pequeña, la palabra Arcadia como firma.
+Arriba, el titular: lo más grande de la imagen y lo primero que se lee; debajo, el subtítulo, si lo hay, más pequeño. Abajo, una franja limpia con los datos que haya en «Texto exacto» — precio, invitación, contacto —; si no hay ninguno, no hay franja. En una esquina, pequeña, la palabra Arcadia como firma, con el lema debajo, si lo hay, aún más pequeño.
 
 Deja un margen amplio en todos los bordes: las redes recortan las orillas y, en 9:16, tapan la franja de arriba y la de abajo con su propia interfaz. Nada importante pegado al borde.
 TXT],
@@ -179,6 +185,7 @@ El texto de la imagen es este, cada uno en el lugar que le da la composición. L
 - Subtítulo, debajo del titular: «{{?subtitle}}»
 - Una tarjeta por logro, los tres primeros, en tamaño mediano, con su verbo inicial en negrita.
 - Firma, pequeña, en una esquina: «Arcadia»
+- Lema, debajo de la firma, aún más pequeño: «{{?tagline}}»
 - Precio, destacado en la franja de abajo: «{{?price}}»
 - Invitación, junto al precio, como texto: «{{?cta}}»
 - WhatsApp, pequeño, con un icono genérico de chat delante (nunca su logo): «{{?whatsapp}}»

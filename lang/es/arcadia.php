@@ -1089,9 +1089,9 @@ return [
     ],
     'landing' => [
         'meta' => [
-            'title' => 'Arcadia · Guías paso a paso',
-            'description' => 'Dile a Arcadia qué quieres aprender. Te armamos una guía con los mejores videos gratis, ordenados por etapas, para seguirla desde tu teléfono o tu computadora.',
-            'image_alt' => 'Arcadia — aprende hoy, construye el mañana. Guías de estudio personalizadas para alcanzar tus metas.',
+            'title' => 'Arcadia · Guías con IA a tu medida',
+            'description' => 'Cuéntale a Arcadia tu situación y qué quieres aprender. La IA te arma una guía a tu medida, con los mejores videos gratis ordenados por etapas, y una persona la revisa antes de que te llegue.',
+            'image_alt' => 'Arcadia — guías con IA, con tu nombre. Aprende a tu medida, construye el mañana.',
         ],
         'nav' => [
             'how' => 'Cómo funciona',
@@ -1099,14 +1099,14 @@ return [
             'start' => 'Pide tu guía',
         ],
         'hero' => [
-            'title' => 'Aprende hoy,',
+            'title' => 'Aprende a tu medida,',
             // As the Spanish social image sets it: the whole second line in the accent.
             'title_lead' => '',
             'title_accent' => 'construye el mañana',
-            'lead' => 'Tu meta, paso a paso.',
+            'lead' => 'Nos cuentas tu situación y la IA arma tu guía: los mejores videos gratis, por etapas, para tu meta.',
             'cta' => 'Pide tu guía',
             'explore' => 'Explorar guías',
-            'price_note' => 'hecha para ti con los mejores videos gratis',
+            'price_note' => 'hecha con IA para tu situación, con los mejores videos gratis',
             'quick' => [
                 'title' => '¿Qué quieres aprender?',
                 'items' => ['excel' => 'Excel', 'english' => 'Inglés', 'design' => 'Canva', 'social' => 'Community manager'],
@@ -1275,24 +1275,25 @@ return [
             ],
         ],
         'topics' => [
-            'title' => 'Una guía para lo que te haga falta',
-            'lead' => 'Lo que la gente en Venezuela quiere aprender para la chamba, por ejemplo:',
+            'title' => '¿Te suena alguna?',
+            'lead' => 'Cada guía arranca desde una situación real, como estas. Toca la tuya:',
+            // Said as the visitor would say it: the tile they recognise themselves in is the topic it asks with.
             'items' => [
-                'excel' => ['name' => 'Excel para ese nuevo trabajo', 'hint' => 'La prueba de Excel de la entrevista, superada'],
-                'instagram' => ['name' => 'Vende por Instagram', 'hint' => 'Tu emprendimiento vendiendo, no solo publicando'],
-                'english' => ['name' => 'Inglés para chamba remota', 'hint' => 'Entrevistas en inglés y pagos en dólares'],
-                'accounts' => ['name' => 'Las cuentas de tu negocio', 'hint' => 'Bolívares, dólares y ganancias, sin enredos'],
-                'usdt' => ['name' => 'USDT y Binance P2P', 'hint' => 'Cobra y cambia sin que te tumben'],
-                'social' => ['name' => 'Community manager', 'hint' => 'Maneja las redes de un negocio y cobra por eso'],
-                'design' => ['name' => 'Diseño con Canva', 'hint' => 'Tus primeros clientes como diseñador'],
+                'excel' => ['name' => 'Tengo entrevista y me van a pedir Excel', 'hint' => 'Llegas a la prueba sabiendo resolverla'],
+                'instagram' => ['name' => 'Publico en Instagram, pero no vendo', 'hint' => 'Que los mensajes terminen en ventas'],
+                'english' => ['name' => 'Quiero chamba remota y me frena el inglés', 'hint' => 'Entrevistas en inglés y pagos en dólares'],
+                'accounts' => ['name' => 'Vendo, pero no sé si estoy ganando', 'hint' => 'Bolívares, dólares y ganancias, sin enredos'],
+                'usdt' => ['name' => 'Me pagan en USDT y me da miedo que me tumben', 'hint' => 'Cobra y cambia en Binance P2P con calma'],
+                'social' => ['name' => 'Manejo redes y quiero cobrar por eso', 'hint' => 'Community manager de un negocio, en serio'],
+                'design' => ['name' => 'Quiero mis primeros clientes de diseño', 'hint' => 'Con Canva, desde cero'],
             ],
-            'other' => ['name' => '¿Otra cosa?', 'hint' => 'La que sea. Cuéntanos cuál.'],
+            'other' => ['name' => '¿La tuya es otra?', 'hint' => 'Cuéntanos tu situación. La que sea.'],
         ],
         'how' => [
             'title' => 'Cómo funciona',
             'steps' => [
-                'ask' => ['title' => 'Nos cuentas qué quieres aprender', 'body' => 'Y para qué: conseguir chamba, mejorar en la tuya o arrancar algo propio.'],
-                'curate' => ['title' => 'Te armamos la guía', 'body' => 'Buscamos, comparamos y nos quedamos con lo mejor que hay gratis. Lo ordenamos por etapas, cada una con su meta.'],
+                'ask' => ['title' => 'Nos cuentas tu situación', 'body' => 'Qué quieres aprender, para qué y desde dónde arrancas: con eso la armamos a tu medida.'],
+                'curate' => ['title' => 'La IA arma tu guía', 'body' => 'Busca, compara y se queda con lo mejor que hay gratis para tu situación, por etapas y cada una con su meta. Una persona la revisa antes de que te llegue.'],
                 'follow' => ['title' => 'La sigues desde tu teléfono o tu computadora', 'body' => 'Un enlace, sin descargas. Entras con tu cuenta, vas marcando y tu avance te sigue de un equipo a otro.'],
             ],
         ],
@@ -1316,8 +1317,8 @@ return [
             ],
         ],
         'request' => [
-            'title' => '¿Qué quieres aprender?',
-            'body' => 'Cuéntale a Arcadia y te armamos tu guía. De una.',
+            'title' => '¿Cuál es tu situación?',
+            'body' => 'Cuéntasela a Arcadia: la IA arma tu guía a tu medida y una persona la revisa. De una.',
         ],
         'price' => [
             'only' => 'Solo',
@@ -1325,11 +1326,11 @@ return [
         ],
         'ask' => [
             'open' => 'Pide tu guía',
-            'title' => '¿Qué quieres aprender?',
-            'lead' => 'Tu guía por solo :price. Una línea basta; nosotros te escribimos.',
-            'lead_unpriced' => 'Una línea basta; nosotros te escribimos.',
-            'topic' => 'Quiero aprender…',
-            'topic_placeholder' => 'Ej.: Excel para mi entrevista',
+            'title' => '¿Cuál es tu situación?',
+            'lead' => 'Tu guía por solo :price. Cuéntalo en una línea, con tus palabras; nosotros te escribimos.',
+            'lead_unpriced' => 'Cuéntalo en una línea, con tus palabras; nosotros te escribimos.',
+            'topic' => 'Quiero aprender… y para qué',
+            'topic_placeholder' => 'Ej.: Excel, tengo la prueba el lunes y casi no lo uso',
             'suggestions' => 'O toca una idea',
             'purposes' => [
                 'job' => 'Conseguir chamba',
