@@ -66,7 +66,7 @@ class GuidePresentationTest extends TestCase
                 ->where('noIndex', true)
                 ->where('metaDescription', 'Aprende Excel en dos semanas, con videos gratuitos ordenados por etapas.')
                 // Arcadia's own preview until the guide has a cover.
-                ->where('ogImage', '/img/arcadia/og-arcadia-medida-es.jpg')
+                ->where('ogImage', '/img/arcadia/og-arcadia-2026-11-es.jpg')
                 ->missing('sections')
                 ->missing('stages')
                 ->missing('guide.greeting'))

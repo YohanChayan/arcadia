@@ -231,16 +231,16 @@ class ArcadiaSite
 
     /**
      * What a link to Arcadia previews as: its social image in this language, and Arcadia's name.
-     * A new artwork ships under a new file name: platforms cache a preview by URL — hence
-     * `og-arcadia-medida-*`, the "a tu medida" cards of 2026-11-05, where the Arcadia cards of
-     * 2026-10-21 were `og-arcadia-*`.
+     * A new artwork ships under a new file name, because platforms cache a preview by URL. Each is
+     * named by the month it was made (`og-arcadia-2026-11-*`, the "a tu medida" cards), never by
+     * its campaign; the first Arcadia cards, of 2026-10-21, were `og-arcadia-*`.
      *
      * @return array{ogImage: string, ogImageAlt: string, siteName: string, siteDomain: string}
      */
     public function preview(): array
     {
         return [
-            'ogImage' => '/img/arcadia/og-arcadia-medida-'.$this->locale().'.jpg',
+            'ogImage' => '/img/arcadia/og-arcadia-2026-11-'.$this->locale().'.jpg',
             'ogImageAlt' => __('arcadia.landing.meta.image_alt'),
             'siteName' => 'Arcadia',
             'siteDomain' => parse_url(config('app.url'), PHP_URL_HOST) ?: '',
