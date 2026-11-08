@@ -54,6 +54,10 @@ class RecogniseDevice
     /** Null when this request may go on — on a device of the account's — else where it goes instead. */
     public function check(Request $request): ?Response
     {
+        if (! config('arcadia.device_limit_enabled')) {
+            return null;
+        }
+
         $user = $request->user();
 
         if (! $user || ! $user->hasVerifiedEmail() || $this->site->roleOf($user)?->alias === 'admin') {

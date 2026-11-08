@@ -56,4 +56,8 @@ return [
     // which keeps cookies apart from the phone's. `?:` for the reason above.
     'device_limit' => (int) (env('ARCADIA_DEVICE_LIMIT') ?: 3),
 
+    // Off, no browser is counted as a device and no one is sent to choose one: the limit,
+    // its swap and the owner's revoke all stop. Rows already kept stay, and count again on.
+    'device_limit_enabled' => (bool) env('ARCADIA_DEVICE_LIMIT_ENABLED', false),
+
 ];

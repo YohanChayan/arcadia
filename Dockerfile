@@ -91,6 +91,10 @@ COPY docker/prod/php-fpm.conf /usr/local/etc/php-fpm.d/zzz-pool.conf
 ENTRYPOINT ["entrypoint"]
 CMD ["php-fpm"]
 
+# www-data's HOME is /var/www, owned by root, so psysh could not write its config
+# and history there and `php artisan tinker` failed. Point them at /tmp instead.
+ENV XDG_CONFIG_HOME=/tmp/.config XDG_DATA_HOME=/tmp/.local/share
+
 USER www-data
 
 # ---- web: nginx in front of arc-app, serving the built `public/` -------------
