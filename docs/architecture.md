@@ -846,6 +846,18 @@ button through the session's `status`, not a toast, so neither shell has to carr
 
 `GuideSignInTest`, `GuideSignInGateTest`, `PasskeysTest` and `SaveConfirmationTest` hold these.
 
+## Knowledge and the assistant are two slices
+
+AI code lives in two folders, and the dependency runs one way. **`app/Knowledge`** owns what the
+AI may know about the catalogue — its index, and the `Retriever` contract that is the only way to
+read it. **`app/Assistant`** owns the conversation and depends on that contract, never on a
+retriever or the index itself; Knowledge never depends on the Assistant. A new corpus is a new
+retriever behind the same contract, so the assistant does not change. What the index holds is
+promise-level only — what a guide sets out to teach, never its lessons, item briefs, links or
+creators — so nothing the assistant retrieves can disclose a guide's contents (ADR 0022). The
+provider for both is `config/ai.php` (`laravel/ai`, Gemini). Until the guide-catalogue retriever
+exists, `KnowledgeServiceProvider` binds a `FakeRetriever` with canned passages.
+
 ## Not here yet
 
 - **Checking links automatically** — a periodic pass that marks a dead source unavailable — is
