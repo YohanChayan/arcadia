@@ -1360,6 +1360,19 @@ return [
         'by' => 'A project by',
         'privacy' => 'Privacy',
     ],
+    'assistant' => [
+        'log_label' => 'Conversation with the assistant',
+        'empty' => 'Tell me what you want to learn and I will tell you which guide fits.',
+        'placeholder' => 'Write your message…',
+        'send' => 'Send',
+        'typing' => 'Typing…',
+        'retry' => 'Try again',
+        'start_over' => 'Start over',
+        'failed' => 'I could not reply. Please try again.',
+        'expired' => 'The page expired. Reload it to carry on.',
+        'too_many' => 'Too many messages in a row. Wait a moment.',
+    ],
+
     'devices' => [
         'title' => 'All your devices are in use',
         'lead' => 'The account :email is already open on :count devices, the most it may. Pick one to swap for this one, or sign out.',

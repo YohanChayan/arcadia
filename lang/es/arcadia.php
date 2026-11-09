@@ -1362,6 +1362,19 @@ return [
         'by' => 'Un proyecto de',
         'privacy' => 'Privacidad',
     ],
+    'assistant' => [
+        'log_label' => 'Conversación con el asistente',
+        'empty' => 'Cuéntame qué quieres aprender y te digo qué guía te sirve.',
+        'placeholder' => 'Escribe tu mensaje…',
+        'send' => 'Enviar',
+        'typing' => 'Escribiendo…',
+        'retry' => 'Reintentar',
+        'start_over' => 'Empezar de nuevo',
+        'failed' => 'No pude responder. Inténtalo otra vez.',
+        'expired' => 'La página caducó. Recárgala para seguir.',
+        'too_many' => 'Demasiados mensajes seguidos. Espera un momento.',
+    ],
+
     'devices' => [
         'title' => 'Ya usas todos tus equipos',
         'lead' => 'La cuenta :email ya está abierta en :count equipos, el máximo. Elige uno para cambiarlo por este, o sal.',
