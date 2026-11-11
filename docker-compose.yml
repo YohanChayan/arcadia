@@ -53,13 +53,13 @@ services:
     <<: *php
     container_name: arcadia_app
 
-  # ---- Queue worker: every mail goes out through a queued job ----------
+  # ---- Queue worker: mail first, then the knowledge index --------------
   #  `queue:listen`, not `queue:work`: it boots the code fresh for every job, so
   #  a PHP change is picked up without a restart. Production keeps `queue:work`.
   queue:
     <<: *php
     container_name: arcadia_queue
-    command: ["php", "artisan", "queue:listen", "--queue=arcadia", "--tries=3", "--backoff=10"]
+    command: ["php", "artisan", "queue:listen", "--queue=arcadia,knowledge", "--tries=3", "--backoff=10"]
 
   # ---- Nginx: the HTTP entrypoint ---------------------------------------
   nginx:

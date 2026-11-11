@@ -858,6 +858,14 @@ creators — so nothing the assistant retrieves can disclose a guide's contents 
 provider for both is `config/ai.php` (`laravel/ai`, Gemini). Until the guide-catalogue retriever
 exists, `KnowledgeServiceProvider` binds a `FakeRetriever` with canned passages.
 
+**The index follows the guides; the guides know nothing of it.** `GuideChunker` makes one
+passage per published guide and one per stage, from the released version only, reading nothing
+below a stage. `GuideIndexer` embeds a passage only when its text or the embedding model changed
+and deletes what a guide no longer has. `KnowledgeServiceProvider` listens for a release or a
+change to a guide's promise and queues `IndexGuideJob` on the `knowledge` queue;
+`knowledge:rebuild` does every guide at once. The table lives on the `vectors` connection
+(Postgres + pgvector, `database/migrations/vectors`), apart from MySQL's migrations.
+
 ## Not here yet
 
 - **Checking links automatically** — a periodic pass that marks a dead source unavailable — is

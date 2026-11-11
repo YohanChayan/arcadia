@@ -40,11 +40,12 @@ services:
       - arc-vectors
 
   # ---- Queue worker ----------------------------------------------------
-  #  Every mail goes out through a queued job (`App\Enums\QueueName`).
+  #  Every mail goes out through a queued job (`App\Enums\QueueName`); the
+  #  knowledge index's reindexing is worked only when no mail waits.
   #  `queue:work`, not `queue:listen`: the code only changes with a new image.
   arc-queue:
     <<: *php
-    command: ["php", "artisan", "queue:work", "--queue=arcadia", "--tries=3", "--backoff=10", "--max-time=3600"]
+    command: ["php", "artisan", "queue:work", "--queue=arcadia,knowledge", "--tries=3", "--backoff=10", "--max-time=3600"]
     mem_limit: 256m
     depends_on:
       - arc-app

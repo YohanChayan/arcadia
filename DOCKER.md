@@ -75,7 +75,16 @@ with pgvector, a second connection named `vectors` (`config/database.php`, `VECT
 derived data, rebuilt from MySQL at any time, so it is never backed up.
 
 On the volume's first start, `docker/pgvector/01-databases.sql` creates `arcadia_vectors_testing`
-beside the index and enables pgvector in both. Outside Docker, `.env`'s `VECTOR_DB_*` point at
+beside the index and enables pgvector in both. Its tables have their own migrations, never run
+by a plain `migrate`:
+
+```bash
+docker compose exec app php artisan migrate --database=vectors --path=database/migrations/vectors
+docker compose exec app php artisan knowledge:rebuild      # needs GEMINI_API_KEY
+```
+
+A release, or a change to what a guide promises, queues that guide's reindexing on the
+`knowledge` queue, which the worker takes after mail. Outside Docker, `.env`'s `VECTOR_DB_*` point at
 127.0.0.1:5433. To start it over: `docker compose rm -sf pgvector && docker volume rm
 arcadia_arcadia_pgvector_data`.
 
@@ -170,6 +179,8 @@ docker compose -f compose.prod.yml run --rm --no-deps --entrypoint php arc-app a
 
 docker compose -f compose.prod.yml up -d
 docker compose -f compose.prod.yml exec arc-app php artisan migrate --force --seed
+docker compose -f compose.prod.yml exec arc-app php artisan migrate --force --database=vectors --path=database/migrations/vectors
+docker compose -f compose.prod.yml exec arc-app php artisan knowledge:rebuild
 ```
 
 **`UserSeeder` creates the owner with a password committed to this repository.** Change it
@@ -186,6 +197,7 @@ Bring the checkout to the new commit, then:
 docker compose -f compose.prod.yml build
 docker compose -f compose.prod.yml up -d
 docker compose -f compose.prod.yml exec arc-app php artisan migrate --force
+docker compose -f compose.prod.yml exec arc-app php artisan migrate --force --database=vectors --path=database/migrations/vectors
 ```
 
 `up -d` recreates every container whose image changed, which re-runs `optimize` in each.
