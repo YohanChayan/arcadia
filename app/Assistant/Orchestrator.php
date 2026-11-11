@@ -17,7 +17,9 @@ use App\Models\User;
 use Illuminate\Support\Collection;
 use InvalidArgumentException;
 use Laravel\Ai\Responses\Data\TextUsage;
+use Laravel\Ai\Responses\StructuredAgentResponse;
 use Laravel\Ai\Streaming\Events\TextDelta;
+use LogicException;
 use Throwable;
 
 /**
@@ -84,6 +86,11 @@ class Orchestrator
                     $message,
                 ),
             );
+
+            // A planner answers in structure; anything else fails the turn here, not further on.
+            if (! $planned instanceof StructuredAgentResponse) {
+                throw new LogicException('The planner did not answer in structure.');
+            }
 
             $plan = TurnPlan::fromPlanner(
                 $planned->structured,
