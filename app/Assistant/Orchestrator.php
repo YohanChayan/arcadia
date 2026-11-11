@@ -68,11 +68,7 @@ class Orchestrator
         $channel->turnStarted($turn);
 
         try {
-            $passages = $this->retriever->retrieve(new RetrievalQuery(
-                $message,
-                $conversation->locale,
-                limit: config('assistant.passages'),
-            ));
+            $passages = $this->passages($message, $conversation->locale);
             $guideTitles = $this->guideTitles($passages, $offeredGuideIds);
             $offeredGuides = collect($offeredGuideIds)->mapWithKeys(fn (int $id): array => [$id => $guideTitles[$id] ?? (string) $id]);
 
@@ -161,6 +157,24 @@ class Orchestrator
         }
 
         return $turn;
+    }
+
+    /**
+     * The passages that fit the visitor's message closely enough to be offered from. A retrieval
+     * that fails — the embeddings provider refusing a call now and then — is reported and leaves
+     * the turn without passages, so the assistant replies that no guide fits rather than failing.
+     */
+    private function passages(string $message, string $locale): RetrievedPassages
+    {
+        try {
+            $passages = $this->retriever->retrieve(new RetrievalQuery($message, $locale, limit: config('assistant.passages')));
+        } catch (Throwable $exception) {
+            report($exception);
+
+            return new RetrievedPassages;
+        }
+
+        return $passages->filter(fn (RetrievedPassage $passage): bool => $passage->score >= config('assistant.min_score'))->values();
     }
 
     /**

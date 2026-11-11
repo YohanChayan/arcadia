@@ -31,6 +31,12 @@ return [
     'history_turns' => 20,
     'passages' => 5,
 
+    // The lowest score a passage may have to reach the model. The retriever returns its top
+    // passages whatever they score, and an off-catalogue question still finds the nearest guide
+    // (0.64–0.66 locally, against 0.75–0.81 on topic); below this, no guide fits. Calibrate on
+    // production data.
+    'min_score' => (float) env('ASSISTANT_MIN_SCORE', 0.7),
+
     // Marks the static instructions as a cache breakpoint for providers with explicit caching
     // (Anthropic). Gemini caches a stable prefix implicitly and ignores this flag; the static
     // instructions are kept byte-stable for it either way.

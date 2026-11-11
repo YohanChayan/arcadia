@@ -112,6 +112,38 @@ class AssistantOrchestratorTest extends TestCase
         $this->assertSame($this->excel->id, $retrieved->refresh()->offered_guide_id);
     }
 
+    public function test_a_passage_below_the_score_floor_never_reaches_the_model_nor_can_be_offered(): void
+    {
+        config(['assistant.min_score' => 0.7]);
+        $this->retrieves([$this->excel], score: 0.65);
+        Planner::fake([$this->plan(offer: $this->excel->id)]);
+        Speaker::fake(['No tengo una guía de eso']);
+
+        $turn = $this->orchestrator()->reply($this->conversation(), 'Quiero aprender git', $this->channel);
+
+        $this->assertNull($turn->refresh()->offered_guide_id);
+        $this->assertSame([], $this->channel->metrics->toArray()['passages']);
+        Speaker::assertPrompted(fn (AgentPrompt $prompt): bool => ! $prompt->contains('Excel desde cero'));
+    }
+
+    public function test_a_failed_retrieval_leaves_the_turn_without_passages_instead_of_failing_it(): void
+    {
+        $this->app->instance(Retriever::class, new class implements Retriever
+        {
+            public function retrieve(RetrievalQuery $query): RetrievedPassages
+            {
+                throw new RuntimeException('403 PERMISSION_DENIED');
+            }
+        });
+        Planner::fake([$this->plan()]);
+        Speaker::fake(['Cuéntame más']);
+
+        $turn = $this->orchestrator()->reply($this->conversation(), 'Hola', $this->channel);
+
+        $this->assertSame(TurnStatus::DONE, $turn->refresh()->status);
+        $this->assertSame([], $this->channel->metrics->toArray()['passages']);
+    }
+
     public function test_accepting_an_offered_guide_records_one_conversion_with_its_guide(): void
     {
         Planner::fake([
@@ -227,17 +259,17 @@ class AssistantOrchestratorTest extends TestCase
     /**
      * @param  list<Guide>  $guides
      */
-    private function retrieves(array $guides): void
+    private function retrieves(array $guides, float $score = 0.8): void
     {
-        $this->app->instance(Retriever::class, new class($guides) implements Retriever
+        $this->app->instance(Retriever::class, new class($guides, $score) implements Retriever
         {
             /** @param  list<Guide>  $guides */
-            public function __construct(private array $guides) {}
+            public function __construct(private array $guides, private float $score) {}
 
             public function retrieve(RetrievalQuery $query): RetrievedPassages
             {
                 return RetrievedPassages::make(array_map(
-                    fn (Guide $guide): RetrievedPassage => new RetrievedPassage("{$guide->title}. Nivel básico.", 0.8, 'test', $guide->id, $guide->title, ChunkType::GUIDE, $query->locale),
+                    fn (Guide $guide): RetrievedPassage => new RetrievedPassage("{$guide->title}. Nivel básico.", $this->score, 'test', $guide->id, $guide->title, ChunkType::GUIDE, $query->locale),
                     $this->guides,
                 ));
             }

@@ -42,7 +42,9 @@ class Rehearsals
                         'Suena bien, pero no tengo mucho tiempo',
                         'Bueno, ¿y cómo empiezo?',
                     ],
-                    'offers' => 'público',
+                    // Guide 9, «Presenta en 5 minutos sin que te tiemble la voz»: listed in
+                    // production, a draft locally — where this rehearsal fails for want of it.
+                    'offers' => 'Presenta',
                     'converts' => false,
                 ],
                 'sin-guia-que-encaje' => [
