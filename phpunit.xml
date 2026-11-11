@@ -38,6 +38,7 @@
         <env name="DB_DATABASE" value=":memory:" force="true"/>
         <env name="VECTOR_DB_DATABASE" value="arcadia_vectors_testing" force="true"/>
         <env name="KNOWLEDGE_INDEX_ON_CHANGE" value="false" force="true"/>
+        <env name="KNOWLEDGE_RETRIEVER" value="fake" force="true"/>
         <env name="DB_URL" value="" force="true"/>
         <env name="MAIL_MAILER" value="array" force="true"/>
         <env name="QUEUE_CONNECTION" value="sync" force="true"/>

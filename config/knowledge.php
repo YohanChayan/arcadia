@@ -21,6 +21,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Retriever
+    |--------------------------------------------------------------------------
+    |
+    | `catalogue` searches the knowledge index; `fake` answers with canned passages, for the tests
+    | and for a machine without a Gemini key or an index.
+    |
+    */
+
+    'retriever' => env('KNOWLEDGE_RETRIEVER', 'catalogue'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Reindexing
     |--------------------------------------------------------------------------
     |

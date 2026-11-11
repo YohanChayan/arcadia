@@ -9,12 +9,12 @@ use App\Knowledge\Retrievers\FakeRetriever;
 use Tests\TestCase;
 
 /**
- * Callers reach the knowledge index only through the `Retriever` contract. Until the guide
- * catalogue is indexed, it answers with canned passages in the query's locale, up to its limit.
+ * Callers reach the knowledge index only through the `Retriever` contract. Set to `fake` — as in
+ * the tests — it answers with canned passages in the query's locale, up to its limit.
  */
 class KnowledgeRetrieverTest extends TestCase
 {
-    public function test_the_contract_resolves_to_the_fake_until_the_index_exists(): void
+    public function test_the_contract_resolves_to_the_fake_when_set_to_fake(): void
     {
         $this->assertInstanceOf(FakeRetriever::class, app(Retriever::class));
     }

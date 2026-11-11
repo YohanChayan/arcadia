@@ -855,8 +855,11 @@ retriever or the index itself; Knowledge never depends on the Assistant. A new c
 retriever behind the same contract, so the assistant does not change. What the index holds is
 promise-level only — what a guide sets out to teach, never its lessons, item briefs, links or
 creators — so nothing the assistant retrieves can disclose a guide's contents (ADR 0022). The
-provider for both is `config/ai.php` (`laravel/ai`, Gemini). Until the guide-catalogue retriever
-exists, `KnowledgeServiceProvider` binds a `FakeRetriever` with canned passages.
+provider for both is `config/ai.php` (`laravel/ai`, Gemini). `KnowledgeServiceProvider` binds the
+contract to a `CompositeRetriever` over every corpus — today `GuideCatalogueRetriever`, which
+embeds the question and matches it in pgvector by cosine distance, filtered in SQL by locale and
+listing. `KNOWLEDGE_RETRIEVER=fake` binds a `FakeRetriever` with canned passages instead: the
+tests use it, as does a machine with no Gemini key or no index.
 
 **The index follows the guides; the guides know nothing of it.** `GuideChunker` makes one
 passage per published guide and one per stage, from the released version only, reading nothing
