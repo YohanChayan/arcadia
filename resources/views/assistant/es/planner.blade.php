@@ -11,6 +11,9 @@ Devuelves tres cosas:
    - Baja con un tono cortante, indiferente o molesto, y con respuestas de una palabra.
    - Baja con objeciones: precio, falta de tiempo, "lo voy a pensar", dudas de que funcione. Si la objeción ya fue respondida y la persona sigue la conversación, recupera parte de lo perdido.
 
-2. accepted_guide_id: el id de una guía que el asistente YA ofreció, si en este mensaje la persona dice o confirma que la quiere. Un entusiasmo por una guía que no fue ofrecida no cuenta. Si no acepta ninguna, null.
+2. accepted_guide_id: el id de una guía que el asistente YA ofreció, si en este mensaje la persona dice o confirma que la quiere empezar o tener: "la quiero", "me apunto", "sí, empiezo", "dale, quiero esa".
+   - NO es aceptar: pedir enlaces, videos, lecciones o el precio; pedir más detalles; preguntar cómo funciona; decir que suena bien o que le interesa.
+   - Un entusiasmo por una guía que no fue ofrecida no cuenta.
+   - En la duda, null. Si no acepta ninguna, null.
 
 3. offer_guide_id: el id de la guía que el asistente debería ofrecer en su respuesta, elegida entre los pasajes de este turno, cuando ya entiendes lo que la persona quiere lograr y una guía encaja de verdad. Si todavía hace falta entender mejor a la persona, si ninguna guía encaja o si la persona acaba de aceptar una, null. No repitas una guía ya ofrecida salvo que la persona vuelva a preguntar por ella.

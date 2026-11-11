@@ -11,6 +11,7 @@ use App\Assistant\TurnStatus;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
+use Illuminate\Support\Sleep;
 
 use function Laravel\Prompts\text;
 
@@ -22,7 +23,7 @@ use function Laravel\Prompts\text;
  * What a link check cannot judge — tone, whether a decline is gracious, whether a video or a
  * creator was named in words — is read in the transcript it prints.
  */
-#[Signature('arcadia:rehearse-assistant {rehearsal? : One rehearsal by name; all of them if omitted} {--locale=es} {--chat : Talk to the assistant yourself}')]
+#[Signature('arcadia:rehearse-assistant {rehearsal? : One rehearsal by name; all of them if omitted} {--locale=es} {--chat : Talk to the assistant yourself} {--pause=0 : Seconds to wait between turns, to stay under the provider\'s rate limit}')]
 #[Description("Run the sales assistant's test conversations against the real model")]
 class RehearseAssistant extends Command
 {
@@ -60,6 +61,7 @@ class RehearseAssistant extends Command
             foreach ($rehearsal['messages'] as $message) {
                 $this->line("<fg=yellow>Visitante:</> {$message}");
                 $orchestrator->reply($conversation, $message, $channel);
+                Sleep::for((int) $this->option('pause'))->seconds();
             }
 
             foreach ($this->check($conversation, $rehearsal) as $failure) {

@@ -20,7 +20,9 @@ use App\Knowledge\RetrievedPassage;
 use App\Knowledge\RetrievedPassages;
 use App\Models\Guide;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Sleep;
 use InvalidArgumentException;
+use Laravel\Ai\Exceptions\RateLimitedException;
 use Laravel\Ai\Prompts\AgentPrompt;
 use Laravel\Ai\Responses\Data\TextUsage;
 use RuntimeException;
@@ -190,6 +192,26 @@ class AssistantOrchestratorTest extends TestCase
         $this->assertSame(__('arcadia.assistant.failed', [], 'es'), $this->channel->failure);
         $this->assertCount(0, $conversation->history(20));
         Speaker::assertNeverPrompted();
+    }
+
+    public function test_a_transient_provider_error_is_retried_once(): void
+    {
+        Sleep::fake();
+        $planned = 0;
+        $spoken = 0;
+        Planner::fake(function () use (&$planned): array {
+            return ++$planned === 1 ? throw RateLimitedException::forProvider('gemini') : $this->plan(engagement: 70);
+        });
+        Speaker::fake(function () use (&$spoken): string {
+            return ++$spoken === 1 ? throw RateLimitedException::forProvider('gemini') : 'Hola de nuevo';
+        });
+
+        $turn = $this->orchestrator()->reply($this->conversation(), 'Hola', $this->channel);
+
+        $this->assertSame(TurnStatus::DONE, $turn->refresh()->status);
+        $this->assertSame('Hola de nuevo', $this->channel->reply());
+        $this->assertSame(70, $turn->engagement);
+        $this->assertSame([2, 2], [$planned, $spoken]);
     }
 
     public function test_cost_is_reported_only_for_a_priced_model(): void
