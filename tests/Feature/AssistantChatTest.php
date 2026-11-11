@@ -9,6 +9,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\TestResponse;
+use Inertia\Testing\AssertableInertia;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
@@ -30,6 +31,25 @@ class AssistantChatTest extends TestCase
         config(['assistant.cache_instructions' => false]);
 
         $this->owner = $this->admin();
+    }
+
+    public function test_the_test_screen_says_which_models_answer_and_whether_there_is_a_key(): void
+    {
+        config(['assistant.provider' => 'gemini', 'ai.providers.gemini.key' => null]);
+
+        $this->actingAs($this->owner)
+            ->get(route('es.editor.assistant.index'))
+            ->assertOk()
+            ->assertInertia(fn (AssertableInertia $page) => $page
+                ->component('editor/assistant/Index')
+                ->where('models', config('assistant.models'))
+                ->where('hasKey', false)
+                ->where('maxLength', 2000));
+
+        config(['ai.providers.gemini.key' => 'a-key']);
+
+        $this->get(route('es.editor.assistant.index'))
+            ->assertInertia(fn (AssertableInertia $page) => $page->where('hasKey', true));
     }
 
     public function test_a_message_is_answered_as_a_stream_of_events(): void
@@ -102,6 +122,7 @@ class AssistantChatTest extends TestCase
         $this->actingAs($reader)
             ->postJson(route('es.editor.assistant.messages'), ['message' => 'Hola'])
             ->assertForbidden();
+        $this->get(route('es.editor.assistant.index'))->assertForbidden();
 
         $this->assertSame(0, Conversation::count());
     }

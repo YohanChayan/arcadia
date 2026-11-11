@@ -5,6 +5,7 @@ use App\Enums\Vocabulary;
 use App\Http\Controllers\Editor\ActivityController;
 use App\Http\Controllers\Editor\ActivityImportController;
 use App\Http\Controllers\Editor\AppearanceController;
+use App\Http\Controllers\Editor\AssistantController;
 use App\Http\Controllers\Editor\AssistantMessageController;
 use App\Http\Controllers\Editor\CompareController;
 use App\Http\Controllers\Editor\ContentController;
@@ -197,6 +198,7 @@ foreach ($site->locales() as $locale) {
             Route::put('/settings', [SettingsController::class, 'update'])->name('settings.update');
 
             // The sales assistant's test chat: one message in, the reply streamed back.
+            Route::get('/assistant', AssistantController::class)->name('assistant.index');
             Route::post('/assistant/messages', AssistantMessageController::class)->name('assistant.messages');
 
             $vocabularies = implode('|', array_column(Vocabulary::cases(), 'value'));

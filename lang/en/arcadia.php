@@ -73,7 +73,7 @@ return [
     'editor' => [
         'nav' => [
             'label' => 'Editor',
-            'items' => ['home' => 'Dashboard', 'guides' => 'Guides', 'prompts' => 'Prompts', 'inquiries' => 'Requests', 'vocabulary' => 'Vocabulary', 'phrases' => 'Phrases', 'settings' => 'Settings'],
+            'items' => ['home' => 'Dashboard', 'guides' => 'Guides', 'prompts' => 'Prompts', 'inquiries' => 'Requests', 'vocabulary' => 'Vocabulary', 'phrases' => 'Phrases', 'assistant' => 'Assistant', 'settings' => 'Settings'],
         ],
         // Which language's editor this is, in the sidebar. Each name in its own language.
         'language' => ['label' => 'Editor language', 'names' => ['es' => 'Español', 'en' => 'English']],
@@ -823,6 +823,30 @@ return [
             ],
             'computed' => 'What changed',
         ],
+        'assistant' => [
+            'title' => 'Sales assistant',
+            'description' => 'Chat with the assistant as a visitor would and see, turn by turn, which passages it read, how much interest it saw and what it cost.',
+            'no_key' => 'The :provider provider has no key configured: the assistant cannot reply.',
+            'models' => 'Planner :planner · reply :speaker',
+            'cache_on' => 'instruction caching on (no effect on Gemini, which caches by itself)',
+            'cache_off' => 'instruction caching off',
+            'metrics' => 'Conversation metrics',
+            'empty' => 'Write to the assistant: what it decided each turn shows here.',
+            'turns' => 'Turns',
+            'turn' => 'Turn :number',
+            'tabs' => ['passages' => 'Passages', 'engagement' => 'Interest', 'usage' => 'Usage', 'conversions' => 'Conversions'],
+            'no_passages' => 'No passage fitted this message.',
+            'engagement_lead' => "The visitor's interest in getting a guide, from 0 to 100, after each message.",
+            'this_turn' => 'This turn',
+            'conversation' => 'Conversation',
+            'input' => 'Input tokens',
+            'cached' => 'Of which cached',
+            'output' => 'Output tokens',
+            'cost' => 'Cost',
+            'not_reported' => 'not reported',
+            'no_price' => 'no price',
+            'no_conversions' => 'Nobody has accepted an offered guide yet.',
+        ],
         'phrases' => [
             'title' => 'Phrases',
             'description' => 'Short encouraging lines readers of the English guides see. {name} becomes their name.',
@@ -1361,6 +1385,7 @@ return [
         'privacy' => 'Privacy',
     ],
     'assistant' => [
+        'greeting' => 'Hi! Tell me what you would like to learn and I will help you find the right guide.',
         'log_label' => 'Conversation with the assistant',
         'empty' => 'Tell me what you want to learn and I will tell you which guide fits.',
         'placeholder' => 'Write your message…',
