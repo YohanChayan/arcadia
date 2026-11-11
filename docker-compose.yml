@@ -1,13 +1,13 @@
 # =============================================================================
 #  Arcadia — local development stack
 #
-#    docker compose up -d                   app, nginx, queue, node, mysql
+#    docker compose up -d                   app, nginx, queue, node, mysql, pgvector
 #    docker compose --profile ssr up -d     also the server render (build it first)
 #    docker compose --profile mail up -d    also the Mailpit mail catcher
 #    docker compose down                    stop (named volumes survive)
 #
 #  http://localhost:8083. Ports are offset from yhn-dev-side's stack (8082, 3310,
-#  5173) so both run at once. See DOCKER.md for the first run.
+#  5173) so both run at once; Postgres is on 5433, clear of a local 5432. See DOCKER.md for the first run.
 # =============================================================================
 
 # What every PHP container reads instead of `.env`'s host-oriented values. Real
@@ -24,6 +24,11 @@ x-app-env: &app-env
   MAIL_MAILER: ${MAIL_MAILER:-smtp}
   MAIL_HOST: ${MAIL_HOST:-mailpit}
   MAIL_PORT: ${MAIL_PORT:-1025}
+  VECTOR_DB_HOST: pgvector
+  VECTOR_DB_PORT: 5432
+  VECTOR_DB_DATABASE: ${VECTOR_DB_DATABASE:-arcadia_vectors}
+  VECTOR_DB_USERNAME: ${VECTOR_DB_USERNAME:-arcadia_app}
+  VECTOR_DB_PASSWORD: ${VECTOR_DB_PASSWORD:-arcadia}
 
 x-php: &php
   build:
@@ -39,6 +44,8 @@ x-php: &php
   depends_on:
     mysql:
       condition: service_healthy
+    pgvector:
+      condition: service_healthy
 
 services:
   # ---- PHP-FPM: the Laravel application --------------------------------
@@ -46,13 +53,13 @@ services:
     <<: *php
     container_name: arcadia_app
 
-  # ---- Queue worker: every mail goes out through a queued job ----------
+  # ---- Queue worker: mail first, then the knowledge index --------------
   #  `queue:listen`, not `queue:work`: it boots the code fresh for every job, so
   #  a PHP change is picked up without a restart. Production keeps `queue:work`.
   queue:
     <<: *php
     container_name: arcadia_queue
-    command: ["php", "artisan", "queue:listen", "--queue=arcadia", "--tries=3", "--backoff=10"]
+    command: ["php", "artisan", "queue:listen", "--queue=arcadia,knowledge", "--tries=3", "--backoff=10"]
 
   # ---- Nginx: the HTTP entrypoint ---------------------------------------
   nginx:
@@ -140,6 +147,32 @@ services:
     networks:
       - arcadia_net
 
+  # ---- Postgres + pgvector: the vector store, nothing else ----------------
+  #  Guides stay in MySQL; this holds the knowledge index, derived from them and
+  #  rebuildable at any time. Its own database for the tests, so a test run never
+  #  touches the index (docker/pgvector/01-databases.sql, first start only).
+  pgvector:
+    image: pgvector/pgvector:pg18
+    container_name: arcadia_pgvector
+    restart: unless-stopped
+    ports:
+      - "${VECTOR_DB_FORWARD_PORT:-5433}:5432"
+    environment:
+      POSTGRES_DB: ${VECTOR_DB_DATABASE:-arcadia_vectors}
+      POSTGRES_USER: ${VECTOR_DB_USERNAME:-arcadia_app}
+      POSTGRES_PASSWORD: ${VECTOR_DB_PASSWORD:-arcadia}
+    volumes:
+      - arcadia_pgvector_data:/var/lib/postgresql
+      - ./docker/pgvector/01-databases.sql:/docker-entrypoint-initdb.d/01-databases.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    networks:
+      - arcadia_net
+
   # ---- Mailpit: optional mail catcher --------------------------------------
   #  docker compose --profile mail up -d  →  http://localhost:8026
   mailpit:
@@ -154,6 +187,7 @@ services:
 
 volumes:
   arcadia_mysql_data:
+  arcadia_pgvector_data:
   arcadia_node_modules:
 
 networks:

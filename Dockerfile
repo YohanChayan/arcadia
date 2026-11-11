@@ -22,16 +22,17 @@ FROM php:8.5.12-fpm AS base
 RUN apt-get update && apt-get install -y --no-install-recommends \
         git unzip zip \
         libpng-dev libjpeg62-turbo-dev libfreetype6-dev libwebp-dev \
-        libicu-dev libzip-dev libonig-dev \
+        libicu-dev libzip-dev libonig-dev libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # GD is configured before it is installed, or JPEG and WebP support is silently
 # absent. WebP is for reading uploads: guide covers arrive as WebP and are cut
 # into JPEG crops. No `opcache`: PHP 8.5 builds it into the core, and asking to
-# install it fails the build.
+# install it fails the build. `pdo_pgsql` is for the vector store, a second connection beside
+# MySQL (`config/database.php`, `vectors`).
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install -j"$(nproc)" \
-        pdo_mysql intl mbstring exif pcntl bcmath gd zip
+        pdo_mysql pdo_pgsql intl mbstring exif pcntl bcmath gd zip
 
 # Production's upload limits, so an image too large there is too large here.
 RUN printf 'upload_max_filesize = 12M\npost_max_size = 25M\nmemory_limit = 256M\n' \

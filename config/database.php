@@ -99,6 +99,24 @@ return [
             'sslmode' => env('DB_SSLMODE', 'prefer'),
         ],
 
+        /*
+         * The vector store: Postgres with pgvector, beside MySQL rather than instead of it. It
+         * holds only the knowledge index, derived from the guides and rebuildable at any time.
+         */
+        'vectors' => [
+            'driver' => 'pgsql',
+            'host' => env('VECTOR_DB_HOST', '127.0.0.1'),
+            'port' => env('VECTOR_DB_PORT', '5433'),
+            'database' => env('VECTOR_DB_DATABASE', 'arcadia_vectors'),
+            'username' => env('VECTOR_DB_USERNAME', 'arcadia_app'),
+            'password' => env('VECTOR_DB_PASSWORD', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => env('VECTOR_DB_SSLMODE', 'prefer'),
+        ],
+
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'url' => env('DB_URL'),

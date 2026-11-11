@@ -1,7 +1,8 @@
 # =============================================================================
 #  Arcadia — production stack, for a host running the shared platform: one
 #  Caddy on the external `edge` network, one MySQL on the external `db`
-#  network. The same shape as yhn-dev-side's. See DOCKER.md § Production.
+#  network. The same shape as yhn-dev-side's, plus Arcadia's own Postgres for
+#  its vector store. See DOCKER.md § Production.
 #
 #    docker compose -f compose.prod.yml build
 #    docker compose -f compose.prod.yml up -d
@@ -35,18 +36,44 @@ services:
       context: .
       target: prod
     mem_limit: 512m
+    depends_on:
+      - arc-vectors
 
   # ---- Queue worker ----------------------------------------------------
-  #  Every mail goes out through a queued job (`App\Enums\QueueName`).
+  #  Every mail goes out through a queued job (`App\Enums\QueueName`); the
+  #  knowledge index's reindexing is worked only when no mail waits.
   #  `queue:work`, not `queue:listen`: the code only changes with a new image.
   arc-queue:
     <<: *php
-    command: ["php", "artisan", "queue:work", "--queue=arcadia", "--tries=3", "--backoff=10", "--max-time=3600"]
+    command: ["php", "artisan", "queue:work", "--queue=arcadia,knowledge", "--tries=3", "--backoff=10", "--max-time=3600"]
     mem_limit: 256m
     depends_on:
       - arc-app
 
   #  No scheduler: Arcadia schedules nothing (routes/console.php).
+
+  # ---- Postgres + pgvector: the vector store ---------------------------
+  #  Arcadia's own, on `internal` only — not the platform's, which is MySQL. It
+  #  holds the knowledge index, derived from the guides in MySQL and rebuilt by
+  #  a command, so a lost volume costs a rebuild, not data. Compose reads the
+  #  credentials from the same `.env` (VECTOR_DB_*).
+  arc-vectors:
+    image: pgvector/pgvector:pg18
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${VECTOR_DB_DATABASE:-arcadia_vectors}
+      POSTGRES_USER: ${VECTOR_DB_USERNAME:-arcadia}
+      POSTGRES_PASSWORD: ${VECTOR_DB_PASSWORD:?set VECTOR_DB_PASSWORD in .env}
+    volumes:
+      - vectors:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    mem_limit: 256m
+    networks:
+      - internal
 
   # ---- Inertia SSR -----------------------------------------------------
   #  Reached by the app as http://arc-ssr:13714 (INERTIA_SSR_URL).
@@ -79,6 +106,7 @@ services:
 
 volumes:
   storage:
+  vectors:
 
 networks:
   internal: {}

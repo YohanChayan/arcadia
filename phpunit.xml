@@ -26,6 +26,7 @@
         <server name="APP_URL" value="http://arcadia.yhndevside.com" force="true"/>
         <server name="DB_CONNECTION" value="sqlite" force="true"/>
         <server name="DB_DATABASE" value=":memory:" force="true"/>
+        <server name="VECTOR_DB_DATABASE" value="arcadia_vectors_testing" force="true"/>
         <server name="MAIL_MAILER" value="array" force="true"/>
         <server name="INERTIA_SSR_URL" value="http://127.0.0.1:13714" force="true"/>
         <env name="APP_ENV" value="testing" force="true"/>
@@ -35,6 +36,8 @@
         <env name="CACHE_STORE" value="array" force="true"/>
         <env name="DB_CONNECTION" value="sqlite" force="true"/>
         <env name="DB_DATABASE" value=":memory:" force="true"/>
+        <env name="VECTOR_DB_DATABASE" value="arcadia_vectors_testing" force="true"/>
+        <env name="KNOWLEDGE_INDEX_ON_CHANGE" value="false" force="true"/>
         <env name="DB_URL" value="" force="true"/>
         <env name="MAIL_MAILER" value="array" force="true"/>
         <env name="QUEUE_CONNECTION" value="sync" force="true"/>
