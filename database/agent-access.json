@@ -1,5 +1,6 @@
 {
     "read": [
+        "assistant_conversions",
         "auth_providers",
         "guide_activity_states",
         "guide_cards",
@@ -26,6 +27,14 @@
         "roles"
     ],
     "columns": {
+        "assistant_conversations": {
+            "allow": ["id", "channel", "locale", "user_id", "created_at", "updated_at"],
+            "deny": ["participant"]
+        },
+        "assistant_turns": {
+            "allow": ["id", "conversation_id", "status", "engagement", "offered_guide_id", "passages", "usage", "cost", "model", "created_at", "updated_at"],
+            "deny": ["visitor_message", "reply"]
+        },
         "failed_jobs": {
             "allow": ["id", "uuid", "connection", "queue", "failed_at"],
             "deny": ["payload", "exception"]
