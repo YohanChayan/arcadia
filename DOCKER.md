@@ -74,12 +74,15 @@ The same three as production, created on the volume's first start (`docker/mysql
 |---|---|
 | `root` | everything (locally with a password; on the server, the socket only) |
 | `arcadia_app` | everything on the `arcadia` database — the application's user |
-| `agent_ro` | `SELECT` on every table except `users`, `passkeys`, `guide_devices`, `guide_readers` and `guide_inquiries` |
+| `agent_ro` | `SELECT` on exactly what `database/agent-access.json` allows: every `read` table, and only the `allow` columns of a `columns` table |
 
-MySQL cannot grant a whole database minus some tables, so `agent_ro` is granted table by table
-(and the excluded tables revoked):
-**run `docker compose exec mysql agent-ro-grants` after every `migrate` that adds a table.**
-The script is the local twin of the server's `/usr/local/sbin/agent-ro-grants`.
+`agent-ro-grants` grants what the manifest allows and revokes everything else, so a table the
+manifest does not classify stays unreadable, and a missing or malformed manifest revokes it all.
+The suite fails until every migrated table is classified (`AgentAccessManifestTest`).
+**Run `docker compose exec -T mysql agent-ro-grants < database/agent-access.json` after every
+`migrate` that adds a table, and after editing the manifest.** The script is the local twin of
+the server's `/usr/local/sbin/agent-ro-grants` (yhn-infra), which reads each project's checkout
+every 15 minutes, so on the server a new table becomes readable once its classification is deployed.
 
 The scripts run only when the volume is new. To start the database over:
 `docker compose down -v` (it deletes the data).

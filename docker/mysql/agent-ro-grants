@@ -1,24 +1,60 @@
 #!/bin/bash
-# Grants `agent_ro` SELECT on every table of the database except those in `excluded` — accounts,
-# passkeys, guide devices, readers and inquiries — one table at a time, as production's `/usr/local/sbin/agent-ro-grants`
-# does, and revokes SELECT on the excluded ones in case an earlier run granted it. MySQL cannot
-# grant a whole database minus some tables, so a new table needs this run again — after every `migrate`.
+# Reconciles `agent_ro` with the manifest `database/agent-access.json`, read from stdin: SELECT on
+# every `read` table, SELECT on only the `allow` columns of a `columns` table, and nothing else —
+# any other grant `agent_ro` holds is revoked, so a table nobody classified stays unreadable. A
+# missing or malformed manifest revokes everything. It is the local twin of production's
+# `/usr/local/sbin/agent-ro-grants` (yhn-infra), which reads each project's checkout every 15 minutes.
 #
-#   docker compose exec mysql agent-ro-grants
+# Run it after every `migrate` that adds a table, and after editing the manifest:
+#   docker compose exec -T mysql agent-ro-grants < database/agent-access.json
 set -euo pipefail
 
 db="${MYSQL_DATABASE}"
-excluded=(users passkeys guide_devices guide_readers guide_inquiries)
-run() { mysql -uroot -p"${MYSQL_ROOT_PASSWORD}" -N -e "$1"; }
+manifest_hex="$(od -An -v -tx1 | tr -d ' \n')"
+run() { mysql -uroot -p"${MYSQL_ROOT_PASSWORD}" -N -B "$@" 2>/dev/null; }
 
-not_in="'$(IFS=,; echo "${excluded[*]}" | sed "s/,/','/g")'"
+statements="$(run <<SQL
+SET @db = '${db}', @user = 'agent_ro', @host = '%', @account = CONCAT(QUOTE('agent_ro'), '@', QUOTE('%'));
+SET @manifest = CONVERT(UNHEX('${manifest_hex}') USING utf8mb4);
+SET @manifest = IF(JSON_VALID(@manifest)
+        AND JSON_TYPE(JSON_EXTRACT(@manifest, '\$.read')) = 'ARRAY'
+        AND JSON_TYPE(JSON_EXTRACT(@manifest, '\$.columns')) = 'OBJECT',
+    @manifest, '{"read": [], "columns": {}}');
 
-for table in $(run "SELECT table_name FROM information_schema.tables WHERE table_schema = '${db}' AND table_name NOT IN (${not_in})"); do
-    run "GRANT SELECT ON \`${db}\`.\`${table}\` TO 'agent_ro'@'%'"
-done
+WITH
+read_tables AS (
+    SELECT t.table_name FROM information_schema.tables t
+    JOIN JSON_TABLE(@manifest, '\$.read[*]' COLUMNS (name VARCHAR(64) PATH '\$')) m ON m.name = t.table_name
+    WHERE t.table_schema = @db
+),
+allowed_columns AS (
+    SELECT c.table_name, c.column_name FROM information_schema.columns c
+    WHERE c.table_schema = @db
+      AND JSON_CONTAINS(JSON_EXTRACT(@manifest, CONCAT('\$.columns."', c.table_name, '".allow')), JSON_QUOTE(c.column_name))
+)
+SELECT CONCAT('REVOKE SELECT ON \`', p.Db, '\`.\`', p.Table_name, '\` FROM ', @account, ';')
+FROM mysql.tables_priv p
+WHERE p.User = @user AND p.Host = @host AND FIND_IN_SET('Select', p.Table_priv)
+  AND NOT (p.Db = @db AND p.Table_name IN (SELECT table_name FROM read_tables))
+UNION ALL
+SELECT CONCAT('REVOKE SELECT (\`', p.Column_name, '\`) ON \`', p.Db, '\`.\`', p.Table_name, '\` FROM ', @account, ';')
+FROM mysql.columns_priv p
+WHERE p.User = @user AND p.Host = @host
+  AND NOT (p.Db = @db AND (p.Table_name, p.Column_name) IN (SELECT table_name, column_name FROM allowed_columns))
+UNION ALL
+SELECT CONCAT('REVOKE SELECT ON \`', d.Db, '\`.* FROM ', @account, ';')
+FROM mysql.db d
+WHERE d.User = @user AND d.Host = @host AND d.Select_priv = 'Y'
+UNION ALL
+SELECT CONCAT('GRANT SELECT ON \`', @db, '\`.\`', table_name, '\` TO ', @account, ';') FROM read_tables
+UNION ALL
+SELECT CONCAT('GRANT SELECT (', GROUP_CONCAT(CONCAT('\`', column_name, '\`') ORDER BY column_name), ') ON \`', @db, '\`.\`', table_name, '\` TO ', @account, ';')
+FROM allowed_columns GROUP BY table_name;
+SQL
+)"
 
-for table in "${excluded[@]}"; do
-    run "REVOKE IF EXISTS SELECT ON \`${db}\`.\`${table}\` FROM 'agent_ro'@'%'"
-done
+if [ -n "${statements}" ]; then
+    printf '%s\n' "${statements}" | run
+fi
 
-echo "agent_ro may now read $(run "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = '${db}' AND table_name NOT IN (${not_in})") tables of ${db} (never ${excluded[*]})."
+echo "agent_ro may now read $(run -e "SELECT COUNT(DISTINCT Table_name) FROM mysql.tables_priv WHERE User = 'agent_ro' AND Host = '%' AND Db = '${db}'") tables of ${db}, as database/agent-access.json says."
