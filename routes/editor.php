@@ -7,6 +7,7 @@ use App\Http\Controllers\Editor\ActivityImportController;
 use App\Http\Controllers\Editor\AppearanceController;
 use App\Http\Controllers\Editor\AssistantController;
 use App\Http\Controllers\Editor\AssistantMessageController;
+use App\Http\Controllers\Editor\BulkGuideController;
 use App\Http\Controllers\Editor\CategoryGuideController;
 use App\Http\Controllers\Editor\CompareController;
 use App\Http\Controllers\Editor\ContentController;
@@ -67,6 +68,9 @@ foreach ($site->locales() as $locale) {
             Route::get('/guides', [GuideController::class, 'index'])->name('guides.index');
             Route::get('/guides/create', [GuideController::class, 'create'])->name('guides.create');
             Route::post('/guides', [GuideController::class, 'store'])->name('guides.store');
+            // One action on many guides from the list: what it would reach first, then done.
+            Route::post('/guides/bulk/preview', [BulkGuideController::class, 'preview'])->name('guides.bulk.preview');
+            Route::post('/guides/bulk', [BulkGuideController::class, 'apply'])->name('guides.bulk');
             Route::get('/guides/{guide:id}/edit', [GuideController::class, 'edit'])->name('guides.edit');
             Route::put('/guides/{guide:id}', [GuideController::class, 'update'])->name('guides.update');
             Route::delete('/guides/{guide:id}', [GuideController::class, 'destroy'])->name('guides.destroy');

@@ -546,6 +546,53 @@ return [
             'state' => [
                 'no_release' => 'Sin versión publicada: nadie la puede abrir',
                 'released_draft' => 'Tiene versión publicada, pero la guía está en borrador',
+                'unreleased_content' => 'Su borrador tiene contenido sin publicar',
+                'no_content' => 'Sin contenido aún: no se puede publicar',
+            ],
+            // Publishing from the list: one guide from its row, or many at once.
+            'publish' => ['action' => 'Publicar guía', 'no_content' => 'Sin contenido: añade contenido antes de publicar'],
+            'bulk' => [
+                'label' => 'Acciones masivas',
+                'actions' => 'Acciones',
+                'select_guide' => 'Seleccionar «:title»',
+                'select_page' => 'Seleccionar esta página',
+                'selected' => '{1} 1 guía seleccionada|[2,*] :count guías seleccionadas',
+                'select_all' => 'Seleccionar las :count que coinciden',
+                'clear' => 'Quitar selección',
+                'publish' => 'Publicar',
+                'draft' => 'Pasar a borrador',
+                'delete' => 'Eliminar',
+                'checking' => 'Revisando las guías…',
+                'more' => 'y :count más',
+                'titles' => [
+                    'publish' => '{1} ¿Publicar 1 guía?|[2,*] ¿Publicar :count guías?',
+                    'draft' => '{1} ¿Pasar 1 guía a borrador?|[2,*] ¿Pasar :count guías a borrador?',
+                    'delete' => '{1} ¿Eliminar 1 guía?|[2,*] ¿Eliminar :count guías?',
+                ],
+                'bodies' => [
+                    'draft' => 'Sus lectores dejan de poder abrirlas hasta que las vuelvas a publicar. Sus versiones y su contenido se conservan.',
+                    'delete' => 'Se eliminan con todas sus versiones, su contenido y sus imágenes. Quien tenga su enlace dejará de poder abrirlas. No se puede deshacer.',
+                ],
+                // What publishing does to each guide, before it is confirmed (`GuidePublishing`).
+                'groups' => [
+                    'releases_draft' => 'Tienen contenido sin publicar: se publica su borrador como versión nueva y, con él, la guía.',
+                    'publishes' => 'Ya tienen una versión publicada: se publica la guía.',
+                    'ready' => 'Ya están publicadas y al día: no cambian.',
+                    'no_content' => 'Sin contenido: no se pueden publicar y se quedan como están.',
+                ],
+                'nothing' => 'Ninguna de estas guías tiene contenido que publicar.',
+                'confirm' => [
+                    'publish' => 'Publicar',
+                    'draft' => 'Pasar a borrador',
+                    'delete' => 'Eliminar',
+                ],
+                'flash' => [
+                    'published' => '{0} Ninguna guía publicada.|{1} 1 guía publicada.|[2,*] :count guías publicadas.',
+                    'released' => '{1} 1 con su borrador publicado como versión nueva.|[2,*] :count con su borrador publicado como versión nueva.',
+                    'skipped' => '{1} 1 omitida por no tener contenido.|[2,*] :count omitidas por no tener contenido.',
+                    'drafted' => '{0} Ninguna guía estaba publicada.|{1} 1 guía pasada a borrador.|[2,*] :count guías pasadas a borrador.',
+                    'deleted' => '{0} Ninguna guía eliminada.|{1} 1 guía eliminada.|[2,*] :count guías eliminadas.',
+                ],
             ],
             'empty' => ['title' => 'Aún no hay guías', 'hint' => 'Crea la primera con «Nueva guía».'],
             'delete' => [

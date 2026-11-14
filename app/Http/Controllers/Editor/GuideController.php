@@ -37,16 +37,18 @@ class GuideController
         $search = trim((string) $request->query('search')) ?: null;
         $ofLocale = fn () => Guide::query()
             ->where('locale', app()->getLocale())
-            ->when($search, fn ($guides) => $guides->where(fn ($guides) => $guides
-                ->whereLike('title', "%{$search}%")
-                ->orWhereRelation('category', 'name', 'like', "%{$search}%")));
+            ->searchedFor($search);
 
         $guides = $ofLocale()
             ->when($status, fn ($guides) => $guides->where('status', $status))
             ->with(['category:id,name', 'images' => fn ($images) => $images->where('slot', ImageSlot::COVER)])
             // Every version, and how many of them were released to readers.
             ->withCount(['versions', 'readers', 'versions as released_versions_count' => fn ($versions) => $versions->whereNotNull('released_at')])
-            ->withExists(['versions as has_release' => fn ($versions) => $versions->whereNotNull('released_at')])
+            ->withExists([
+                'versions as has_release' => fn ($versions) => $versions->whereNotNull('released_at'),
+                // A draft with content not yet released — what publishing would release (`PublishGuide`).
+                'versions as has_unreleased_content' => fn ($versions) => $versions->whereNull('released_at')->whereHas('items'),
+            ])
             ->latest('updated_at')
             ->paginate(12)
             ->withQueryString();

@@ -136,6 +136,17 @@ class Guide extends Model
             ->whereHas('versions', fn (Builder $versions) => $versions->whereNotNull('released_at'));
     }
 
+    /**
+     * The editor's list as filtered: words in the title or the category's name. Shared by the
+     * list and by what is done to every guide it shows at once, so both mean the same guides.
+     */
+    public function scopeSearchedFor(Builder $query, ?string $search): void
+    {
+        $query->when($search, fn (Builder $guides) => $guides->where(fn (Builder $guides) => $guides
+            ->whereLike('title', "%{$search}%")
+            ->orWhereRelation('category', 'name', 'like', "%{$search}%")));
+    }
+
     /** The newest version, released or still a draft — what the editor works on. */
     public function latestVersion(): Version
     {

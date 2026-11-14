@@ -545,6 +545,53 @@ return [
             'state' => [
                 'no_release' => 'No released version: nobody can open it',
                 'released_draft' => 'Has a released version, but the guide is a draft',
+                'unreleased_content' => 'Its draft has unreleased content',
+                'no_content' => 'No content yet: it cannot be published',
+            ],
+            // Publishing from the list: one guide from its row, or many at once.
+            'publish' => ['action' => 'Publish guide', 'no_content' => 'No content: add some before publishing'],
+            'bulk' => [
+                'label' => 'Bulk actions',
+                'actions' => 'Actions',
+                'select_guide' => 'Select ":title"',
+                'select_page' => 'Select this page',
+                'selected' => '{1} 1 guide selected|[2,*] :count guides selected',
+                'select_all' => 'Select all :count that match',
+                'clear' => 'Clear selection',
+                'publish' => 'Publish',
+                'draft' => 'Set to draft',
+                'delete' => 'Delete',
+                'checking' => 'Checking the guides…',
+                'more' => 'and :count more',
+                'titles' => [
+                    'publish' => '{1} Publish 1 guide?|[2,*] Publish :count guides?',
+                    'draft' => '{1} Set 1 guide to draft?|[2,*] Set :count guides to draft?',
+                    'delete' => '{1} Delete 1 guide?|[2,*] Delete :count guides?',
+                ],
+                'bodies' => [
+                    'draft' => 'Their readers can no longer open them until you publish them again. Their versions and content are kept.',
+                    'delete' => 'Every version, all their content and their images go with them. Anyone with their link can no longer open them. This cannot be undone.',
+                ],
+                // What publishing does to each guide, before it is confirmed (`GuidePublishing`).
+                'groups' => [
+                    'releases_draft' => 'Unreleased content: their draft is released as a new version, and the guide published with it.',
+                    'publishes' => 'Already have a released version: the guide is published.',
+                    'ready' => 'Already published and up to date: unchanged.',
+                    'no_content' => 'No content: they cannot be published and are left as they are.',
+                ],
+                'nothing' => 'None of these guides has content to publish.',
+                'confirm' => [
+                    'publish' => 'Publish',
+                    'draft' => 'Set to draft',
+                    'delete' => 'Delete',
+                ],
+                'flash' => [
+                    'published' => '{0} No guide published.|{1} 1 guide published.|[2,*] :count guides published.',
+                    'released' => '{1} 1 with its draft released as a new version.|[2,*] :count with their draft released as a new version.',
+                    'skipped' => '{1} 1 left out for having no content.|[2,*] :count left out for having no content.',
+                    'drafted' => '{0} No guide was published.|{1} 1 guide set to draft.|[2,*] :count guides set to draft.',
+                    'deleted' => '{0} No guide deleted.|{1} 1 guide deleted.|[2,*] :count guides deleted.',
+                ],
             ],
             'empty' => ['title' => 'No guides yet', 'hint' => 'Create the first with "New guide".'],
             'delete' => [
