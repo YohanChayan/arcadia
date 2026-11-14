@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Actions\DraftNextVersion;
+use App\Actions\Content\DraftNextVersion;
 use App\Enums\GuideStatus;
 use App\Enums\Level;
 use App\Jobs\IndexGuideJob;
@@ -114,6 +114,18 @@ class KnowledgeIndexTest extends TestCase
         app(GuideIndexer::class)->index($guide->id);
 
         $guide->update(['open_for_enrollment' => false]);
+        $counts = app(GuideIndexer::class)->index($guide->id);
+
+        $this->assertSame(0, $counts['embedded']);
+        $this->assertSame(0, KnowledgeChunk::query()->where('guide_id', $guide->id)->where('listed', true)->count());
+    }
+
+    public function test_keeping_a_guide_out_of_the_catalogue_unlists_its_passages(): void
+    {
+        $guide = $this->guide();
+        app(GuideIndexer::class)->index($guide->id);
+
+        $guide->update(['in_catalogue' => false]);
         $counts = app(GuideIndexer::class)->index($guide->id);
 
         $this->assertSame(0, $counts['embedded']);

@@ -11,17 +11,18 @@ use Tests\TestCase;
 
 /**
  * The catalogue lists only the guides anyone may ask for (ADR 0023): published, released and open
- * for enrollment, in the language of its URL. A guide made for one person is never open, so it is
- * never listed. A card carries what the presentation shows and nothing of the content.
+ * for enrollment, in the language of its URL — unless the owner keeps one to its link (ADR 0024).
+ * A guide made for one person is never open, so it is never listed. A card carries what the
+ * presentation shows and nothing of the content.
  */
 class CatalogueTest extends TestCase
 {
     use RefreshDatabase;
 
-    private function guide(string $title, string $locale = 'es', bool $open = true, bool $released = true, GuideStatus $status = GuideStatus::PUBLISHED, ?Category $category = null): Guide
+    private function guide(string $title, string $locale = 'es', bool $open = true, bool $released = true, GuideStatus $status = GuideStatus::PUBLISHED, ?Category $category = null, bool $inCatalogue = true): Guide
     {
         $guide = Guide::create(['locale' => $locale, 'title' => $title, 'level' => Level::BASIC, 'category_id' => $category?->id]);
-        $guide->update(['status' => $status, 'open_for_enrollment' => $open, 'pitch' => "Sobre {$title}", 'goals' => ['Una meta']]);
+        $guide->update(['status' => $status, 'open_for_enrollment' => $open, 'in_catalogue' => $inCatalogue, 'pitch' => "Sobre {$title}", 'goals' => ['Una meta']]);
 
         if ($released) {
             $guide->latestVersion()->release();
@@ -34,6 +35,7 @@ class CatalogueTest extends TestCase
     {
         $listed = $this->guide('Excel para el trabajo');
         $this->guide('Hecha para una persona', open: false);
+        $this->guide('Vendida solo por enlace', inCatalogue: false);
         $this->guide('Sin versión liberada', released: false);
         $this->guide('En borrador', status: GuideStatus::DRAFT);
         $this->guide('English guide', locale: 'en');

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Editor;
 
-use App\Actions\AppendContent;
-use App\Actions\MoveContent;
+use App\Actions\Content\AppendContent;
+use App\Actions\Content\MoveContent;
 use App\Enums\ActivityFamily;
 use App\Enums\CardKind;
 use App\Enums\ChangeKind;

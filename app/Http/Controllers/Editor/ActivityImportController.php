@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Editor;
 
-use App\Actions\AttachActivities;
+use App\Actions\Content\AttachActivities;
 use App\Http\Requests\ActivityImportRequest;
 use App\Models\Guide;
 use App\Models\Version;

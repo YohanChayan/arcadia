@@ -152,16 +152,18 @@ stage's goal, in three kinds of card on one front/back shape — a concept, a ru
 last for guides about people and selling — and never forced: fewer than three honest cards, and
 it answers that there are none. `GuideFlipCardsTest` holds each rule.
 
-## Reached by link, and listed while open
+## Reached by link, and listed while open and in the catalogue
 
 A guide's `link_token` — 24 lowercase characters, minted on creation, never taken from input,
 unique — is its route key. `rotateLinkToken()` revokes a link that travelled too far. `status` is
 `draft` until the owner publishes.
 
 **The catalogue** (`/es/guias` · `/en/guides`, `CatalogueController`, ADR 0023) lists a language's
-guides that `Guide::scopeListed()` admits: published, with a released version, **and open for
-enrollment**. There is no separate "listed" switch: a guide anyone may ask for is one worth
-showing, and a guide made for one person is never opened, so it never appears. Each card links to
+guides that `Guide::scopeListed()` admits: published, with a released version, **open for
+enrollment and `in_catalogue`** (ADR 0024). `in_catalogue` is on by default and switched on the
+Readers screen only while the guide is open: off keeps an open guide to its link, still taking
+requests from it. A guide made for one person is never opened, so it never appears. The sales
+assistant's index marks passages `listed` by the same scope, so it never offers a guide kept out. Each card links to
 the guide's presentation and carries only what that page shows — cover (`share` crop), title,
 level, category, pitch and goals. The categories offered are only those a listed guide is in. Not
 indexed yet, as the presentations are not.
@@ -261,7 +263,7 @@ price. It answers 200, `noindex`, with its own canonical, and its link preview i
 - **An account whose enrollment request was declined** → `declined`, "you don't have access",
   and nothing more to ask.
 - **Any other account** → a request to enroll with an optional message while the guide is **open
-  for enrollment** (`open`), the request already made (`pending`), or "not open yet" (`closed`) —
+  for enrollment** (`open`), the request already made (`pending`), or "not available for enrollment" (`closed`) —
   with the account named and "use another Google account", the usual reason for being here.
 
 **Visits are counted, and nothing about the visitor is kept** (`GuideVisits`, `guide_visits`): the
@@ -289,7 +291,8 @@ that shared it; the editor's confirmation says so.
 **Enrollment** (ADR 0022) is paid, and the payment happens outside Arcadia:
 
 - **`guides.open_for_enrollment`**, off by default, switched on the guide's Readers screen. A
-  closed guide takes no requests; a reader of it, or one removed from it, has nothing to ask.
+  closed guide takes no requests and is not listed; a reader of it, or one removed from it, has
+  nothing to ask. While open, `guides.in_catalogue` decides whether it is also listed.
 - **A request** (`guide_access_requests`, `AccessRequest`) is once per guide per account, with
   an optional `message`, and the account's verified email is the contact — nothing else is asked.
   Creating one emails the owner (`SendAccessRequestNotificationJob` → `AccessRequestedMail`, to
@@ -845,6 +848,17 @@ shell their owner works in — the editor's for the owner, the reader's for a re
 button through the session's `status`, not a toast, so neither shell has to carry one.
 
 `GuideSignInTest`, `GuideSignInGateTest`, `PasskeysTest` and `SaveConfirmationTest` hold these.
+
+## Where a class goes
+
+Everything outside the two AI slices below is layered by type, and a layer is grouped by subject
+once two or more of its files share one. `app/Actions` is `Auth/` (who signs in),
+`Content/` (a version's tree: drafting, appending, moving, importing, repairing), `Readers/`
+(assigning and telling them) and `Guides/` (a guide's description, image and start from a
+request); a subject with one action stays at the root until a second arrives
+(`DraftNextPromptVersion`). `app/Services/Site` holds what Site settings reads — health, logs,
+mail, agents. A model's traits are in `app/Models/Concerns`. Sorting by subject is not
+sorting by size: a folder of many unrelated files stays flat.
 
 ## Knowledge and the assistant are two slices
 

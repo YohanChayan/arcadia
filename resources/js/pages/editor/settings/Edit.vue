@@ -1,5 +1,8 @@
 <script setup>
 /**
+ * Site settings' first tab, and where its nav item lands. The section's other tabs are
+ * site-wide; this one is per language.
+ *
  * This host's settings: the price the landing page offers a guide at, in dollars — shown beside
  * its button and in its popup; nothing is charged through the site — and a short note shown
  * beside the price wherever it appears (`BCV`). New display options join this form.
@@ -11,6 +14,7 @@ import { useForm } from '@inertiajs/vue3'
 import PageHeader from '@/components/common/PageHeader.vue'
 import EditorTitle from '@/components/editor/EditorTitle.vue'
 import EditorBreadcrumb from '@/components/editor/EditorBreadcrumb.vue'
+import SiteSettingsTabs from '@/components/editor/SiteSettingsTabs.vue'
 import Eyebrow from '@/components/common/Eyebrow.vue'
 import Price from '@/components/landing/Price.vue'
 import { Button } from '@/components/ui/button'
@@ -39,6 +43,10 @@ const submit = () => form.put(editorRoute('settings.update'), { preserveScroll: 
         <EditorBreadcrumb :trail="[{ label: $t('arcadia.editor.settings.title') }]" />
 
         <PageHeader :title="$t('arcadia.editor.settings.title')" :description="$t('arcadia.editor.settings.description')" />
+
+        <SiteSettingsTabs active="host" />
+
+        <p class="mb-4 max-w-md text-sm text-ink-3">{{ $t('arcadia.editor.settings.tabs.host_scope') }}</p>
 
         <form class="panel max-w-md p-6 sm:p-8" @submit.prevent="submit">
             <Field :data-invalid="form.errors.price ? true : undefined">

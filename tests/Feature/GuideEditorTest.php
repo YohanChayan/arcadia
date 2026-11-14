@@ -4,12 +4,14 @@ namespace Tests\Feature;
 
 use App\Enums\GuideStatus;
 use App\Enums\Level;
+use App\Jobs\IndexGuideJob;
 use App\Models\Category;
 use App\Models\Guide;
 use App\Models\Role;
 use App\Models\Topic;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 
 /**
@@ -230,6 +232,87 @@ class GuideEditorTest extends TestCase
                 ->where('lists.topics.0.guides_count', 1)
                 ->has('lists.categories', 0)
                 ->missing('lists.goals'));
+    }
+
+    public function test_the_categorizer_searches_every_guide_of_this_language(): void
+    {
+        $category = Category::create(['locale' => 'es', 'name' => 'Ofimática']);
+        $this->guide('es', 'Excel para el trabajo')->update(['category_id' => $category->id]);
+        $this->guide('es', 'Ahorra un dólar al día');
+        $this->guide('en', 'Excel at work');
+
+        $this->get('/es/editor/vocabulary')
+            ->assertOk()
+            ->assertInertia(fn ($page) => $page
+                ->has('guides', 2)
+                ->where('guides.0.title', 'Ahorra un dólar al día')
+                ->where('guides.0.category_id', null)
+                ->where('guides.1.category_id', $category->id));
+    }
+
+    public function test_the_categorizer_files_several_guides_at_once_and_reindexes_each(): void
+    {
+        config(['knowledge.index_on_change' => true]);
+        $category = Category::create(['locale' => 'es', 'name' => 'Salud']);
+        $walking = $this->guide('es', '30 días de caminar');
+        $stress = $this->guide('es', 'Calma el estrés');
+        Queue::fake();
+
+        $this->post("/es/editor/vocabulary/categories/{$category->id}/guides", ['guide_ids' => [$walking->id, $stress->id]])
+            ->assertSessionHasNoErrors()
+            ->assertRedirect();
+
+        $this->assertSame([$category->id, $category->id], [$walking->fresh()->category_id, $stress->fresh()->category_id]);
+        Queue::assertPushed(IndexGuideJob::class, 2);
+    }
+
+    public function test_the_categorizer_moves_a_guide_from_another_category_only_when_asked(): void
+    {
+        $health = Category::create(['locale' => 'es', 'name' => 'Salud']);
+        $habits = Category::create(['locale' => 'es', 'name' => 'Hábitos']);
+        $guide = $this->guide('es', 'Recupera tu tiempo');
+        $guide->update(['category_id' => $habits->id]);
+
+        $this->post("/es/editor/vocabulary/categories/{$health->id}/guides", ['guide_ids' => [$guide->id]])
+            ->assertSessionHasErrors('guide_ids');
+        $this->assertSame($habits->id, $guide->fresh()->category_id);
+
+        $this->post("/es/editor/vocabulary/categories/{$health->id}/guides", ['guide_ids' => [$guide->id], 'move' => true])
+            ->assertSessionHasNoErrors();
+        $this->assertSame($health->id, $guide->fresh()->category_id);
+
+        // Filing it again where it already is is not a move.
+        $this->post("/es/editor/vocabulary/categories/{$health->id}/guides", ['guide_ids' => [$guide->id]])
+            ->assertSessionHasNoErrors();
+    }
+
+    public function test_the_categorizer_stays_within_this_language(): void
+    {
+        $spanish = Category::create(['locale' => 'es', 'name' => 'Ofimática']);
+        $english = Category::create(['locale' => 'en', 'name' => 'Office']);
+        $englishGuide = $this->guide('en', 'Excel at work');
+
+        $this->post("/es/editor/vocabulary/categories/{$spanish->id}/guides", ['guide_ids' => [$englishGuide->id]])
+            ->assertSessionHasErrors('guide_ids.0');
+        $this->post("/es/editor/vocabulary/categories/{$english->id}/guides", ['guide_ids' => [$this->guide()->id]])
+            ->assertNotFound();
+
+        $this->assertNull($englishGuide->fresh()->category_id);
+    }
+
+    public function test_the_categorizer_unfiles_one_guide_and_leaves_it_in_place(): void
+    {
+        $category = Category::create(['locale' => 'es', 'name' => 'Ofimática']);
+        $guide = $this->guide();
+        $guide->update(['category_id' => $category->id]);
+        $other = Category::create(['locale' => 'es', 'name' => 'Ventas']);
+
+        // Only from the category it is in.
+        $this->delete("/es/editor/vocabulary/categories/{$other->id}/guides/{$guide->id}")->assertNotFound();
+
+        $this->delete("/es/editor/vocabulary/categories/{$category->id}/guides/{$guide->id}")->assertRedirect();
+
+        $this->assertNull($guide->fresh()->category_id);
     }
 
     public function test_stages_unlock_in_order_until_the_owner_switches_it_off(): void

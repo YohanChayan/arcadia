@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions;
+namespace App\Actions\Guides;
 
 use App\Enums\GuideStatus;
 use App\Enums\Level;

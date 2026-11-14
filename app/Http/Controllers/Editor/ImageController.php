@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Editor;
 
-use App\Actions\StoreGuideImage;
+use App\Actions\Guides\StoreGuideImage;
 use App\Enums\ImageSlot;
 use App\Http\Requests\GuideImageRequest;
 use App\Models\Guide;

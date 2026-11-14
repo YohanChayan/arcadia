@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Editor;
 
-use App\Actions\StartGuideFromInquiry;
+use App\Actions\Guides\StartGuideFromInquiry;
 use App\Models\Inquiry;
 use Illuminate\Http\RedirectResponse;
 

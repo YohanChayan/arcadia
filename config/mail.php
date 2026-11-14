@@ -118,12 +118,15 @@ return [
     | Where the owner is told of a guide request or an access request. `?:` rather than env()'s
     | default, so an empty key in `.env` still has an address.
     |
+    | Every email is sent from the same mailbox too: there is no address on the site's own domain
+    | yet, and a `no-reply@` on a domain with no mailbox is one providers reject or mark as spam.
+    |
     */
 
     'business_address' => env('MAIL_BUSINESS_ADDRESS') ?: 'yhndevside@gmail.com',
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
+        'address' => env('MAIL_FROM_ADDRESS') ?: 'yhndevside@gmail.com',
         'name' => env('MAIL_FROM_NAME', env('APP_NAME', 'Laravel')),
     ],
 

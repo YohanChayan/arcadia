@@ -52,7 +52,7 @@
             "deny": ["email", "name"]
         },
         "guides": {
-            "allow": ["id", "locale", "title", "level", "goals", "category_id", "counterpart_id", "inquiry_id", "prompt_version_id", "curator_notes", "status", "open_for_enrollment", "unlock_in_order", "default_palette", "default_accent", "greeting", "pitch", "created_at", "updated_at"],
+            "allow": ["id", "locale", "title", "level", "goals", "category_id", "counterpart_id", "inquiry_id", "prompt_version_id", "curator_notes", "status", "open_for_enrollment", "in_catalogue", "unlock_in_order", "default_palette", "default_accent", "greeting", "pitch", "created_at", "updated_at"],
             "deny": ["link_token", "prompt_values"]
         },
         "job_batches": {
@@ -62,6 +62,10 @@
         "jobs": {
             "allow": ["id", "queue", "attempts", "reserved_at", "available_at", "created_at"],
             "deny": ["payload"]
+        },
+        "sent_mails": {
+            "allow": ["id", "sent_at", "mailable", "locale", "message_id"],
+            "deny": ["recipient", "subject"]
         },
         "users": {
             "allow": ["id", "email_verified_at", "approved_at", "created_at", "updated_at"],

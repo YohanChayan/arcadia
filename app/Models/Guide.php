@@ -16,8 +16,8 @@ use Illuminate\Support\Str;
 
 /**
  * One guide, in one language. Reached by its link token — minted here, never taken from input,
- * and rotated to revoke a shared link — and, while it is open for enrollment, listed in the
- * catalogue (`scopeListed`, ADR 0023).
+ * and rotated to revoke a shared link — and, while it is open for enrollment and the owner keeps
+ * it there, listed in the catalogue (`scopeListed`, ADRs 0023 and 0024).
  *
  * Its content lives in versions, each a full copy. Version 1 is created with the guide.
  */
@@ -31,6 +31,7 @@ class Guide extends Model
         'counterpart_id',
         'status',
         'open_for_enrollment',
+        'in_catalogue',
         'unlock_in_order',
         'greeting',
         'pitch',
@@ -45,6 +46,7 @@ class Guide extends Model
         'default_palette' => Palette::class,
         'default_accent' => Accent::class,
         'open_for_enrollment' => 'boolean',
+        'in_catalogue' => 'boolean',
         'unlock_in_order' => 'boolean',
         'prompt_values' => 'array',
         'curator_notes' => 'array',
@@ -121,14 +123,16 @@ class Guide extends Model
     }
 
     /**
-     * The guides the catalogue lists (ADR 0023): those anyone may ask for — open for enrollment —
-     * and could read once let in: published, with a released version. A guide made for one person
-     * is never open, so it is never listed.
+     * The guides the catalogue lists (ADRs 0023, 0024): those anyone may ask for — open for
+     * enrollment — that the owner keeps in the catalogue, and could read once let in: published,
+     * with a released version. A guide made for one person is never open, so it is never listed;
+     * one sold only by its link is open but kept out.
      */
     public function scopeListed(Builder $query): void
     {
         $query->where('status', GuideStatus::PUBLISHED)
             ->where('open_for_enrollment', true)
+            ->where('in_catalogue', true)
             ->whereHas('versions', fn (Builder $versions) => $versions->whereNotNull('released_at'));
     }
 

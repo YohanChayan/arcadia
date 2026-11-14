@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Editor;
 
-use App\Actions\MoveContent;
+use App\Actions\Content\MoveContent;
 use App\Http\Requests\PromptSectionRequest;
 use App\Models\PromptSection;
 use App\Models\PromptTemplate;

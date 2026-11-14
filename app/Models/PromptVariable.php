@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\PromptVariableType;
+use App\Models\Concerns\FrozenOnceUsed;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 

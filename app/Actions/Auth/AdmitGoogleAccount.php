@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Actions;
+namespace App\Actions\Auth;
 
-use App\Actions\Auth\HandleSocialAuthUser;
+use App\Actions\Readers\LinkReaderAssignments;
 use App\Models\AuthProvider;
 use App\Models\User;
 use App\Services\ArcadiaSite;

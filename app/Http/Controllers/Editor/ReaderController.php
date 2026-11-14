@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Editor;
 
-use App\Actions\AssignReader;
-use App\Actions\TellReaders;
+use App\Actions\Readers\AssignReader;
+use App\Actions\Readers\TellReaders;
 use App\Enums\Accent;
 use App\Enums\AccessRequestStatus;
 use App\Enums\Palette;
@@ -87,6 +87,8 @@ class ReaderController
                 ]),
             // Whether accounts it is not shared with may ask to enroll from its link (ADR 0022).
             'openForEnrollment' => $guide->open_for_enrollment,
+            // Whether, while open, it is also shown in the catalogue or taken only by its link (ADR 0024).
+            'inCatalogue' => $guide->in_catalogue,
             // Enrollment requests: the pending first, then the answered, newest first. The note is
             // the owner's record of the payment; the requester never sees it.
             'accessRequests' => $guide->accessRequests()
@@ -113,7 +115,13 @@ class ReaderController
         $this->ownLocale($guide);
         $email = $request->validated('email');
 
-        $reader = $assign->handle($guide, $email, $request->user(), $request->boolean('notify', true), $request->validated('name'));
+        $reader = $assign->handle(
+            $guide,
+            $email,
+            $request->user(),
+            $request->boolean('notify', true),
+            $request->validated('name')
+        );
 
         return back()->with('success', __($this->addedFlash($reader, $tell->reader($reader)), ['email' => $email]));
     }
@@ -188,6 +196,17 @@ class ReaderController
         $guide->forceFill(['open_for_enrollment' => $open])->save();
 
         return back()->with('success', __($open ? 'arcadia.editor.readers.flash.enrollment_opened' : 'arcadia.editor.readers.flash.enrollment_closed'));
+    }
+
+    /** Show the guide in the catalogue while it is open, or keep it to its link (ADR 0024). */
+    public function catalogue(Request $request, Guide $guide): RedirectResponse
+    {
+        $this->ownLocale($guide);
+
+        $listed = $request->validate(['listed' => ['required', 'boolean']])['listed'];
+        $guide->forceFill(['in_catalogue' => $listed])->save();
+
+        return back()->with('success', __($listed ? 'arcadia.editor.readers.flash.catalogue_shown' : 'arcadia.editor.readers.flash.catalogue_hidden'));
     }
 
     public function destroy(Guide $guide, Reader $reader): RedirectResponse

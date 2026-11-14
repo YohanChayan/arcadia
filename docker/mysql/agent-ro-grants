@@ -3,7 +3,7 @@
 # every `read` table, SELECT on only the `allow` columns of a `columns` table, and nothing else —
 # any other grant `agent_ro` holds is revoked, so a table nobody classified stays unreadable. A
 # missing or malformed manifest revokes everything. It is the local twin of production's
-# `/usr/local/sbin/agent-ro-grants` (yhn-infra), which reads each project's checkout every 15 minutes.
+# `/usr/local/sbin/agent-ro-grants` (yhn-infra), which reads each project's checkout on every deploy.
 #
 # Run it after every `migrate` that adds a table, and after editing the manifest:
 #   docker compose exec -T mysql agent-ro-grants < database/agent-access.json

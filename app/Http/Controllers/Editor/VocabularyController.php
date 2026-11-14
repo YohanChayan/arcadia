@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Editor;
 
 use App\Enums\Vocabulary;
 use App\Http\Requests\VocabularyTermRequest;
+use App\Models\Guide;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -26,7 +27,15 @@ class VocabularyController
                 ->get();
         }
 
-        return Inertia::render('editor/vocabulary/Index', ['lists' => $lists]);
+        return Inertia::render('editor/vocabulary/Index', [
+            'lists' => $lists,
+            // Every guide of this language, for the categorizer to search: few enough to send
+            // whole and filter on the page.
+            'guides' => Guide::query()
+                ->where('locale', app()->getLocale())
+                ->orderBy('title')
+                ->get(['id', 'title', 'status', 'category_id']),
+        ]);
     }
 
     public function store(VocabularyTermRequest $request, string $vocabulary): RedirectResponse

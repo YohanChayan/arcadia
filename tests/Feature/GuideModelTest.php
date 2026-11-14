@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\Actions\DraftNextVersion;
-use App\Actions\FixItemEverywhere;
+use App\Actions\Content\DraftNextVersion;
+use App\Actions\Content\FixItemEverywhere;
 use App\Enums\CardKind;
 use App\Enums\ChangeKind;
 use App\Enums\ItemKind;

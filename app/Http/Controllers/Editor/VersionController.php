@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Editor;
 
-use App\Actions\DraftNextVersion;
-use App\Actions\FixItemEverywhere;
-use App\Actions\TellReaders;
+use App\Actions\Content\DraftNextVersion;
+use App\Actions\Content\FixItemEverywhere;
+use App\Actions\Readers\TellReaders;
 use App\Enums\ChangeKind;
 use App\Enums\GuideStatus;
 use App\Http\Requests\ItemFixRequest;

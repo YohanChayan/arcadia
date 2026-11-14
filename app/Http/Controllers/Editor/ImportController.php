@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Editor;
 
-use App\Actions\ImportGuideContent;
+use App\Actions\Content\ImportGuideContent;
 use App\Http\Requests\ImportRequest;
 use App\Http\Resources\ImportPreviewResource;
 use App\Models\Guide;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions;
+namespace App\Actions\Content;
 
 use App\Models\Guide;
 use App\Models\Version;

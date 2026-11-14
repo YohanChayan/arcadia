@@ -13,6 +13,8 @@ import { Badge } from '@/components/ui/badge'
 
 defineProps({
     lists: { type: Object, required: true },
+    // Every guide of this language, for the categories tab's categorizer.
+    guides: { type: Array, required: true },
 })
 
 // Categories and topics: what guides are grouped by. A guide's goals are its own words, written
@@ -44,7 +46,7 @@ const active = ref('categories')
             </TabsList>
 
             <TabsContent v-for="tab in tabs" :key="tab.key" :value="tab.key">
-                <VocabularyList :vocabulary="tab.key" :terms="lists[tab.key]" />
+                <VocabularyList :vocabulary="tab.key" :terms="lists[tab.key]" :guides="guides" />
             </TabsContent>
         </Tabs>
     </div>

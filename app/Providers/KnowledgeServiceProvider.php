@@ -25,7 +25,7 @@ use Illuminate\Support\ServiceProvider;
 class KnowledgeServiceProvider extends ServiceProvider
 {
     /** The guide's own fields that reach a passage, or decide whether it is indexed and listed. */
-    private const PROMISE = ['title', 'level', 'category_id', 'goals', 'pitch', 'status', 'open_for_enrollment'];
+    private const PROMISE = ['title', 'level', 'category_id', 'goals', 'pitch', 'status', 'open_for_enrollment', 'in_catalogue'];
 
     public function register(): void
     {

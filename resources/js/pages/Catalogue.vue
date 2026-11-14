@@ -2,14 +2,20 @@
 /**
  * The catalogue — `/es/guias` · `/en/guides` (`CatalogueController`, ADR 0023): the guides anyone
  * may ask for, as cards that open each one's presentation. A short header under the aurora, a row
- * of category chips — one line that slides on a phone, wrapping on a wide screen — and the grid:
- * one column on a phone, two, then three.
+ * of category chips — one line that slides on a phone, wrapping on a wide screen — and below them
+ * either the packs or one pack's cards.
  *
- * Each card in one of the mark's hues (`--aurora-*`), in turn, as the landing's topics are. A card
- * shows what the presentation shows, shorter: cover, category and level, title, two lines of pitch
- * and the first goals. A guide not there is asked for from the landing's own popup.
+ * All of them, as packs: one per category, guides with none in a last "Others", each a small grid
+ * of its first guides — cover cut square-ish and a short title, four on a phone, six from `sm` —
+ * so the whole catalogue reads in a few screens. "See all" opens the pack: its chip, and the full
+ * cards. With a single pack there is nothing to bundle, and the cards show at once.
+ *
+ * Each pack, and each card, in one of the mark's hues (`--aurora-*`), in turn, as the landing's
+ * topics are. A card shows what the presentation shows, shorter: cover, category and level, title,
+ * two lines of pitch and the first goals. A guide not there is asked for from the landing's own popup.
  */
 import { computed, ref } from 'vue'
+import { trans } from 'laravel-vue-i18n'
 import { ArrowLeft, ArrowRight, Check, Languages, Send } from '@lucide/vue'
 import SeoHead from '@/components/common/SeoHead.vue'
 import { Button } from '@/components/ui/button'
@@ -57,13 +63,37 @@ const hues = ['var(--aurora-3)', 'var(--aurora-1)', 'var(--aurora-5)', 'var(--au
 
 const categoryName = computed(() => Object.fromEntries(props.categories.map(category => [category.id, category.name])))
 
-// The chosen category; null is all of them. Only offered when there is something to choose between.
+// The pack a guide is in: its category, or "others" for one with none.
+const OTHERS = 'others'
+const packOf = guide => (guide.category !== null && categoryName.value[guide.category] ? guide.category : OTHERS)
+
+// [{ id, name, guides }] — the categories in their order, then the guides with none.
+const packs = computed(() => {
+    const byPack = new Map(props.categories.map(category => [category.id, { id: category.id, name: category.name, guides: [] }]))
+    byPack.set(OTHERS, { id: OTHERS, name: trans(`${base}.others`), guides: [] })
+    props.guides.forEach(guide => byPack.get(packOf(guide)).guides.push(guide))
+
+    return [...byPack.values()].filter(pack => pack.guides.length)
+})
+
+// How many of a pack's guides its grid shows: four on a phone, six from `sm`.
+const PACK_SIZE = 6
+
+// The chosen pack; null is all of them. Only offered when there is something to choose between.
 const chosen = ref(null)
-const showChips = computed(() => props.categories.length > 1)
+const showChips = computed(() => packs.value.length > 1)
+const showPacks = computed(() => chosen.value === null && showChips.value)
 
 const shown = computed(() => chosen.value === null
     ? props.guides
-    : props.guides.filter(guide => guide.category === chosen.value))
+    : props.guides.filter(guide => packOf(guide) === chosen.value))
+
+// Opening a pack from its "See all" brings the chips back into view, the chosen one lit.
+const top = ref(null)
+const open = pack => {
+    chosen.value = pack
+    top.value?.scrollIntoView({ block: 'start' })
+}
 
 // The request popup, for the guide that is not here.
 const asking = ref(false)
@@ -105,7 +135,7 @@ const asking = ref(false)
         </header>
 
         <!-- One line that slides on a phone, past the gutter to the screen's edge; wrapped on a wide one. -->
-        <div v-if="showChips" class="mx-auto max-w-6xl sm:px-6">
+        <div v-if="showChips" ref="top" class="mx-auto max-w-6xl scroll-mt-4 sm:px-6">
             <ul role="group" :aria-label="$t(`${base}.filter`)"
                 class="chips m-0 flex snap-x gap-2 overflow-x-auto px-4 pb-2 sm:flex-wrap sm:overflow-visible sm:px-0">
                 <li class="shrink-0 snap-start list-none">
@@ -115,17 +145,54 @@ const asking = ref(false)
                         <span class="font-mono text-xs opacity-70">{{ guides.length }}</span>
                     </button>
                 </li>
-                <li v-for="category in categories" :key="category.id" class="shrink-0 snap-start list-none">
-                    <button type="button" class="chip text-sm transition-colors hover:text-ink" :class="chosen === category.id && 'chip-on'"
-                            :aria-pressed="chosen === category.id" @click="chosen = category.id">
-                        {{ category.name }}
+                <li v-for="pack in packs" :key="pack.id" class="shrink-0 snap-start list-none">
+                    <button type="button" class="chip text-sm transition-colors hover:text-ink" :class="chosen === pack.id && 'chip-on'"
+                            :aria-pressed="chosen === pack.id" @click="chosen = pack.id">
+                        {{ pack.name }}
                     </button>
                 </li>
             </ul>
         </div>
 
         <main class="mx-auto max-w-6xl px-4 pt-6 pb-24 sm:px-6">
-            <ul v-if="shown.length" class="m-0 grid grid-cols-1 gap-5 p-0 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6" aria-live="polite">
+            <!-- All of them, bundled: one pack per category, a small grid of its first guides. -->
+            <ul v-if="showPacks" class="m-0 grid grid-cols-1 gap-5 p-0 lg:grid-cols-2 lg:gap-6">
+                <li v-for="(pack, index) in packs" :key="pack.id" class="list-none">
+                    <section :style="{ '--hue': hues[index % hues.length] }" :aria-labelledby="`pack-${pack.id}`"
+                             class="pack panel flex h-full flex-col p-4 sm:p-5">
+                        <header class="flex items-baseline justify-between gap-3">
+                            <h2 :id="`pack-${pack.id}`" class="m-0 font-display text-lg font-semibold text-ink sm:text-xl">{{ pack.name }}</h2>
+                            <span class="hue-text shrink-0 font-mono text-xs">{{ pack.guides.length }}</span>
+                        </header>
+
+                        <ul class="m-0 mt-4 grid grid-cols-2 gap-3 p-0 sm:grid-cols-3">
+                            <li v-for="(guide, at) in pack.guides.slice(0, PACK_SIZE)" :key="guide.url"
+                                class="list-none" :class="at >= 4 && 'hidden sm:block'">
+                                <a :href="guide.url" class="tile group block no-underline">
+                                    <div class="relative aspect-[4/3] overflow-hidden rounded-lg border border-rule">
+                                        <img v-if="guide.cover" :src="guide.cover.url" :width="guide.cover.width" :height="guide.cover.height" alt=""
+                                             loading="lazy" class="block size-full object-cover transition-transform duration-300 group-hover:scale-105">
+                                        <ArcadiaPhoto v-else />
+                                        <span class="hue-wash absolute inset-0" aria-hidden="true"></span>
+                                    </div>
+                                    <p class="m-0 mt-1.5 line-clamp-2 text-xs font-medium leading-snug text-ink-2 transition-colors group-hover:text-ink sm:text-sm">
+                                        {{ guide.title }}
+                                    </p>
+                                </a>
+                            </li>
+                        </ul>
+
+                        <button type="button" class="mt-auto inline-flex items-center gap-1.5 self-start pt-4 text-sm font-semibold text-ink transition-colors hover:text-accent"
+                                @click="open(pack.id)">
+                            {{ $t(`${base}.see_all`) }}
+                            <span class="font-mono text-xs opacity-70">{{ pack.guides.length }}</span>
+                            <ArrowRight :size="16" aria-hidden="true" />
+                        </button>
+                    </section>
+                </li>
+            </ul>
+
+            <ul v-else-if="shown.length" class="m-0 grid grid-cols-1 gap-5 p-0 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6" aria-live="polite">
                 <li v-for="(guide, index) in shown" :key="guide.url" class="list-none">
                     <a :href="guide.url" :style="{ '--hue': hues[index % hues.length] }"
                        class="card panel group flex h-full flex-col overflow-hidden no-underline">
@@ -203,6 +270,19 @@ const asking = ref(false)
     color: var(--ink);
 }
 
+/* A pack's tiles lift their cover a little on hover; the pack itself only takes its hue's edge. */
+.pack {
+    transition: box-shadow 0.2s ease;
+}
+.pack:hover {
+    box-shadow: 0 0 0 1px color-mix(in oklab, var(--hue) 45%, transparent);
+}
+.tile:focus-visible {
+    outline: 2px solid var(--hue);
+    outline-offset: 3px;
+    border-radius: 0.5rem;
+}
+
 /* A card in its hue: the label, the ticks, a faint wash over the cover and, on hover, the edge —
    as the landing's topic tiles do. */
 .card {
@@ -227,8 +307,9 @@ const asking = ref(false)
 }
 @media (prefers-reduced-motion: reduce) {
     .card:hover,
-    .card:focus-visible {
-        transform: none;
+    .card:focus-visible,
+    .tile img {
+        transform: none !important;
     }
 }
 

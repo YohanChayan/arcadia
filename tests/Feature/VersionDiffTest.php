@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Actions\DraftNextVersion;
+use App\Actions\Content\DraftNextVersion;
 use App\Enums\CardKind;
 use App\Enums\ItemKind;
 use App\Enums\Level;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions;
+namespace App\Actions\Readers;
 
 use App\Models\Reader;
 use App\Models\User;

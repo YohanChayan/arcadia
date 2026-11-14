@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions;
+namespace App\Actions\Readers;
 
 use App\Enums\AccessRequestStatus;
 use App\Models\AccessRequest;

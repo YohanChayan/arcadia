@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Actions\AdmitGoogleAccount;
+use App\Actions\Auth\AdmitGoogleAccount;
 use App\Services\ArcadiaSite;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;

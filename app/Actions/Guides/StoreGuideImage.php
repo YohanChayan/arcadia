@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions;
+namespace App\Actions\Guides;
 
 use App\Enums\ImageSlot;
 use App\Models\Guide;

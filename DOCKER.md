@@ -103,8 +103,9 @@ manifest does not classify stays unreadable, and a missing or malformed manifest
 The suite fails until every migrated table is classified (`AgentAccessManifestTest`).
 **Run `docker compose exec -T mysql agent-ro-grants < database/agent-access.json` after every
 `migrate` that adds a table, and after editing the manifest.** The script is the local twin of
-the server's `/usr/local/sbin/agent-ro-grants` (yhn-infra), which reads each project's checkout
-every 15 minutes, so on the server a new table becomes readable once its classification is deployed.
+the server's `/usr/local/sbin/agent-ro-grants` (yhn-infra), which reads each project's checkout.
+Nothing schedules it: the deploy runs it last (§ Updating), so on the server a new table becomes
+readable once its classification is deployed.
 
 The scripts run only when the volume is new. To start the database over:
 `docker compose down -v` (it deletes the data).
@@ -184,6 +185,7 @@ docker compose -f compose.prod.yml up -d
 docker compose -f compose.prod.yml exec arc-app php artisan migrate --force --seed
 docker compose -f compose.prod.yml exec arc-app php artisan migrate --force --database=vectors --path=database/migrations/vectors
 docker compose -f compose.prod.yml exec arc-app php artisan knowledge:rebuild
+sudo /usr/local/sbin/agent-ro-grants
 ```
 
 **`UserSeeder` creates the owner with a password committed to this repository.** Change it
@@ -201,7 +203,11 @@ docker compose -f compose.prod.yml build
 docker compose -f compose.prod.yml up -d
 docker compose -f compose.prod.yml exec arc-app php artisan migrate --force
 docker compose -f compose.prod.yml exec arc-app php artisan migrate --force --database=vectors --path=database/migrations/vectors
+sudo /usr/local/sbin/agent-ro-grants
 ```
+
+**`agent-ro-grants` is the last step of every deploy, never skipped.** Nothing else runs it: a
+deploy without it leaves a table or column the manifest now hides readable by agents.
 
 `up -d` recreates every container whose image changed, which re-runs `optimize` in each.
 

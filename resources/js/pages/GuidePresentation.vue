@@ -7,7 +7,7 @@
  * - `sign_in` — signed out: sign in to enroll, or to read it if it is theirs;
  * - `open` — an account it is not shared with, while it is open: ask to enroll, with a message;
  * - `pending` — they asked: the owner will write to them;
- * - `closed` — not open for enrollment yet;
+ * - `closed` — not open for enrollment;
  * - `removed` · `declined` — no access, and nothing to ask.
  *
  * No price: payment is arranged with the owner, outside Arcadia. The editor previews it as `open`

@@ -7,6 +7,7 @@ use App\Http\Controllers\Editor\ActivityImportController;
 use App\Http\Controllers\Editor\AppearanceController;
 use App\Http\Controllers\Editor\AssistantController;
 use App\Http\Controllers\Editor\AssistantMessageController;
+use App\Http\Controllers\Editor\CategoryGuideController;
 use App\Http\Controllers\Editor\CompareController;
 use App\Http\Controllers\Editor\ContentController;
 use App\Http\Controllers\Editor\DeviceController;
@@ -28,6 +29,10 @@ use App\Http\Controllers\Editor\PromptVersionController;
 use App\Http\Controllers\Editor\ReaderController;
 use App\Http\Controllers\Editor\ReaderViewController;
 use App\Http\Controllers\Editor\SettingsController;
+use App\Http\Controllers\Editor\SiteAgentsController;
+use App\Http\Controllers\Editor\SiteHealthController;
+use App\Http\Controllers\Editor\SiteLogController;
+use App\Http\Controllers\Editor\SiteMailController;
 use App\Http\Controllers\Editor\VersionController;
 use App\Http\Controllers\Editor\VocabularyController;
 use App\Services\ArcadiaSite;
@@ -84,6 +89,8 @@ foreach ($site->locales() as $locale) {
             // Enrollment: whether the guide takes requests, and the requests — approve, decline, and
             // the owner's own note on each (ADR 0022).
             Route::put('/guides/{guide:id}/enrollment', [ReaderController::class, 'enrollment'])->name('enrollment.update');
+            // Whether, while open, it is also in the catalogue or taken only by its link (ADR 0024).
+            Route::put('/guides/{guide:id}/catalogue', [ReaderController::class, 'catalogue'])->name('catalogue.update');
             Route::put('/guides/{guide:id}/access-requests/{accessRequest}/note', [ReaderController::class, 'note'])
                 ->whereNumber('accessRequest')->name('access-requests.note');
             Route::post('/guides/{guide:id}/access-requests/{accessRequest}', [ReaderController::class, 'accept'])
@@ -196,6 +203,17 @@ foreach ($site->locales() as $locale) {
             // This host's settings: the price a guide is offered at.
             Route::get('/settings', [SettingsController::class, 'edit'])->name('settings.edit');
             Route::put('/settings', [SettingsController::class, 'update'])->name('settings.update');
+            // Site settings' monitoring tabs — site-wide, the same in both editors.
+            Route::prefix('/settings/health')->name('settings.health')->group(function () {
+                Route::get('/', [SiteHealthController::class, 'index']);
+                Route::post('/failed-jobs/{uuid}/retry', [SiteHealthController::class, 'retry'])->whereUuid('uuid')->name('.retry');
+                Route::delete('/failed-jobs/{uuid}', [SiteHealthController::class, 'forget'])->whereUuid('uuid')->name('.forget');
+                Route::delete('/failed-jobs', [SiteHealthController::class, 'flush'])->name('.flush');
+                Route::post('/test-mail', [SiteHealthController::class, 'testMail'])->name('.test-mail');
+            });
+            Route::get('/settings/logs', SiteLogController::class)->name('settings.logs');
+            Route::get('/settings/agents', SiteAgentsController::class)->name('settings.agents');
+            Route::get('/settings/mail', SiteMailController::class)->name('settings.mail');
 
             // The sales assistant's test chat: one message in, the reply streamed back.
             Route::get('/assistant', AssistantController::class)->name('assistant.index');
@@ -216,5 +234,10 @@ foreach ($site->locales() as $locale) {
                 ->where(['vocabulary' => $vocabularies, 'term' => '[0-9]+'])->name('vocabulary.update');
             Route::delete('/vocabulary/{vocabulary}/{term}', [VocabularyController::class, 'destroy'])
                 ->where(['vocabulary' => $vocabularies, 'term' => '[0-9]+'])->name('vocabulary.destroy');
+            // The categorizer: a category's guides, filed several at once or unfiled one by one.
+            Route::post('/vocabulary/categories/{term}/guides', [CategoryGuideController::class, 'store'])
+                ->whereNumber('term')->name('vocabulary.categories.guides.store');
+            Route::delete('/vocabulary/categories/{term}/guides/{guide}', [CategoryGuideController::class, 'destroy'])
+                ->whereNumber(['term', 'guide'])->name('vocabulary.categories.guides.destroy');
         });
 }

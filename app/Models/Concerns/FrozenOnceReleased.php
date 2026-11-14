@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Concerns;
 
+use App\Models\Version;
 use LogicException;
 
 /**

@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Actions\AssignReader;
-use App\Actions\ImportGuideContent;
+use App\Actions\Content\ImportGuideContent;
+use App\Actions\Readers\AssignReader;
 use App\Enums\GuideStatus;
 use App\Enums\InquiryPurpose;
 use App\Enums\Level;

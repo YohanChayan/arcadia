@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions;
+namespace App\Actions\Content;
 
 use App\Enums\ActivityFamily;
 use App\Models\Version;

@@ -68,6 +68,25 @@ class GuideEnrollmentTest extends TestCase
         $this->assertFalse($this->guide->fresh()->open_for_enrollment);
     }
 
+    public function test_an_open_guide_kept_out_of_the_catalogue_still_takes_requests_from_its_link(): void
+    {
+        $this->assertTrue($this->guide->fresh()->in_catalogue);
+
+        $this->actingAs($this->owner)->get($this->editor('/readers'))
+            ->assertInertia(fn ($page) => $page->where('inCatalogue', true));
+
+        $this->guide->update(['open_for_enrollment' => true]);
+        $this->put($this->editor('/catalogue'), ['listed' => false])->assertRedirect();
+        $this->assertFalse($this->guide->fresh()->in_catalogue);
+        $this->assertFalse(Guide::query()->whereKey($this->guide->id)->listed()->exists());
+
+        $this->actingAs($this->bob)->get($this->link())
+            ->assertInertia(fn ($page) => $page->component('GuidePresentation')->where('state', 'open'));
+
+        $this->actingAs($this->owner)->put($this->editor('/catalogue'), ['listed' => true])->assertRedirect();
+        $this->assertTrue(Guide::query()->whereKey($this->guide->id)->listed()->exists());
+    }
+
     public function test_a_request_emails_the_owner_once_with_the_requesters_email_to_reply_to(): void
     {
         Queue::fake();
@@ -194,5 +213,6 @@ class GuideEnrollmentTest extends TestCase
             ->put("/es/editor/guides/{$english->id}/access-requests/{$request->id}/note", ['owner_note' => 'x'])
             ->assertNotFound();
         $this->put("/es/editor/guides/{$english->id}/enrollment", ['open' => true])->assertNotFound();
+        $this->put("/es/editor/guides/{$english->id}/catalogue", ['listed' => false])->assertNotFound();
     }
 }

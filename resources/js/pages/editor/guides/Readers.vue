@@ -10,7 +10,8 @@
  * Above the list, enrollment requests waiting for an answer (ADR 0022) take the full width, each
  * with its message, approved once the owner has arranged payment outside Arcadia, or declined.
  * Below them the add form, and beside it the two guide-wide settings: enrollment — whether
- * accounts the guide is not shared with may ask to enroll from its link, with the answered
+ * accounts the guide is not shared with may ask to enroll from its link, and, while it is open,
+ * whether it is also shown in the catalogue or sold only by that link (ADR 0024), with the answered
  * requests and the owner's own note, his record of the payment — and the default colours new
  * readers start from.
  */
@@ -45,6 +46,8 @@ const props = defineProps({
     accessRequests: { type: Array, default: () => [] },
     // Whether accounts it is not shared with may ask to enroll from its link.
     openForEnrollment: { type: Boolean, default: false },
+    // Whether, while open, it is also shown in the catalogue — or taken only by its link.
+    inCatalogue: { type: Boolean, default: true },
     noteMax: { type: Number, default: 1000 },
     // The site's device limit; a reader's own `device_limit` overrides it.
     deviceLimit: { type: Number, required: true },
@@ -119,6 +122,7 @@ const pendingRequests = computed(() => props.accessRequests.filter(request => re
 const answeredRequests = computed(() => props.accessRequests.filter(request => request.status !== 'pending'))
 
 const setEnrollment = open => router.put(editorRoute('enrollment.update', { guide: props.guide.id }), { open }, { preserveScroll: true })
+const setCatalogue = listed => router.put(editorRoute('catalogue.update', { guide: props.guide.id }), { listed }, { preserveScroll: true })
 
 const accept = request => router.post(editorRoute('access-requests.accept', { guide: props.guide.id, accessRequest: request.id }), {}, { preserveScroll: true })
 const dismiss = request => router.delete(editorRoute('access-requests.dismiss', { guide: props.guide.id, accessRequest: request.id }), { preserveScroll: true })
@@ -223,6 +227,18 @@ const confirmRemove = () => {
                         </div>
                         <Switch :model-value="openForEnrollment" :aria-label="$t('arcadia.editor.readers.enrollment.switch')"
                                 @update:model-value="setEnrollment" />
+                    </div>
+
+                    <!-- Only while open: a closed guide is never listed, whatever this says. -->
+                    <div v-if="openForEnrollment" class="mt-4 flex items-start justify-between gap-4 border-t border-rule pt-4">
+                        <div class="min-w-0">
+                            <h3 class="m-0 text-sm font-semibold text-ink">{{ $t('arcadia.editor.readers.catalogue.title') }}</h3>
+                            <p class="mt-1 mb-0 text-sm text-ink-3">
+                                {{ $t(inCatalogue ? 'arcadia.editor.readers.catalogue.shown_hint' : 'arcadia.editor.readers.catalogue.hidden_hint') }}
+                            </p>
+                        </div>
+                        <Switch :model-value="inCatalogue" :aria-label="$t('arcadia.editor.readers.catalogue.switch')"
+                                @update:model-value="setCatalogue" />
                     </div>
 
                     <details v-if="answeredRequests.length" class="mt-4">

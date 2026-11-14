@@ -7,17 +7,24 @@
 import { computed, ref } from 'vue'
 import { router } from '@inertiajs/vue3'
 import { trans, transChoice } from 'laravel-vue-i18n'
-import { Plus, Pencil, Trash2 } from '@lucide/vue'
+import { FolderInput, Plus, Pencil, Trash2 } from '@lucide/vue'
 import DataTable from '@/components/common/DataTable.vue'
 import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
 import { Button } from '@/components/ui/button'
 import TermDialog from '@/components/editor/TermDialog.vue'
+import CategoryGuidesDialog from '@/components/editor/CategoryGuidesDialog.vue'
 import { useEditorRoute } from '@/composables/useEditorRoute.js'
 
 const props = defineProps({
     vocabulary: { type: String, required: true },
     terms: { type: Array, required: true },
+    // Every guide of this language, for the categorizer — categories only.
+    guides: { type: Array, default: () => [] },
 })
+
+// The category whose guides are open in the categorizer, by id so it follows renames and reloads.
+const categorizing = ref(null)
+const categorizingTerm = computed(() => props.terms.find(term => term.id === categorizing.value) ?? null)
 
 const editorRoute = useEditorRoute()
 
@@ -66,6 +73,10 @@ const confirmDelete = () => {
                 {{ transChoice('arcadia.editor.vocabulary.used_by', row.guides_count, { count: row.guides_count }) }}
             </td>
             <td class="px-4 py-3 align-top text-right whitespace-nowrap">
+                <Button v-if="vocabulary === 'categories'" type="button" variant="outline" size="sm" class="mr-1" @click="categorizing = row.id">
+                    <FolderInput :size="14" aria-hidden="true" />
+                    {{ $t('arcadia.editor.vocabulary.categorizer.open') }}
+                </Button>
                 <Button type="button" variant="ghost" size="icon-sm" @click="dialog = row" :aria-label="$t('arcadia.editor.vocabulary.save')">
                     <Pencil :size="14" aria-hidden="true" />
                 </Button>
@@ -76,6 +87,13 @@ const confirmDelete = () => {
             </td>
         </template>
     </DataTable>
+
+    <CategoryGuidesDialog v-if="vocabulary === 'categories'"
+                          :open="categorizingTerm !== null"
+                          :category="categorizingTerm"
+                          :categories="terms"
+                          :guides="guides"
+                          @close="categorizing = null" />
 
     <TermDialog :open="dialog !== null" :vocabulary="vocabulary" :term="dialog?.id ? dialog : null" @close="dialog = null" />
 

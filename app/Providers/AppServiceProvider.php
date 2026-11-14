@@ -2,11 +2,13 @@
 
 namespace App\Providers;
 
-use App\Actions\LinkReaderAssignments;
+use App\Actions\Readers\LinkReaderAssignments;
 use App\Models\User;
 use App\Services\ArcadiaSite;
+use App\Services\Site\SiteHealth;
 use Carbon\CarbonImmutable;
 use Illuminate\Auth\Events\Verified;
+use Illuminate\Queue\Events\Looping;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
@@ -43,6 +45,28 @@ class AppServiceProvider extends ServiceProvider
             if ($event->user instanceof User) {
                 app(LinkReaderAssignments::class)->handle($event->user);
             }
+        });
+
+        $this->recordWorkerHeartbeat();
+    }
+
+    /**
+     * The worker says it is alive while it loops, idle or not, for Site settings → Health: with no
+     * scheduler, an empty queue cannot otherwise tell a quiet worker from a dead one. The worker is
+     * one long process, so it remembers its last beat itself and writes one every
+     * `WORKER_HEARTBEAT_SECONDS`, not one per loop.
+     */
+    protected function recordWorkerHeartbeat(): void
+    {
+        $lastBeat = null;
+
+        Event::listen(Looping::class, function () use (&$lastBeat) {
+            if ($lastBeat !== null && $lastBeat > now()->subSeconds(SiteHealth::WORKER_HEARTBEAT_SECONDS)) {
+                return;
+            }
+
+            $lastBeat = now();
+            app(SiteHealth::class)->recordWorkerHeartbeat();
         });
     }
 

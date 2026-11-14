@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Enums\ActivityFamily;
 use App\Enums\ItemKind;
+use App\Models\Concerns\FrozenOnceReleased;
+use App\Models\Concerns\HasLineageKey;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 

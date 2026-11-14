@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Editor;
 
-use App\Actions\SaveGuide;
-use App\Actions\TellReaders;
+use App\Actions\Guides\SaveGuide;
+use App\Actions\Readers\TellReaders;
 use App\Enums\GuideStatus;
 use App\Enums\ImageSlot;
 use App\Enums\Level;

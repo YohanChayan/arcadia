@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Editor;
 
-use App\Actions\RewordActivity;
+use App\Actions\Content\RewordActivity;
 use App\Enums\ContentNode;
 use App\Models\Guide;
 use Illuminate\Database\Eloquent\Model;
