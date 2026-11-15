@@ -64,7 +64,9 @@ fi
 # A failed run keeps the dump: after the drop it is the only copy left to import again.
 cleanup() {
     local status=$?
-    if [[ $status -ne 0 && -s "$dump" ]]; then
+    if [[ -z "$from" && ! -s "$dump" ]]; then
+        rm -f "$dump"
+    elif [[ $status -ne 0 ]]; then
         echo "Dump kept at $dump (import it with --from)." >&2
     elif [[ "$keep" != true ]]; then
         rm -f "$dump"
@@ -78,13 +80,15 @@ ssh "$host" 'bash -s' > "$dump" <<'REMOTE'
 set -euo pipefail
 # Anything printed here would land in the dump: cd says nothing.
 cd /srv/apps/arcadia >/dev/null
-user="$(docker compose -f compose.prod.yml exec -T arc-app printenv DB_USERNAME)"
-pass="$(docker compose -f compose.prod.yml exec -T arc-app printenv DB_PASSWORD)"
-db="$(docker compose -f compose.prod.yml exec -T arc-app printenv DB_DATABASE)"
+# This script arrives on stdin, so every docker command reads </dev/null: otherwise the first
+# one swallows the rest of the script and bash exits 0 having dumped nothing.
+user="$(docker compose -f compose.prod.yml exec -T arc-app printenv DB_USERNAME </dev/null)"
+pass="$(docker compose -f compose.prod.yml exec -T arc-app printenv DB_PASSWORD </dev/null)"
+db="$(docker compose -f compose.prod.yml exec -T arc-app printenv DB_DATABASE </dev/null)"
 # Passed by name from the environment, so the password never appears in the host's process list.
 MYSQL_PWD="$pass" docker exec -e MYSQL_PWD platform-mysql-1 \
     mysqldump -u"$user" --single-transaction --quick --no-tablespaces --routines --triggers \
-        --set-gtid-purged=OFF --default-character-set=utf8mb4 "$db" \
+        --set-gtid-purged=OFF --default-character-set=utf8mb4 "$db" </dev/null \
     | gzip
 REMOTE
 fi
@@ -107,7 +111,7 @@ mysql_root() {
 has_local="$(mysql_root -N -e "SELECT COUNT(*) FROM information_schema.schemata WHERE schema_name = 'arcadia'")"
 if [[ "$has_local" == 1 ]]; then
     backup="$dump_dir/arcadia-local-$(date +%Y%m%d-%H%M%S).sql.gz"
-    echo "→ Backing up the local database to $backup…"
+    echo "→ Backing up the local database to ${backup}…"
     docker compose exec -T mysql sh -c 'MYSQL_PWD="$MYSQL_ROOT_PASSWORD" exec mysqldump -uroot --single-transaction --quick --no-tablespaces --routines --triggers --set-gtid-purged=OFF --default-character-set=utf8mb4 arcadia' \
         | gzip > "$backup"
     if ! gzip -dc "$backup" | tail -n 1 | grep -q 'Dump completed'; then
