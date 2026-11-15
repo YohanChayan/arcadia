@@ -16,7 +16,8 @@ use Tests\TestCase;
 /**
  * What a guide calls its reader: a name the owner gives when adding them, or changes later; else
  * the first name on their account. The guide page greets them by it, the editor's preview as that
- * reader does too, and so does the email that shares the guide.
+ * reader does too, and so does the email that shares the guide. One name per person: it is the same
+ * on every guide of this language given to their email.
  */
 class ReaderNameTest extends TestCase
 {
@@ -105,5 +106,38 @@ class ReaderNameTest extends TestCase
         $this->actingAs($ana)->get($link)->assertInertia(fn ($page) => $page
             ->where('readerName', 'María')
             ->where('guide.greeting', 'Hola {nombre}, esta es tu ruta.'));
+    }
+
+    public function test_a_name_given_on_one_guide_is_theirs_on_every_guide_of_this_language(): void
+    {
+        $savings = Guide::create(['locale' => 'es', 'title' => 'Ahorro', 'level' => Level::BASIC]);
+        $english = Guide::create(['locale' => 'en', 'title' => 'Excel at work', 'level' => Level::BASIC]);
+        $removed = $savings->readers()->create(['email' => 'ana@gmail.com', 'name' => 'Anita']);
+        $removed->delete();
+        $inEnglish = $english->readers()->create(['email' => 'ana@gmail.com', 'name' => 'Ann']);
+
+        $this->post($this->readers(), ['email' => 'ana@gmail.com', 'name' => 'María', 'notify' => false])->assertSessionHasNoErrors();
+
+        $this->assertSame('María', $removed->fresh()->name);
+        $this->assertSame('Ann', $inEnglish->fresh()->name);
+
+        // Renamed on one guide, renamed on all; cleared, cleared on all.
+        $reader = $this->guide->readers()->firstWhere('email', 'ana@gmail.com');
+        $this->put($this->readers()."/{$reader->id}/name", ['name' => 'Mari'])->assertSessionHasNoErrors();
+        $this->assertSame('Mari', $removed->fresh()->name);
+
+        $this->put($this->readers()."/{$reader->id}/name", ['name' => ''])->assertSessionHasNoErrors();
+        $this->assertNull($removed->fresh()->name);
+        $this->assertSame('Ann', $inEnglish->fresh()->name);
+    }
+
+    public function test_a_new_guide_given_without_a_name_keeps_the_one_they_have(): void
+    {
+        $savings = Guide::create(['locale' => 'es', 'title' => 'Ahorro', 'level' => Level::BASIC]);
+        $savings->readers()->create(['email' => 'ana@gmail.com', 'name' => 'María']);
+
+        $this->post($this->readers(), ['email' => 'ana@gmail.com', 'notify' => false])->assertSessionHasNoErrors();
+
+        $this->assertSame('María', $this->guide->readers()->firstWhere('email', 'ana@gmail.com')->name);
     }
 }

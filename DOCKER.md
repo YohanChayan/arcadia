@@ -110,6 +110,19 @@ readable once its classification is deployed.
 The scripts run only when the volume is new. To start the database over:
 `docker compose down -v` (it deletes the data).
 
+### A copy of production
+
+```bash
+ARCADIA_PROD_SSH=<admin ssh alias> docker/mysql/pull-production.sh   # --keep, --yes, --from <file>
+```
+
+Replaces the local `arcadia` database with production's: one SSH session runs `mysqldump` in the
+platform MySQL with the app's own credentials and streams it back, so nothing is left on the
+server. It needs the admin user, which runs Docker — `agent-ro` cannot read every table. Locally
+it empties sessions, cache and jobs, runs the migrations production does not have yet, and
+re-applies `agent_ro`'s grants. The vector index is not copied: rebuild it with
+`knowledge:rebuild`. Uploads (covers) are not copied either.
+
 ## Production
 
 `compose.prod.yml` runs Arcadia on a host that already provides the shared platform: **one

@@ -28,6 +28,7 @@ use App\Http\Controllers\Editor\PromptTemplateController;
 use App\Http\Controllers\Editor\PromptVariableController;
 use App\Http\Controllers\Editor\PromptVersionController;
 use App\Http\Controllers\Editor\ReaderController;
+use App\Http\Controllers\Editor\ReaderDirectoryController;
 use App\Http\Controllers\Editor\ReaderViewController;
 use App\Http\Controllers\Editor\SettingsController;
 use App\Http\Controllers\Editor\SiteAgentsController;
@@ -195,6 +196,9 @@ foreach ($site->locales() as $locale) {
             Route::post('/prompts/{template:id}/fill', PromptFillController::class)->name('prompts.fill');
 
             // What visitors asked for, from the landing page's popup.
+            // Everyone this language's guides are for, across guides; each guide's own screen assigns them.
+            Route::get('/readers', ReaderDirectoryController::class)->name('readers.directory');
+
             Route::get('/requests', [InquiryController::class, 'index'])->name('inquiries.index');
             // One the owner writes, to make a guide of their own through the same steps.
             Route::post('/requests', [InquiryController::class, 'store'])->name('inquiries.store');

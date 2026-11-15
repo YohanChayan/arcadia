@@ -1,7 +1,7 @@
 <script setup>
 /**
- * This language's motivation phrases — short lines a reader reads in a glance — grouped by the
- * moment they are shown at: arriving at "My guides", and on a guide's card for where they stand
+ * The vocabulary screen's phrases tab: this language's motivation phrases — short lines a reader
+ * reads in a glance — grouped by the moment they are shown at: arriving at "My guides", and on a guide's card for where they stand
  * (not started, under way, nearly done, done). `{name}` becomes the reader's name.
  *
  * Added at the top, changed in place, deleted after a confirm. Each says how many guides chose it;
@@ -10,9 +10,6 @@
 import { computed, ref } from 'vue'
 import { router, useForm } from '@inertiajs/vue3'
 import { Check, Pencil, Plus, Trash2, X } from '@lucide/vue'
-import PageHeader from '@/components/common/PageHeader.vue'
-import EditorTitle from '@/components/editor/EditorTitle.vue'
-import EditorBreadcrumb from '@/components/editor/EditorBreadcrumb.vue'
 import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -74,12 +71,8 @@ const confirmDelete = () => {
 </script>
 
 <template>
-    <EditorTitle :parts="[$t('arcadia.editor.phrases.title')]" />
-
-    <div class="py-6">
-        <EditorBreadcrumb :trail="[{ label: $t('arcadia.editor.phrases.title') }]" />
-
-        <PageHeader :title="$t('arcadia.editor.phrases.title')" :description="$t('arcadia.editor.phrases.description')" :count="phrases.length" />
+    <div>
+        <p class="mt-0 mb-4 max-w-prose text-sm text-ink-3">{{ $t('arcadia.editor.phrases.description') }}</p>
 
         <form class="panel mb-6 max-w-3xl p-5" @submit.prevent="add">
             <Field :data-invalid="form.errors.text ? true : undefined">

@@ -15,9 +15,14 @@ use App\Models\User;
  * `LinkReaderAssignments`); and that account's request for this guide, if any, is answered by it
  * — approved, and kept, whether the owner approved it or added the email himself.
  * Whether they are told by email (`notify`) is the owner's choice; the telling is `TellReaders`.
+ *
+ * A name given is theirs on every guide of this language (`NameReader`); none keeps the one they
+ * already have, here or on another guide.
  */
 class AssignReader
 {
+    public function __construct(private NameReader $names) {}
+
     public function handle(Guide $guide, string $email, User $by, bool $notify = true, ?string $name = null): Reader
     {
         $email = mb_strtolower(trim($email));
@@ -29,11 +34,13 @@ class AssignReader
 
         if ($reader) {
             $reader->restore();
-            // A name given now replaces the one they had; none keeps it.
-            $reader->forceFill(['user_id' => $reader->user_id ?? $userId, 'assigned_by' => $by->id, 'notify' => $notify, 'name' => $name ?? $reader->name])->save();
+            $reader->forceFill(['user_id' => $reader->user_id ?? $userId, 'assigned_by' => $by->id, 'notify' => $notify])->save();
         } else {
-            $reader = $guide->readers()->create(['email' => $email, 'name' => $name, 'user_id' => $userId, 'assigned_by' => $by->id, 'notify' => $notify]);
+            $reader = $guide->readers()->create(['email' => $email, 'user_id' => $userId, 'assigned_by' => $by->id, 'notify' => $notify]);
         }
+
+        $this->names->handle($reader, $name ?? $this->names->knownName($reader));
+        $reader->refresh();
 
         if ($userId !== null) {
             AccessRequest::query()->where('guide_id', $guide->id)->where('user_id', $userId)

@@ -124,7 +124,7 @@ const onOpenChange = isOpen => { if (!isOpen && !applying.value) emit('close') }
                 </template>
 
                 <AlertDialogFooter class="mt-2">
-                    <AlertDialogCancel :disabled="applying">{{ $t('admin.confirm.cancel') }}</AlertDialogCancel>
+                    <AlertDialogCancel :disabled="applying">{{ $t('common.confirm.cancel') }}</AlertDialogCancel>
                     <Button :variant="CONFIRM_VARIANT[action]" :disabled="!canConfirm" @click="confirm">
                         <Spinner v-if="applying" />
                         {{ $t(`arcadia.editor.guides.bulk.confirm.${action}`) }}

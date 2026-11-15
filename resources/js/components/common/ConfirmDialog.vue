@@ -51,7 +51,7 @@ const onOpenChange = isOpen => { if (!isOpen) emit('cancel') }
             </div>
 
             <AlertDialogFooter class="mt-2">
-                <AlertDialogCancel :disabled="processing">{{ $t('admin.confirm.cancel') }}</AlertDialogCancel>
+                <AlertDialogCancel :disabled="processing">{{ $t('common.confirm.cancel') }}</AlertDialogCancel>
                 <Button variant="destructive" :disabled="processing" @click="emit('confirm')">
                     <Spinner v-if="processing" />
                     {{ confirmLabel }}

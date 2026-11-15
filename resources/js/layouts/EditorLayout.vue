@@ -15,7 +15,7 @@
  */
 import { computed, onBeforeUnmount, onMounted } from 'vue'
 import { usePage } from '@inertiajs/vue3'
-import { House, BookOpen, Bot, Inbox, MessageSquareHeart, ScrollText, Settings2, Tags } from '@lucide/vue'
+import { House, BookOpen, Bot, Inbox, ScrollText, Settings2, Tags, Users } from '@lucide/vue'
 import DashboardShell from '@/components/chrome/DashboardShell.vue'
 import EditorLanguageSwitch from '@/components/editor/EditorLanguageSwitch.vue'
 import ArcadiaMark from '@/components/ArcadiaMark.vue'
@@ -32,8 +32,8 @@ const nav = computed(() => {
         { key: 'guides', route: `${locale}.editor.guides.index`, match: `${base}/guides`, icon: BookOpen },
         { key: 'prompts', route: `${locale}.editor.prompts.index`, match: `${base}/prompts`, icon: ScrollText },
         { key: 'inquiries', route: `${locale}.editor.inquiries.index`, match: `${base}/requests`, icon: Inbox },
+        { key: 'readers', route: `${locale}.editor.readers.directory`, match: `${base}/readers`, icon: Users },
         { key: 'vocabulary', route: `${locale}.editor.vocabulary.index`, match: `${base}/vocabulary`, icon: Tags },
-        { key: 'phrases', route: `${locale}.editor.phrases.index`, match: `${base}/phrases`, icon: MessageSquareHeart },
         { key: 'assistant', route: `${locale}.editor.assistant.index`, match: `${base}/assistant`, icon: Bot },
         { key: 'settings', route: `${locale}.editor.settings.edit`, match: `${base}/settings`, icon: Settings2 },
     ]

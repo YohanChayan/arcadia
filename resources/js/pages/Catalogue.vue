@@ -1,31 +1,31 @@
 <script setup>
 /**
  * The catalogue — `/es/guias` · `/en/guides` (`CatalogueController`, ADR 0023): the guides anyone
- * may ask for, as cards that open each one's presentation. A short header under the aurora, a row
- * of category chips — one line that slides on a phone, wrapping on a wide screen — and below them
- * either the packs or one pack's cards.
+ * may ask for, dense enough that most of the catalogue reads in a screen or two. A short header
+ * under the aurora, with the price stated once — every guide costs the same, so no tile repeats
+ * it, and with no price set there is nothing to state.
  *
- * All of them, as packs: one per category, guides with none in a last "Others", each a small grid
- * of its first guides — cover cut square-ish and a short title, four on a phone, six from `sm` —
- * so the whole catalogue reads in a few screens. "See all" opens the pack: its chip, and the full
- * cards. With a single pack there is nothing to bundle, and the cards show at once.
+ * Below it, one section per category — guides with none in a last "Others" — each a dense grid of
+ * small tiles: the cover cut 3:2 and the title. Every guide of a section shows; there
+ * is no "see all". The chips above stick to the top and jump to a section, the one in view lit.
+ * With a single section there is nothing to jump between: no chips and no heading.
  *
- * Each pack, and each card, in one of the mark's hues (`--aurora-*`), in turn, as the landing's
- * topics are. A card shows what the presentation shows, shorter: cover, category and level, title,
- * two lines of pitch and the first goals. A guide not there is asked for from the landing's own popup.
+ * Each section in one of the mark's hues (`--aurora-*`), by its category's place, as the landing's
+ * topics are. A guide not there is asked for from the landing's own popup.
  */
-import { computed, ref } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import { trans } from 'laravel-vue-i18n'
-import { ArrowLeft, ArrowRight, Check, Languages, Send } from '@lucide/vue'
+import { ArrowLeft, Languages, Send, Sparkles } from '@lucide/vue'
 import SeoHead from '@/components/common/SeoHead.vue'
 import { Button } from '@/components/ui/button'
 import AuroraBackdrop from '@/components/AuroraBackdrop.vue'
 import ArcadiaMark from '@/components/ArcadiaMark.vue'
 import ArcadiaPhoto from '@/components/ArcadiaPhoto.vue'
+import Price from '@/components/landing/Price.vue'
 import RequestDialog from '@/components/landing/RequestDialog.vue'
 
 const props = defineProps({
-    // [{ url, title, level, category (id) | null, goals, pitch, cover: { url, width, height } | null }]
+    // [{ url, title, category (id) | null, goals, pitch, cover: { url, width, height } | null }]
     guides: { type: Array, required: true },
     // [{ id, name }] — only those a listed guide is in.
     categories: { type: Array, required: true },
@@ -33,6 +33,7 @@ const props = defineProps({
     inquiryUrl: { type: String, required: true },
     requester: { type: Object, default: null },
     contactEmail: { type: String, default: null },
+    // Already written (`$2`), or null when none is set.
     price: { type: String, default: null },
     priceNote: { type: String, default: null },
     alternates: { type: Object, default: () => ({}) },
@@ -63,37 +64,52 @@ const hues = ['var(--aurora-3)', 'var(--aurora-1)', 'var(--aurora-5)', 'var(--au
 
 const categoryName = computed(() => Object.fromEntries(props.categories.map(category => [category.id, category.name])))
 
-// The pack a guide is in: its category, or "others" for one with none.
+// The section a guide is in: its category, or "others" for one with none.
 const OTHERS = 'others'
-const packOf = guide => (guide.category !== null && categoryName.value[guide.category] ? guide.category : OTHERS)
+const sectionOf = guide => (guide.category !== null && categoryName.value[guide.category] ? guide.category : OTHERS)
 
-// [{ id, name, guides }] — the categories in their order, then the guides with none.
-const packs = computed(() => {
-    const byPack = new Map(props.categories.map(category => [category.id, { id: category.id, name: category.name, guides: [] }]))
-    byPack.set(OTHERS, { id: OTHERS, name: trans(`${base}.others`), guides: [] })
-    props.guides.forEach(guide => byPack.get(packOf(guide)).guides.push(guide))
+// [{ id, anchor, name, hue, guides }] — the categories in their order, then the guides with none.
+// The hue follows the category's place, so a category keeps its colour whichever others show.
+const sections = computed(() => {
+    const bySection = new Map(props.categories.map((category, index) => [category.id, {
+        id: category.id,
+        name: category.name,
+        hue: hues[index % hues.length],
+        guides: [],
+    }]))
+    bySection.set(OTHERS, { id: OTHERS, name: trans(`${base}.others`), hue: hues[props.categories.length % hues.length], guides: [] })
+    props.guides.forEach(guide => bySection.get(sectionOf(guide)).guides.push(guide))
 
-    return [...byPack.values()].filter(pack => pack.guides.length)
+    return [...bySection.values()]
+        .filter(section => section.guides.length)
+        .map(section => ({ ...section, anchor: `cat-${section.id}` }))
 })
 
-// How many of a pack's guides its grid shows: four on a phone, six from `sm`.
-const PACK_SIZE = 6
+const showSections = computed(() => sections.value.length > 1)
 
-// The chosen pack; null is all of them. Only offered when there is something to choose between.
-const chosen = ref(null)
-const showChips = computed(() => packs.value.length > 1)
-const showPacks = computed(() => chosen.value === null && showChips.value)
+// The section in view, lit on its chip: the topmost one crossing the band under the sticky chips.
+const current = ref(null)
+let observer = null
 
-const shown = computed(() => chosen.value === null
-    ? props.guides
-    : props.guides.filter(guide => packOf(guide) === chosen.value))
+onMounted(async () => {
+    if (!showSections.value || typeof IntersectionObserver === 'undefined') {
+        return
+    }
+    await nextTick()
+    const visible = new Set()
+    observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => (entry.isIntersecting ? visible.add(entry.target.id) : visible.delete(entry.target.id)))
+        current.value = sections.value.find(section => visible.has(section.anchor))?.anchor ?? current.value
+    }, { rootMargin: '-80px 0px -55% 0px' })
+    sections.value.forEach(section => {
+        const element = document.getElementById(section.anchor)
+        if (element) {
+            observer.observe(element)
+        }
+    })
+})
 
-// Opening a pack from its "See all" brings the chips back into view, the chosen one lit.
-const top = ref(null)
-const open = pack => {
-    chosen.value = pack
-    top.value?.scrollIntoView({ block: 'start' })
-}
+onBeforeUnmount(() => observer?.disconnect())
 
 // The request popup, for the guide that is not here.
 const asking = ref(false)
@@ -120,112 +136,73 @@ const asking = ref(false)
             </div>
         </nav>
 
-        <header class="enter mx-auto max-w-6xl px-4 pt-8 pb-8 sm:px-6 sm:pt-14">
-            <a :href="homeUrl" class="mb-5 inline-flex items-center gap-1.5 text-sm text-ink-3 no-underline hover:text-accent">
-                <ArrowLeft :size="14" aria-hidden="true" />
-                {{ $t(`${base}.back`) }}
-            </a>
-            <h1 class="m-0 font-display text-[clamp(2.25rem,7vw,4rem)] font-bold leading-[1.05] tracking-tight text-ink text-balance">
-                {{ $t(`${base}.title`) }}
-                <span class="text-accent">{{ $t(`${base}.title_accent`) }}</span>
-            </h1>
-            <p class="mt-4 mb-0 text-lg font-medium text-ink-2 sm:text-xl">
-                {{ $t(`${base}.lead`) }}
+        <header class="enter mx-auto flex max-w-6xl flex-col gap-4 px-4 pt-4 pb-6 sm:flex-row sm:items-end sm:justify-between sm:px-6 sm:pt-8">
+            <div>
+                <a :href="homeUrl" class="mb-3 inline-flex items-center gap-1.5 text-sm text-ink-3 no-underline hover:text-accent">
+                    <ArrowLeft :size="14" aria-hidden="true" />
+                    {{ $t(`${base}.back`) }}
+                </a>
+                <h1 class="m-0 font-display text-[clamp(1.75rem,5vw,2.75rem)] font-bold leading-[1.1] tracking-tight text-ink text-balance">
+                    {{ $t(`${base}.title`) }}
+                    <span class="text-accent">{{ $t(`${base}.title_accent`) }}</span>
+                </h1>
+                <p class="mt-2 mb-0 font-medium text-ink-2 sm:text-lg">
+                    {{ $t(`${base}.lead`) }}
+                </p>
+            </div>
+
+            <!-- The price, once: every guide costs the same. -->
+            <p v-if="price && guides.length" class="price m-0 inline-flex shrink-0 items-center gap-2.5 self-start rounded-full px-4 py-2 sm:self-auto">
+                <Sparkles :size="16" class="text-accent" aria-hidden="true" />
+                <span class="text-sm font-medium text-ink-2">{{ $t(`${base}.price_lead`) }}</span>
+                <Price :amount="price" :note="priceNote" class="text-2xl leading-none" />
             </p>
         </header>
 
-        <!-- One line that slides on a phone, past the gutter to the screen's edge; wrapped on a wide one. -->
-        <div v-if="showChips" ref="top" class="mx-auto max-w-6xl scroll-mt-4 sm:px-6">
-            <ul role="group" :aria-label="$t(`${base}.filter`)"
-                class="chips m-0 flex snap-x gap-2 overflow-x-auto px-4 pb-2 sm:flex-wrap sm:overflow-visible sm:px-0">
-                <li class="shrink-0 snap-start list-none">
-                    <button type="button" class="chip text-sm transition-colors hover:text-ink" :class="chosen === null && 'chip-on'"
-                            :aria-pressed="chosen === null" @click="chosen = null">
-                        {{ $t(`${base}.all`) }}
-                        <span class="font-mono text-xs opacity-70">{{ guides.length }}</span>
-                    </button>
-                </li>
-                <li v-for="pack in packs" :key="pack.id" class="shrink-0 snap-start list-none">
-                    <button type="button" class="chip text-sm transition-colors hover:text-ink" :class="chosen === pack.id && 'chip-on'"
-                            :aria-pressed="chosen === pack.id" @click="chosen = pack.id">
-                        {{ pack.name }}
-                    </button>
-                </li>
-            </ul>
-        </div>
-
-        <main class="mx-auto max-w-6xl px-4 pt-6 pb-24 sm:px-6">
-            <!-- All of them, bundled: one pack per category, a small grid of its first guides. -->
-            <ul v-if="showPacks" class="m-0 grid grid-cols-1 gap-5 p-0 lg:grid-cols-2 lg:gap-6">
-                <li v-for="(pack, index) in packs" :key="pack.id" class="list-none">
-                    <section :style="{ '--hue': hues[index % hues.length] }" :aria-labelledby="`pack-${pack.id}`"
-                             class="pack panel flex h-full flex-col p-4 sm:p-5">
-                        <header class="flex items-baseline justify-between gap-3">
-                            <h2 :id="`pack-${pack.id}`" class="m-0 font-display text-lg font-semibold text-ink sm:text-xl">{{ pack.name }}</h2>
-                            <span class="hue-text shrink-0 font-mono text-xs">{{ pack.guides.length }}</span>
-                        </header>
-
-                        <ul class="m-0 mt-4 grid grid-cols-2 gap-3 p-0 sm:grid-cols-3">
-                            <li v-for="(guide, at) in pack.guides.slice(0, PACK_SIZE)" :key="guide.url"
-                                class="list-none" :class="at >= 4 && 'hidden sm:block'">
-                                <a :href="guide.url" class="tile group block no-underline">
-                                    <div class="relative aspect-[4/3] overflow-hidden rounded-lg border border-rule">
-                                        <img v-if="guide.cover" :src="guide.cover.url" :width="guide.cover.width" :height="guide.cover.height" alt=""
-                                             loading="lazy" class="block size-full object-cover transition-transform duration-300 group-hover:scale-105">
-                                        <ArcadiaPhoto v-else />
-                                        <span class="hue-wash absolute inset-0" aria-hidden="true"></span>
-                                    </div>
-                                    <p class="m-0 mt-1.5 line-clamp-2 text-xs font-medium leading-snug text-ink-2 transition-colors group-hover:text-ink sm:text-sm">
-                                        {{ guide.title }}
-                                    </p>
-                                </a>
-                            </li>
-                        </ul>
-
-                        <button type="button" class="mt-auto inline-flex items-center gap-1.5 self-start pt-4 text-sm font-semibold text-ink transition-colors hover:text-accent"
-                                @click="open(pack.id)">
-                            {{ $t(`${base}.see_all`) }}
-                            <span class="font-mono text-xs opacity-70">{{ pack.guides.length }}</span>
-                            <ArrowRight :size="16" aria-hidden="true" />
-                        </button>
-                    </section>
-                </li>
-            </ul>
-
-            <ul v-else-if="shown.length" class="m-0 grid grid-cols-1 gap-5 p-0 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6" aria-live="polite">
-                <li v-for="(guide, index) in shown" :key="guide.url" class="list-none">
-                    <a :href="guide.url" :style="{ '--hue': hues[index % hues.length] }"
-                       class="card panel group flex h-full flex-col overflow-hidden no-underline">
-                        <div class="relative aspect-[40/21] overflow-hidden border-b border-rule">
-                            <img v-if="guide.cover" :src="guide.cover.url" :width="guide.cover.width" :height="guide.cover.height" alt=""
-                                 loading="lazy" class="block size-full object-cover">
-                            <ArcadiaPhoto v-else />
-                            <span class="hue-wash absolute inset-0" aria-hidden="true"></span>
-                        </div>
-
-                        <div class="flex flex-1 flex-col p-5">
-                            <p class="m-0 flex flex-wrap gap-x-3 gap-y-1 font-mono text-[0.7rem] uppercase tracking-widest">
-                                <span v-if="guide.category && categoryName[guide.category]" class="hue-text">{{ categoryName[guide.category] }}</span>
-                                <span class="text-ink-3">{{ guide.level }}</span>
-                            </p>
-                            <h2 class="mt-2 mb-0 font-display text-xl font-semibold leading-snug text-ink text-balance">{{ guide.title }}</h2>
-                            <p v-if="guide.pitch" class="mt-2 mb-0 line-clamp-2 text-sm leading-relaxed text-ink-3">{{ guide.pitch }}</p>
-
-                            <ul v-if="guide.goals.length" class="m-0 mt-4 flex flex-col gap-1.5 p-0">
-                                <li v-for="goal in guide.goals.slice(0, 2)" :key="goal" class="flex list-none items-start gap-2 text-sm text-ink-2">
-                                    <Check :size="15" :stroke-width="2.5" class="hue-text mt-0.5 shrink-0" aria-hidden="true" />
-                                    <span class="line-clamp-1">{{ goal }}</span>
-                                </li>
-                            </ul>
-
-                            <span class="mt-auto inline-flex items-center gap-1.5 pt-5 text-sm font-semibold text-ink transition-colors group-hover:text-accent">
-                                {{ $t(`${base}.open`) }}
-                                <ArrowRight :size="16" aria-hidden="true" />
-                            </span>
-                        </div>
+        <!-- Sticky: one line that slides on a phone, past the gutter to the screen's edge; wrapped on a wide one. -->
+        <nav v-if="showSections" :aria-label="$t(`${base}.sections`)" class="bar sticky top-0 z-20">
+            <ul class="chips m-0 mx-auto flex max-w-6xl snap-x gap-2 overflow-x-auto px-4 py-2.5 sm:flex-wrap sm:overflow-visible sm:px-6">
+                <li v-for="section in sections" :key="section.id" class="shrink-0 snap-start list-none">
+                    <a :href="`#${section.anchor}`" :style="{ '--hue': section.hue }"
+                       class="chip text-sm no-underline transition-colors hover:text-ink" :class="current === section.anchor && 'chip-on'"
+                       :aria-current="current === section.anchor ? 'true' : undefined">
+                        <span class="dot" aria-hidden="true"></span>
+                        {{ section.name }}
+                        <span class="font-mono text-xs opacity-70">{{ section.guides.length }}</span>
                     </a>
                 </li>
             </ul>
+        </nav>
+
+        <main class="mx-auto max-w-6xl px-4 pt-4 pb-20 sm:px-6">
+            <div v-if="guides.length" class="flex flex-col gap-10">
+                <section v-for="section in sections" :id="section.anchor" :key="section.id"
+                         :style="{ '--hue': section.hue }" class="scroll-mt-16"
+                         :aria-labelledby="showSections ? `${section.anchor}-title` : undefined">
+                    <header v-if="showSections" class="mb-3 flex items-center gap-2.5">
+                        <span class="dot" aria-hidden="true"></span>
+                        <h2 :id="`${section.anchor}-title`" class="m-0 font-display text-base font-semibold text-ink sm:text-lg">{{ section.name }}</h2>
+                        <span class="hue-text font-mono text-xs">{{ section.guides.length }}</span>
+                        <span class="rule ml-1 h-px flex-1" aria-hidden="true"></span>
+                    </header>
+
+                    <ul class="m-0 grid grid-cols-2 gap-x-3 gap-y-5 p-0 sm:grid-cols-3 sm:gap-x-4 md:grid-cols-4 lg:grid-cols-5">
+                        <li v-for="guide in section.guides" :key="guide.url" class="list-none">
+                            <a :href="guide.url" :title="guide.title" class="tile group block no-underline">
+                                <div class="relative aspect-[3/2] overflow-hidden rounded-lg border border-rule">
+                                    <img v-if="guide.cover" :src="guide.cover.url" :width="guide.cover.width" :height="guide.cover.height" alt=""
+                                         loading="lazy" class="block size-full object-cover transition-transform duration-300 group-hover:scale-105">
+                                    <ArcadiaPhoto v-else />
+                                    <span class="hue-wash absolute inset-0" aria-hidden="true"></span>
+                                </div>
+                                <p class="m-0 mt-2 line-clamp-3 text-sm font-semibold leading-snug text-ink-2 transition-colors group-hover:text-ink">
+                                    {{ guide.title }}
+                                </p>
+                            </a>
+                        </li>
+                    </ul>
+                </section>
+            </div>
 
             <!-- Nothing listed yet: say so, and offer the request instead. -->
             <div v-else class="panel mx-auto flex max-w-xl flex-col items-center px-6 py-14 text-center">
@@ -256,6 +233,21 @@ const asking = ref(false)
 </template>
 
 <style scoped>
+/* The price, lit in the accent: the one figure on the page. */
+.price {
+    border: 1px solid color-mix(in oklab, var(--accent) 45%, transparent);
+    background-color: color-mix(in oklab, var(--accent) 12%, transparent);
+    box-shadow: 0 10px 30px -14px var(--accent);
+}
+
+/* The sticky chips sit on a frosted strip of the ground, so tiles pass under them unread. */
+.bar {
+    background-color: color-mix(in oklab, var(--ground-a) 78%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--rule);
+}
+
 /* The phone's slide of chips shows no scrollbar: the cut-off chip at the edge says there is more. */
 .chips {
     scrollbar-width: none;
@@ -265,33 +257,30 @@ const asking = ref(false)
 }
 
 .chip-on {
-    border-color: var(--accent);
-    background-color: color-mix(in oklab, var(--accent) 16%, transparent);
+    border-color: var(--hue);
+    background-color: color-mix(in oklab, var(--hue) 18%, transparent);
     color: var(--ink);
 }
 
-/* A pack's tiles lift their cover a little on hover; the pack itself only takes its hue's edge. */
-.pack {
-    transition: box-shadow 0.2s ease;
+.dot {
+    display: inline-block;
+    width: 0.5rem;
+    height: 0.5rem;
+    flex-shrink: 0;
+    border-radius: 9999px;
+    background-color: var(--hue);
 }
-.pack:hover {
-    box-shadow: 0 0 0 1px color-mix(in oklab, var(--hue) 45%, transparent);
+.rule {
+    background: linear-gradient(to right, color-mix(in oklab, var(--hue) 40%, transparent), transparent);
 }
+
 .tile:focus-visible {
     outline: 2px solid var(--hue);
     outline-offset: 3px;
     border-radius: 0.5rem;
 }
-
-/* A card in its hue: the label, the ticks, a faint wash over the cover and, on hover, the edge —
-   as the landing's topic tiles do. */
-.card {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.card:hover,
-.card:focus-visible {
-    transform: translateY(-2px);
-    box-shadow: 0 0 0 1px color-mix(in oklab, var(--hue) 60%, transparent), 0 18px 40px -18px var(--hue);
+.tile:hover .rounded-lg {
+    box-shadow: 0 12px 28px -16px var(--hue);
 }
 .hue-text {
     color: var(--hue);
@@ -306,8 +295,6 @@ const asking = ref(false)
     }
 }
 @media (prefers-reduced-motion: reduce) {
-    .card:hover,
-    .card:focus-visible,
     .tile img {
         transform: none !important;
     }

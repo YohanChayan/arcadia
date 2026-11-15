@@ -208,8 +208,10 @@ class MotivationPhraseTest extends TestCase
         $this->put("/es/editor/guides/{$this->guide->id}", [...$fields, 'phrase_ids' => [$phrase->id]])->assertSessionHasNoErrors();
         $this->assertSame([$phrase->id], $this->guide->phrases()->pluck('guide_phrases.id')->all());
 
-        $this->get('/es/editor/phrases')->assertInertia(fn ($page) => $page
-            ->component('editor/phrases/Index')
+        // Listed in the vocabulary screen's phrases tab, which the old address opens.
+        $this->get('/es/editor/phrases')->assertRedirect('/es/editor/vocabulary?tab=phrases');
+        $this->get('/es/editor/vocabulary')->assertInertia(fn ($page) => $page
+            ->component('editor/vocabulary/Index')
             ->has('phrases', 1)
             ->where('phrases.0.guides_count', 1));
 

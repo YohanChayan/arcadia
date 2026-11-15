@@ -35,14 +35,14 @@ const goToPage = requested => {
         :items-per-page="1"
         :sibling-count="1"
         show-edges
-        :aria-label="$t('admin.pagination.label')"
+        :aria-label="$t('common.pagination.label')"
         class="mt-2"
         @update:page="goToPage"
     >
         <PaginationContent v-slot="{ items }">
             <PaginationPrevious>
                 <ChevronLeft />
-                <span class="hidden sm:block">{{ $t('admin.pagination.previous') }}</span>
+                <span class="hidden sm:block">{{ $t('common.pagination.previous') }}</span>
             </PaginationPrevious>
 
             <template v-for="(item, index) in items" :key="index">
@@ -53,7 +53,7 @@ const goToPage = requested => {
             </template>
 
             <PaginationNext>
-                <span class="hidden sm:block">{{ $t('admin.pagination.next') }}</span>
+                <span class="hidden sm:block">{{ $t('common.pagination.next') }}</span>
                 <ChevronRight />
             </PaginationNext>
         </PaginationContent>

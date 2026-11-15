@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Editor;
 
 use App\Actions\Readers\AssignReader;
+use App\Actions\Readers\NameReader;
 use App\Actions\Readers\TellReaders;
 use App\Enums\Accent;
 use App\Enums\AccessRequestStatus;
@@ -126,14 +127,17 @@ class ReaderController
         return back()->with('success', __($this->addedFlash($reader, $tell->reader($reader)), ['email' => $email]));
     }
 
-    /** What the guide calls this reader; blank goes back to their account's first name. */
-    public function rename(Request $request, Guide $guide, Reader $reader): RedirectResponse
+    /**
+     * What this reader is called, on every guide of this language given to them (`NameReader`);
+     * blank goes back to their account's first name.
+     */
+    public function rename(Request $request, Guide $guide, Reader $reader, NameReader $names): RedirectResponse
     {
         $this->ownLocale($guide);
         abort_unless($reader->guide_id === $guide->id, 404);
 
         $name = $request->validate(['name' => ['nullable', 'string', 'max:80']])['name'] ?? null;
-        $reader->update(['name' => filled($name) ? trim($name) : null]);
+        $names->handle($reader, $name);
 
         return back()->with('success', __('arcadia.editor.readers.flash.renamed'));
     }

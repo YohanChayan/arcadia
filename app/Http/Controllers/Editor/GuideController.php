@@ -71,7 +71,7 @@ class GuideController
         return Inertia::render('editor/guides/Index', [
             'guides' => $guides,
             'levels' => $this->levelOptions(),
-            'statuses' => $this->statusOptions(),
+            'statuses' => GuideStatus::options(),
             'status' => $status?->value,
             'search' => $search,
             // Per status, whatever the filter, so each choice says how many it would show.
@@ -195,7 +195,7 @@ class GuideController
 
         return [
             'levels' => $this->levelOptions(),
-            'statuses' => $this->statusOptions(),
+            'statuses' => GuideStatus::options(),
             'categories' => $terms(Vocabulary::CATEGORIES),
             'topics' => $terms(Vocabulary::TOPICS),
             // To choose from, by moment — only those a guide chooses for (`PhraseMoment::perGuide()`).
@@ -209,15 +209,5 @@ class GuideController
     private function levelOptions(): array
     {
         return array_map(fn (Level $level) => ['value' => $level->value, 'label' => $level->label()], Level::cases());
-    }
-
-    /** @return list<array{value: string, label: string, tone: string}> */
-    private function statusOptions(): array
-    {
-        return array_map(fn (GuideStatus $status) => [
-            'value' => $status->value,
-            'label' => __("arcadia.editor.guides.statuses.{$status->value}"),
-            'tone' => $status === GuideStatus::PUBLISHED ? 'ok' : 'neutral',
-        ], GuideStatus::cases());
     }
 }

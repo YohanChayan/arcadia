@@ -42,7 +42,6 @@ class CatalogueController
             'guides' => $guides->map(fn (Guide $guide) => [
                 'url' => '/'.$site->guidePath().'/'.$guide->link_token,
                 'title' => $guide->title,
-                'level' => $guide->level->label(),
                 'category' => $guide->category_id,
                 'goals' => $guide->goals ?? [],
                 'pitch' => $guide->pitch,

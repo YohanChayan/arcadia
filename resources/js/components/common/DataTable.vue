@@ -63,7 +63,7 @@ const alignment = {
                     <td :colspan="columns.length" class="px-4 py-12">
                         <div class="flex items-center justify-center gap-3 text-sm text-ink-4">
                             <Spinner class="size-[18px]" />
-                            <span>{{ $t('admin.table.loading') }}</span>
+                            <span>{{ $t('common.table.loading') }}</span>
                         </div>
                     </td>
                 </tr>
@@ -73,7 +73,7 @@ const alignment = {
                         <Empty>
                             <EmptyHeader>
                                 <EmptyMedia variant="icon"><Inbox /></EmptyMedia>
-                                <EmptyTitle>{{ emptyTitle || $t('admin.table.empty') }}</EmptyTitle>
+                                <EmptyTitle>{{ emptyTitle || $t('common.table.empty') }}</EmptyTitle>
                                 <EmptyDescription v-if="emptyHint">{{ emptyHint }}</EmptyDescription>
                             </EmptyHeader>
                         </Empty>

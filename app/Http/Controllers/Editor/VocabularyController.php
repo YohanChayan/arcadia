@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Editor;
 
+use App\Enums\PhraseMoment;
 use App\Enums\Vocabulary;
 use App\Http\Requests\VocabularyTermRequest;
 use App\Models\Guide;
+use App\Models\Phrase;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -12,6 +14,9 @@ use Inertia\Response;
 /**
  * The owner's vocabularies for this site's language — categories and topics — on one screen.
  * One controller because they differ only in what `Vocabulary` answers.
+ *
+ * The motivation phrases share the screen as a third tab, the other list guides choose from, but
+ * are not a vocabulary: they are written and changed through `PhraseController`.
  */
 class VocabularyController
 {
@@ -35,6 +40,15 @@ class VocabularyController
                 ->where('locale', app()->getLocale())
                 ->orderBy('title')
                 ->get(['id', 'title', 'status', 'category_id']),
+            'phrases' => Phrase::query()->where('locale', app()->getLocale())->withCount('guides')->oldest('id')->get()
+                ->map(fn (Phrase $phrase) => [
+                    'id' => $phrase->id,
+                    'moment' => $phrase->moment->value,
+                    'text' => $phrase->text,
+                    'guides_count' => $phrase->guides_count,
+                ]),
+            'moments' => PhraseMoment::options(),
+            'maxLength' => Phrase::MAX_LENGTH,
         ]);
     }
 
