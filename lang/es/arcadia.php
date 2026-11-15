@@ -1422,6 +1422,18 @@ return [
                 'items' => ['excel' => 'Excel', 'english' => 'Inglés', 'design' => 'Canva', 'social' => 'Community manager'],
                 'other' => 'Otra cosa',
             ],
+            // Stickers over the photograph: requests in the first person, as someone would ask for a guide — it can be about anything.
+            'stickers' => [
+                'job' => 'Quiero conseguir mi primer trabajo',
+                'breakup' => 'Busco sanar después de una ruptura',
+                'guitar' => 'Quiero tocar guitarra desde cero',
+                'sleep' => 'Necesito dormir mejor y despertar con energía',
+                'invest' => 'Quiero empezar a invertir con poco dinero',
+                'career' => 'Quiero cambiar de carrera a los 30',
+                'decisions' => 'Ayúdame a tomar mejores decisiones',
+                'garden' => 'Quiero hacer mi primer huerto en casa',
+                'meditate' => 'Me gustaría aprender a meditar',
+            ],
             'points' => [
                 'free' => 'Videos gratis',
                 'stages' => 'Por etapas, con meta',

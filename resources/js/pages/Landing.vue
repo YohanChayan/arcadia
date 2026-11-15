@@ -118,6 +118,43 @@ const ask = (topic = '') => {
 // The hero's quick picks: a few of the topics below, by key, each opening the popup with it.
 const quick = ['excel', 'english', 'design', 'social']
 
+/**
+ * The stickers on the photograph, by key: what the walker is thinking — requests in the first
+ * person, rising from his head into the sky, nearer ones larger and clearer, farther ones smaller
+ * and fainter. `at` is the sticker's centre in the hero; `depth` is near, mid, far or farthest.
+ * A wide screen gets `stickers` (`wide` ones only from `xl`, where the margin opens up); a narrow
+ * one gets `phoneStickers`, smaller and fewer. Tune a sticker here, not in the template.
+ *
+ * @type {Array<{ key: string, at: Record<string, string>, tilt: number, tone: string, depth: 'near' | 'mid' | 'far' | 'farthest', wide?: boolean }>}
+ */
+const teal = '#2EE6B8'
+const cyan = '#2DD6F5'
+const sky = '#38A8F5'
+const blue = '#5B8DEF'
+const violet = '#7687F0'
+const stickers = [
+    // The trail from the walker's head, zigzagging up into the open sky between him and the title.
+    { key: 'job', at: { left: '52%', top: '30%' }, tilt: -3, tone: teal, depth: 'near' },
+    { key: 'career', at: { left: '50%', top: '20%' }, tilt: 4, tone: cyan, depth: 'mid' },
+    { key: 'meditate', at: { left: '56%', top: '11.5%' }, tilt: -2, tone: blue, depth: 'far' },
+    { key: 'guitar', at: { left: '43%', top: '10.5%' }, tilt: 3, tone: sky, depth: 'farthest' },
+    // Alone in the sky at the top right, tilted up towards the corner.
+    { key: 'garden', at: { left: '87%', top: '17%' }, tilt: -16, tone: blue, depth: 'mid' },
+    // Two stuck on the rocks, overlapping only at their ends so neither loses a word.
+    { key: 'sleep', at: { left: '15%', top: '88%' }, tilt: -4, tone: cyan, depth: 'near' },
+    { key: 'invest', at: { left: '31%', top: '92.5%' }, tilt: 6, tone: sky, depth: 'mid' },
+    // One alone past the walker, tilted hard.
+    { key: 'breakup', at: { left: '89.5%', top: '80%' }, tilt: 14, tone: violet, depth: 'near' },
+]
+/** @type {typeof stickers} The same thought trail on a phone: beside the title, over the walker's head. */
+const phoneStickers = [
+    { key: 'meditate', at: { left: '77.5%', top: '11rem' }, tilt: -4, tone: blue, depth: 'near' },
+    { key: 'job', at: { left: '75%', top: '7.5rem' }, tilt: 5, tone: teal, depth: 'mid' },
+    { key: 'decisions', at: { left: '66%', top: '4.75rem' }, tilt: -3, tone: sky, depth: 'far' },
+    { key: 'invest', at: { left: '32%', bottom: '4.75rem' }, tilt: -3, tone: sky, depth: 'near' },
+    { key: 'breakup', at: { left: '72%', bottom: '2rem' }, tilt: 9, tone: violet, depth: 'mid' },
+]
+
 // Whether the hero's action has scrolled up out of view — the phone's bottom bar shows then.
 const heroAction = ref(null)
 const pastAction = ref(false)
@@ -148,6 +185,25 @@ const ideas = computed(() => topics.map(topic => trans(`${base}.topics.items.${t
                 <div class="hero-scrim absolute inset-0"></div>
             </div>
 
+            <!-- What the walker is thinking, stuck on the photograph. Decorative: under the text and
+                 the buttons (negative z, above the photo), never in the way of a click. -->
+            <ul aria-hidden="true" class="pointer-events-none absolute inset-0 -z-[5] m-0 hidden p-0 lg:block">
+                <li v-for="sticker in stickers" :key="sticker.key"
+                    class="sticker absolute list-none"
+                    :class="[`depth-${sticker.depth}`, { 'hidden xl:block': sticker.wide }]"
+                    :style="{ ...sticker.at, '--tilt': `${sticker.tilt}deg`, '--tone': sticker.tone }">
+                    {{ $t(`${base}.hero.stickers.${sticker.key}`) }}
+                </li>
+            </ul>
+            <ul aria-hidden="true" class="pointer-events-none absolute inset-0 -z-[5] m-0 p-0 lg:hidden">
+                <li v-for="sticker in phoneStickers" :key="sticker.key"
+                    class="sticker sticker-small absolute list-none"
+                    :class="`depth-${sticker.depth}`"
+                    :style="{ ...sticker.at, '--tilt': `${sticker.tilt}deg`, '--tone': sticker.tone }">
+                    {{ $t(`${base}.hero.stickers.${sticker.key}`) }}
+                </li>
+            </ul>
+
             <nav class="relative mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-5 sm:px-6">
                 <ArcadiaMark class="text-2xl [--mark-height:1.1em] sm:text-3xl" />
 
@@ -173,7 +229,7 @@ const ideas = computed(() => topics.map(topic => trans(`${base}.topics.items.${t
                  screen — over the photograph, centred in the hero's height. On a phone the group sits
                  in the flow, under the promise. One element either way, so the bottom bar's watcher
                  (`heroAction`) sees the same buttons at every width. -->
-            <div class="enter mx-auto grid max-w-6xl gap-x-10 px-4 pt-14 pb-28 sm:px-6 lg:grid-cols-[minmax(0,42rem)_1fr] lg:pt-24 lg:pb-40">
+            <div class="enter mx-auto grid max-w-6xl gap-x-10 px-4 pt-14 pb-32 sm:px-6 lg:grid-cols-[minmax(0,42rem)_1fr] lg:pt-24 lg:pb-40">
                 <div class="lg:col-start-1">
                     <h1 class="m-0 font-display text-[clamp(2.5rem,9vw,4.75rem)] font-bold leading-[1.05] tracking-tight text-ink text-balance">
                         {{ $t(`${base}.hero.title`) }}
@@ -209,7 +265,8 @@ const ideas = computed(() => topics.map(topic => trans(`${base}.topics.items.${t
                 </div>
 
                 <!-- One tap from an idea to the request, its topic already written. -->
-                <div class="mt-9 lg:col-start-1 lg:mt-10">
+                <!-- Not on a phone: the topics further down open the same popup, and the stickers need the room. -->
+                <div class="mt-9 hidden lg:col-start-1 lg:mt-10 lg:block">
                     <p class="m-0 text-xs font-medium uppercase tracking-widest text-ink-3">{{ $t(`${base}.hero.quick.title`) }}</p>
                     <ul class="mt-3 flex flex-wrap gap-2 p-0">
                         <li v-for="key in quick" :key="key" class="list-none">
@@ -451,6 +508,51 @@ const ideas = computed(() => topics.map(topic => trans(`${base}.topics.items.${t
     text-shadow: 0 1px 2px var(--ground-a), 0 0 14px var(--ground-a);
 }
 
+/* A sticker on the photograph: a pill like the tinted button, in its own tone, kept in the
+   background — faint fill, thin edge, softened text. Placed by its centre; its depth sets its
+   size and how far it fades, so the thoughts recede as they rise. */
+.sticker {
+    --scale: 1;
+    --fade: 0.9;
+    padding: 0.4em 1em;
+    border-radius: 9999px;
+    white-space: nowrap;
+    font-size: calc(0.75rem * var(--scale));
+    font-weight: 500;
+    color: color-mix(in oklab, #fff 80%, transparent);
+    background-color: color-mix(in oklab, var(--tone) 18%, color-mix(in oklab, var(--ground-a) 30%, transparent));
+    box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--tone) 38%, transparent);
+    backdrop-filter: blur(6px);
+    opacity: var(--fade);
+    translate: -50% -50%;
+    transform: rotate(var(--tilt));
+}
+.depth-mid {
+    --scale: 0.9;
+    --fade: 0.75;
+}
+.depth-far {
+    --scale: 0.8;
+    --fade: 0.58;
+    filter: blur(0.3px);
+}
+.depth-farthest {
+    --scale: 0.7;
+    --fade: 0.45;
+    filter: blur(0.5px);
+}
+/* On a phone: smaller still, and quieter, so the text in front keeps the eye. */
+.sticker-small {
+    padding: 0.35em 0.85em;
+    font-size: calc(0.5625rem * var(--scale));
+    opacity: calc(var(--fade) * 0.85);
+}
+@media (min-width: 640px) {
+    .sticker-small {
+        font-size: calc(0.6875rem * var(--scale));
+    }
+}
+
 /* The closing band: a deep ground, the lights at its ends. */
 .band {
     background-color: color-mix(in oklab, var(--ground-b) 70%, transparent);
@@ -498,6 +600,13 @@ const ideas = computed(() => topics.map(topic => trans(`${base}.topics.items.${t
     .enter-late {
         animation-delay: 0.15s;
     }
+    .sticker {
+        animation: drift 7s ease-in-out infinite alternate;
+    }
+    .sticker:nth-child(even) {
+        animation-duration: 9s;
+        animation-delay: -3s;
+    }
 
     @supports (animation-timeline: view()) {
         .reveal {
@@ -505,6 +614,12 @@ const ideas = computed(() => topics.map(topic => trans(`${base}.topics.items.${t
             animation-timeline: view();
             animation-range: entry 0% entry 35%;
         }
+    }
+}
+
+@keyframes drift {
+    to {
+        transform: rotate(var(--tilt)) translateY(-3px);
     }
 }
 
