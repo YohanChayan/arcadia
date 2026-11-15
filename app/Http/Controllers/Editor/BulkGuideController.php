@@ -84,9 +84,9 @@ class BulkGuideController
         $skipped = $outcomes->get(GuidePublishing::NO_CONTENT->value, 0);
 
         return collect([
-            trans_choice('arcadia.editor.guides.bulk.flash.published', $published, ['count' => $published]),
-            $released ? trans_choice('arcadia.editor.guides.bulk.flash.released', $released, ['count' => $released]) : null,
-            $skipped ? trans_choice('arcadia.editor.guides.bulk.flash.skipped', $skipped, ['count' => $skipped]) : null,
+            trans_choice('editor.guides.bulk.flash.published', $published, ['count' => $published]),
+            $released ? trans_choice('editor.guides.bulk.flash.released', $released, ['count' => $released]) : null,
+            $skipped ? trans_choice('editor.guides.bulk.flash.skipped', $skipped, ['count' => $skipped]) : null,
         ])->filter()->implode(' ');
     }
 
@@ -96,7 +96,7 @@ class BulkGuideController
         $published = $guides->where('status', GuideStatus::PUBLISHED);
         $published->each(fn (Guide $guide) => $guide->update(['status' => GuideStatus::DRAFT]));
 
-        return trans_choice('arcadia.editor.guides.bulk.flash.drafted', $published->count(), ['count' => $published->count()]);
+        return trans_choice('editor.guides.bulk.flash.drafted', $published->count(), ['count' => $published->count()]);
     }
 
     /** @param  Collection<int, Guide>  $guides */
@@ -107,8 +107,8 @@ class BulkGuideController
         $waiting = $outcomes->get(GuideListing::AWAITS_PUBLISHING->value, 0);
 
         return collect([
-            trans_choice('arcadia.editor.guides.bulk.flash.listed', $listed, ['count' => $listed]),
-            $waiting ? trans_choice('arcadia.editor.guides.bulk.flash.awaiting', $waiting, ['count' => $waiting]) : null,
+            trans_choice('editor.guides.bulk.flash.listed', $listed, ['count' => $listed]),
+            $waiting ? trans_choice('editor.guides.bulk.flash.awaiting', $waiting, ['count' => $waiting]) : null,
         ])->filter()->implode(' ');
     }
 
@@ -123,7 +123,7 @@ class BulkGuideController
         // One by one, so each is reindexed (`KnowledgeServiceProvider`).
         $listed->each(fn (Guide $guide) => $guide->update(['in_catalogue' => false]));
 
-        return trans_choice('arcadia.editor.guides.bulk.flash.unlisted', $listed->count(), ['count' => $listed->count()]);
+        return trans_choice('editor.guides.bulk.flash.unlisted', $listed->count(), ['count' => $listed->count()]);
     }
 
     /** @param  Collection<int, Guide>  $guides */
@@ -132,6 +132,6 @@ class BulkGuideController
         // One by one, so each takes its images' files with it (`Guide::booted`).
         $guides->each->delete();
 
-        return trans_choice('arcadia.editor.guides.bulk.flash.deleted', $guides->count(), ['count' => $guides->count()]);
+        return trans_choice('editor.guides.bulk.flash.deleted', $guides->count(), ['count' => $guides->count()]);
     }
 }

@@ -20,7 +20,7 @@ enum Palette: string
 
     public function label(): string
     {
-        return __("arcadia.appearance.palettes.{$this->value}");
+        return __("appearance.palettes.{$this->value}");
     }
 
     /**

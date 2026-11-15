@@ -40,12 +40,12 @@ const parts = computed(() => {
     <div class="mt-0 mb-8 rounded-2xl bg-guide-well p-5 sm:p-6">
         <!-- Opened by name when the greeting does not place it itself. -->
         <p v-if="name && !asksForName" class="m-0 mb-2 font-display text-2xl font-bold text-guide-ink sm:text-3xl">
-            {{ $t('arcadia.reader.hello_before') }}<span class="name">{{ name }}</span>{{ $t('arcadia.reader.hello_after') }}
+            {{ $t('reader.hello_before') }}<span class="name">{{ name }}</span>{{ $t('reader.hello_after') }}
         </p>
         <p v-if="greeting" class="m-0 text-lg leading-relaxed whitespace-pre-line text-guide-ink">
             <template v-for="(part, index) in parts" :key="index">
                 <span v-if="part.name && name" class="name">{{ name }}</span>
-                <span v-else-if="part.name" class="rounded border border-dashed border-guide-accent px-1.5 text-base text-guide-accent">{{ $t('arcadia.reader.name_slot') }}</span>
+                <span v-else-if="part.name" class="rounded border border-dashed border-guide-accent px-1.5 text-base text-guide-accent">{{ $t('reader.name_slot') }}</span>
                 <template v-else>{{ part.text }}</template>
             </template>
         </p>

@@ -99,7 +99,7 @@ const moving = computed(() =>
 );
 
 const moveBody = computed(() =>
-    trans('arcadia.editor.vocabulary.categorizer.move.body', {
+    trans('editor.vocabulary.categorizer.move.body', {
         guides: moving.value
             .map(
                 (guide) =>
@@ -161,14 +161,14 @@ const remove = (guide) => {
             <DialogHeader>
                 <DialogTitle>{{ category?.name }}</DialogTitle>
                 <DialogDescription>{{
-                    $t('arcadia.editor.vocabulary.categorizer.description')
+                    $t('editor.vocabulary.categorizer.description')
                 }}</DialogDescription>
             </DialogHeader>
 
             <div class="grid min-w-0 gap-6 md:grid-cols-2">
                 <section class="min-w-0">
                     <Eyebrow as="h3" class="mb-2">
-                        {{ $t('arcadia.editor.vocabulary.categorizer.inside') }}
+                        {{ $t('editor.vocabulary.categorizer.inside') }}
                         · {{ inside.length }}
                     </Eyebrow>
                     <ul
@@ -188,7 +188,7 @@ const remove = (guide) => {
                                 class="shrink-0 py-0 text-[10px]"
                                 >{{
                                     $t(
-                                        `arcadia.editor.vocabulary.categorizer.statuses.${guide.status}`,
+                                        `editor.vocabulary.categorizer.statuses.${guide.status}`,
                                     )
                                 }}</Badge
                             >
@@ -200,7 +200,7 @@ const remove = (guide) => {
                                 @click="remove(guide)"
                                 :aria-label="
                                     $t(
-                                        'arcadia.editor.vocabulary.categorizer.remove',
+                                        'editor.vocabulary.categorizer.remove',
                                     )
                                 "
                             >
@@ -214,7 +214,7 @@ const remove = (guide) => {
                     >
                         {{
                             $t(
-                                'arcadia.editor.vocabulary.categorizer.inside_empty',
+                                'editor.vocabulary.categorizer.inside_empty',
                             )
                         }}
                     </p>
@@ -226,7 +226,7 @@ const remove = (guide) => {
                         for="categorizer-search"
                         class="mb-2 block"
                         >{{
-                            $t('arcadia.editor.vocabulary.categorizer.search')
+                            $t('editor.vocabulary.categorizer.search')
                         }}</Eyebrow
                     >
                     <div class="relative mb-2">
@@ -243,7 +243,7 @@ const remove = (guide) => {
                             class="pl-9"
                             :placeholder="
                                 $t(
-                                    'arcadia.editor.vocabulary.categorizer.search_placeholder',
+                                    'editor.vocabulary.categorizer.search_placeholder',
                                 )
                             "
                         />
@@ -284,7 +284,7 @@ const remove = (guide) => {
                                             class="py-0 text-[10px]"
                                             >{{
                                                 $t(
-                                                    'arcadia.editor.vocabulary.categorizer.uncategorised',
+                                                    'editor.vocabulary.categorizer.uncategorised',
                                                 )
                                             }}</Badge
                                         >
@@ -293,7 +293,7 @@ const remove = (guide) => {
                                             class="py-0 text-[10px]"
                                             >{{
                                                 $t(
-                                                    `arcadia.editor.vocabulary.categorizer.statuses.${guide.status}`,
+                                                    `editor.vocabulary.categorizer.statuses.${guide.status}`,
                                                 )
                                             }}</Badge
                                         >
@@ -308,7 +308,7 @@ const remove = (guide) => {
                     >
                         {{
                             $t(
-                                'arcadia.editor.vocabulary.categorizer.results_empty',
+                                'editor.vocabulary.categorizer.results_empty',
                             )
                         }}
                     </p>
@@ -323,7 +323,7 @@ const remove = (guide) => {
                 <div class="flex items-center gap-2 text-sm text-ink-3">
                     {{
                         transChoice(
-                            'arcadia.editor.vocabulary.categorizer.selected',
+                            'editor.vocabulary.categorizer.selected',
                             selected.length,
                             { count: selected.length },
                         )
@@ -335,7 +335,7 @@ const remove = (guide) => {
                         size="sm"
                         @click="selected = []"
                     >
-                        {{ $t('arcadia.editor.vocabulary.categorizer.clear') }}
+                        {{ $t('editor.vocabulary.categorizer.clear') }}
                     </Button>
                 </div>
                 <div class="flex gap-2">
@@ -343,7 +343,7 @@ const remove = (guide) => {
                         type="button"
                         variant="outline"
                         @click="emit('close')"
-                        >{{ $t('arcadia.editor.cancel') }}</Button
+                        >{{ $t('editor.common.cancel') }}</Button
                     >
                     <Button
                         type="button"
@@ -351,7 +351,7 @@ const remove = (guide) => {
                         :disabled="processing || !selected.length"
                         @click="file()"
                     >
-                        {{ $t('arcadia.editor.vocabulary.categorizer.add') }}
+                        {{ $t('editor.vocabulary.categorizer.add') }}
                     </Button>
                 </div>
             </DialogFooter>
@@ -360,10 +360,10 @@ const remove = (guide) => {
 
     <ConfirmDialog
         :open="confirmingMove"
-        :title="$t('arcadia.editor.vocabulary.categorizer.move.title')"
+        :title="$t('editor.vocabulary.categorizer.move.title')"
         :body="moveBody"
         :confirm-label="
-            $t('arcadia.editor.vocabulary.categorizer.move.confirm')
+            $t('editor.vocabulary.categorizer.move.confirm')
         "
         :processing="processing"
         @confirm="file(true)"

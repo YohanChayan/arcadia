@@ -59,14 +59,14 @@ class VocabularyController
             ...$request->safe()->only(['name']),
         ]);
 
-        return back()->with('success', __('arcadia.editor.vocabulary.flash.saved'));
+        return back()->with('success', __('editor.vocabulary.flash.saved'));
     }
 
     public function update(VocabularyTermRequest $request, string $vocabulary, int $term): RedirectResponse
     {
         $this->find($vocabulary, $term)->update($request->safe()->only(['name']));
 
-        return back()->with('success', __('arcadia.editor.vocabulary.flash.saved'));
+        return back()->with('success', __('editor.vocabulary.flash.saved'));
     }
 
     /**
@@ -77,7 +77,7 @@ class VocabularyController
     {
         $this->find($vocabulary, $term)->delete();
 
-        return back()->with('success', __('arcadia.editor.vocabulary.flash.deleted'));
+        return back()->with('success', __('editor.vocabulary.flash.deleted'));
     }
 
     private function find(string $vocabulary, int $term)

@@ -16,15 +16,15 @@ const user = computed(() => page.props.user!);
 </script>
 
 <template>
-    <Head :title="$t('arcadia.account.profile.title')" />
+    <Head :title="$t('account.profile.title')" />
 
-    <h1 class="sr-only">{{ $t('arcadia.account.profile.title') }}</h1>
+    <h1 class="sr-only">{{ $t('account.profile.title') }}</h1>
 
     <div class="flex flex-col space-y-6">
         <Heading
             variant="small"
-            :title="$t('arcadia.account.profile.title')"
-            :description="$t('arcadia.account.profile.lead')"
+            :title="$t('account.profile.title')"
+            :description="$t('account.profile.lead')"
         />
 
         <Form
@@ -33,7 +33,7 @@ const user = computed(() => page.props.user!);
             v-slot="{ errors, processing }"
         >
             <div class="grid gap-2">
-                <Label for="name">{{ $t('arcadia.account.profile.name') }}</Label>
+                <Label for="name">{{ $t('account.profile.name') }}</Label>
                 <Input
                     id="name"
                     class="mt-1 block w-full"
@@ -41,13 +41,13 @@ const user = computed(() => page.props.user!);
                     :default-value="user.name"
                     required
                     autocomplete="name"
-                    :placeholder="$t('arcadia.account.profile.name_placeholder')"
+                    :placeholder="$t('account.profile.name_placeholder')"
                 />
                 <InputError class="mt-2" :message="errors.name" />
             </div>
 
             <div class="grid gap-2">
-                <Label for="email">{{ $t('arcadia.account.profile.email') }}</Label>
+                <Label for="email">{{ $t('account.profile.email') }}</Label>
                 <Input
                     id="email"
                     type="email"
@@ -56,20 +56,20 @@ const user = computed(() => page.props.user!);
                     :default-value="user.email"
                     required
                     autocomplete="username"
-                    :placeholder="$t('arcadia.account.profile.email_placeholder')"
+                    :placeholder="$t('account.profile.email_placeholder')"
                 />
                 <InputError class="mt-2" :message="errors.email" />
             </div>
 
             <div v-if="page.props.mustVerifyEmail && !user.email_verified_at">
                 <p class="-mt-4 text-sm text-muted-foreground">
-                    {{ $t('arcadia.account.profile.unverified') }}
+                    {{ $t('account.profile.unverified') }}
                     <Link
                         :href="send()"
                         as="button"
                         class="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
                     >
-                        {{ $t('arcadia.account.profile.resend') }}
+                        {{ $t('account.profile.resend') }}
                     </Link>
                 </p>
 
@@ -77,14 +77,14 @@ const user = computed(() => page.props.user!);
                     v-if="page.props.status === 'verification-link-sent'"
                     class="mt-2 text-sm font-medium text-green-600"
                 >
-                    {{ $t('arcadia.account.profile.resent') }}
+                    {{ $t('account.profile.resent') }}
                 </div>
             </div>
 
             <div class="flex items-center gap-4">
-                <Button :disabled="processing" data-test="update-profile-button">{{ $t('arcadia.account.save') }}</Button>
+                <Button :disabled="processing" data-test="update-profile-button">{{ $t('account.save') }}</Button>
                 <p v-if="page.props.status === 'profile-updated'" class="text-sm text-muted-foreground" role="status">
-                    {{ $t('arcadia.account.profile.saved') }}
+                    {{ $t('account.profile.saved') }}
                 </p>
             </div>
         </Form>

@@ -16,12 +16,12 @@ use App\Models\Note;
 use App\Models\Reader;
 use App\Models\Version;
 use App\Services\Appearance;
-use App\Services\ArcadiaSite;
 use App\Services\GuidePresentation;
 use App\Services\GuidePresenter;
 use App\Services\GuideProgressSummary;
 use App\Services\GuideVisits;
 use App\Services\MotivationPicker;
+use App\Services\Site\Site;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -55,7 +55,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class GuidePageController
 {
-    public function __invoke(Request $request, string $token, ArcadiaSite $site, GuidePresenter $presenter, GuidePresentation $presentation, GuideVisits $visits, RecogniseDevice $devices, GuideProgressSummary $summary, MotivationPicker $motivation): Response|RedirectResponse
+    public function __invoke(Request $request, string $token, Site $site, GuidePresenter $presenter, GuidePresentation $presentation, GuideVisits $visits, RecogniseDevice $devices, GuideProgressSummary $summary, MotivationPicker $motivation): Response|RedirectResponse
     {
         $guide = Guide::query()
             ->where('link_token', $token)
@@ -192,7 +192,7 @@ class GuidePageController
      * What the guide is about, and what this visitor can do about it — never what is in it. A 200,
      * so a link's preview is fetched from it.
      */
-    private function presentation(Request $request, ArcadiaSite $site, Guide $guide, GuidePresentation $presentation, GuideVisits $visits, string $state): Response
+    private function presentation(Request $request, Site $site, Guide $guide, GuidePresentation $presentation, GuideVisits $visits, string $state): Response
     {
         $user = $request->user();
 

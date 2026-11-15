@@ -38,19 +38,19 @@ const active = ref(tabs.value.some(tab => tab.key === requested) ? requested : '
 </script>
 
 <template>
-    <EditorTitle :parts="[$t('arcadia.editor.vocabulary.title')]" />
+    <EditorTitle :parts="[$t('editor.vocabulary.title')]" />
 
     <div class="py-6">
-        <EditorBreadcrumb :trail="[{ label: $t('arcadia.editor.vocabulary.title') }]" />
+        <EditorBreadcrumb :trail="[{ label: $t('editor.vocabulary.title') }]" />
 
-        <PageHeader :title="$t('arcadia.editor.vocabulary.title')" :description="$t('arcadia.editor.vocabulary.description')" />
+        <PageHeader :title="$t('editor.vocabulary.title')" :description="$t('editor.vocabulary.description')" />
 
         <Tabs v-model="active" :unmount-on-hide="false" class="gap-0">
             <TabsList class="mb-5 h-auto max-w-full flex-wrap justify-start gap-1 rounded-lg bg-well p-1">
                 <TabsTrigger v-for="tab in tabs" :key="tab.key" :value="tab.key"
                              class="h-auto flex-none gap-2 rounded-md border-0 px-3.5 py-1.5 text-ink-3 hover:text-ink data-[state=active]:bg-raised-solid data-[state=active]:text-ink data-[state=active]:shadow-[var(--shadow-sm)] dark:data-[state=active]:bg-raised-solid dark:data-[state=active]:text-ink">
                     <component :is="tab.icon" :size="16" aria-hidden="true" />
-                    {{ $t(`arcadia.editor.vocabulary.tabs.${tab.key}`) }}
+                    {{ $t(`editor.vocabulary.tabs.${tab.key}`) }}
                     <Badge variant="neutral" class="px-1.5 py-0 font-mono text-[10px]">{{ tab.count }}</Badge>
                 </TabsTrigger>
             </TabsList>

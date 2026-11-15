@@ -28,7 +28,7 @@ class AppearanceController
 
         $guide->forceFill(['default_palette' => $palette, 'default_accent' => $accent])->save();
 
-        return back()->with('success', __('arcadia.editor.appearance.flash.default'));
+        return back()->with('success', __('editor.appearance.flash.default'));
     }
 
     public function reader(Request $request, Guide $guide, Reader $reader): RedirectResponse
@@ -38,12 +38,12 @@ class AppearanceController
         [$palette, $accent] = $this->validated($request);
 
         if ($reader->appearance_by === Reader::BY_READER && ! $request->boolean('overwrite')) {
-            throw ValidationException::withMessages(['overwrite' => __('arcadia.editor.appearance.errors.overwrite')]);
+            throw ValidationException::withMessages(['overwrite' => __('editor.appearance.errors.overwrite')]);
         }
 
         $reader->paint($palette, $accent, Reader::BY_ADMIN);
 
-        return back()->with('success', __('arcadia.editor.appearance.flash.reader', ['email' => $reader->email]));
+        return back()->with('success', __('editor.appearance.flash.reader', ['email' => $reader->email]));
     }
 
     /** @return array{Palette, Accent} */

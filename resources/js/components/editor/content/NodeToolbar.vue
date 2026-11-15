@@ -20,16 +20,16 @@ const content = inject('content')
 
 <template>
     <div v-if="content.editable" class="flex shrink-0 gap-0.5">
-        <Button type="button" variant="ghost" size="icon-sm" :disabled="first" @click="content.move(node, row, 'up')" :aria-label="$t('arcadia.editor.content.actions.up')">
+        <Button type="button" variant="ghost" size="icon-sm" :disabled="first" @click="content.move(node, row, 'up')" :aria-label="$t('editor.content.actions.up')">
             <ArrowUp :size="14" aria-hidden="true" />
         </Button>
-        <Button type="button" variant="ghost" size="icon-sm" :disabled="last" @click="content.move(node, row, 'down')" :aria-label="$t('arcadia.editor.content.actions.down')">
+        <Button type="button" variant="ghost" size="icon-sm" :disabled="last" @click="content.move(node, row, 'down')" :aria-label="$t('editor.content.actions.down')">
             <ArrowDown :size="14" aria-hidden="true" />
         </Button>
-        <Button type="button" variant="ghost" size="icon-sm" @click="$emit('edit')" :aria-label="$t('arcadia.editor.content.actions.edit')">
+        <Button type="button" variant="ghost" size="icon-sm" @click="$emit('edit')" :aria-label="$t('editor.content.actions.edit')">
             <Pencil :size="14" aria-hidden="true" />
         </Button>
-        <Button type="button" variant="ghost-danger" size="icon-sm" @click="content.requestDelete(node, row)" :aria-label="$t('arcadia.editor.content.actions.delete')">
+        <Button type="button" variant="ghost-danger" size="icon-sm" @click="content.requestDelete(node, row)" :aria-label="$t('editor.content.actions.delete')">
             <Trash2 :size="14" aria-hidden="true" />
         </Button>
     </div>

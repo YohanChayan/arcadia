@@ -113,43 +113,43 @@ const onOpenChange = isOpen => { if (!isOpen && !applying.value) emit('close') }
         <AlertDialogContent class="max-w-lg">
             <template v-if="request">
                 <AlertDialogTitle class="font-display text-lg font-semibold text-ink">
-                    <template v-if="answer">{{ $tChoice(`arcadia.editor.guides.bulk.titles.${action}`, answer.total, { count: answer.total }) }}</template>
-                    <template v-else>{{ $t('arcadia.editor.guides.bulk.checking') }}</template>
+                    <template v-if="answer">{{ $tChoice(`editor.guides.bulk.titles.${action}`, answer.total, { count: answer.total }) }}</template>
+                    <template v-else>{{ $t('editor.guides.bulk.checking') }}</template>
                 </AlertDialogTitle>
 
                 <AlertDialogDescription v-if="!answer" class="flex items-center gap-2 text-sm text-ink-3">
-                    <Spinner /> {{ $t('arcadia.editor.guides.bulk.checking') }}
+                    <Spinner /> {{ $t('editor.guides.bulk.checking') }}
                 </AlertDialogDescription>
 
                 <AlertDialogDescription v-else-if="!grouped" class="text-sm text-ink-3">
-                    {{ $t(`arcadia.editor.guides.bulk.bodies.${action}`) }}
+                    {{ $t(`editor.guides.bulk.bodies.${action}`) }}
                 </AlertDialogDescription>
 
                 <template v-else>
-                    <AlertDialogDescription class="sr-only">{{ $tChoice(`arcadia.editor.guides.bulk.titles.${action}`, answer.total, { count: answer.total }) }}</AlertDialogDescription>
+                    <AlertDialogDescription class="sr-only">{{ $tChoice(`editor.guides.bulk.titles.${action}`, answer.total, { count: answer.total }) }}</AlertDialogDescription>
                     <ul class="m-0 flex max-h-[50vh] list-none flex-col gap-2 overflow-y-auto p-0">
                         <li v-for="group in groups" :key="group.key" class="rounded-lg border p-3 text-sm" :class="group.tone">
                             <p class="m-0 flex items-start gap-2">
                                 <component :is="group.icon" v-if="group.icon" :size="16" class="mt-0.5 shrink-0" :class="group.iconTone" aria-hidden="true" />
                                 <span>
                                     <span class="font-mono font-semibold tabular-nums">{{ group.count }}</span>
-                                    · {{ $t(`arcadia.editor.guides.bulk.${grouped.labels}.${group.key}`) }}
+                                    · {{ $t(`editor.guides.bulk.${grouped.labels}.${group.key}`) }}
                                 </span>
                             </p>
                             <ul class="m-0 mt-1.5 list-none p-0 pl-6 text-xs text-ink-3">
                                 <li v-for="title in group.titles" :key="title" class="truncate">{{ title }}</li>
-                                <li v-if="group.count > group.titles.length">{{ $t('arcadia.editor.guides.bulk.more', { count: group.count - group.titles.length }) }}</li>
+                                <li v-if="group.count > group.titles.length">{{ $t('editor.guides.bulk.more', { count: group.count - group.titles.length }) }}</li>
                             </ul>
                         </li>
                     </ul>
-                    <p v-if="!actionable" class="m-0 text-sm text-danger">{{ $t(`arcadia.editor.guides.bulk.${grouped.nothing}`) }}</p>
+                    <p v-if="!actionable" class="m-0 text-sm text-danger">{{ $t(`editor.guides.bulk.${grouped.nothing}`) }}</p>
                 </template>
 
                 <AlertDialogFooter class="mt-2">
                     <AlertDialogCancel :disabled="applying">{{ $t('common.confirm.cancel') }}</AlertDialogCancel>
                     <Button :variant="CONFIRM_VARIANT[action]" :disabled="!canConfirm" @click="confirm">
                         <Spinner v-if="applying" />
-                        {{ $t(`arcadia.editor.guides.bulk.confirm.${action}`) }}
+                        {{ $t(`editor.guides.bulk.confirm.${action}`) }}
                     </Button>
                 </AlertDialogFooter>
             </template>

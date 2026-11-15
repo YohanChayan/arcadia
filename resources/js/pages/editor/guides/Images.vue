@@ -133,40 +133,40 @@ const formatSize = bytes => bytes >= 1024 * 1024
 </script>
 
 <template>
-    <EditorTitle :parts="[guide.title, $t('arcadia.editor.images.title')]" />
+    <EditorTitle :parts="[guide.title, $t('editor.images.title')]" />
 
     <div class="py-6">
-        <EditorBreadcrumb :trail="[{ label: $t('arcadia.editor.guides.title'), route: 'guides.index' }, { label: guide.title, route: 'content.show', params: { guide: guide.id } }, { label: $t('arcadia.editor.images.title') }]" />
+        <EditorBreadcrumb :trail="[{ label: $t('editor.guides.title'), route: 'guides.index' }, { label: guide.title, route: 'content.show', params: { guide: guide.id } }, { label: $t('editor.images.title') }]" />
 
-        <PageHeader :title="$t('arcadia.editor.images.title')" :description="guide.title">
+        <PageHeader :title="$t('editor.images.title')" :description="guide.title">
             <template #actions>
                 <Button type="button" variant="outline" @click="prompting = true">
                     <Sparkles :size="16" aria-hidden="true" />
-                    {{ $t('arcadia.editor.images.prompt.title') }}
+                    {{ $t('editor.images.prompt.title') }}
                 </Button>
                 <Button type="button" variant="outline" @click="flyering = true">
                     <Megaphone :size="16" aria-hidden="true" />
-                    {{ $t('arcadia.editor.images.flyer.open') }}
+                    {{ $t('editor.images.flyer.open') }}
                 </Button>
                 <a :href="editorRoute('presentation.preview', { guide: guide.id })" target="_blank" rel="noopener"
                    :class="buttonVariants({ variant: 'outline' })" class="no-underline">
                     <Eye :size="16" aria-hidden="true" />
-                    {{ $t('arcadia.editor.images.preview') }}
+                    {{ $t('editor.images.preview') }}
                 </a>
             </template>
         </PageHeader>
 
-        <p class="mt-0 mb-6 max-w-2xl text-sm text-ink-3">{{ $t('arcadia.editor.images.lead') }}</p>
+        <p class="mt-0 mb-6 max-w-2xl text-sm text-ink-3">{{ $t('editor.images.lead') }}</p>
 
         <form class="panel mb-6 p-6" @submit.prevent="savePitch">
             <Field :data-invalid="pitchForm.errors.pitch ? true : undefined">
-                <FieldLabel for="pitch"><Eyebrow as="span">{{ $t('arcadia.editor.images.pitch.label') }}</Eyebrow></FieldLabel>
+                <FieldLabel for="pitch"><Eyebrow as="span">{{ $t('editor.images.pitch.label') }}</Eyebrow></FieldLabel>
                 <Textarea id="pitch" v-model="pitchForm.pitch" rows="4" :maxlength="pitchMax" />
                 <FieldError v-if="pitchForm.errors.pitch">{{ pitchForm.errors.pitch }}</FieldError>
-                <FieldDescription v-else>{{ $t('arcadia.editor.images.pitch.hint') }}</FieldDescription>
+                <FieldDescription v-else>{{ $t('editor.images.pitch.hint') }}</FieldDescription>
             </Field>
             <Button type="submit" variant="outline" class="mt-4" :disabled="pitchForm.processing || !pitchForm.isDirty">
-                {{ $t('arcadia.editor.images.pitch.save') }}
+                {{ $t('editor.images.pitch.save') }}
             </Button>
         </form>
 
@@ -183,12 +183,12 @@ const formatSize = bytes => bytes >= 1024 * 1024
                     <Eyebrow :id="`slot-${slot.slot}-title`" as="h2">
                         {{ slot.label }}
                         <span v-if="slot.max_images > 1" class="ml-1 font-normal text-ink-4">
-                            · {{ $t('arcadia.editor.images.count', { count: slot.images.length, max: slot.max_images }) }}
+                            · {{ $t('editor.images.count', { count: slot.images.length, max: slot.max_images }) }}
                         </span>
                     </Eyebrow>
-                    <p class="mt-1 mb-0 max-w-3xl text-sm text-ink-3">{{ $t(`arcadia.editor.images.slots.${slot.slot}.hint`) }}</p>
+                    <p class="mt-1 mb-0 max-w-3xl text-sm text-ink-3">{{ $t(`editor.images.slots.${slot.slot}.hint`) }}</p>
                     <p class="mt-1 mb-0 text-xs text-ink-4">
-                        {{ $t(`arcadia.editor.images.slots.${slot.slot}.rule`, { max: slot.max_mb, width: slot.min_width, height: slot.min_height }) }}
+                        {{ $t(`editor.images.slots.${slot.slot}.rule`, { max: slot.max_mb, width: slot.min_width, height: slot.min_height }) }}
                     </p>
                 </div>
                 <div class="flex shrink-0 items-center gap-2">
@@ -197,15 +197,15 @@ const formatSize = bytes => bytes >= 1024 * 1024
                         <ImageUp v-else :size="16" aria-hidden="true" />
                         <template v-if="queue?.slot === slot.slot">
                             {{ queue.total > 1
-                                ? $t('arcadia.editor.images.uploading_many', { done: queue.done + 1, total: queue.total })
-                                : $t('arcadia.editor.images.uploading') }}
+                                ? $t('editor.images.uploading_many', { done: queue.done + 1, total: queue.total })
+                                : $t('editor.images.uploading') }}
                         </template>
-                        <template v-else-if="slot.max_images > 1">{{ $t('arcadia.editor.images.add') }}</template>
-                        <template v-else>{{ $t(slot.images.length ? 'arcadia.editor.images.replace' : 'arcadia.editor.images.upload') }}</template>
+                        <template v-else-if="slot.max_images > 1">{{ $t('editor.images.add') }}</template>
+                        <template v-else>{{ $t(slot.images.length ? 'editor.images.replace' : 'editor.images.upload') }}</template>
                     </Button>
                     <Button v-if="slot.max_images === 1 && slot.images.length" type="button" variant="ghost-danger" size="icon"
                             :disabled="queue !== null"
-                            :aria-label="$t('arcadia.editor.images.remove.action')" :title="$t('arcadia.editor.images.remove.action')"
+                            :aria-label="$t('editor.images.remove.action')" :title="$t('editor.images.remove.action')"
                             @click="pendingRemove = slot.images[0]">
                         <Trash2 :size="16" aria-hidden="true" />
                     </Button>
@@ -225,7 +225,7 @@ const formatSize = bytes => bytes >= 1024 * 1024
                 <FlyerGallery v-if="slot.images.length" class="mt-5" :images="slot.images" :disabled="queue !== null"
                               @remove="image => pendingRemove = image" />
                 <p v-else class="mt-5 mb-0 rounded-control border border-dashed border-rule p-6 text-center text-sm text-ink-4">
-                    {{ dropping === slot.slot ? $t('arcadia.editor.images.drop') : $t('arcadia.editor.images.empty') }}
+                    {{ dropping === slot.slot ? $t('editor.images.drop') : $t('editor.images.empty') }}
                 </p>
             </template>
 
@@ -235,30 +235,30 @@ const formatSize = bytes => bytes >= 1024 * 1024
                      class="mt-5 grid items-start gap-5 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
                     <figure class="m-0">
                         <img :src="image.crops.hero" alt="" class="block w-full rounded-control border border-rule">
-                        <figcaption class="mt-1.5 text-xs text-ink-4">{{ $t('arcadia.editor.images.crops.hero') }}</figcaption>
+                        <figcaption class="mt-1.5 text-xs text-ink-4">{{ $t('editor.images.crops.hero') }}</figcaption>
                     </figure>
                     <div class="flex flex-col gap-5">
                         <div class="flex flex-wrap items-end gap-5">
                             <figure class="m-0 w-full max-w-sm">
                                 <img :src="image.crops.share" alt="" class="block aspect-[1200/630] w-full rounded-control border border-rule object-cover">
-                                <figcaption class="mt-1.5 text-xs text-ink-4">{{ $t('arcadia.editor.images.crops.share') }}</figcaption>
+                                <figcaption class="mt-1.5 text-xs text-ink-4">{{ $t('editor.images.crops.share') }}</figcaption>
                             </figure>
                             <figure class="m-0">
                                 <img :src="image.crops.thumb" alt="" class="block size-20 rounded-control border border-rule object-cover">
-                                <figcaption class="mt-1.5 text-xs text-ink-4">{{ $t('arcadia.editor.images.crops.thumb') }}</figcaption>
+                                <figcaption class="mt-1.5 text-xs text-ink-4">{{ $t('editor.images.crops.thumb') }}</figcaption>
                             </figure>
                         </div>
                         <p class="m-0 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-ink-4">
-                            <span>{{ $t('arcadia.editor.images.original', { width: image.width, height: image.height, size: formatSize(image.bytes) }) }}</span>
+                            <span>{{ $t('editor.images.original', { width: image.width, height: image.height, size: formatSize(image.bytes) }) }}</span>
                             <a :href="image.original" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-ink-3 no-underline hover:text-accent">
                                 <ExternalLink :size="12" aria-hidden="true" />
-                                {{ $t('arcadia.editor.images.download') }}
+                                {{ $t('editor.images.download') }}
                             </a>
                         </p>
                     </div>
                 </div>
                 <p v-if="!slot.images.length" class="mt-5 mb-0 rounded-control border border-dashed border-rule p-6 text-center text-sm text-ink-4">
-                    {{ $t('arcadia.editor.images.empty') }}
+                    {{ $t('editor.images.empty') }}
                 </p>
             </template>
         </section>
@@ -267,8 +267,8 @@ const formatSize = bytes => bytes >= 1024 * 1024
         <Dialog v-model:open="prompting">
             <DialogContent class="w-[calc(100%-2rem)] max-w-5xl">
                 <DialogHeader>
-                    <DialogTitle>{{ $t('arcadia.editor.images.prompt.title') }}</DialogTitle>
-                    <DialogDescription>{{ coverPrompt ? $t('arcadia.editor.images.prompt.hint') : $t('arcadia.editor.images.prompt.missing') }}</DialogDescription>
+                    <DialogTitle>{{ $t('editor.images.prompt.title') }}</DialogTitle>
+                    <DialogDescription>{{ coverPrompt ? $t('editor.images.prompt.hint') : $t('editor.images.prompt.missing') }}</DialogDescription>
                 </DialogHeader>
                 <VersionedPromptFiller v-if="coverPrompt" :prompt="coverPrompt" :choices="choices" :initial="coverPromptValues" />
             </DialogContent>
@@ -278,17 +278,17 @@ const formatSize = bytes => bytes >= 1024 * 1024
         <Dialog v-model:open="flyering">
             <DialogContent class="w-[calc(100%-2rem)] max-w-5xl">
                 <DialogHeader>
-                    <DialogTitle>{{ $t('arcadia.editor.images.flyer.open') }}</DialogTitle>
-                    <DialogDescription>{{ flyerPrompt ? $t('arcadia.editor.images.flyer.hint') : $t('arcadia.editor.images.flyer.missing') }}</DialogDescription>
+                    <DialogTitle>{{ $t('editor.images.flyer.open') }}</DialogTitle>
+                    <DialogDescription>{{ flyerPrompt ? $t('editor.images.flyer.hint') : $t('editor.images.flyer.missing') }}</DialogDescription>
                 </DialogHeader>
                 <VersionedPromptFiller v-if="flyerPrompt" :prompt="flyerPrompt" :choices="choices" :initial="flyerPromptValues" />
             </DialogContent>
         </Dialog>
 
         <ConfirmDialog :open="pendingRemove !== null"
-                       :title="$t('arcadia.editor.images.remove.title')"
-                       :body="$t('arcadia.editor.images.remove.body')"
-                       :confirm-label="$t('arcadia.editor.images.remove.confirm')"
+                       :title="$t('editor.images.remove.title')"
+                       :body="$t('editor.images.remove.body')"
+                       :confirm-label="$t('editor.images.remove.confirm')"
                        :processing="removing"
                        @confirm="confirmRemove"
                        @cancel="pendingRemove = null" />

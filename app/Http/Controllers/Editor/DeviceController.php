@@ -20,7 +20,7 @@ class DeviceController
     {
         Device::query()->where('user_id', $this->member($user)->user_id)->findOrFail($device)->delete();
 
-        return back()->with('success', __('arcadia.editor.devices.flash.revoked'));
+        return back()->with('success', __('editor.devices.flash.revoked'));
     }
 
     public function limit(Request $request, int $user): RedirectResponse
@@ -29,7 +29,7 @@ class DeviceController
 
         $this->member($user)->update(['device_limit' => $validated['limit'] ?? null]);
 
-        return back()->with('success', __('arcadia.editor.devices.flash.limit'));
+        return back()->with('success', __('editor.devices.flash.limit'));
     }
 
     /** An Arcadia member only: the owner manages Arcadia's readers, not every account on the site. */

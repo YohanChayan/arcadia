@@ -37,31 +37,31 @@ const submit = () => form.post(editorRoute('inquiries.store'), {
     <Dialog v-model:open="open">
         <DialogContent class="max-w-md">
             <DialogHeader>
-                <DialogTitle>{{ $t('arcadia.editor.inquiries.create.title') }}</DialogTitle>
-                <DialogDescription>{{ $t('arcadia.editor.inquiries.create.description') }}</DialogDescription>
+                <DialogTitle>{{ $t('editor.inquiries.create.title') }}</DialogTitle>
+                <DialogDescription>{{ $t('editor.inquiries.create.description') }}</DialogDescription>
             </DialogHeader>
 
             <form id="create-inquiry" class="space-y-4" @submit.prevent="submit">
                 <Field :data-invalid="form.errors.topic ? true : undefined">
-                    <FieldLabel for="create-topic">{{ $t('arcadia.editor.inquiries.create.topic') }}</FieldLabel>
+                    <FieldLabel for="create-topic">{{ $t('editor.inquiries.create.topic') }}</FieldLabel>
                     <Input id="create-topic" v-model="form.topic" maxlength="200" autocomplete="off" :aria-invalid="form.errors.topic ? 'true' : undefined" />
                     <FieldError v-if="form.errors.topic">{{ form.errors.topic }}</FieldError>
                 </Field>
                 <Field :data-invalid="form.errors.contact ? true : undefined">
-                    <FieldLabel for="create-contact">{{ $t('arcadia.editor.inquiries.create.contact') }}</FieldLabel>
+                    <FieldLabel for="create-contact">{{ $t('editor.inquiries.create.contact') }}</FieldLabel>
                     <Input id="create-contact" v-model="form.contact" maxlength="160" autocomplete="off" :aria-invalid="form.errors.contact ? 'true' : undefined" />
                     <FieldError v-if="form.errors.contact">{{ form.errors.contact }}</FieldError>
-                    <FieldDescription v-else>{{ $t('arcadia.editor.inquiries.create.contact_hint') }}</FieldDescription>
+                    <FieldDescription v-else>{{ $t('editor.inquiries.create.contact_hint') }}</FieldDescription>
                 </Field>
                 <Field>
-                    <FieldLabel for="create-name">{{ $t('arcadia.editor.inquiries.create.name') }}</FieldLabel>
+                    <FieldLabel for="create-name">{{ $t('editor.inquiries.create.name') }}</FieldLabel>
                     <Input id="create-name" v-model="form.name" maxlength="120" autocomplete="off" />
                 </Field>
             </form>
 
             <DialogFooter>
-                <Button type="button" variant="ghost" @click="open = false">{{ $t('arcadia.editor.inquiries.create.cancel') }}</Button>
-                <Button type="submit" form="create-inquiry" variant="brand" :disabled="form.processing">{{ $t('arcadia.editor.inquiries.create.save') }}</Button>
+                <Button type="button" variant="ghost" @click="open = false">{{ $t('editor.inquiries.create.cancel') }}</Button>
+                <Button type="submit" form="create-inquiry" variant="brand" :disabled="form.processing">{{ $t('editor.inquiries.create.save') }}</Button>
             </DialogFooter>
         </DialogContent>
     </Dialog>

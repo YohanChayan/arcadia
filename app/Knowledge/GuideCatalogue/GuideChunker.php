@@ -87,7 +87,7 @@ class GuideChunker
 
         return collect([
             $this->label('guide', $locale).': '.$guide->title,
-            $this->label('level', $locale).': '.__("arcadia.levels.{$guide->level->value}", [], $locale),
+            $this->label('level', $locale).': '.__("guide.levels.{$guide->level->value}", [], $locale),
             $category ? $this->label('category', $locale).': '.$category : null,
             $goals ? $this->label('goals', $locale).":\n".collect($goals)->map(fn (string $goal) => "- {$goal}")->implode("\n") : null,
             filled($guide->pitch) ? $this->label('pitch', $locale).': '.trim($guide->pitch) : null,

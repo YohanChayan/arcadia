@@ -34,7 +34,7 @@ const addingItem = ref(false)
         <div class="mt-3 divide-y divide-rule border-t border-rule">
             <ItemRow v-for="(item, index) in card.items" :key="item.id" :item="item"
                      :first="index === 0" :last="index === card.items.length - 1" />
-            <p v-if="card.items.length === 0" class="m-0 py-2 text-sm text-ink-4">{{ $t('arcadia.editor.content.items.empty') }}</p>
+            <p v-if="card.items.length === 0" class="m-0 py-2 text-sm text-ink-4">{{ $t('editor.content.items.empty') }}</p>
         </div>
 
         <p v-if="card.closing_note && !editing" class="mt-3 mb-0 whitespace-pre-line text-sm text-ink-3">{{ card.closing_note }}</p>
@@ -43,7 +43,7 @@ const addingItem = ref(false)
             <NodeForm v-if="addingItem" class="mt-3" node="items" :parent-id="card.id" @done="addingItem = false" />
             <Button v-else type="button" variant="ghost" size="sm" class="mt-2" @click="addingItem = true">
                 <Plus :size="14" aria-hidden="true" />
-                {{ $t('arcadia.editor.content.items.add') }}
+                {{ $t('editor.content.items.add') }}
             </Button>
         </template>
     </div>

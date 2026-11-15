@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import ArcadiaMark from '@/components/ArcadiaMark.vue';
+import BrandMark from '@/components/BrandMark.vue';
 
 defineProps<{
     title?: string;
@@ -19,7 +19,7 @@ defineProps<{
                         href="/"
                         class="flex flex-col items-center gap-2 font-medium"
                     >
-                        <ArcadiaMark class="mb-1 text-2xl" />
+                        <BrandMark class="mb-1 text-2xl" />
                         <span class="sr-only">{{ title }}</span>
                     </Link>
                     <div v-if="title || description" class="space-y-2 text-center">

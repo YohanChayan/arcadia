@@ -49,8 +49,8 @@ const { verify, isLoading, error, isSupported } = usePasskeyVerify({
                 <KeyRound v-else class="h-4 w-4" />
                 {{
                     isLoading
-                        ? (props.loadingLabel ?? $t('arcadia.auth.passkey.signing_in'))
-                        : (props.label ?? $t('arcadia.auth.passkey.sign_in'))
+                        ? (props.loadingLabel ?? $t('auth.passkey.signing_in'))
+                        : (props.label ?? $t('auth.passkey.sign_in'))
                 }}
             </Button>
 
@@ -65,7 +65,7 @@ const { verify, isLoading, error, isSupported } = usePasskeyVerify({
             </div>
             <div class="relative flex justify-center text-xs uppercase">
                 <span class="bg-background px-2 text-muted-foreground">
-                    {{ props.separator ?? $t('arcadia.auth.passkey.or') }}
+                    {{ props.separator ?? $t('auth.passkey.or') }}
                 </span>
             </div>
         </div>

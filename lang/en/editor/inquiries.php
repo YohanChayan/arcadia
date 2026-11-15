@@ -1,0 +1,51 @@
+<?php
+
+return [
+    'title' => 'Requests',
+    'description' => 'What people asked for from this site\'s home page, newest first.',
+    'columns' => [
+        'when' => 'Received',
+        'topic' => 'Wants to learn',
+        'contact' => 'Contact',
+        'status' => 'Status',
+    ],
+    'stages' => ['pending' => 'Pending', 'guide' => 'Has a guide'],
+    'filters' => [
+        'label' => 'Filter by status',
+        'all' => 'All',
+        'kind' => 'Contact',
+        'kinds' => ['all' => 'Any contact', 'whatsapp' => 'WhatsApp', 'email' => 'Email'],
+        'empty' => 'No request matches.',
+        'clear' => 'Clear filters',
+    ],
+    'search' => 'Search by topic, contact or name',
+    'search_submit' => 'Search',
+    'more' => 'More actions',
+    'open_guide' => 'Open guide',
+    'reply' => ['email' => 'Reply by email', 'whatsapp' => 'Reply on WhatsApp'],
+    'copy' => 'Copy contact',
+    'account' => 'The account that asked: assign the guide to this one',
+    'copied' => 'Copied',
+    'empty' => [
+        'title' => 'No requests yet',
+        'hint' => 'When someone asks for a guide from the home page, it shows here and you get an email.',
+    ],
+    'delete' => [
+        'action' => 'Delete request',
+        'title' => 'Delete this request?',
+        'body' => 'It is gone for good. If you have not answered it yet, keep the contact first.',
+        'confirm' => 'Delete',
+    ],
+    'flash' => ['deleted' => 'Request deleted.', 'created' => 'Request created.'],
+    'create' => [
+        'action' => 'Create request',
+        'title' => 'New request',
+        'description' => 'For a guide you want to make yourself, or one asked for some other way. It goes through the same steps: prompt and "Create guide".',
+        'topic' => 'Topic',
+        'contact' => 'WhatsApp or email',
+        'contact_hint' => 'Who gets the answer. You, by default.',
+        'name' => 'Name (optional)',
+        'save' => 'Create',
+        'cancel' => 'Cancel',
+    ],
+];

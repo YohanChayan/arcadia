@@ -34,7 +34,7 @@ const fieldId = `prompt-${props.prompt.id}-version`
 <template>
     <div>
         <Field v-if="prompt.versions.length > 1" class="mb-4 max-w-xl">
-            <FieldLabel :for="fieldId"><Eyebrow as="span">{{ $t('arcadia.editor.images.prompt.version') }}</Eyebrow></FieldLabel>
+            <FieldLabel :for="fieldId"><Eyebrow as="span">{{ $t('editor.images.prompt.version') }}</Eyebrow></FieldLabel>
             <Select :model-value="String(versionId)" @update:model-value="id => (versionId = Number(id))">
                 <SelectTrigger :id="fieldId"><SelectValue /></SelectTrigger>
                 <SelectContent>

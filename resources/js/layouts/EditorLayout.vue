@@ -18,7 +18,7 @@ import { usePage } from '@inertiajs/vue3'
 import { House, BookOpen, Bot, Inbox, ScrollText, Settings2, Tags, Users } from '@lucide/vue'
 import DashboardShell from '@/components/chrome/DashboardShell.vue'
 import EditorLanguageSwitch from '@/components/editor/EditorLanguageSwitch.vue'
-import ArcadiaMark from '@/components/ArcadiaMark.vue'
+import BrandMark from '@/components/BrandMark.vue'
 
 onMounted(() => { document.documentElement.dataset.surface = 'editor' })
 onBeforeUnmount(() => { delete document.documentElement.dataset.surface })
@@ -41,9 +41,9 @@ const nav = computed(() => {
 </script>
 
 <template>
-    <DashboardShell :nav="nav" nav-label="arcadia.editor.nav.label" item-labels="arcadia.editor.nav.items"
+    <DashboardShell :nav="nav" nav-label="editor.nav.label" item-labels="editor.nav.items"
                     :home-href="route(`${$page.props.locale}.editor.home`)">
-        <template #brand><ArcadiaMark class="text-xl" /></template>
+        <template #brand><BrandMark class="text-xl" /></template>
         <template #sidebar><EditorLanguageSwitch /></template>
         <slot />
     </DashboardShell>

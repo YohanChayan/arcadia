@@ -126,7 +126,7 @@ class ReaderViewTest extends TestCase
     {
         $this->get('/privacidad')->assertOk();
 
-        $this->assertStringContainsString('Quien prepara la guía ve qué líneas marcaste', __('arcadia.privacy.sections.progress.body', [], 'es'));
-        $this->assertStringContainsString("The guide's author sees which lines you ticked", __('arcadia.privacy.sections.progress.body', [], 'en'));
+        $this->assertStringContainsString('Quien prepara la guía ve qué líneas marcaste', __('privacy.sections.progress.body', [], 'es'));
+        $this->assertStringContainsString("The guide's author sees which lines you ticked", __('privacy.sections.progress.body', [], 'en'));
     }
 }

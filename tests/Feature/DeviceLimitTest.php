@@ -34,7 +34,7 @@ class DeviceLimitTest extends TestCase
     {
         parent::setUp();
 
-        config(['arcadia.device_limit' => 3, 'arcadia.device_limit_enabled' => true]);
+        config(['site.device_limit' => 3, 'site.device_limit_enabled' => true]);
 
         $this->guide = Guide::create(['locale' => 'es', 'title' => 'Excel para el trabajo', 'level' => Level::BASIC, 'status' => GuideStatus::PUBLISHED]);
         $this->guide->latestVersion()->release();
@@ -111,7 +111,7 @@ class DeviceLimitTest extends TestCase
     public function test_with_the_limit_off_no_browser_is_counted_or_turned_away(): void
     {
         $this->fillTheSlots();
-        config(['arcadia.device_limit_enabled' => false]);
+        config(['site.device_limit_enabled' => false]);
 
         $this->openInNewBrowser()->assertOk();
 
@@ -156,7 +156,7 @@ class DeviceLimitTest extends TestCase
         // Back in Ana's browser: its session still names the device.
         $this->actingAs($this->ana)->get($this->link())
             ->assertRedirect('/login')
-            ->assertSessionHas('error', __('arcadia.devices.signed_out'));
+            ->assertSessionHas('error', __('devices.signed_out'));
         $this->assertGuest();
     }
 
@@ -220,6 +220,6 @@ class DeviceLimitTest extends TestCase
             $this->assertSame($label, Devices::label($userAgent));
         }
 
-        $this->assertSame(__('arcadia.devices.unknown'), Devices::label(''));
+        $this->assertSame(__('devices.unknown'), Devices::label(''));
     }
 }

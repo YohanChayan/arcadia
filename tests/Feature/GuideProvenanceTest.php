@@ -69,7 +69,7 @@ class GuideProvenanceTest extends TestCase
         $this->get("/es/editor/guides/{$guide->id}/content")->assertInertia(fn ($page) => $page
             ->where('research.values.topic', 'excel para mi entrevista')
             ->where('research.values.learner_name', 'Ana')
-            ->where('research.values.purpose', __('arcadia.landing.ask.purposes.job')));
+            ->where('research.values.purpose', __('landing.ask.purposes.job')));
     }
 
     public function test_a_request_prompted_before_the_move_still_hands_its_prompt_on(): void

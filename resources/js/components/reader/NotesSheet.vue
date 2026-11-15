@@ -30,7 +30,7 @@ const open = computed({
         <DialogContent v-if="notes.opened.value" :style="tokens"
                        class="top-auto bottom-0 left-0 max-h-[85vh] w-full max-w-none translate-x-0 translate-y-0 rounded-t-2xl rounded-b-none border-guide-rule bg-guide-surface p-5 sm:left-1/2 sm:max-w-lg sm:-translate-x-1/2">
             <DialogHeader class="text-left">
-                <DialogTitle class="text-guide-ink">{{ $t('arcadia.reader.notes.title') }}</DialogTitle>
+                <DialogTitle class="text-guide-ink">{{ $t('reader.notes.title') }}</DialogTitle>
                 <DialogDescription class="text-guide-ink-soft">{{ titleFor(notes.opened.value) }}</DialogDescription>
             </DialogHeader>
             <NoteThread :target="notes.opened.value" autofocus :key="notes.idOf(notes.opened.value) + notes.openedAt.value" />

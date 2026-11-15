@@ -25,19 +25,19 @@ const passwordInput = useTemplateRef('passwordInput');
     <div class="space-y-6">
         <Heading
             variant="small"
-            :title="$t('arcadia.account.delete.title')"
-            :description="$t('arcadia.account.delete.lead')"
+            :title="$t('account.delete.title')"
+            :description="$t('account.delete.lead')"
         />
         <div
             class="space-y-4 rounded-lg border border-red-100 bg-red-50 p-4 dark:border-red-200/10 dark:bg-red-700/10"
         >
             <div class="relative space-y-0.5 text-red-600 dark:text-red-100">
-                <p class="font-medium">{{ $t('arcadia.account.delete.warning') }}</p>
-                <p class="text-sm">{{ $t('arcadia.account.delete.warning_body') }}</p>
+                <p class="font-medium">{{ $t('account.delete.warning') }}</p>
+                <p class="text-sm">{{ $t('account.delete.warning_body') }}</p>
             </div>
             <Dialog>
                 <DialogTrigger as-child>
-                    <Button variant="destructive" data-test="delete-user-button">{{ $t('arcadia.account.delete.button') }}</Button>
+                    <Button variant="destructive" data-test="delete-user-button">{{ $t('account.delete.button') }}</Button>
                 </DialogTrigger>
                 <DialogContent>
                     <Form
@@ -51,17 +51,17 @@ const passwordInput = useTemplateRef('passwordInput');
                         v-slot="{ errors, processing, reset, clearErrors }"
                     >
                         <DialogHeader class="space-y-3">
-                            <DialogTitle>{{ $t('arcadia.account.delete.confirm_title') }}</DialogTitle>
-                            <DialogDescription>{{ $t('arcadia.account.delete.confirm_body') }}</DialogDescription>
+                            <DialogTitle>{{ $t('account.delete.confirm_title') }}</DialogTitle>
+                            <DialogDescription>{{ $t('account.delete.confirm_body') }}</DialogDescription>
                         </DialogHeader>
 
                         <div class="grid gap-2">
-                            <Label for="password" class="sr-only">{{ $t('arcadia.account.delete.password') }}</Label>
+                            <Label for="password" class="sr-only">{{ $t('account.delete.password') }}</Label>
                             <PasswordInput
                                 id="password"
                                 name="password"
                                 ref="passwordInput"
-                                :placeholder="$t('arcadia.account.delete.password')"
+                                :placeholder="$t('account.delete.password')"
                             />
                             <InputError :message="errors.password" />
                         </div>
@@ -77,7 +77,7 @@ const passwordInput = useTemplateRef('passwordInput');
                                         }
                                     "
                                 >
-                                    {{ $t('arcadia.account.cancel') }}
+                                    {{ $t('account.cancel') }}
                                 </Button>
                             </DialogClose>
 
@@ -87,7 +87,7 @@ const passwordInput = useTemplateRef('passwordInput');
                                 :disabled="processing"
                                 data-test="confirm-delete-user-button"
                             >
-                                {{ $t('arcadia.account.delete.button') }}
+                                {{ $t('account.delete.button') }}
                             </Button>
                         </DialogFooter>
                     </Form>

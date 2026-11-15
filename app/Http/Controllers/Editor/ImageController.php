@@ -65,7 +65,7 @@ class ImageController
 
         $store->handle($guide, $slot, $request->file('image'));
 
-        return back()->with('success', __('arcadia.editor.images.flash.saved', ['slot' => $slot->label()]));
+        return back()->with('success', __('editor.images.flash.saved', ['slot' => $slot->label()]));
     }
 
     /** One image, by its id — a slot of many has no other way to name it. Bound within its guide. */
@@ -76,7 +76,7 @@ class ImageController
         // Its files go with the row.
         $image->delete();
 
-        return back()->with('success', __('arcadia.editor.images.flash.removed', ['slot' => $image->slot->label()]));
+        return back()->with('success', __('editor.images.flash.removed', ['slot' => $image->slot->label()]));
     }
 
     /** A guide of the other language is not this editor's, whatever the id in the URL. */

@@ -62,7 +62,7 @@ class GuideImport
                 foreach ((array) ($stage['cards'] ?? []) as $c => $card) {
                     foreach ((array) ($card['items'] ?? []) as $i => $item) {
                         if (in_array($item['kind'] ?? null, $links, true) && trim((string) ($item['url'] ?? '')) === '') {
-                            $validator->errors()->add("stages.{$s}.cards.{$c}.items.{$i}.url", __('arcadia.editor.import.errors.link_needs_url'));
+                            $validator->errors()->add("stages.{$s}.cards.{$c}.items.{$i}.url", __('editor.import.errors.link_needs_url'));
                         }
                     }
                 }
@@ -92,7 +92,7 @@ class GuideImport
 
         return [
             'title' => $data['title'] ?? null,
-            'level' => isset($data['level']) ? __("arcadia.levels.{$data['level']}") : null,
+            'level' => isset($data['level']) ? __("guide.levels.{$data['level']}") : null,
             'stages' => count($data['stages']),
             'cards' => $cards->count(),
             'items' => $items->count(),
@@ -167,7 +167,7 @@ class GuideImport
             $next = $segments[$i + 1] ?? null;
 
             if (in_array($segment, ['stages', 'cards', 'items', 'sections'], true) && is_numeric($next)) {
-                $parts[] = __("arcadia.editor.import.places.{$segment}", ['number' => (int) $next + 1]);
+                $parts[] = __("editor.import.places.{$segment}", ['number' => (int) $next + 1]);
                 $i++;
             } else {
                 $parts[] = $segment;

@@ -41,16 +41,16 @@ const STATUS_TONE = {
 // An activity is a whole JSON: said by its family and how many questions, cards, pairs or steps.
 const activitySummary = activity => {
     const count = ['questions', 'cards', 'pairs', 'steps'].map(list => activity[list]?.length ?? 0).find(length => length > 0) ?? 1
-    const family = trans(`arcadia.editor.activities.families.${activity.family}`)
+    const family = trans(`editor.activities.families.${activity.family}`)
 
-    return transChoice('arcadia.editor.activities.summary', count, { family, count })
+    return transChoice('editor.activities.summary', count, { family, count })
 }
 
 const show = (field, value) => {
     if (value === null || value === '' || value === undefined) return '—'
     if (field === 'activity') return activitySummary(value)
-    if (value === true) return trans('arcadia.editor.content.fields.yes')
-    if (value === false) return trans('arcadia.editor.content.fields.no')
+    if (value === true) return trans('editor.content.fields.yes')
+    if (value === false) return trans('editor.content.fields.no')
     // A kind is stored as its code; show its label.
     return field === 'kind' ? props.labels[props.level]?.[value] ?? value : value
 }
@@ -64,15 +64,15 @@ const show = (field, value) => {
             </span>
             <Badge v-if="level === 'items'" variant="neutral">{{ labels.items[node.node.kind] }}</Badge>
             <Badge v-if="node.status !== 'unchanged'" :variant="STATUS_BADGE[node.status]">
-                {{ $t(`arcadia.editor.compare.status.${node.status}`) }}
+                {{ $t(`editor.compare.status.${node.status}`) }}
             </Badge>
-            <Badge v-if="node.moved" variant="active">{{ $t('arcadia.editor.compare.status.moved') }}</Badge>
-            <Badge v-else-if="node.reordered" variant="active">{{ $t('arcadia.editor.compare.status.reordered') }}</Badge>
+            <Badge v-if="node.moved" variant="active">{{ $t('editor.compare.status.moved') }}</Badge>
+            <Badge v-else-if="node.reordered" variant="active">{{ $t('editor.compare.status.reordered') }}</Badge>
         </div>
 
         <dl v-if="Object.keys(node.changed).length" class="mt-1 mb-2 grid gap-1 text-xs">
             <div v-for="(change, field) in node.changed" :key="field" class="grid grid-cols-[auto_1fr] gap-x-3">
-                <dt class="text-ink-4">{{ $t(`arcadia.editor.content.fields.${field}`) }}</dt>
+                <dt class="text-ink-4">{{ $t(`editor.content.fields.${field}`) }}</dt>
                 <dd class="m-0 min-w-0">
                     <span class="whitespace-pre-line break-words text-danger line-through">{{ show(field, change.from) }}</span>
                     <span class="mx-1 text-ink-4" aria-hidden="true">→</span>

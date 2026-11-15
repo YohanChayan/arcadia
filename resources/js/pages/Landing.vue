@@ -26,8 +26,8 @@ import { trans } from 'laravel-vue-i18n'
 import SeoHead from '@/components/common/SeoHead.vue'
 import { Button } from '@/components/ui/button'
 import AuroraBackdrop from '@/components/AuroraBackdrop.vue'
-import ArcadiaMark from '@/components/ArcadiaMark.vue'
-import ArcadiaPhoto from '@/components/ArcadiaPhoto.vue'
+import BrandMark from '@/components/BrandMark.vue'
+import HeroPhoto from '@/components/HeroPhoto.vue'
 import Price from '@/components/landing/Price.vue'
 import RequestDialog from '@/components/landing/RequestDialog.vue'
 import SampleGuide from '@/components/landing/SampleGuide.vue'
@@ -71,7 +71,7 @@ const seo = computed(() => ({
 
 const alternate = computed(() => Object.values(props.alternates)[0] ?? null)
 
-const base = 'arcadia.landing'
+const base = 'landing'
 
 // The studio Arcadia belongs to, linked from the nav and the footer. Its own root picks the language.
 const studioUrl = 'https://www.yhndevside.com'
@@ -181,7 +181,7 @@ const ideas = computed(() => topics.map(topic => trans(`${base}.topics.items.${t
             <!-- Faded out by a mask, not painted over with a ground colour: `body` paints the ground
                  as a gradient, so no single colour matches it and a fade to one left a visible line. -->
             <div aria-hidden="true" class="absolute inset-0 -z-10 [mask-image:linear-gradient(to_bottom,black_60%,transparent)]">
-                <ArcadiaPhoto />
+                <HeroPhoto />
                 <div class="hero-scrim absolute inset-0"></div>
             </div>
 
@@ -205,7 +205,7 @@ const ideas = computed(() => topics.map(topic => trans(`${base}.topics.items.${t
             </ul>
 
             <nav class="relative mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-5 sm:px-6">
-                <ArcadiaMark class="text-2xl [--mark-height:1.1em] sm:text-3xl" />
+                <BrandMark class="text-2xl [--mark-height:1.1em] sm:text-3xl" />
 
                 <div class="flex shrink-0 items-center gap-1 text-sm sm:gap-2">
                     <a :href="studioUrl" class="group hidden items-center gap-1 rounded-control px-3 py-2 text-ink-3 no-underline transition-colors hover:text-ink lg:inline-flex" :title="`${$t(`${base}.by`)} YHN Dev Side`">
@@ -302,12 +302,12 @@ const ideas = computed(() => topics.map(topic => trans(`${base}.topics.items.${t
                 <div class="mt-8 flex flex-wrap items-center justify-center gap-5 lg:justify-start">
                     <Button type="button" variant="brand" size="lg" @click="ask()">
                         <Send :size="18" aria-hidden="true" />
-                        {{ $t('arcadia.landing.ask.open') }}
+                        {{ $t('landing.ask.open') }}
                     </Button>
                     <p v-if="price" class="m-0 flex items-baseline gap-1.5 text-ink-3">
-                        <span class="text-sm">{{ $t('arcadia.landing.price.only') }}</span>
+                        <span class="text-sm">{{ $t('landing.price.only') }}</span>
                         <Price :amount="price" :note="priceNote" class="text-3xl" />
-                        <span class="text-sm">{{ $t('arcadia.landing.price.per') }}</span>
+                        <span class="text-sm">{{ $t('landing.price.per') }}</span>
                     </p>
                 </div>
             </div>
@@ -323,8 +323,8 @@ const ideas = computed(() => topics.map(topic => trans(`${base}.topics.items.${t
         <!-- Dense: named topics, tight together. -->
         <section class="reveal mx-auto max-w-6xl px-4 sm:px-6" aria-labelledby="topics-title">
             <div>
-                <h2 id="topics-title" class="m-0 font-display text-2xl font-semibold text-ink sm:text-3xl">{{ $t('arcadia.landing.topics.title') }}</h2>
-                <p class="mt-1 mb-0 text-sm text-ink-3">{{ $t('arcadia.landing.topics.lead') }}</p>
+                <h2 id="topics-title" class="m-0 font-display text-2xl font-semibold text-ink sm:text-3xl">{{ $t('landing.topics.title') }}</h2>
+                <p class="mt-1 mb-0 text-sm text-ink-3">{{ $t('landing.topics.lead') }}</p>
             </div>
 
             <ul class="mt-6 grid grid-cols-1 gap-3 p-0 sm:grid-cols-2 lg:grid-cols-4">
@@ -348,8 +348,8 @@ const ideas = computed(() => topics.map(topic => trans(`${base}.topics.items.${t
                             <Plus :size="22" aria-hidden="true" />
                         </span>
                         <span class="min-w-0">
-                            <span class="block font-display text-[0.95rem] font-semibold leading-snug text-ink">{{ $t('arcadia.landing.topics.other.name') }}</span>
-                            <span class="mt-0.5 block text-xs leading-snug text-ink-3">{{ $t('arcadia.landing.topics.other.hint') }}</span>
+                            <span class="block font-display text-[0.95rem] font-semibold leading-snug text-ink">{{ $t('landing.topics.other.name') }}</span>
+                            <span class="mt-0.5 block text-xs leading-snug text-ink-3">{{ $t('landing.topics.other.hint') }}</span>
                         </span>
                     </button>
                 </li>
@@ -358,7 +358,7 @@ const ideas = computed(() => topics.map(topic => trans(`${base}.topics.items.${t
 
         <!-- Open: three steps on one line, with air around them. -->
         <section id="how" class="reveal mx-auto max-w-6xl scroll-mt-6 px-4 py-24 sm:px-6 lg:py-32" aria-labelledby="how-title">
-            <h2 id="how-title" class="m-0 text-center font-display text-2xl font-semibold text-ink sm:text-3xl">{{ $t('arcadia.landing.how.title') }}</h2>
+            <h2 id="how-title" class="m-0 text-center font-display text-2xl font-semibold text-ink sm:text-3xl">{{ $t('landing.how.title') }}</h2>
 
             <ol class="relative mt-14 grid grid-cols-1 gap-12 p-0 sm:grid-cols-3 sm:gap-8">
                 <!-- The line the three steps sit on. -->
@@ -380,10 +380,10 @@ const ideas = computed(() => topics.map(topic => trans(`${base}.topics.items.${t
             <div aria-hidden="true" class="panel relative order-last mx-3 p-5 sm:p-6 md:order-first">
                 <div class="relative">
                     <span class="pin top-0">1</span>
-                    <p class="m-0 font-mono text-xs font-medium uppercase tracking-widest text-guide-accent">{{ $t('arcadia.reader.stage', { number: 1 }) }}</p>
-                    <p class="mt-1 mb-0 font-display text-lg font-semibold text-guide-ink">{{ $t('arcadia.landing.sample.samples.excel.stage.title') }}</p>
+                    <p class="m-0 font-mono text-xs font-medium uppercase tracking-widest text-guide-accent">{{ $t('reader.stage', { number: 1 }) }}</p>
+                    <p class="mt-1 mb-0 font-display text-lg font-semibold text-guide-ink">{{ $t('landing.sample.samples.excel.stage.title') }}</p>
                     <p class="mt-1 mb-0 text-sm text-guide-ink-soft">
-                        <span class="font-medium text-guide-ink">{{ $t('arcadia.reader.when_done') }}</span> {{ $t('arcadia.landing.sample.samples.excel.stage.goal') }}
+                        <span class="font-medium text-guide-ink">{{ $t('reader.when_done') }}</span> {{ $t('landing.sample.samples.excel.stage.goal') }}
                     </p>
                 </div>
 
@@ -393,15 +393,15 @@ const ideas = computed(() => topics.map(topic => trans(`${base}.topics.items.${t
                         <PlaySquare :size="18" />
                     </span>
                     <span class="min-w-0">
-                        <span class="block truncate text-sm font-medium text-guide-ink">{{ $t('arcadia.landing.sample.samples.excel.items.b.title') }}</span>
-                        <span class="block text-xs text-guide-ink-soft">{{ $t('arcadia.landing.sample.samples.excel.items.b.hint') }}</span>
+                        <span class="block truncate text-sm font-medium text-guide-ink">{{ $t('landing.sample.samples.excel.items.b.title') }}</span>
+                        <span class="block text-xs text-guide-ink-soft">{{ $t('landing.sample.samples.excel.items.b.hint') }}</span>
                     </span>
                 </div>
 
                 <div class="relative mt-3 rounded-xl border-2 border-guide-accent p-3">
                     <span class="pin">3</span>
-                    <span class="block text-xs font-semibold uppercase tracking-wide text-guide-accent">{{ $t('arcadia.reader.challenge') }}</span>
-                    <span class="mt-0.5 block text-sm font-medium text-guide-ink">{{ $t('arcadia.landing.sample.samples.excel.challenge.title') }}</span>
+                    <span class="block text-xs font-semibold uppercase tracking-wide text-guide-accent">{{ $t('reader.challenge') }}</span>
+                    <span class="mt-0.5 block text-sm font-medium text-guide-ink">{{ $t('landing.sample.samples.excel.challenge.title') }}</span>
                 </div>
 
                 <div class="relative mt-5 flex items-center gap-3">
@@ -409,12 +409,12 @@ const ideas = computed(() => topics.map(topic => trans(`${base}.topics.items.${t
                     <div class="h-1.5 flex-1 overflow-hidden rounded-full bg-guide-well">
                         <div class="h-full w-3/5 rounded-full bg-guide-accent"></div>
                     </div>
-                    <span class="font-mono text-xs text-guide-ink-soft">{{ $t('arcadia.reader.progress', { done: 3, total: 5 }) }}</span>
+                    <span class="font-mono text-xs text-guide-ink-soft">{{ $t('reader.progress', { done: 3, total: 5 }) }}</span>
                 </div>
             </div>
 
             <div>
-                <h2 id="inside-title" class="m-0 font-display text-2xl font-semibold text-ink sm:text-3xl">{{ $t('arcadia.landing.inside.title') }}</h2>
+                <h2 id="inside-title" class="m-0 font-display text-2xl font-semibold text-ink sm:text-3xl">{{ $t('landing.inside.title') }}</h2>
                 <ol class="mt-8 space-y-6 p-0">
                     <li v-for="(feature, index) in inside" :key="feature.key" class="flex list-none gap-4">
                         <span class="flex size-8 shrink-0 items-center justify-center rounded-full bg-accent font-mono text-sm font-semibold text-on-accent">{{ index + 1 }}</span>
@@ -435,9 +435,9 @@ const ideas = computed(() => topics.map(topic => trans(`${base}.topics.items.${t
             <AuroraBackdrop variant="band" />
             <div class="mx-auto flex max-w-4xl flex-col items-center px-4 py-20 text-center sm:px-6 lg:py-24">
                 <p class="m-0 font-display text-3xl font-bold leading-tight tracking-tight text-ink sm:text-5xl">
-                    {{ $t('arcadia.landing.motto.line_a') }}
+                    {{ $t('landing.motto.line_a') }}
                     <span class="text-accent">=</span>
-                    <span class="block bg-linear-to-r from-(--aurora-3) via-(--aurora-1) to-(--aurora-2) bg-clip-text text-transparent">{{ $t('arcadia.landing.motto.line_b') }}</span>
+                    <span class="block bg-linear-to-r from-(--aurora-3) via-(--aurora-1) to-(--aurora-2) bg-clip-text text-transparent">{{ $t('landing.motto.line_b') }}</span>
                 </p>
 
                 <ol class="mt-8 flex flex-wrap items-center justify-center gap-x-2 gap-y-3 p-0">
@@ -447,16 +447,16 @@ const ideas = computed(() => topics.map(topic => trans(`${base}.topics.items.${t
                     </li>
                 </ol>
 
-                <h2 id="request-title" class="mt-14 mb-0 font-display text-2xl font-semibold text-ink sm:text-3xl">{{ $t('arcadia.landing.request.title') }}</h2>
-                <p class="mt-2 mb-0 text-ink-3">{{ $t('arcadia.landing.request.body') }}</p>
+                <h2 id="request-title" class="mt-14 mb-0 font-display text-2xl font-semibold text-ink sm:text-3xl">{{ $t('landing.request.title') }}</h2>
+                <p class="mt-2 mb-0 text-ink-3">{{ $t('landing.request.body') }}</p>
                 <Button type="button" variant="brand" size="lg" class="mt-7" @click="ask()">
                     <Send :size="18" aria-hidden="true" />
-                    {{ $t('arcadia.landing.ask.open') }}
+                    {{ $t('landing.ask.open') }}
                 </Button>
                 <p v-if="price" class="mt-3 mb-0 flex items-baseline gap-1.5 text-ink-3">
-                    <span class="text-sm">{{ $t('arcadia.landing.price.only') }}</span>
+                    <span class="text-sm">{{ $t('landing.price.only') }}</span>
                     <Price :amount="price" :note="priceNote" class="text-2xl" />
-                    <span class="text-sm">{{ $t('arcadia.landing.price.per') }}</span>
+                    <span class="text-sm">{{ $t('landing.price.per') }}</span>
                 </p>
             </div>
         </section>
@@ -486,10 +486,10 @@ const ideas = computed(() => topics.map(topic => trans(`${base}.topics.items.${t
                        :topic="askingFor" :suggestions="ideas" :price="price" :price-note="priceNote" :contact-email="contactEmail" />
 
         <footer class="pb-14 pt-12 text-center text-sm text-ink-4 sm:pb-44">
-            {{ $t('arcadia.landing.by') }}
+            {{ $t('landing.by') }}
             <a :href="studioUrl" class="font-medium text-ink-3 no-underline hover:text-accent">YHN Dev Side</a>
             <span class="mx-2" aria-hidden="true">·</span>
-            <Link :href="privacyUrl" class="text-ink-3 no-underline hover:text-accent">{{ $t('arcadia.landing.privacy') }}</Link>
+            <Link :href="privacyUrl" class="text-ink-3 no-underline hover:text-accent">{{ $t('landing.privacy') }}</Link>
         </footer>
     </div>
 </template>

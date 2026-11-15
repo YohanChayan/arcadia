@@ -27,7 +27,7 @@ enum ImageSlot: string
 
     public function label(): string
     {
-        return __("arcadia.editor.images.slots.{$this->value}.label");
+        return __("editor.images.slots.{$this->value}.label");
     }
 
     public function minWidth(): int

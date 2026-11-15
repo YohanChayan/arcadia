@@ -50,10 +50,10 @@ const handleDelete = () => {
                     </span>
                 </div>
                 <p class="text-sm text-muted-foreground">
-                    {{ $t('arcadia.account.passkeys.added', { when: passkey.created_at_diff }) }}
+                    {{ $t('account.passkeys.added', { when: passkey.created_at_diff }) }}
                     <template v-if="passkey.last_used_at_diff">
                         <span class="mx-1 text-muted-foreground/50">/</span>
-                        {{ $t('arcadia.account.passkeys.last_used', { when: passkey.last_used_at_diff }) }}
+                        {{ $t('account.passkeys.last_used', { when: passkey.last_used_at_diff }) }}
                     </template>
                 </p>
             </div>
@@ -67,23 +67,23 @@ const handleDelete = () => {
                     class="text-destructive hover:bg-destructive/10 hover:text-destructive"
                 >
                     <Trash2 class="h-4 w-4" />
-                    <span class="sr-only">{{ $t('arcadia.account.passkeys.remove') }}</span>
+                    <span class="sr-only">{{ $t('account.passkeys.remove') }}</span>
                 </Button>
             </DialogTrigger>
 
             <DialogContent>
-                <DialogTitle>{{ $t('arcadia.account.passkeys.remove_title') }}</DialogTitle>
-                <DialogDescription>{{ $t('arcadia.account.passkeys.remove_body', { name: passkey.name }) }}</DialogDescription>
+                <DialogTitle>{{ $t('account.passkeys.remove_title') }}</DialogTitle>
+                <DialogDescription>{{ $t('account.passkeys.remove_body', { name: passkey.name }) }}</DialogDescription>
                 <DialogFooter class="gap-2">
                     <DialogClose as-child>
-                        <Button variant="secondary">{{ $t('arcadia.account.cancel') }}</Button>
+                        <Button variant="secondary">{{ $t('account.cancel') }}</Button>
                     </DialogClose>
                     <Button
                         variant="destructive"
                         :disabled="isDeleting"
                         @click="handleDelete"
                     >
-                        {{ isDeleting ? $t('arcadia.account.passkeys.removing') : $t('arcadia.account.passkeys.remove_confirm') }}
+                        {{ isDeleting ? $t('account.passkeys.removing') : $t('account.passkeys.remove_confirm') }}
                     </Button>
                 </DialogFooter>
             </DialogContent>

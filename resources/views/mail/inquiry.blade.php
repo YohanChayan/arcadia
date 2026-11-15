@@ -18,7 +18,7 @@
 
         <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;">
             @foreach (array_filter([
-                'Para qué' => $inquiry->purpose ? __('arcadia.landing.ask.purposes.'.$inquiry->purpose->value, [], 'es') : null,
+                'Para qué' => $inquiry->purpose ? __('landing.ask.purposes.'.$inquiry->purpose->value, [], 'es') : null,
                 'Cuenta' => $inquiry->user?->email,
                 $inquiry->contact_kind === \App\Models\Inquiry::EMAIL ? 'Contacto' : 'WhatsApp' => $inquiry->contact,
             ]) as $label => $value)

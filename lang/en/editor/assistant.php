@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'title' => 'Sales assistant',
+    'description' => 'Chat with the assistant as a visitor would and see, turn by turn, which passages it read, how much interest it saw and what it cost.',
+    'no_key' => 'The :provider provider has no key configured: the assistant cannot reply.',
+    'models' => 'Planner :planner · reply :speaker',
+    'cache_on' => 'instruction caching on (no effect on Gemini, which caches by itself)',
+    'cache_off' => 'instruction caching off',
+    'metrics' => 'Conversation metrics',
+    'empty' => 'Write to the assistant: what it decided each turn shows here.',
+    'turns' => 'Turns',
+    'turn' => 'Turn :number',
+    'tabs' => ['passages' => 'Passages', 'engagement' => 'Interest', 'usage' => 'Usage', 'conversions' => 'Conversions'],
+    'no_passages' => 'No passage fitted this message.',
+    'engagement_lead' => "The visitor's interest in getting a guide, from 0 to 100, after each message.",
+    'this_turn' => 'This turn',
+    'conversation' => 'Conversation',
+    'input' => 'Input tokens',
+    'cached' => 'Of which cached',
+    'output' => 'Output tokens',
+    'cost' => 'Cost',
+    'not_reported' => 'not reported',
+    'no_price' => 'no price',
+    'no_conversions' => 'Nobody has accepted an offered guide yet.',
+];

@@ -35,14 +35,14 @@ const hrefFor = locale => {
 
 <template>
     <div class="space-y-2">
-        <p class="m-0 px-3 text-[11px] font-semibold uppercase tracking-wider text-ink-4">{{ $t('arcadia.editor.language.label') }}</p>
-        <div role="group" :aria-label="$t('arcadia.editor.language.label')" class="grid grid-cols-2 gap-1 rounded-control border border-rule p-1">
+        <p class="m-0 px-3 text-[11px] font-semibold uppercase tracking-wider text-ink-4">{{ $t('editor.common.language.label') }}</p>
+        <div role="group" :aria-label="$t('editor.common.language.label')" class="grid grid-cols-2 gap-1 rounded-control border border-rule p-1">
             <Link v-for="locale in LANGUAGES" :key="locale" :href="hrefFor(locale)" :lang="locale"
                   :aria-current="locale === current ? 'page' : undefined"
                   class="flex items-center justify-center gap-2 rounded-control border px-2 py-1.5 text-sm font-medium no-underline transition-colors"
                   :class="locale === current ? TONES[locale] : 'border-transparent text-ink-3 hover:bg-ink/5 hover:text-ink'">
                 <span class="font-mono text-xs font-bold">{{ locale.toUpperCase() }}</span>
-                <span>{{ $t(`arcadia.editor.language.names.${locale}`) }}</span>
+                <span>{{ $t(`editor.common.language.names.${locale}`) }}</span>
             </Link>
         </div>
     </div>

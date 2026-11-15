@@ -31,15 +31,15 @@ const save = () => router.put(props.saveUrl, { owner_note: draft.value }, {
 
 <template>
     <div v-if="editing" class="flex flex-col gap-2">
-        <Textarea v-model="draft" rows="2" :maxlength="max" :placeholder="$t('arcadia.editor.readers.requests.note_placeholder')"
-                  :aria-label="$t('arcadia.editor.readers.requests.note')" />
+        <Textarea v-model="draft" rows="2" :maxlength="max" :placeholder="$t('editor.readers.requests.note_placeholder')"
+                  :aria-label="$t('editor.readers.requests.note')" />
         <div class="flex gap-2">
-            <Button type="button" variant="outline" size="sm" @click="save">{{ $t('arcadia.editor.readers.requests.note_save') }}</Button>
-            <Button type="button" variant="ghost" size="sm" @click="editing = false">{{ $t('arcadia.editor.readers.requests.note_cancel') }}</Button>
+            <Button type="button" variant="outline" size="sm" @click="save">{{ $t('editor.readers.requests.note_save') }}</Button>
+            <Button type="button" variant="ghost" size="sm" @click="editing = false">{{ $t('editor.readers.requests.note_cancel') }}</Button>
         </div>
     </div>
     <button v-else type="button" class="inline-flex items-center gap-1.5 text-left text-xs text-ink-3 hover:text-accent" @click="start">
         <NotebookPen :size="12" class="shrink-0" aria-hidden="true" />
-        {{ note || $t('arcadia.editor.readers.requests.note_add') }}
+        {{ note || $t('editor.readers.requests.note_add') }}
     </button>
 </template>

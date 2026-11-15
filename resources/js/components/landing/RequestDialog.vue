@@ -83,20 +83,20 @@ const submit = () => {
                 <span class="flex size-14 items-center justify-center rounded-full bg-accent text-on-accent shadow-[var(--glow)]">
                     <PartyPopper :size="26" aria-hidden="true" />
                 </span>
-                <DialogTitle class="mt-5 font-display text-2xl font-bold text-ink">{{ $t('arcadia.landing.ask.done.title') }}</DialogTitle>
-                <DialogDescription class="mt-2 text-ink-3">{{ $t('arcadia.landing.ask.done.body') }}</DialogDescription>
+                <DialogTitle class="mt-5 font-display text-2xl font-bold text-ink">{{ $t('landing.ask.done.title') }}</DialogTitle>
+                <DialogDescription class="mt-2 text-ink-3">{{ $t('landing.ask.done.body') }}</DialogDescription>
 
                 <!-- Where they will be reached, so a wrong number or address is caught here, and where to write if it is. -->
                 <div class="mt-6 w-full divide-y divide-rule rounded-control border border-rule text-left">
                     <div class="px-4 py-3">
-                        <p class="m-0 text-xs text-ink-4">{{ $t(contactIsEmail ? 'arcadia.landing.ask.done.to_email' : 'arcadia.landing.ask.done.to_whatsapp') }}</p>
+                        <p class="m-0 text-xs text-ink-4">{{ $t(contactIsEmail ? 'landing.ask.done.to_email' : 'landing.ask.done.to_whatsapp') }}</p>
                         <p class="mt-1 mb-0 flex items-center gap-2 font-medium break-all text-ink">
                             <component :is="contactIsEmail ? Mail : MessageCircle" :size="16" class="shrink-0 text-accent" aria-hidden="true" />
                             {{ form.contact }}
                         </p>
                     </div>
                     <div v-if="requester" class="px-4 py-3">
-                        <p class="m-0 text-xs text-ink-4">{{ $t('arcadia.landing.ask.done.to_account') }}</p>
+                        <p class="m-0 text-xs text-ink-4">{{ $t('landing.ask.done.to_account') }}</p>
                         <p class="mt-1 mb-0 flex items-center gap-2 font-medium break-all text-ink">
                             <UserRound :size="16" class="shrink-0 text-accent" aria-hidden="true" />
                             {{ requester.email }}
@@ -106,29 +106,29 @@ const submit = () => {
                 <p v-if="contactEmail" class="mt-3 mb-0 flex w-full items-start gap-2 rounded-control border border-accent/40 bg-accent/10 px-3 py-2.5 text-left text-xs text-ink-2">
                     <Mail :size="14" class="mt-0.5 shrink-0 text-accent" aria-hidden="true" />
                     <span>
-                        {{ $t('arcadia.landing.ask.done.wrong') }}
+                        {{ $t('landing.ask.done.wrong') }}
                         <a :href="`mailto:${contactEmail}`" class="font-medium text-ink underline underline-offset-2 hover:text-accent">{{ contactEmail }}</a>
                     </span>
                 </p>
 
-                <Button type="button" variant="brand" size="lg" class="mt-7" @click="open = false">{{ $t('arcadia.landing.ask.done.close') }}</Button>
+                <Button type="button" variant="brand" size="lg" class="mt-7" @click="open = false">{{ $t('landing.ask.done.close') }}</Button>
             </div>
 
             <form v-else class="relative max-h-[85vh] overflow-y-auto px-6 pt-7 pb-6" @submit.prevent="submit">
                 <DialogHeader class="text-left">
-                    <DialogTitle class="font-display text-2xl font-bold text-ink">{{ $t('arcadia.landing.ask.title') }}</DialogTitle>
-                    <DialogDescription class="text-ink-3">{{ price ? $t('arcadia.landing.ask.lead', { price: priceNote ? `${price} ${priceNote}` : price }) : $t('arcadia.landing.ask.lead_unpriced') }}</DialogDescription>
+                    <DialogTitle class="font-display text-2xl font-bold text-ink">{{ $t('landing.ask.title') }}</DialogTitle>
+                    <DialogDescription class="text-ink-3">{{ price ? $t('landing.ask.lead', { price: priceNote ? `${price} ${priceNote}` : price }) : $t('landing.ask.lead_unpriced') }}</DialogDescription>
                 </DialogHeader>
 
                 <div class="mt-6 space-y-5">
                     <Field :data-invalid="form.errors.topic ? true : undefined">
-                        <FieldLabel for="ask-topic">{{ $t('arcadia.landing.ask.topic') }}</FieldLabel>
+                        <FieldLabel for="ask-topic">{{ $t('landing.ask.topic') }}</FieldLabel>
                         <Input id="ask-topic" v-model="form.topic" type="text" maxlength="200" autocomplete="off"
-                               :placeholder="$t('arcadia.landing.ask.topic_placeholder')"
+                               :placeholder="$t('landing.ask.topic_placeholder')"
                                :aria-invalid="form.errors.topic ? 'true' : undefined" />
                         <FieldError v-if="form.errors.topic">{{ form.errors.topic }}</FieldError>
 
-                        <p class="mt-2 mb-1.5 text-xs text-ink-4">{{ $t('arcadia.landing.ask.suggestions') }}</p>
+                        <p class="mt-2 mb-1.5 text-xs text-ink-4">{{ $t('landing.ask.suggestions') }}</p>
                         <div class="flex flex-wrap gap-1.5">
                             <button v-for="idea in suggestions" :key="idea" type="button"
                                     class="rounded-full border px-2.5 py-1 text-xs transition-colors"
@@ -140,17 +140,17 @@ const submit = () => {
                     </Field>
 
                     <Field :data-invalid="form.errors.contact ? true : undefined">
-                        <FieldLabel for="ask-contact">{{ $t('arcadia.landing.ask.contact') }}</FieldLabel>
+                        <FieldLabel for="ask-contact">{{ $t('landing.ask.contact') }}</FieldLabel>
                         <Input id="ask-contact" v-model="form.contact" type="text" inputmode="email" maxlength="160" autocomplete="email"
-                               :placeholder="$t('arcadia.landing.ask.contact_placeholder')"
+                               :placeholder="$t('landing.ask.contact_placeholder')"
                                :aria-invalid="form.errors.contact ? 'true' : undefined" />
                         <FieldError v-if="form.errors.contact">{{ form.errors.contact }}</FieldError>
-                        <FieldDescription v-else>{{ $t('arcadia.landing.ask.contact_hint') }}</FieldDescription>
+                        <FieldDescription v-else>{{ $t('landing.ask.contact_hint') }}</FieldDescription>
                     </Field>
 
                     <!-- Signed in: the account the request is recorded with, the one the guide is assigned to. -->
                     <div v-if="requester" class="rounded-control border border-rule px-3 py-2.5">
-                        <p class="m-0 text-xs text-ink-4">{{ $t('arcadia.landing.ask.as_account') }}</p>
+                        <p class="m-0 text-xs text-ink-4">{{ $t('landing.ask.as_account') }}</p>
                         <p class="mt-0.5 mb-0 flex items-center gap-2 text-sm font-medium break-all text-ink">
                             <UserRound :size="14" class="shrink-0 text-accent" aria-hidden="true" />
                             {{ requester.email }}
@@ -165,14 +165,14 @@ const submit = () => {
                 <p v-if="contactEmail" class="mt-5 mb-0 flex items-start gap-2 rounded-control border border-accent/40 bg-accent/10 px-3 py-2.5 text-xs text-ink-2">
                     <Mail :size="14" class="mt-0.5 shrink-0 text-accent" aria-hidden="true" />
                     <span>
-                        {{ $t('arcadia.landing.ask.help') }}
+                        {{ $t('landing.ask.help') }}
                         <a :href="`mailto:${contactEmail}`" class="font-medium text-ink underline underline-offset-2 hover:text-accent">{{ contactEmail }}</a>
                     </span>
                 </p>
 
                 <Button type="submit" variant="brand" size="lg" class="mt-7 w-full" :disabled="form.processing">
                     <Send :size="18" aria-hidden="true" />
-                    {{ $t('arcadia.landing.ask.send') }}
+                    {{ $t('landing.ask.send') }}
                 </Button>
             </form>
         </DialogContent>

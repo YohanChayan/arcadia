@@ -12,8 +12,8 @@ use App\Enums\Vocabulary;
 use App\Http\Requests\GuideRequest;
 use App\Models\Guide;
 use App\Models\Phrase;
-use App\Services\ArcadiaSite;
 use App\Services\GuideVisits;
+use App\Services\Site\Site;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -29,7 +29,7 @@ use Inertia\Response;
  */
 class GuideController
 {
-    public function index(Request $request, ArcadiaSite $site, GuideVisits $visits): Response
+    public function index(Request $request, Site $site, GuideVisits $visits): Response
     {
         // Only one status when asked for; anything else is every guide.
         $status = GuideStatus::tryFrom((string) $request->query('status'));
@@ -90,7 +90,7 @@ class GuideController
 
         return redirect()
             ->route($this->name('guides.index'))
-            ->with('success', __('arcadia.editor.guides.flash.created', ['title' => $guide->title]));
+            ->with('success', __('editor.guides.flash.created', ['title' => $guide->title]));
     }
 
     public function edit(Guide $guide): Response
@@ -130,7 +130,7 @@ class GuideController
 
         return redirect()
             ->route($this->name('guides.index'))
-            ->with('success', __('arcadia.editor.guides.flash.updated', ['title' => $guide->title]));
+            ->with('success', __('editor.guides.flash.updated', ['title' => $guide->title]));
     }
 
     public function destroy(Guide $guide): RedirectResponse
@@ -142,7 +142,7 @@ class GuideController
 
         return redirect()
             ->route($this->name('guides.index'))
-            ->with('success', __('arcadia.editor.guides.flash.deleted', ['title' => $title]));
+            ->with('success', __('editor.guides.flash.deleted', ['title' => $title]));
     }
 
     /**
@@ -154,7 +154,7 @@ class GuideController
         $this->ownLocale($guide);
         $guide->rotateLinkToken();
 
-        return back()->with('success', __('arcadia.editor.guides.flash.rotated'));
+        return back()->with('success', __('editor.guides.flash.rotated'));
     }
 
     private function save(GuideRequest $request, SaveGuide $save, ?Guide $guide): Guide

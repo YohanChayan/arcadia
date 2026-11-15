@@ -146,7 +146,7 @@ const catalogueActions = [
 
 // Each choice with how many it would show, whatever is filtered now.
 const filters = computed(() => [
-    { value: null, label: trans('arcadia.editor.guides.filters.all'), count: Object.values(props.statusCounts).reduce((sum, n) => sum + n, 0) },
+    { value: null, label: trans('editor.guides.filters.all'), count: Object.values(props.statusCounts).reduce((sum, n) => sum + n, 0) },
     ...props.statuses.map(s => ({ value: s.value, label: s.label, count: props.statusCounts[s.value] ?? 0 })),
 ])
 
@@ -176,25 +176,25 @@ const goToPage = page => router.get(editorRoute('guides.index'), query({ page })
 </script>
 
 <template>
-    <EditorTitle :parts="[$t('arcadia.editor.guides.title')]" />
+    <EditorTitle :parts="[$t('editor.guides.title')]" />
 
     <div class="py-6">
-        <EditorBreadcrumb :trail="[{ label: $t('arcadia.editor.guides.title') }]" />
+        <EditorBreadcrumb :trail="[{ label: $t('editor.guides.title') }]" />
 
-        <PageHeader :title="$t('arcadia.editor.guides.title')" :description="$t('arcadia.editor.guides.description')" :count="guides.total">
+        <PageHeader :title="$t('editor.guides.title')" :description="$t('editor.guides.description')" :count="guides.total">
             <template #actions>
                 <Link :href="editorRoute('guides.create')" :class="buttonVariants({ variant: 'brand' })" class="no-underline">
                     <Plus :size="16" aria-hidden="true" />
-                    {{ $t('arcadia.editor.guides.new') }}
+                    {{ $t('editor.guides.new') }}
                 </Link>
             </template>
         </PageHeader>
 
         <SearchField v-model="searchTerm" class="mb-3 max-w-md"
-                     :label="$t('arcadia.editor.guides.search.label')" :button-label="$t('arcadia.editor.guides.search.submit')"
+                     :label="$t('editor.guides.search.label')" :button-label="$t('editor.guides.search.submit')"
                      @search="search" />
 
-        <div role="group" :aria-label="$t('arcadia.editor.guides.filters.label')" class="mb-4 flex flex-wrap gap-1">
+        <div role="group" :aria-label="$t('editor.guides.filters.label')" class="mb-4 flex flex-wrap gap-1">
             <Button v-for="filter in filters" :key="filter.value ?? 'all'" type="button" size="sm"
                     :variant="status === filter.value ? 'secondary' : 'ghost'"
                     :aria-pressed="status === filter.value"
@@ -207,62 +207,62 @@ const goToPage = page => router.get(editorRoute('guides.index'), query({ page })
         <Empty v-if="!guides.data.length" class="border border-dashed border-rule">
             <EmptyHeader>
                 <EmptyMedia variant="icon"><BookOpen /></EmptyMedia>
-                <EmptyTitle>{{ search ? $t('arcadia.editor.guides.search.empty') : status ? $t('arcadia.editor.guides.filters.empty') : $t('arcadia.editor.guides.empty.title') }}</EmptyTitle>
-                <EmptyDescription v-if="!status && !search">{{ $t('arcadia.editor.guides.empty.hint') }}</EmptyDescription>
+                <EmptyTitle>{{ search ? $t('editor.guides.search.empty') : status ? $t('editor.guides.filters.empty') : $t('editor.guides.empty.title') }}</EmptyTitle>
+                <EmptyDescription v-if="!status && !search">{{ $t('editor.guides.empty.hint') }}</EmptyDescription>
             </EmptyHeader>
         </Empty>
 
         <template v-else>
             <!-- The page's tick and, once anything is selected, what to do with it. -->
-            <div role="toolbar" :aria-label="$t('arcadia.editor.guides.bulk.label')"
+            <div role="toolbar" :aria-label="$t('editor.guides.bulk.label')"
                  class="sticky top-0 z-20 mb-2 flex min-h-11 flex-wrap items-center gap-x-3 gap-y-2 rounded-lg border border-rule bg-card/95 px-3 py-1.5 backdrop-blur">
                 <label class="flex cursor-pointer items-center gap-2 text-sm text-ink-3">
                     <Checkbox :model-value="pageState" @update:model-value="togglePage" />
-                    {{ $t('arcadia.editor.guides.bulk.select_page') }}
+                    {{ $t('editor.guides.bulk.select_page') }}
                 </label>
 
                 <template v-if="selectedCount">
                     <span class="h-5 w-px bg-rule" aria-hidden="true" />
                     <span class="text-sm font-medium text-ink" aria-live="polite">
-                        {{ $tChoice('arcadia.editor.guides.bulk.selected', selectedCount, { count: selectedCount }) }}
+                        {{ $tChoice('editor.guides.bulk.selected', selectedCount, { count: selectedCount }) }}
                     </span>
                     <Button v-if="!allMatching && guides.total > selectedCount" type="button" variant="link" size="sm" class="h-auto px-0" @click="selectAllMatching">
-                        {{ $t('arcadia.editor.guides.bulk.select_all', { count: guides.total }) }}
+                        {{ $t('editor.guides.bulk.select_all', { count: guides.total }) }}
                     </Button>
                     <Button type="button" variant="ghost" size="sm" @click="clearSelection">
                         <X :size="14" aria-hidden="true" />
-                        {{ $t('arcadia.editor.guides.bulk.clear') }}
+                        {{ $t('editor.guides.bulk.clear') }}
                     </Button>
 
                     <DropdownMenu>
                         <DropdownMenuTrigger as-child>
                             <Button type="button" variant="outline" size="sm" class="ml-auto">
-                                {{ $t('arcadia.editor.guides.bulk.actions') }}
+                                {{ $t('editor.guides.bulk.actions') }}
                                 <ChevronDown :size="14" aria-hidden="true" />
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>{{ $t('arcadia.editor.guides.bulk.label') }}</DropdownMenuLabel>
+                            <DropdownMenuLabel>{{ $t('editor.guides.bulk.label') }}</DropdownMenuLabel>
                             <DropdownMenuItem v-for="bulk in bulkActions" :key="bulk.key" @select="askBulk(bulk.key)">
                                 <component :is="bulk.icon" :class="bulk.tone" aria-hidden="true" />
-                                {{ $t(`arcadia.editor.guides.bulk.${bulk.key}`) }}
+                                {{ $t(`editor.guides.bulk.${bulk.key}`) }}
                             </DropdownMenuItem>
                             <DropdownMenuSub>
                                 <DropdownMenuSubTrigger>
                                     <LibraryBig aria-hidden="true" />
-                                    {{ $t('arcadia.editor.guides.bulk.catalogue') }}
+                                    {{ $t('editor.guides.bulk.catalogue') }}
                                 </DropdownMenuSubTrigger>
                                 <DropdownMenuSubContent>
                                     <DropdownMenuItem v-for="bulk in catalogueActions" :key="bulk.key" @select="askBulk(bulk.key)">
                                         <component :is="bulk.icon" :class="bulk.tone" aria-hidden="true" />
-                                        {{ $t(`arcadia.editor.guides.bulk.${bulk.key}`) }}
+                                        {{ $t(`editor.guides.bulk.${bulk.key}`) }}
                                     </DropdownMenuItem>
                                 </DropdownMenuSubContent>
                             </DropdownMenuSub>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem variant="destructive" @select="askBulk('delete')">
                                 <Trash2 aria-hidden="true" />
-                                {{ $t('arcadia.editor.guides.bulk.delete') }}
+                                {{ $t('editor.guides.bulk.delete') }}
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
@@ -285,9 +285,9 @@ const goToPage = page => router.get(editorRoute('guides.index'), query({ page })
         <GuideBulkDialog :request="bulkRequest" @close="bulkRequest = null" @done="bulkDone" />
 
         <ConfirmDialog :open="pendingDelete !== null"
-                       :title="$t('arcadia.editor.guides.delete.title')"
-                       :body="$t('arcadia.editor.guides.delete.body')"
-                       :confirm-label="$t('arcadia.editor.guides.delete.confirm')"
+                       :title="$t('editor.guides.delete.title')"
+                       :body="$t('editor.guides.delete.body')"
+                       :confirm-label="$t('editor.guides.delete.confirm')"
                        :processing="deleting"
                        @confirm="confirmDelete"
                        @cancel="pendingDelete = null" />

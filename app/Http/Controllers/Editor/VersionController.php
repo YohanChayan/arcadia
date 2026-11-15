@@ -42,12 +42,12 @@ class VersionController
             $guide->update(['status' => GuideStatus::PUBLISHED]);
             $tell->waiting($guide);
 
-            return back()->with('success', __('arcadia.editor.versions.flash.released_and_published', ['number' => $version->number]));
+            return back()->with('success', __('editor.versions.flash.released_and_published', ['number' => $version->number]));
         }
 
         $tell->waiting($guide);
 
-        return back()->with('success', __('arcadia.editor.versions.flash.released', ['number' => $version->number]));
+        return back()->with('success', __('editor.versions.flash.released', ['number' => $version->number]));
     }
 
     public function store(Guide $guide, DraftNextVersion $draftNext): RedirectResponse
@@ -57,7 +57,7 @@ class VersionController
 
         return redirect()
             ->route(app()->getLocale().'.editor.content.show', ['guide' => $guide->id])
-            ->with('success', __('arcadia.editor.versions.flash.drafted', ['number' => $draft->number]));
+            ->with('success', __('editor.versions.flash.drafted', ['number' => $draft->number]));
     }
 
     public function storeChange(Request $request, Guide $guide): RedirectResponse
@@ -69,7 +69,7 @@ class VersionController
             'title' => ['required', 'string', 'max:160'],
             'notes' => ['nullable', 'string', 'max:1000'],
         ], [
-            'title.required' => __('arcadia.editor.content.errors.title'),
+            'title.required' => __('editor.content.errors.title'),
         ]));
 
         return back();
@@ -91,7 +91,7 @@ class VersionController
 
         $count = $fix->handle($guide, $key, $request->validated());
 
-        return back()->with('success', trans_choice('arcadia.editor.versions.flash.fixed', $count, ['count' => $count]));
+        return back()->with('success', trans_choice('editor.versions.flash.fixed', $count, ['count' => $count]));
     }
 
     private function draft(Guide $guide): Version

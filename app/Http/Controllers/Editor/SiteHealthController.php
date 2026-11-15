@@ -47,7 +47,7 @@ class SiteHealthController
 
         Artisan::call('queue:retry', ['id' => [$uuid]]);
 
-        return back()->with('success', __('arcadia.editor.settings.health.flash.retried'));
+        return back()->with('success', __('editor.settings.health.flash.retried'));
     }
 
     public function forget(string $uuid): RedirectResponse
@@ -56,7 +56,7 @@ class SiteHealthController
 
         Artisan::call('queue:forget', ['id' => $uuid]);
 
-        return back()->with('success', __('arcadia.editor.settings.health.flash.forgotten'));
+        return back()->with('success', __('editor.settings.health.flash.forgotten'));
     }
 
     /**
@@ -70,7 +70,7 @@ class SiteHealthController
 
         $deleted = $health->flushFailedJobs($range['start'], $range['end']);
 
-        return back()->with('success', __('arcadia.editor.settings.health.flash.flushed', ['count' => $deleted]));
+        return back()->with('success', __('editor.settings.health.flash.flushed', ['count' => $deleted]));
     }
 
     /**
@@ -82,13 +82,13 @@ class SiteHealthController
         $to = $request->user()->email;
 
         try {
-            Mail::raw(__('arcadia.editor.settings.health.test_mail.body', ['time' => now()->toDateTimeString()]), function ($message) use ($to) {
-                $message->to($to)->subject(__('arcadia.editor.settings.health.test_mail.subject'));
+            Mail::raw(__('editor.settings.health.test_mail.body', ['time' => now()->toDateTimeString()]), function ($message) use ($to) {
+                $message->to($to)->subject(__('editor.settings.health.test_mail.subject'));
             });
         } catch (Throwable $e) {
-            return back()->with('error', __('arcadia.editor.settings.health.flash.mail_failed', ['error' => $e->getMessage()]));
+            return back()->with('error', __('editor.settings.health.flash.mail_failed', ['error' => $e->getMessage()]));
         }
 
-        return back()->with('success', __('arcadia.editor.settings.health.flash.mail_sent', ['to' => $to]));
+        return back()->with('success', __('editor.settings.health.flash.mail_sent', ['to' => $to]));
     }
 }

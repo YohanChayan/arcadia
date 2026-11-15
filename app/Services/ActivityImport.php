@@ -41,7 +41,7 @@ class ActivityImport
         $family = ActivityFamily::tryFrom((string) ($data['family'] ?? ''));
 
         if (! $family) {
-            return [['place' => 'family', 'message' => __('arcadia.editor.activity_import.errors.family')]];
+            return [['place' => 'family', 'message' => __('editor.activity_import.errors.family')]];
         }
 
         $validator = Validator::make($data, ['activities' => ['required', 'array', 'list', 'min:1'], 'activities.*' => ['array'], 'activities.*.key' => ['required', 'string'], ...$this->rules($family)]);
@@ -60,9 +60,9 @@ class ActivityImport
 
                 // The node must be in this draft, and of the kind the family belongs on.
                 if (! $node || ! $family->belongsOn($node)) {
-                    $validator->errors()->add("activities.{$a}.key", __('arcadia.editor.activity_import.errors.unknown_key', ['key' => $key]));
+                    $validator->errors()->add("activities.{$a}.key", __('editor.activity_import.errors.unknown_key', ['key' => $key]));
                 } elseif (isset($seen[$key])) {
-                    $validator->errors()->add("activities.{$a}.key", __('arcadia.editor.activity_import.errors.repeated_key', ['key' => $key]));
+                    $validator->errors()->add("activities.{$a}.key", __('editor.activity_import.errors.repeated_key', ['key' => $key]));
                 }
 
                 $seen[$key] = true;
@@ -166,7 +166,7 @@ class ActivityImport
             foreach ((array) ($activity['questions'] ?? []) as $q => $question) {
                 $correct = $question['correct'] ?? null;
                 if (is_int($correct) && is_array($question['options'] ?? null) && $correct >= count($question['options'])) {
-                    $problems["questions.{$q}.correct"] = __('arcadia.editor.activity_import.errors.correct');
+                    $problems["questions.{$q}.correct"] = __('editor.activity_import.errors.correct');
                 }
             }
         }
@@ -174,7 +174,7 @@ class ActivityImport
         if ($family === ActivityFamily::STAGE_GAME && ($activity['game'] ?? null) === 'blanks') {
             foreach ((array) ($activity['pairs'] ?? []) as $p => $pair) {
                 if (is_string($pair['left'] ?? null) && ! str_contains($pair['left'], '___')) {
-                    $problems["pairs.{$p}.left"] = __('arcadia.editor.activity_import.errors.blank');
+                    $problems["pairs.{$p}.left"] = __('editor.activity_import.errors.blank');
                 }
             }
         }
@@ -199,7 +199,7 @@ class ActivityImport
             $next = $segments[$i + 1] ?? null;
 
             if (in_array($segment, $counted, true) && is_numeric($next)) {
-                $parts[] = __("arcadia.editor.activity_import.places.{$segment}", ['number' => (int) $next + 1]);
+                $parts[] = __("editor.activity_import.places.{$segment}", ['number' => (int) $next + 1]);
                 $i++;
             } else {
                 $parts[] = $segment;

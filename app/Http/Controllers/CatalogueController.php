@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Guide;
 use App\Models\Setting;
-use App\Services\ArcadiaSite;
+use App\Services\Site\Site;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -19,7 +19,7 @@ use Inertia\Response;
  */
 class CatalogueController
 {
-    public function __invoke(Request $request, ArcadiaSite $site): Response
+    public function __invoke(Request $request, Site $site): Response
     {
         $guides = Guide::query()
             ->listed()
@@ -50,8 +50,8 @@ class CatalogueController
             // Only the categories something is listed in, so no chip filters down to nothing.
             'categories' => $guides->pluck('category')->filter()->unique('id')->sortBy('name')
                 ->map(fn ($category) => ['id' => $category->id, 'name' => $category->name])->values(),
-            'pageTitle' => __('arcadia.catalogue.meta.title'),
-            'metaDescription' => __('arcadia.catalogue.meta.description'),
+            'pageTitle' => __('catalogue.meta.title'),
+            'metaDescription' => __('catalogue.meta.description'),
             ...$site->preview(),
             'noIndex' => true,
             'canonicalUrl' => $site->url($site->cataloguePath()),

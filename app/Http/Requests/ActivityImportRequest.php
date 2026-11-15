@@ -25,10 +25,10 @@ class ActivityImportRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'file.required' => __('arcadia.editor.activity_import.errors.no_file'),
-            'file.file' => __('arcadia.editor.activity_import.errors.no_file'),
-            'file.extensions' => __('arcadia.editor.activity_import.errors.not_json_file'),
-            'file.max' => __('arcadia.editor.activity_import.errors.too_large'),
+            'file.required' => __('editor.activity_import.errors.no_file'),
+            'file.file' => __('editor.activity_import.errors.no_file'),
+            'file.extensions' => __('editor.activity_import.errors.not_json_file'),
+            'file.max' => __('editor.activity_import.errors.too_large'),
         ];
     }
 

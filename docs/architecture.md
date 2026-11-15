@@ -1,7 +1,7 @@
 # Arcadia — the data model, the host and sign-in
 
 Arcadia, the learning guides, is this application. Its product code is the `app/` slice;
-`ArcadiaSite` (a singleton over `config/arcadia.php`) answers its paths per language, its roles and
+`Site` (a singleton over `config/site.php`) answers its paths per language, its roles and
 who may sign in. This file is the shape of a guide in the database, then — at the end — how the
 host and sign-in work. Migrations: `database/migrations/`, one file per table.
 Every product table is `guide_`-prefixed; the accounts tables (`roles`, `memberships`,
@@ -20,7 +20,7 @@ guides ── guide_versions             1 = the base; each later one a copy of 
 
 The final challenge is a **card** in the last stage, not a stage, so its tasks count toward
 that stage's progress. A guide is one language (`locale`) and one `Level` — a fixed scale,
-labelled from `lang/{es,en}/arcadia.php` — with a category, topics and one or more goals, the
+labelled from `lang/{es,en}/guide.php` — with a category, topics and one or more goals, the
 last its own lines of text (ADR 0020).
 
 **Why copies.** Content goes stale: a video is taken down, a creator's site dies, in the base
@@ -170,7 +170,7 @@ indexed yet, as the presentations are not.
 
 ## The reader's page
 
-`/guia/{token}` in Spanish, `/guide/{token}` in English (`ArcadiaSite::guidePath()`,
+`/guia/{token}` in Spanish, `/guide/{token}` in English (`Site::guidePath()`,
 `GuidePageController`). It serves **only a published guide of that slug's language, and only its
 latest released version** — a draft is never shown. A wrong or rotated token, a draft, an
 unreleased guide, the other language's guide: all the same 404, so a link says nothing about
@@ -385,7 +385,7 @@ release.
   band — for `cover`, 1200 × 675 and 1.4 to 1.91 (3:2 and 16:9 both fit; a square does not, as
   its share card would need upscaling); for `flyer`, 1080 × 1080 and 0.55 to 1.0, square or
   portrait, the 1:1, 4:5 and 9:16 its prompt offers. The ratio message is the slot's own
-  (`arcadia.editor.images.slots.{slot}.ratio`), as is the rule the editor shows. The composition that survives every crop — subject in
+  (`editor.images.slots.{slot}.ratio`), as is the rule the editor shows. The composition that survives every crop — subject in
   the centre, no text — is the generating prompt's job, not the server's.
 - **Files** sit on the `public` disk under `guides/{guide}/{random}/` — covers uploaded before the
   rename to Arcadia (2026-10-21) stay under `studia/guides/…`, as their row records. **Every upload gets
@@ -412,7 +412,7 @@ release.
 
 ## The reader's own pages
 
-`routes/reader.php`: `/es/mis-guias` · `/en/my-guides` (`ArcadiaSite::readerPath()`),
+`routes/reader.php`: `/es/mis-guias` · `/en/my-guides` (`Site::readerPath()`),
 named `<locale>.reader.*`, behind the floor and `role:reader` — the reader role of a
 Arcadia membership — and **not** `approved`, since the membership is a reader's admission.
 
@@ -447,7 +447,7 @@ Arcadia membership — and **not** `approved`, since the membership is a reader'
   also remembers it in `sessionStorage`, since going Back restores the props it was sent with.
   None for the owner, and none is remembered while there is no phrase to show.
 - **Help** (`Reader\HelpController`, `pages/reader/Help.vue`): `/es/ayuda` · `/en/help`
-  (`ArcadiaSite::helpPath()`) — short answers, which are copy (`arcadia.help`), and the address in
+  (`Site::helpPath()`) — short answers, which are copy (`help`), and the address in
   `contact_email`. Only the account's device limit and that address come from the server.
 - **The reader's bar** (`ReaderLayout`, picked by `shellFor`) sits above "My guides", help
   and a guide its reader opens — not the device limit, nor a guide the owner reads or previews.
@@ -658,7 +658,7 @@ and keeps the prompt here (`guide_prompt_templates` → `guide_prompt_versions` 
   pitch and goals; the scene is the owner's — in the same `PromptFiller`, found by its name
   (`PromptTemplate::COVER`). Copying there records nothing and freezes no version.
 
-- **`ArcadiaFlyerPromptTemplateSeeder`** writes a third optional template, "Flyer de Arcadia —
+- **`BrandFlyerPromptTemplateSeeder`** writes a third optional template, "Flyer de Arcadia —
   imagen": a social media flyer that sells **Arcadia, not one guide**. Its rule is that **people
   buy results, not processes** — a gym sells someone fit, not hours of weights — and a guide is
   the key of a subject, for growing at work, in one's own life or to start something. So the
@@ -759,7 +759,7 @@ next version.
 
 The landing page's one action is a popup (`components/landing/RequestDialog.vue`) that
 posts to its language's path — `POST /pedir` from `/es`, `/ask` from `/en`
-(`ArcadiaSite::inquiryPath()`) — into `guide_inquiries` (`Inquiry`), in that language.
+(`Site::inquiryPath()`) — into `guide_inquiries` (`Inquiry`), in that language.
 
 **Anyone may ask — no account is needed** (decided 2026-10-16, reversing a sign-in requirement
 built the same day: a stranger asked to sign in first is one who does not ask).
@@ -781,7 +781,7 @@ What the popup asks for:
 dropped as taps too many; the columns stay, read by the editor and the prompt popup on the
 requests that carry them. `Inquiry::requesterName()` reads the account's name, else a typed one.
 
-The popup shows Arcadia's contact address (`ArcadiaSite::contactEmail()`) under the form and on
+The popup shows Arcadia's contact address (`Site::contactEmail()`) under the form and on
 its thank-you, which also repeats the contact typed and, when recorded, the account — the way
 out for someone who typed their number or address wrong.
 
@@ -801,7 +801,7 @@ held off by a hidden `website` field that must stay empty and by `throttle:5,10`
 
 Arcadia is the whole application, so it answers whatever host reaches it: its routes are bound
 to no host (`routes/web.php`). Its links, canonicals, emails and Google
-callback are built on `APP_URL` (`ArcadiaSite::url()`), never on the request's host.
+callback are built on `APP_URL` (`Site::url()`), never on the request's host.
 
 **Which hosts reach it is the edge's decision, not the app's.** The proxy in front — Caddy in
 production — lists the real hosts, refuses the rest, and owns any redirect from a former host;
@@ -809,7 +809,7 @@ the app refuses nothing by host.
 
 ## Who may sign in, and how
 
-Three ways in, one rule. **Admission is `ArcadiaSite::admits()`**: an `admin` membership on an
+Three ways in, one rule. **Admission is `Site::admits()`**: an `admin` membership on an
 approved account (the owner), or a `reader` membership. No membership, no entry. Every way in asks
 it before the user is signed in, never after:
 
@@ -844,7 +844,7 @@ Wayfinder, so a build never depends on the switch.
 
 **The account settings** (`pages/settings/*`, the kit's Profile and Security) render inside the
 shell their owner works in — the editor's for the owner, the reader's for a reader
-(`lib/shell-for.js`) — in both languages (`arcadia.account.*`), and confirm a save beside its
+(`lib/shell-for.js`) — in both languages (`account.*`), and confirm a save beside its
 button through the session's `status`, not a toast, so neither shell has to carry one.
 
 `GuideSignInTest`, `GuideSignInGateTest`, `PasskeysTest` and `SaveConfirmationTest` hold these.
@@ -859,6 +859,14 @@ request); a subject with one action stays at the root until a second arrives
 (`DraftNextPromptVersion`). `app/Services/Site` holds what Site settings reads — health, logs,
 mail, agents. A model's traits are in `app/Models/Concerns`. Sorting by subject is not
 sorting by size: a folder of many unrelated files stays flat.
+
+**Copy is one file per surface**, the same files in `lang/es` and `lang/en`: `landing.php`,
+`reader.php`, `auth.php`, `account.php`, … and `guide.php` for a guide's own words (its levels).
+The editor is big enough to be a directory, one file per screen — `lang/{locale}/editor/guides.php`
+is `editor.guides.*`, its shared words in `editor/common.php`. Laravel alone reads that file only
+as `editor/guides.*`, while `laravel-vue-i18n` compiles it to `editor.guides.*`;
+`App\Translation\DirectoryFileLoader` reads a directory as a group, so a key has one spelling in
+PHP and in `$t()`.
 
 ## Knowledge and the assistant are two slices
 

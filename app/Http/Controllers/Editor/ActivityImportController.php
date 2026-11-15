@@ -27,7 +27,7 @@ class ActivityImportController
         $data = $import->extract($request->answer());
 
         if ($data === null) {
-            return response()->json(['problems' => [['place' => '—', 'message' => __('arcadia.editor.activity_import.errors.no_json')]], 'summary' => null]);
+            return response()->json(['problems' => [['place' => '—', 'message' => __('editor.activity_import.errors.no_json')]], 'summary' => null]);
         }
 
         $problems = $import->problems($data, $draft);
@@ -44,12 +44,12 @@ class ActivityImportController
         $data = $import->extract($request->answer());
 
         if ($data === null || $import->problems($data, $draft) !== []) {
-            throw ValidationException::withMessages(['file' => __('arcadia.editor.activity_import.errors.not_valid')]);
+            throw ValidationException::withMessages(['file' => __('editor.activity_import.errors.not_valid')]);
         }
 
         $attach->handle($draft, $data);
 
-        return back()->with('success', __('arcadia.editor.activity_import.flash.imported'));
+        return back()->with('success', __('editor.activity_import.flash.imported'));
     }
 
     private function draft(Guide $guide): Version

@@ -100,14 +100,14 @@ const submit = () => {
     <form class="panel max-w-3xl p-6 sm:p-8" @submit.prevent="submit">
         <div class="grid grid-cols-1 gap-5">
             <Field :data-invalid="form.errors.title ? true : undefined">
-                <FieldLabel for="title"><Eyebrow as="span">{{ $t('arcadia.editor.guides.fields.title') }}</Eyebrow></FieldLabel>
+                <FieldLabel for="title"><Eyebrow as="span">{{ $t('editor.guides.fields.title') }}</Eyebrow></FieldLabel>
                 <Input id="title" v-model="form.title" type="text" autocomplete="off" :aria-invalid="form.errors.title ? 'true' : undefined" />
                 <FieldError v-if="form.errors.title">{{ form.errors.title }}</FieldError>
             </Field>
 
             <div class="grid grid-cols-1 gap-5 sm:grid-cols-3">
                 <Field>
-                    <FieldLabel for="level"><Eyebrow as="span">{{ $t('arcadia.editor.guides.fields.level') }}</Eyebrow></FieldLabel>
+                    <FieldLabel for="level"><Eyebrow as="span">{{ $t('editor.guides.fields.level') }}</Eyebrow></FieldLabel>
                     <Select v-model="form.level">
                         <SelectTrigger id="level"><SelectValue /></SelectTrigger>
                         <SelectContent>
@@ -117,7 +117,7 @@ const submit = () => {
                 </Field>
 
                 <Field>
-                    <FieldLabel for="status"><Eyebrow as="span">{{ $t('arcadia.editor.guides.fields.status') }}</Eyebrow></FieldLabel>
+                    <FieldLabel for="status"><Eyebrow as="span">{{ $t('editor.guides.fields.status') }}</Eyebrow></FieldLabel>
                     <Select v-model="form.status">
                         <SelectTrigger id="status"><SelectValue /></SelectTrigger>
                         <SelectContent>
@@ -127,11 +127,11 @@ const submit = () => {
                 </Field>
 
                 <Field :data-invalid="form.errors.category_id ? true : undefined">
-                    <FieldLabel for="category"><Eyebrow as="span">{{ $t('arcadia.editor.guides.fields.category') }}</Eyebrow></FieldLabel>
+                    <FieldLabel for="category"><Eyebrow as="span">{{ $t('editor.guides.fields.category') }}</Eyebrow></FieldLabel>
                     <Select v-model="form.category_id">
                         <SelectTrigger id="category"><SelectValue /></SelectTrigger>
                         <SelectContent>
-                            <SelectItem :value="NO_CATEGORY">{{ $t('arcadia.editor.guides.fields.no_category') }}</SelectItem>
+                            <SelectItem :value="NO_CATEGORY">{{ $t('editor.guides.fields.no_category') }}</SelectItem>
                             <SelectItem v-for="option in categories" :key="option.id" :value="String(option.id)">{{ option.name }}</SelectItem>
                         </SelectContent>
                     </Select>
@@ -140,17 +140,17 @@ const submit = () => {
             </div>
 
             <Field :data-invalid="form.errors.goals || form.errors['goals.0'] ? true : undefined">
-                <FieldLabel for="goals"><Eyebrow as="span">{{ $t('arcadia.editor.guides.fields.goals') }}</Eyebrow></FieldLabel>
-                <Textarea id="goals" v-model="form.goals" rows="4" :placeholder="$t('arcadia.editor.guides.fields.goals_placeholder')" />
+                <FieldLabel for="goals"><Eyebrow as="span">{{ $t('editor.guides.fields.goals') }}</Eyebrow></FieldLabel>
+                <Textarea id="goals" v-model="form.goals" rows="4" :placeholder="$t('editor.guides.fields.goals_placeholder')" />
                 <FieldError v-if="form.errors.goals || form.errors['goals.0']">{{ form.errors.goals || form.errors['goals.0'] }}</FieldError>
-                <FieldDescription v-else>{{ $t('arcadia.editor.guides.fields.goals_hint') }}</FieldDescription>
+                <FieldDescription v-else>{{ $t('editor.guides.fields.goals_hint') }}</FieldDescription>
             </Field>
 
             <fieldset class="m-0 border-0 p-0">
-                <legend class="mb-2"><Eyebrow as="span">{{ $t('arcadia.editor.guides.fields.topics') }}</Eyebrow></legend>
+                <legend class="mb-2"><Eyebrow as="span">{{ $t('editor.guides.fields.topics') }}</Eyebrow></legend>
                 <CheckboxGroup v-model="form.topic_ids"
                                :options="topics.map(option => ({ value: option.id, label: option.name }))"
-                               :empty="$t('arcadia.editor.guides.fields.none_yet')" />
+                               :empty="$t('editor.guides.fields.none_yet')" />
                 <FieldError v-if="form.errors.topic_ids || form.errors['topic_ids.0']" class="mt-1">
                     {{ form.errors.topic_ids || form.errors['topic_ids.0'] }}
                 </FieldError>
@@ -160,17 +160,17 @@ const submit = () => {
                  Toggle chips, hand-built as /draft's are until the library has a toggle group. -->
             <fieldset v-if="phrases.length" class="m-0 border-0 p-0">
                 <legend class="mb-1 flex w-full flex-wrap items-center justify-between gap-2">
-                    <Eyebrow as="span">{{ $t('arcadia.editor.guides.fields.phrases') }}</Eyebrow>
+                    <Eyebrow as="span">{{ $t('editor.guides.fields.phrases') }}</Eyebrow>
                     <Button type="button" variant="outline" size="sm" @click="suggestPhrases">
                         <Shuffle aria-hidden="true" />
-                        {{ $t('arcadia.editor.guides.fields.phrases_suggest') }}
+                        {{ $t('editor.guides.fields.phrases_suggest') }}
                     </Button>
                 </legend>
-                <p class="mt-0 mb-3 text-xs text-ink-3">{{ $t('arcadia.editor.guides.fields.phrases_hint') }}</p>
+                <p class="mt-0 mb-3 text-xs text-ink-3">{{ $t('editor.guides.fields.phrases_hint') }}</p>
                 <div class="grid gap-4">
                     <div v-for="moment in moments" :key="moment.value">
                         <p class="m-0 mb-1.5 text-xs font-semibold text-ink-2">{{ moment.label }}</p>
-                        <p v-if="phrasesFor(moment.value).length === 0" class="m-0 text-sm text-ink-4">{{ $t('arcadia.editor.phrases.empty') }}</p>
+                        <p v-if="phrasesFor(moment.value).length === 0" class="m-0 text-sm text-ink-4">{{ $t('editor.phrases.empty') }}</p>
                         <div v-else class="flex flex-wrap gap-2" role="group" :aria-label="moment.label">
                             <button v-for="phrase in phrasesFor(moment.value)" :key="phrase.id" type="button"
                                     :aria-pressed="form.phrase_ids.includes(phrase.id)"
@@ -191,20 +191,20 @@ const submit = () => {
             <!-- The personal opening the reader sees first; an imported answer writes it. -->
             <Field :data-invalid="form.errors.greeting ? true : undefined">
                 <FieldLabel for="greeting">
-                    <Eyebrow as="span">{{ $t('arcadia.editor.guides.fields.greeting') }}</Eyebrow>
-                    <span class="text-xs font-normal text-ink-4">· {{ $t('arcadia.editor.optional') }}</span>
+                    <Eyebrow as="span">{{ $t('editor.guides.fields.greeting') }}</Eyebrow>
+                    <span class="text-xs font-normal text-ink-4">· {{ $t('editor.common.optional') }}</span>
                 </FieldLabel>
                 <Textarea id="greeting" v-model="form.greeting" rows="3" maxlength="2000" />
                 <FieldError v-if="form.errors.greeting">{{ form.errors.greeting }}</FieldError>
-                <FieldDescription v-else>{{ $t('arcadia.editor.guides.fields.greeting_hint') }}</FieldDescription>
+                <FieldDescription v-else>{{ $t('editor.guides.fields.greeting_hint') }}</FieldDescription>
             </Field>
 
             <div class="flex items-start justify-between gap-4">
                 <div class="min-w-0">
                     <FieldLabel for="unlock_in_order">
-                        <Eyebrow as="span">{{ $t('arcadia.editor.guides.fields.unlock_in_order') }}</Eyebrow>
+                        <Eyebrow as="span">{{ $t('editor.guides.fields.unlock_in_order') }}</Eyebrow>
                     </FieldLabel>
-                    <p class="mt-1 mb-0 text-sm text-ink-3">{{ $t('arcadia.editor.guides.fields.unlock_in_order_hint') }}</p>
+                    <p class="mt-1 mb-0 text-sm text-ink-3">{{ $t('editor.guides.fields.unlock_in_order_hint') }}</p>
                 </div>
                 <Switch id="unlock_in_order" v-model="form.unlock_in_order" />
             </div>
@@ -214,7 +214,7 @@ const submit = () => {
             <Button type="submit" variant="brand" size="lg" :disabled="form.processing">{{ submitLabel }}</Button>
             <Link :href="editorRoute('guides.index')" :class="buttonVariants({ variant: 'outline', size: 'lg' })" class="no-underline">
                 <ArrowLeft :size="15" aria-hidden="true" />
-                {{ $t('arcadia.editor.cancel') }}
+                {{ $t('editor.common.cancel') }}
             </Link>
         </div>
     </form>

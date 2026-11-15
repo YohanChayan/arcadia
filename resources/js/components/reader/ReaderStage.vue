@@ -65,14 +65,14 @@ watch(() => props.celebration, async celebration => {
                     :aria-expanded="expanded" :aria-controls="bodyId" @click="$emit('fold')">
                 <span class="min-w-0 flex-1">
                     <span class="flex items-center gap-2 font-mono text-xs font-medium uppercase tracking-widest text-guide-accent">
-                        {{ $t('arcadia.reader.stage', { number }) }}
+                        {{ $t('reader.stage', { number }) }}
                         <span v-if="locked" class="inline-flex items-center gap-1 normal-case tracking-normal text-guide-ink-soft">
                             <Lock :size="12" aria-hidden="true" />
-                            {{ $t('arcadia.reader.locked') }}
+                            {{ $t('reader.locked') }}
                         </span>
                         <span v-else-if="keys.length" class="normal-case tracking-normal text-guide-ink-soft">{{ done }}/{{ keys.length }}</span>
                         <!-- The owner's view of a reader: they wrote a note on this stage. -->
-                        <NotebookPen v-if="noteMarks.has(`stage:${stage.key}`)" :size="12" class="text-guide-accent" :aria-label="$t('arcadia.reader.has_notes')" />
+                        <NotebookPen v-if="noteMarks.has(`stage:${stage.key}`)" :size="12" class="text-guide-accent" :aria-label="$t('reader.has_notes')" />
                     </span>
                     <span class="mt-1 block font-display text-xl font-semibold text-guide-ink sm:text-2xl">{{ stage.title }}</span>
                 </span>
@@ -80,9 +80,9 @@ watch(() => props.celebration, async celebration => {
             </button>
             <button v-if="notes?.enabled && !locked" type="button"
                     class="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-guide-rule px-2.5 py-1 text-xs text-guide-ink hover:border-guide-accent"
-                    :aria-label="`${$t('arcadia.reader.notes.on_stage')}: ${stage.title}`" @click="notes.open(target)">
+                    :aria-label="`${$t('reader.notes.on_stage')}: ${stage.title}`" @click="notes.open(target)">
                 <NotebookPen :size="13" aria-hidden="true" />
-                {{ $t('arcadia.reader.notes.title') }}
+                {{ $t('reader.notes.title') }}
                 <!-- How many, only when there are any. -->
                 <span v-if="noteCount" class="rounded-full bg-guide-accent px-1.5 font-mono text-[11px] leading-4 font-semibold text-guide-on-accent">{{ noteCount }}</span>
             </button>
@@ -90,30 +90,30 @@ watch(() => props.celebration, async celebration => {
 
         <div v-if="expanded" :id="bodyId">
             <p v-if="stage.goal" class="mt-2 mb-0 text-sm text-guide-ink-soft">
-                <span class="font-medium text-guide-ink">{{ $t('arcadia.reader.when_done') }}</span> {{ stage.goal }}
+                <span class="font-medium text-guide-ink">{{ $t('reader.when_done') }}</span> {{ stage.goal }}
             </p>
 
             <!-- What is coming, and what opens it. -->
             <div v-if="locked" class="mt-4 flex items-start gap-3 rounded-xl border border-guide-rule bg-guide-well p-4">
                 <Lock :size="18" class="mt-0.5 shrink-0 text-guide-accent" aria-hidden="true" />
                 <div class="min-w-0 text-sm">
-                    <p class="m-0 font-semibold text-guide-ink">{{ $t('arcadia.reader.unlock_hint', { number: number - 1 }) }}</p>
+                    <p class="m-0 font-semibold text-guide-ink">{{ $t('reader.unlock_hint', { number: number - 1 }) }}</p>
                     <p class="mt-0.5 mb-0 text-guide-ink-soft">
-                        {{ $tChoice('arcadia.reader.stage_lines', keys.length, { count: keys.length }) }}<template v-if="minutes"> · {{ $t('arcadia.reader.stage_minutes', { minutes }) }}</template>
+                        {{ $tChoice('reader.stage_lines', keys.length, { count: keys.length }) }}<template v-if="minutes"> · {{ $t('reader.stage_minutes', { minutes }) }}</template>
                     </p>
                 </div>
             </div>
 
             <div v-else class="mt-4">
                 <ProgressBar :done="done" :total="keys.length" />
-                <p v-if="keys.length && done === keys.length" class="mt-2 mb-0 text-sm font-medium text-guide-done">{{ $t('arcadia.reader.stage_complete') }}</p>
+                <p v-if="keys.length && done === keys.length" class="mt-2 mb-0 text-sm font-medium text-guide-done">{{ $t('reader.stage_complete') }}</p>
             </div>
 
             <!-- Locked: seen, not used — dimmed, and out of reach of clicks, keys and readers. -->
             <div class="relative" :inert="locked || undefined" :aria-hidden="locked || undefined">
                 <article v-for="card in stage.cards" :key="card.key" class="mt-6 rounded-xl p-4 sm:p-5"
                          :class="card.kind === 'challenge' ? 'border-2 border-guide-accent' : 'bg-guide-well'">
-                    <p v-if="card.kind === 'challenge'" class="m-0 text-xs font-semibold uppercase tracking-wide text-guide-accent">{{ $t('arcadia.reader.challenge') }}</p>
+                    <p v-if="card.kind === 'challenge'" class="m-0 text-xs font-semibold uppercase tracking-wide text-guide-accent">{{ $t('reader.challenge') }}</p>
                     <p v-if="card.byline" class="m-0 font-semibold text-guide-ink">{{ card.byline }}</p>
                     <p v-if="card.description" class="mt-1 mb-0 text-sm text-guide-ink-soft">{{ card.description }}</p>
                     <blockquote v-if="card.quote" class="mt-3 mb-0 border-l-2 border-guide-accent pl-3 text-sm italic text-guide-ink-soft">{{ card.quote }}</blockquote>
@@ -133,15 +133,15 @@ watch(() => props.celebration, async celebration => {
                  class="stage-cheer mt-6 rounded-xl border-2 border-guide-done bg-guide-well p-5 text-center sm:p-6">
                 <PartyPopper :size="32" class="mx-auto text-guide-done" aria-hidden="true" />
                 <p class="mt-2 mb-0 font-display text-xl font-semibold text-guide-ink">
-                    {{ $t(celebration.guide ? 'arcadia.reader.guide_complete' : 'arcadia.reader.stage_complete') }}
+                    {{ $t(celebration.guide ? 'reader.guide_complete' : 'reader.stage_complete') }}
                 </p>
                 <p v-if="stage.goal" class="mt-2 mb-0 text-guide-ink">
-                    <span class="font-semibold">{{ $t('arcadia.reader.you_can_now') }}</span> {{ stage.goal }}
+                    <span class="font-semibold">{{ $t('reader.you_can_now') }}</span> {{ stage.goal }}
                 </p>
                 <p v-if="celebration.phrase" class="mt-2 mb-0 text-sm font-semibold text-guide-accent">{{ celebration.phrase }}</p>
                 <button v-if="!last" type="button" @click="$emit('onward')"
                         class="mt-4 inline-flex items-center justify-center rounded-full bg-guide-accent px-5 py-2.5 text-sm font-semibold text-guide-on-accent">
-                    {{ $t('arcadia.reader.next_stage', { number: number + 1 }) }}
+                    {{ $t('reader.next_stage', { number: number + 1 }) }}
                 </button>
             </div>
         </div>

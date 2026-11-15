@@ -53,35 +53,35 @@ const saveLimit = () => form
     <Dialog :open="reader !== null" @update:open="isOpen => !isOpen && emit('close')">
         <DialogContent v-if="reader" class="max-w-md">
             <DialogHeader>
-                <DialogTitle>{{ $t('arcadia.editor.devices.title') }}</DialogTitle>
+                <DialogTitle>{{ $t('editor.devices.title') }}</DialogTitle>
                 <DialogDescription class="break-all">{{ reader.email }}</DialogDescription>
             </DialogHeader>
 
-            <p v-if="!reader.devices.length" class="m-0 py-4 text-center text-sm text-ink-4">{{ $t('arcadia.editor.devices.empty') }}</p>
+            <p v-if="!reader.devices.length" class="m-0 py-4 text-center text-sm text-ink-4">{{ $t('editor.devices.empty') }}</p>
             <ul v-else class="m-0 divide-y divide-rule rounded-control border border-rule p-0">
                 <li v-for="device in reader.devices" :key="device.id" class="flex list-none items-center justify-between gap-3 px-3 py-2.5">
                     <div class="min-w-0">
                         <p class="m-0 truncate text-sm font-medium text-ink">{{ device.label }}</p>
                         <p class="mt-0.5 mb-0 text-xs text-ink-4">
-                            {{ $t('arcadia.editor.devices.used', { first: formatDate(device.created_at), last: formatDate(device.last_used_at) }) }}
+                            {{ $t('editor.devices.used', { first: formatDate(device.created_at), last: formatDate(device.last_used_at) }) }}
                         </p>
                     </div>
                     <Button type="button" variant="ghost-danger" size="sm" class="shrink-0" :disabled="revoking !== null" @click="revoke(device)">
                         <Trash2 :size="14" aria-hidden="true" />
-                        {{ $t('arcadia.editor.devices.revoke') }}
+                        {{ $t('editor.devices.revoke') }}
                     </Button>
                 </li>
             </ul>
 
             <form class="mt-2 flex items-end gap-2" @submit.prevent="saveLimit">
                 <Field class="flex-1" :data-invalid="form.errors.limit ? true : undefined">
-                    <FieldLabel for="device-limit">{{ $t('arcadia.editor.devices.limit') }}</FieldLabel>
+                    <FieldLabel for="device-limit">{{ $t('editor.devices.limit') }}</FieldLabel>
                     <Input id="device-limit" v-model="form.limit" type="number" min="1" max="20" inputmode="numeric"
                            :placeholder="String(siteLimit)" :aria-invalid="form.errors.limit ? 'true' : undefined" />
                     <FieldError v-if="form.errors.limit">{{ form.errors.limit }}</FieldError>
-                    <FieldDescription v-else>{{ $t('arcadia.editor.devices.limit_hint', { count: siteLimit }) }}</FieldDescription>
+                    <FieldDescription v-else>{{ $t('editor.devices.limit_hint', { count: siteLimit }) }}</FieldDescription>
                 </Field>
-                <Button type="submit" variant="outline" :disabled="form.processing" class="mb-6">{{ $t('arcadia.editor.devices.save') }}</Button>
+                <Button type="submit" variant="outline" :disabled="form.processing" class="mb-6">{{ $t('editor.devices.save') }}</Button>
             </form>
         </DialogContent>
     </Dialog>

@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\Role;
-use App\Services\ArcadiaSite;
+use App\Services\Site\Site;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,7 +23,7 @@ class EnsureUserHasRecognisedRole
         Role::ALIAS_READER,
     ];
 
-    public function __construct(private readonly ArcadiaSite $site) {}
+    public function __construct(private readonly Site $site) {}
 
     public function handle(Request $request, Closure $next): Response
     {

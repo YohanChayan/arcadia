@@ -43,13 +43,13 @@ const submit = () => {
     <Dialog :open="open" @update:open="value => !value && emit('close')">
         <DialogContent class="max-w-md">
             <DialogHeader>
-                <DialogTitle>{{ $t(`arcadia.editor.vocabulary.tabs.${vocabulary}`) }}</DialogTitle>
-                <DialogDescription>{{ $t(`arcadia.editor.vocabulary.hints.${vocabulary}`) }}</DialogDescription>
+                <DialogTitle>{{ $t(`editor.vocabulary.tabs.${vocabulary}`) }}</DialogTitle>
+                <DialogDescription>{{ $t(`editor.vocabulary.hints.${vocabulary}`) }}</DialogDescription>
             </DialogHeader>
 
             <form :id="`term-${vocabulary}`" class="grid gap-4" @submit.prevent="submit">
                 <Field :data-invalid="form.errors.name || form.errors.slug ? true : undefined">
-                    <FieldLabel :for="`term-${vocabulary}-name`"><Eyebrow as="span">{{ $t('arcadia.editor.vocabulary.fields.name') }}</Eyebrow></FieldLabel>
+                    <FieldLabel :for="`term-${vocabulary}-name`"><Eyebrow as="span">{{ $t('editor.vocabulary.fields.name') }}</Eyebrow></FieldLabel>
                     <Input :id="`term-${vocabulary}-name`" v-model="form.name" autocomplete="off"
                            :aria-invalid="form.errors.name || form.errors.slug ? 'true' : undefined" />
                     <FieldError v-if="form.errors.name || form.errors.slug">{{ form.errors.name || form.errors.slug }}</FieldError>
@@ -57,9 +57,9 @@ const submit = () => {
             </form>
 
             <DialogFooter>
-                <Button type="button" variant="outline" @click="emit('close')">{{ $t('arcadia.editor.cancel') }}</Button>
+                <Button type="button" variant="outline" @click="emit('close')">{{ $t('editor.common.cancel') }}</Button>
                 <Button type="submit" :form="`term-${vocabulary}`" variant="brand" :disabled="form.processing || !form.name">
-                    {{ $t('arcadia.editor.vocabulary.save') }}
+                    {{ $t('editor.vocabulary.save') }}
                 </Button>
             </DialogFooter>
         </DialogContent>

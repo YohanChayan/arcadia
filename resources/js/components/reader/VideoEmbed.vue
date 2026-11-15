@@ -141,8 +141,8 @@ onBeforeUnmount(() => {
                 <span class="flex size-14 items-center justify-center rounded-full bg-accent text-on-accent shadow-lg">
                     <Play :size="26" aria-hidden="true" class="ml-0.5" />
                 </span>
-                <span class="text-sm font-medium text-ink">{{ embed.video ? $t('arcadia.reader.play') : $t('arcadia.reader.play_list') }}</span>
-                <span class="max-w-xs text-xs text-ink-3">{{ $t('arcadia.reader.play_note') }}</span>
+                <span class="text-sm font-medium text-ink">{{ embed.video ? $t('reader.play') : $t('reader.play_list') }}</span>
+                <span class="max-w-xs text-xs text-ink-3">{{ $t('reader.play_note') }}</span>
             </button>
         </div>
 
@@ -152,15 +152,15 @@ onBeforeUnmount(() => {
                     <div class="h-full rounded-full bg-accent transition-[width] duration-200" :style="{ width: `${progress * 100}%` }"></div>
                 </div>
                 <span class="font-mono text-xs tabular-nums" :class="!continued && remaining <= 10 ? 'font-semibold text-accent' : 'text-ink-3'" aria-live="off">
-                    {{ continued ? $t('arcadia.reader.clip_past') : atEnd ? $t('arcadia.reader.clip_over') : $t('arcadia.reader.clip_ends_in', { time: clock(remaining) }) }}
+                    {{ continued ? $t('reader.clip_past') : atEnd ? $t('reader.clip_over') : $t('reader.clip_ends_in', { time: clock(remaining) }) }}
                 </span>
             </div>
 
             <div v-if="atEnd" class="mt-2 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-rule bg-raised-solid px-4 py-3" role="status">
-                <p class="m-0 text-sm text-ink">{{ $t('arcadia.reader.clip_done') }}</p>
+                <p class="m-0 text-sm text-ink">{{ $t('reader.clip_done') }}</p>
                 <div class="flex gap-2">
-                    <Button type="button" variant="outline" size="sm" @click="keepWatching">{{ $t('arcadia.reader.keep_watching') }}</Button>
-                    <Button type="button" variant="brand" size="sm" @click="emit('next')">{{ $t('arcadia.reader.next') }}</Button>
+                    <Button type="button" variant="outline" size="sm" @click="keepWatching">{{ $t('reader.keep_watching') }}</Button>
+                    <Button type="button" variant="brand" size="sm" @click="emit('next')">{{ $t('reader.next') }}</Button>
                 </div>
             </div>
         </template>

@@ -29,7 +29,7 @@ const categorizingTerm = computed(() => props.terms.find(term => term.id === cat
 const editorRoute = useEditorRoute()
 
 const columns = computed(() => [
-    { key: 'name', label: trans('arcadia.editor.vocabulary.fields.name') },
+    { key: 'name', label: trans('editor.vocabulary.fields.name') },
     { key: 'used', label: '', align: 'right' },
     { key: 'actions', label: '', align: 'right', width: '1%' },
 ])
@@ -53,14 +53,14 @@ const confirmDelete = () => {
 
 <template>
     <DataTable :columns="columns" :rows="terms"
-               :empty-title="$t('arcadia.editor.vocabulary.empty')"
+               :empty-title="$t('editor.vocabulary.empty')"
 >
         <template #toolbar>
             <div class="flex flex-wrap items-center justify-between gap-3">
-                <p class="m-0 max-w-prose text-sm text-ink-3">{{ $t(`arcadia.editor.vocabulary.hints.${vocabulary}`) }}</p>
+                <p class="m-0 max-w-prose text-sm text-ink-3">{{ $t(`editor.vocabulary.hints.${vocabulary}`) }}</p>
                 <Button type="button" variant="brand" size="sm" @click="dialog = {}">
                     <Plus :size="16" aria-hidden="true" />
-                    {{ $t('arcadia.editor.vocabulary.add') }}
+                    {{ $t('editor.vocabulary.add') }}
                 </Button>
             </div>
         </template>
@@ -70,18 +70,18 @@ const confirmDelete = () => {
                 <div class="font-medium text-ink">{{ row.name }}</div>
             </td>
             <td class="px-4 py-3 align-top text-right font-mono text-xs whitespace-nowrap text-ink-4">
-                {{ transChoice('arcadia.editor.vocabulary.used_by', row.guides_count, { count: row.guides_count }) }}
+                {{ transChoice('editor.vocabulary.used_by', row.guides_count, { count: row.guides_count }) }}
             </td>
             <td class="px-4 py-3 align-top text-right whitespace-nowrap">
                 <Button v-if="vocabulary === 'categories'" type="button" variant="outline" size="sm" class="mr-1" @click="categorizing = row.id">
                     <FolderInput :size="14" aria-hidden="true" />
-                    {{ $t('arcadia.editor.vocabulary.categorizer.open') }}
+                    {{ $t('editor.vocabulary.categorizer.open') }}
                 </Button>
-                <Button type="button" variant="ghost" size="icon-sm" @click="dialog = row" :aria-label="$t('arcadia.editor.vocabulary.save')">
+                <Button type="button" variant="ghost" size="icon-sm" @click="dialog = row" :aria-label="$t('editor.vocabulary.save')">
                     <Pencil :size="14" aria-hidden="true" />
                 </Button>
                 <Button type="button" variant="ghost-danger" size="icon-sm" class="ml-1" @click="pendingDelete = row"
-                        :aria-label="$t('arcadia.editor.vocabulary.delete.confirm')">
+                        :aria-label="$t('editor.vocabulary.delete.confirm')">
                     <Trash2 :size="14" aria-hidden="true" />
                 </Button>
             </td>
@@ -98,9 +98,9 @@ const confirmDelete = () => {
     <TermDialog :open="dialog !== null" :vocabulary="vocabulary" :term="dialog?.id ? dialog : null" @close="dialog = null" />
 
     <ConfirmDialog :open="pendingDelete !== null"
-                   :title="$t('arcadia.editor.vocabulary.delete.title')"
-                   :body="$t('arcadia.editor.vocabulary.delete.body')"
-                   :confirm-label="$t('arcadia.editor.vocabulary.delete.confirm')"
+                   :title="$t('editor.vocabulary.delete.title')"
+                   :body="$t('editor.vocabulary.delete.body')"
+                   :confirm-label="$t('editor.vocabulary.delete.confirm')"
                    :processing="deleting"
                    @confirm="confirmDelete"
                    @cancel="pendingDelete = null" />

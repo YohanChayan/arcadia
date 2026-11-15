@@ -55,14 +55,14 @@ class GuideVersionTest extends TestCase
         $this->assertSame(GuideStatus::DRAFT, $this->guide->fresh()->status);
 
         $this->post($this->url('/versions/release'))
-            ->assertSessionHas('success', __('arcadia.editor.versions.flash.released_and_published', ['number' => 1]));
+            ->assertSessionHas('success', __('editor.versions.flash.released_and_published', ['number' => 1]));
         $this->assertSame(GuideStatus::PUBLISHED, $this->guide->fresh()->status);
 
         // Taken down again by hand, then a new version released: it stays down.
         $this->guide->update(['status' => GuideStatus::DRAFT]);
         $this->post($this->url('/versions'));
         $this->post($this->url('/versions/release'))
-            ->assertSessionHas('success', __('arcadia.editor.versions.flash.released', ['number' => 2]));
+            ->assertSessionHas('success', __('editor.versions.flash.released', ['number' => 2]));
         $this->assertSame(GuideStatus::DRAFT, $this->guide->fresh()->status);
     }
 

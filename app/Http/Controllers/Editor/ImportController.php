@@ -25,7 +25,7 @@ class ImportController
 
         if ($data === null) {
             return new ImportPreviewResource([
-                'problems' => [['place' => '—', 'message' => __('arcadia.editor.import.errors.no_json')]],
+                'problems' => [['place' => '—', 'message' => __('editor.import.errors.no_json')]],
                 'summary' => null,
                 'has_content' => $this->hasContent($draft),
             ]);
@@ -46,16 +46,16 @@ class ImportController
         $data = $import->extract($request->answer());
 
         if ($data === null || $import->problems($data) !== []) {
-            throw ValidationException::withMessages(['file' => __('arcadia.editor.import.errors.not_valid')]);
+            throw ValidationException::withMessages(['file' => __('editor.import.errors.not_valid')]);
         }
 
         if ($this->hasContent($draft) && ! $request->boolean('replace')) {
-            throw ValidationException::withMessages(['replace' => __('arcadia.editor.import.errors.confirm_replace')]);
+            throw ValidationException::withMessages(['replace' => __('editor.import.errors.confirm_replace')]);
         }
 
         $write->handle($guide, $draft, $data, $request->boolean('replace'), $request->boolean('apply_details'));
 
-        return back()->with('success', __('arcadia.editor.import.flash.imported'));
+        return back()->with('success', __('editor.import.flash.imported'));
     }
 
     private function draft(Guide $guide): Version

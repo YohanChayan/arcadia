@@ -49,17 +49,17 @@ const save = () => {
     <Dialog :open="open" @update:open="value => !value && emit('close')">
         <DialogContent class="sm:max-w-md">
             <DialogHeader>
-                <DialogTitle>{{ $t('arcadia.my_guides.colours.title') }}</DialogTitle>
+                <DialogTitle>{{ $t('my_guides.colours.title') }}</DialogTitle>
                 <DialogDescription>{{ title }}</DialogDescription>
             </DialogHeader>
 
-            <p class="m-0 text-sm text-ink-3">{{ $t('arcadia.my_guides.colours.hint') }}</p>
+            <p class="m-0 text-sm text-ink-3">{{ $t('my_guides.colours.hint') }}</p>
 
             <AppearancePicker v-model:palette="palette" v-model:accent="accent" :options="options" name="reader-colours" />
 
             <DialogFooter>
-                <Button type="button" variant="outline" :disabled="saving" @click="emit('close')">{{ $t('arcadia.my_guides.colours.cancel') }}</Button>
-                <Button type="button" variant="brand" :disabled="saving" @click="save">{{ $t('arcadia.my_guides.colours.save') }}</Button>
+                <Button type="button" variant="outline" :disabled="saving" @click="emit('close')">{{ $t('my_guides.colours.cancel') }}</Button>
+                <Button type="button" variant="brand" :disabled="saving" @click="save">{{ $t('my_guides.colours.save') }}</Button>
             </DialogFooter>
         </DialogContent>
     </Dialog>

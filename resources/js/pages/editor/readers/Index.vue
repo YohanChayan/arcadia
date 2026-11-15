@@ -32,9 +32,9 @@ const props = defineProps({
 const editorRoute = useEditorRoute()
 
 const columns = computed(() => [
-    { key: 'reader', label: trans('arcadia.editor.reader_directory.columns.reader') },
-    { key: 'account', label: trans('arcadia.editor.reader_directory.columns.account') },
-    { key: 'guides', label: trans('arcadia.editor.reader_directory.columns.guides'), align: 'right' },
+    { key: 'reader', label: trans('editor.reader_directory.columns.reader') },
+    { key: 'account', label: trans('editor.reader_directory.columns.account') },
+    { key: 'guides', label: trans('editor.reader_directory.columns.guides'), align: 'right' },
     { key: 'actions', label: '', align: 'right', width: '1%' },
 ])
 
@@ -69,34 +69,34 @@ const filtered = computed(() => Boolean(props.filters.search || props.filters.ac
 </script>
 
 <template>
-    <EditorTitle :parts="[$t('arcadia.editor.reader_directory.title')]" />
+    <EditorTitle :parts="[$t('editor.reader_directory.title')]" />
 
     <div class="py-6">
-        <EditorBreadcrumb :trail="[{ label: $t('arcadia.editor.reader_directory.title') }]" />
+        <EditorBreadcrumb :trail="[{ label: $t('editor.reader_directory.title') }]" />
 
-        <PageHeader :title="$t('arcadia.editor.reader_directory.title')" :description="$t('arcadia.editor.reader_directory.description')" :count="totals.readers" />
+        <PageHeader :title="$t('editor.reader_directory.title')" :description="$t('editor.reader_directory.description')" :count="totals.readers" />
 
         <div class="mb-4 flex flex-wrap items-center gap-3">
-            <div role="group" :aria-label="$t('arcadia.editor.reader_directory.access.label')"
+            <div role="group" :aria-label="$t('editor.reader_directory.access.label')"
                  class="inline-flex max-w-full flex-wrap gap-1 rounded-lg bg-well p-1">
                 <button v-for="tab in accessTabs" :key="tab.key" type="button"
                         :aria-pressed="filters.access === tab.value"
                         class="inline-flex cursor-pointer items-center gap-2 rounded-md border-0 bg-transparent px-3.5 py-1.5 text-sm font-medium text-ink-3 transition-[color,box-shadow] hover:text-ink aria-pressed:bg-raised-solid aria-pressed:text-ink aria-pressed:shadow-[var(--shadow-sm)]"
                         @click="filterBy(tab.value)">
                     <component :is="tab.icon" :size="16" aria-hidden="true" />
-                    {{ $t(`arcadia.editor.reader_directory.access.${tab.key}`) }}
+                    {{ $t(`editor.reader_directory.access.${tab.key}`) }}
                     <Badge variant="neutral" class="px-1.5 py-0 font-mono text-[10px]">{{ tab.count }}</Badge>
                 </button>
             </div>
             <SearchField v-model="searchTerm" class="min-w-0 flex-1 basis-64 sm:max-w-md"
-                         :label="$t('arcadia.editor.reader_directory.search')" :button-label="$t('arcadia.editor.reader_directory.search_submit')"
+                         :label="$t('editor.reader_directory.search')" :button-label="$t('editor.reader_directory.search_submit')"
                          @search="searchFor" />
         </div>
-        <p v-if="filters.access === 'pending'" class="mt-0 mb-4 max-w-prose text-sm text-ink-3">{{ $t('arcadia.editor.reader_directory.access.pending_hint') }}</p>
+        <p v-if="filters.access === 'pending'" class="mt-0 mb-4 max-w-prose text-sm text-ink-3">{{ $t('editor.reader_directory.access.pending_hint') }}</p>
 
         <DataTable :columns="columns" :rows="readers.data" row-key="email"
-                   :empty-title="filtered ? $t('arcadia.editor.reader_directory.empty.search') : $t('arcadia.editor.reader_directory.empty.title')"
-                   :empty-hint="filtered ? '' : $t('arcadia.editor.reader_directory.empty.hint')">
+                   :empty-title="filtered ? $t('editor.reader_directory.empty.search') : $t('editor.reader_directory.empty.title')"
+                   :empty-hint="filtered ? '' : $t('editor.reader_directory.empty.hint')">
             <template #row="{ row }">
                 <td class="px-4 py-3 align-top">
                     <button type="button" class="m-0 cursor-pointer border-0 bg-transparent p-0 text-left" @click="showing = row">
@@ -107,14 +107,14 @@ const filtered = computed(() => Boolean(props.filters.search || props.filters.ac
                 <td class="px-4 py-3 align-top">
                     <Badge :variant="row.has_account ? 'ok' : 'pending'">
                         <component :is="row.has_account ? UserRound : Clock" :size="12" aria-hidden="true" />
-                        {{ $t(`arcadia.editor.reader_directory.account.${row.has_account ? 'yes' : 'no'}`) }}
+                        {{ $t(`editor.reader_directory.account.${row.has_account ? 'yes' : 'no'}`) }}
                     </Badge>
                 </td>
                 <td class="px-4 py-3 align-top text-right font-mono text-sm tabular-nums text-ink">{{ row.guides_count }}</td>
                 <td class="px-4 py-3 align-top whitespace-nowrap">
                     <Button type="button" variant="outline" size="sm" @click="showing = row">
                         <Eye :size="14" aria-hidden="true" />
-                        {{ $t('arcadia.editor.reader_directory.show') }}
+                        {{ $t('editor.reader_directory.show') }}
                     </Button>
                 </td>
             </template>

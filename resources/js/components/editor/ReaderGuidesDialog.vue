@@ -34,8 +34,8 @@ const formatDate = iso => new Date(iso).toLocaleDateString(undefined, { day: 'nu
                 </DialogTitle>
                 <DialogDescription>
                     <span v-if="reader?.name">{{ reader.email }} · </span>
-                    {{ $tChoice('arcadia.editor.reader_directory.guides_count', reader?.guides.length ?? 0, { count: reader?.guides.length ?? 0 }) }}
-                    <span v-if="reader && !reader.has_account"> · {{ $t('arcadia.editor.reader_directory.account.no') }}</span>
+                    {{ $tChoice('editor.reader_directory.guides_count', reader?.guides.length ?? 0, { count: reader?.guides.length ?? 0 }) }}
+                    <span v-if="reader && !reader.has_account"> · {{ $t('editor.reader_directory.account.no') }}</span>
                 </DialogDescription>
             </DialogHeader>
 
@@ -48,11 +48,11 @@ const formatDate = iso => new Date(iso).toLocaleDateString(undefined, { day: 'nu
                             {{ guide.title }}
                         </Link>
                         <p class="m-0 font-mono text-[11px] text-ink-4">
-                            {{ $t('arcadia.editor.reader_directory.assigned', { date: formatDate(guide.assigned_at) }) }}
+                            {{ $t('editor.reader_directory.assigned', { date: formatDate(guide.assigned_at) }) }}
                             <template v-if="!reader.has_account">
                                 · {{ guide.notified_at
-                                    ? $t('arcadia.editor.reader_directory.invited', { date: formatDate(guide.notified_at) })
-                                    : $t('arcadia.editor.reader_directory.not_invited') }}
+                                    ? $t('editor.reader_directory.invited', { date: formatDate(guide.notified_at) })
+                                    : $t('editor.reader_directory.not_invited') }}
                             </template>
                         </p>
                     </div>

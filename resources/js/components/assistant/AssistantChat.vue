@@ -102,7 +102,7 @@ watch(
             ref="log"
             role="log"
             aria-live="polite"
-            :aria-label="$t('arcadia.assistant.log_label')"
+            :aria-label="$t('assistant.log_label')"
             class="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto p-4"
         >
             <div
@@ -125,7 +125,7 @@ watch(
                 v-else-if="messages.length === 0"
                 class="m-auto max-w-xs text-center text-sm text-ink-3"
             >
-                {{ $t('arcadia.assistant.empty') }}
+                {{ $t('assistant.empty') }}
             </p>
 
             <template v-for="message in messages" :key="message.id">
@@ -153,7 +153,7 @@ watch(
                             class="inline-flex items-center gap-2 text-ink-3"
                         >
                             <Spinner />
-                            {{ $t('arcadia.assistant.typing') }}
+                            {{ $t('assistant.typing') }}
                         </span>
                     </p>
                 </div>
@@ -166,7 +166,7 @@ watch(
             >
                 <span class="flex-1">{{ status.message }}</span>
                 <Button variant="danger" size="sm" @click="retry">
-                    {{ $t('arcadia.assistant.retry') }}
+                    {{ $t('assistant.retry') }}
                 </Button>
             </div>
         </div>
@@ -180,8 +180,8 @@ watch(
                 type="button"
                 variant="ghost"
                 size="icon"
-                :title="$t('arcadia.assistant.start_over')"
-                :aria-label="$t('arcadia.assistant.start_over')"
+                :title="$t('assistant.start_over')"
+                :aria-label="$t('assistant.start_over')"
                 @click="startOver"
             >
                 <RotateCcw />
@@ -190,8 +190,8 @@ watch(
                 v-model="draft"
                 rows="1"
                 maxlength="2000"
-                :placeholder="$t('arcadia.assistant.placeholder')"
-                :aria-label="$t('arcadia.assistant.placeholder')"
+                :placeholder="$t('assistant.placeholder')"
+                :aria-label="$t('assistant.placeholder')"
                 class="field-sizing-content max-h-40 min-h-10 flex-1 resize-none rounded-control border-2 border-rule bg-well px-3 py-2 text-ink transition-colors outline-none placeholder:text-ink-4 focus-visible:border-accent"
                 @keydown="onKeydown"
             />
@@ -199,7 +199,7 @@ watch(
                 type="submit"
                 size="icon"
                 :disabled="draft.trim() === '' || status.state === 'replying'"
-                :aria-label="$t('arcadia.assistant.send')"
+                :aria-label="$t('assistant.send')"
             >
                 <ArrowUp />
             </Button>

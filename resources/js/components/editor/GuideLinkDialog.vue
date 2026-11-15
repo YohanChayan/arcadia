@@ -55,24 +55,24 @@ const rotate = () => {
     <Dialog :open="guide !== null" @update:open="value => !value && emit('close')">
         <DialogContent v-if="guide" class="max-w-lg">
             <DialogHeader>
-                <DialogTitle>{{ $t('arcadia.editor.guides.link.title') }}</DialogTitle>
+                <DialogTitle>{{ $t('editor.guides.link.title') }}</DialogTitle>
                 <DialogDescription>{{ guide.title }}</DialogDescription>
             </DialogHeader>
 
             <div class="grid gap-3">
-                <p class="m-0 text-sm text-ink-3">{{ $t('arcadia.editor.guides.link.hint') }}</p>
-                <CodeBlock :code="guide.link" :copy-label="$t('arcadia.editor.guides.link.copy')" :copied-label="$t('arcadia.editor.guides.link.copied')" />
-                <Badge :variant="state.tone" class="justify-self-start">{{ $t(`arcadia.editor.guides.link.${state.key}`) }}</Badge>
+                <p class="m-0 text-sm text-ink-3">{{ $t('editor.guides.link.hint') }}</p>
+                <CodeBlock :code="guide.link" :copy-label="$t('editor.guides.link.copy')" :copied-label="$t('editor.guides.link.copied')" />
+                <Badge :variant="state.tone" class="justify-self-start">{{ $t(`editor.guides.link.${state.key}`) }}</Badge>
             </div>
 
             <div v-if="confirming" class="rounded-control border border-danger/30 bg-danger/5 p-4">
-                <p class="m-0 text-sm font-semibold text-ink">{{ $t('arcadia.editor.guides.link.rotate_title') }}</p>
-                <p class="mt-1 mb-3 text-sm text-ink-3">{{ $t('arcadia.editor.guides.link.rotate_body') }}</p>
+                <p class="m-0 text-sm font-semibold text-ink">{{ $t('editor.guides.link.rotate_title') }}</p>
+                <p class="mt-1 mb-3 text-sm text-ink-3">{{ $t('editor.guides.link.rotate_body') }}</p>
                 <div class="flex justify-end gap-2">
-                    <Button type="button" variant="outline" size="sm" :disabled="rotating" @click="confirming = false">{{ $t('arcadia.editor.cancel') }}</Button>
+                    <Button type="button" variant="outline" size="sm" :disabled="rotating" @click="confirming = false">{{ $t('editor.common.cancel') }}</Button>
                     <Button type="button" variant="destructive" size="sm" :disabled="rotating" @click="rotate">
                         <RefreshCw :size="14" aria-hidden="true" :class="rotating ? 'animate-spin' : ''" />
-                        {{ $t('arcadia.editor.guides.link.rotate') }}
+                        {{ $t('editor.guides.link.rotate') }}
                     </Button>
                 </div>
             </div>
@@ -80,9 +80,9 @@ const rotate = () => {
             <DialogFooter>
                 <Button v-if="!confirming" type="button" variant="outline" class="sm:mr-auto" @click="confirming = true">
                     <RefreshCw :size="14" aria-hidden="true" />
-                    {{ $t('arcadia.editor.guides.link.rotate') }}
+                    {{ $t('editor.guides.link.rotate') }}
                 </Button>
-                <Button type="button" variant="brand" @click="emit('close')">{{ $t('arcadia.editor.close') }}</Button>
+                <Button type="button" variant="brand" @click="emit('close')">{{ $t('editor.common.close') }}</Button>
             </DialogFooter>
         </DialogContent>
     </Dialog>

@@ -30,7 +30,7 @@ class GuideImageRequest extends FormRequest
                 'required',
                 function (string $attribute, mixed $value, Closure $fail) use ($slot) {
                     if ($slot->holdsMany() && $this->guide()->images()->where('slot', $slot)->count() >= $slot->maxImages()) {
-                        $fail(__('arcadia.editor.images.errors.full', ['max' => $slot->maxImages()]));
+                        $fail(__('editor.images.errors.full', ['max' => $slot->maxImages()]));
                     }
                 },
                 'file',
@@ -43,7 +43,7 @@ class GuideImageRequest extends FormRequest
                     $ratio = $height > 0 ? $width / $height : 0;
 
                     if ($ratio < $min || $ratio > $max) {
-                        $fail(__("arcadia.editor.images.slots.{$slot->value}.ratio", ['ratio' => number_format($ratio, 2)]));
+                        $fail(__("editor.images.slots.{$slot->value}.ratio", ['ratio' => number_format($ratio, 2)]));
                     }
                 },
             ],
@@ -55,11 +55,11 @@ class GuideImageRequest extends FormRequest
         $slot = $this->slot();
 
         return [
-            'image.required' => __('arcadia.editor.images.errors.required'),
-            'image.file' => __('arcadia.editor.images.errors.required'),
-            'image.mimes' => __('arcadia.editor.images.errors.type'),
-            'image.max' => __('arcadia.editor.images.errors.size', ['max' => intdiv(ImageSlot::MAX_KILOBYTES, 1024)]),
-            'image.dimensions' => __('arcadia.editor.images.errors.dimensions', ['width' => $slot->minWidth(), 'height' => $slot->minHeight()]),
+            'image.required' => __('editor.images.errors.required'),
+            'image.file' => __('editor.images.errors.required'),
+            'image.mimes' => __('editor.images.errors.type'),
+            'image.max' => __('editor.images.errors.size', ['max' => intdiv(ImageSlot::MAX_KILOBYTES, 1024)]),
+            'image.dimensions' => __('editor.images.errors.dimensions', ['width' => $slot->minWidth(), 'height' => $slot->minHeight()]),
         ];
     }
 

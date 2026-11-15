@@ -16,8 +16,8 @@ use App\Models\Item;
 use App\Models\PromptTemplate;
 use App\Models\Setting;
 use App\Models\Version;
-use App\Services\ArcadiaSite;
 use App\Services\PromptFormOptions;
+use App\Services\Site\Site;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -35,7 +35,7 @@ use Inertia\Response;
  */
 class ContentController
 {
-    public function show(Request $request, Guide $guide, ArcadiaSite $site, PromptFormOptions $options): Response
+    public function show(Request $request, Guide $guide, Site $site, PromptFormOptions $options): Response
     {
         $this->ownLocale($guide);
         $latest = $guide->latestVersion();
@@ -172,7 +172,7 @@ class ContentController
     {
         return array_map(fn (\BackedEnum $case) => [
             'value' => $case->value,
-            'label' => __("arcadia.editor.content.{$labels}.{$case->value}"),
+            'label' => __("editor.content.{$labels}.{$case->value}"),
         ], $cases);
     }
 }

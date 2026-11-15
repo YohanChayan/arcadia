@@ -41,9 +41,9 @@ class InquiryRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'topic.required' => __('arcadia.landing.ask.errors.topic'),
-            'topic.min' => __('arcadia.landing.ask.errors.topic'),
-            'contact.required' => __('arcadia.landing.ask.errors.contact'),
+            'topic.required' => __('landing.ask.errors.topic'),
+            'topic.min' => __('landing.ask.errors.topic'),
+            'contact.required' => __('landing.ask.errors.contact'),
         ];
     }
 
@@ -59,7 +59,7 @@ class InquiryRequest extends FormRequest
                 && preg_match_all('/\d/', $value) <= 15;
 
         if (! $isReachable) {
-            $fail(__('arcadia.landing.ask.errors.contact'));
+            $fail(__('landing.ask.errors.contact'));
         }
     }
 }

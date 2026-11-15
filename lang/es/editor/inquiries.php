@@ -1,0 +1,51 @@
+<?php
+
+return [
+    'title' => 'Solicitudes',
+    'description' => 'Lo que la gente pidió desde la página de inicio de este sitio, lo más reciente primero.',
+    'columns' => [
+        'when' => 'Recibida',
+        'topic' => 'Quiere aprender',
+        'contact' => 'Contacto',
+        'status' => 'Estado',
+    ],
+    'stages' => ['pending' => 'Pendiente', 'guide' => 'Con guía'],
+    'filters' => [
+        'label' => 'Filtrar por estado',
+        'all' => 'Todas',
+        'kind' => 'Contacto',
+        'kinds' => ['all' => 'Cualquier contacto', 'whatsapp' => 'WhatsApp', 'email' => 'Correo'],
+        'empty' => 'Ninguna solicitud coincide.',
+        'clear' => 'Quitar filtros',
+    ],
+    'search' => 'Buscar por tema, contacto o nombre',
+    'search_submit' => 'Buscar',
+    'more' => 'Más acciones',
+    'open_guide' => 'Abrir guía',
+    'reply' => ['email' => 'Responder por correo', 'whatsapp' => 'Responder por WhatsApp'],
+    'copy' => 'Copiar contacto',
+    'account' => 'La cuenta que la pidió: a esta le asignas la guía',
+    'copied' => 'Copiado',
+    'empty' => [
+        'title' => 'Aún no hay solicitudes',
+        'hint' => 'Cuando alguien pida una guía desde la página de inicio, aparece aquí y te llega un correo.',
+    ],
+    'delete' => [
+        'action' => 'Eliminar solicitud',
+        'title' => '¿Eliminar esta solicitud?',
+        'body' => 'Se borra para siempre. Si aún no la respondiste, guarda antes su contacto.',
+        'confirm' => 'Eliminar',
+    ],
+    'flash' => ['deleted' => 'Solicitud eliminada.', 'created' => 'Solicitud creada.'],
+    'create' => [
+        'action' => 'Crear solicitud',
+        'title' => 'Nueva solicitud',
+        'description' => 'Para una guía que quieres hacer tú, o una que te pidieron por otro lado. Sigue los mismos pasos: prompt y «Crear guía».',
+        'topic' => 'Tema',
+        'contact' => 'WhatsApp o correo',
+        'contact_hint' => 'A quién se le responde. Por defecto, tú.',
+        'name' => 'Nombre (opcional)',
+        'save' => 'Crear',
+        'cancel' => 'Cancelar',
+    ],
+];

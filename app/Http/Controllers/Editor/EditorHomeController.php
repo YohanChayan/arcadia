@@ -8,8 +8,8 @@ use App\Models\AccessRequest;
 use App\Models\Guide;
 use App\Models\Inquiry;
 use App\Models\Setting;
-use App\Services\ArcadiaSite;
 use App\Services\GuideVisits;
+use App\Services\Site\Site;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -23,7 +23,7 @@ use Inertia\Response;
  */
 class EditorHomeController
 {
-    public function __invoke(Request $request, ArcadiaSite $site, GuideVisits $visits): Response
+    public function __invoke(Request $request, Site $site, GuideVisits $visits): Response
     {
         // What the guides' presentations brought in: the last 30 days, or since the start.
         $window = $request->query('window') === 'all' ? 'all' : '30';

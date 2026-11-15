@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Setting;
-use App\Services\ArcadiaSite;
+use App\Services\Site\Site;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -16,7 +16,7 @@ use Inertia\Response;
  */
 class LandingController
 {
-    public function __invoke(Request $request, ArcadiaSite $site): Response
+    public function __invoke(Request $request, Site $site): Response
     {
         // The landing page in Arcadia's other languages.
         $alternates = [];
@@ -27,8 +27,8 @@ class LandingController
         }
 
         return Inertia::render('Landing', [
-            'pageTitle' => __('arcadia.landing.meta.title'),
-            'metaDescription' => __('arcadia.landing.meta.description'),
+            'pageTitle' => __('landing.meta.title'),
+            'metaDescription' => __('landing.meta.description'),
             ...$site->preview(),
             'noIndex' => true,
             'canonicalUrl' => $site->url($site->homePath()),

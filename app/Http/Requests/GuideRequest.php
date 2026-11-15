@@ -50,11 +50,11 @@ class GuideRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'title.required' => __('arcadia.editor.guides.errors.title'),
-            'category_id.exists' => __('arcadia.editor.guides.errors.vocabulary'),
-            'topic_ids.*.exists' => __('arcadia.editor.guides.errors.vocabulary'),
-            'phrase_ids.*.exists' => __('arcadia.editor.guides.errors.vocabulary'),
-            'goals.max' => __('arcadia.editor.guides.errors.goals', ['max' => Guide::MAX_GOALS]),
+            'title.required' => __('editor.guides.errors.title'),
+            'category_id.exists' => __('editor.guides.errors.vocabulary'),
+            'topic_ids.*.exists' => __('editor.guides.errors.vocabulary'),
+            'phrase_ids.*.exists' => __('editor.guides.errors.vocabulary'),
+            'goals.max' => __('editor.guides.errors.goals', ['max' => Guide::MAX_GOALS]),
         ];
     }
 }

@@ -161,7 +161,7 @@ class ReaderDashboardTest extends TestCase
             ->assertOk()
             ->assertInertia(fn ($page) => $page
                 ->component('reader/Help')
-                ->where('contactEmail', config('arcadia.contact_email'))
+                ->where('contactEmail', config('site.contact_email'))
                 ->where('deviceLimit', 3));
 
         $this->get('/en/help')->assertOk();

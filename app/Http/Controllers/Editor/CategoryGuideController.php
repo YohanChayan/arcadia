@@ -29,7 +29,7 @@ class CategoryGuideController
                 ->each(fn (Guide $guide) => $guide->update(['category_id' => $category->id]));
         });
 
-        return back()->with('success', __('arcadia.editor.vocabulary.categorizer.flash.filed'));
+        return back()->with('success', __('editor.vocabulary.categorizer.flash.filed'));
     }
 
     public function destroy(int $term, int $guide): RedirectResponse
@@ -38,7 +38,7 @@ class CategoryGuideController
 
         $category->guides()->where('locale', $category->locale)->findOrFail($guide)->update(['category_id' => null]);
 
-        return back()->with('success', __('arcadia.editor.vocabulary.categorizer.flash.unfiled'));
+        return back()->with('success', __('editor.vocabulary.categorizer.flash.unfiled'));
     }
 
     private function category(int $term): Category

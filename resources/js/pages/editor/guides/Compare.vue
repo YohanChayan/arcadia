@@ -37,46 +37,46 @@ const nothingChanged = computed(() => LEVELS.every(level => Object.values(props.
 </script>
 
 <template>
-    <EditorTitle :parts="[guide.title, $t('arcadia.editor.compare.title')]" />
+    <EditorTitle :parts="[guide.title, $t('editor.compare.title')]" />
 
     <div class="max-w-4xl py-6">
-        <EditorBreadcrumb :trail="[{ label: $t('arcadia.editor.guides.title'), route: 'guides.index' }, { label: guide.title, route: 'content.show', params: { guide: guide.id } }, { label: $t('arcadia.editor.compare.title') }]" />
+        <EditorBreadcrumb :trail="[{ label: $t('editor.guides.title'), route: 'guides.index' }, { label: guide.title, route: 'content.show', params: { guide: guide.id } }, { label: $t('editor.compare.title') }]" />
 
-        <PageHeader :title="guide.title" :eyebrow="$t('arcadia.editor.compare.title')" />
+        <PageHeader :title="guide.title" :eyebrow="$t('editor.compare.title')" />
 
         <div class="panel mb-6 flex flex-wrap items-end gap-3 p-4">
             <label class="flex flex-col gap-1 text-xs text-ink-4">
-                {{ $t('arcadia.editor.compare.from') }}
+                {{ $t('editor.compare.from') }}
                 <Select :model-value="String(from)" @update:model-value="n => compare(Number(n), to)">
                     <SelectTrigger class="w-40"><SelectValue /></SelectTrigger>
                     <SelectContent>
-                        <SelectItem v-for="v in versions" :key="v.id" :value="String(v.number)">{{ $t('arcadia.editor.content.version', { number: v.number }) }}</SelectItem>
+                        <SelectItem v-for="v in versions" :key="v.id" :value="String(v.number)">{{ $t('editor.content.version', { number: v.number }) }}</SelectItem>
                     </SelectContent>
                 </Select>
             </label>
             <label class="flex flex-col gap-1 text-xs text-ink-4">
-                {{ $t('arcadia.editor.compare.to') }}
+                {{ $t('editor.compare.to') }}
                 <Select :model-value="String(to)" @update:model-value="n => compare(from, Number(n))">
                     <SelectTrigger class="w-40"><SelectValue /></SelectTrigger>
                     <SelectContent>
-                        <SelectItem v-for="v in versions" :key="v.id" :value="String(v.number)">{{ $t('arcadia.editor.content.version', { number: v.number }) }}</SelectItem>
+                        <SelectItem v-for="v in versions" :key="v.id" :value="String(v.number)">{{ $t('editor.content.version', { number: v.number }) }}</SelectItem>
                     </SelectContent>
                 </Select>
             </label>
-            <Button type="button" variant="outline" size="sm" :disabled="to === 1" @click="compare(1, to)">{{ $t('arcadia.editor.compare.since_base') }}</Button>
-            <Button type="button" variant="outline" size="sm" :disabled="to === 1" @click="compare(to - 1, to)">{{ $t('arcadia.editor.compare.previous') }}</Button>
+            <Button type="button" variant="outline" size="sm" :disabled="to === 1" @click="compare(1, to)">{{ $t('editor.compare.since_base') }}</Button>
+            <Button type="button" variant="outline" size="sm" :disabled="to === 1" @click="compare(to - 1, to)">{{ $t('editor.compare.previous') }}</Button>
             <div class="ml-auto flex items-center gap-2">
                 <Switch id="show-unchanged" v-model="showUnchanged" />
-                <Label for="show-unchanged" class="cursor-pointer font-normal text-ink-2">{{ $t('arcadia.editor.compare.show_unchanged') }}</Label>
+                <Label for="show-unchanged" class="cursor-pointer font-normal text-ink-2">{{ $t('editor.compare.show_unchanged') }}</Label>
             </div>
         </div>
 
-        <p v-if="from === to" class="panel p-4 text-sm text-ink-3">{{ $t('arcadia.editor.compare.same_version') }}</p>
+        <p v-if="from === to" class="panel p-4 text-sm text-ink-3">{{ $t('editor.compare.same_version') }}</p>
 
         <template v-else>
             <section class="panel mb-6 p-5 sm:p-6">
-                <h2 class="m-0 font-display text-base font-semibold text-ink">{{ $t('arcadia.editor.compare.logged.title') }}</h2>
-                <p class="mt-1 mb-0 text-sm text-ink-3">{{ $t('arcadia.editor.compare.logged.hint') }}</p>
+                <h2 class="m-0 font-display text-base font-semibold text-ink">{{ $t('editor.compare.logged.title') }}</h2>
+                <p class="mt-1 mb-0 text-sm text-ink-3">{{ $t('editor.compare.logged.hint') }}</p>
                 <ul v-if="logged.length" class="mt-3 divide-y divide-rule p-0">
                     <li v-for="change in logged" :key="change.id" class="flex list-none items-start gap-3 py-2">
                         <span class="font-mono text-xs text-ink-4">v{{ change.version }}</span>
@@ -87,20 +87,20 @@ const nothingChanged = computed(() => LEVELS.every(level => Object.values(props.
                         </div>
                     </li>
                 </ul>
-                <p v-else class="mt-3 mb-0 text-sm text-ink-4">{{ $t('arcadia.editor.compare.logged.empty') }}</p>
+                <p v-else class="mt-3 mb-0 text-sm text-ink-4">{{ $t('editor.compare.logged.empty') }}</p>
             </section>
 
             <section class="panel p-5 sm:p-6">
-                <h2 class="m-0 font-display text-base font-semibold text-ink">{{ $t('arcadia.editor.compare.computed') }}</h2>
+                <h2 class="m-0 font-display text-base font-semibold text-ink">{{ $t('editor.compare.computed') }}</h2>
 
                 <dl class="mt-3 grid grid-cols-2 gap-x-6 gap-y-1 text-xs sm:grid-cols-4">
                     <div v-for="level in LEVELS" :key="level">
-                        <dt class="text-ink-4">{{ $t(`arcadia.editor.compare.levels.${level}`) }}</dt>
-                        <dd class="m-0 font-mono text-ink-2">{{ $t('arcadia.editor.compare.summary', diff.summary[level]) }}</dd>
+                        <dt class="text-ink-4">{{ $t(`editor.compare.levels.${level}`) }}</dt>
+                        <dd class="m-0 font-mono text-ink-2">{{ $t('editor.compare.summary', diff.summary[level]) }}</dd>
                     </div>
                 </dl>
 
-                <p v-if="nothingChanged && !showUnchanged" class="mt-4 mb-0 text-sm text-ink-4">{{ $t('arcadia.editor.compare.no_changes') }}</p>
+                <p v-if="nothingChanged && !showUnchanged" class="mt-4 mb-0 text-sm text-ink-4">{{ $t('editor.compare.no_changes') }}</p>
 
                 <div class="mt-4 flex flex-col gap-2">
                     <DiffNode v-for="node in diff.sections" :key="node.key" :node="node" level="sections" :labels="labels" :show-unchanged="showUnchanged" />

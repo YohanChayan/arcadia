@@ -8,7 +8,7 @@ use App\Http\Controllers\Reader\HelpController;
 use App\Http\Controllers\Reader\NoteController;
 use App\Http\Controllers\Reader\ProgressController;
 use App\Http\Controllers\Reader\QuickCheckController;
-use App\Services\ArcadiaSite;
+use App\Services\Site\Site;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-/** @var ArcadiaSite $site */
+/** @var Site $site */
 foreach ($site->locales() as $locale) {
     Route::middleware([$site->localeMiddleware($locale), 'disable-ssr', 'auth', 'verified', 'has-role', 'role:reader', 'device'])
         ->prefix(ltrim($site->readerPath($locale), '/'))

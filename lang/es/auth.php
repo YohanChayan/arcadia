@@ -17,218 +17,63 @@ return [
     'password' => 'La contraseña proporcionada es incorrecta',
     'throttle' => 'Demasiado intentos, intente de nuevo en :seconds segundos.',
 
-    // Login and Register page translations
-    'login' => [
-        'badge' => 'Acceso Seguro',
-        'title' => [
-            'line_1' => 'Bienvenido a',
-            'highlight' => 'Yhn Dev Side',
+    // The sign-in and register screens (`AuthFrame.vue`).
+    'meta' => ['title' => 'Entrar · Arcadia'],
+    'back' => 'Volver al inicio',
+    'heading' => 'Entrar',
+    'lead' => 'Entra con la cuenta de Google con la que te compartieron tu guía.',
+    'fields' => ['name' => 'Tu nombre', 'email' => 'Correo', 'password' => 'Contraseña', 'password_confirmation' => 'Repite la contraseña', 'remember' => 'Recordarme'],
+    'submit' => 'Entrar',
+    'submitting' => 'Entrando…',
+    'owner' => 'Entrar con correo y contraseña',
+    'forgot' => '¿Olvidaste tu contraseña?',
+    'no_account' => '¿No tienes cuenta?',
+    'create_account' => 'Crear una cuenta',
+    // The other account screens on Arcadia (`Site::authPage()`), since 2026-10-15.
+    'screens' => [
+        'register' => [
+            'title' => 'Crear una cuenta',
+            'lead' => 'Con tu correo y una contraseña, si prefieres no usar Google.',
+            'email_hint' => 'Usa el correo con el que te compartieron tu guía. Te enviaremos un enlace para confirmarlo.',
+            'submit' => 'Crear cuenta',
+            'have_account' => '¿Ya tienes cuenta?',
         ],
-        'description' => 'Ingresa tus credenciales para acceder a tu panel de control',
-        'fields' => [
-            'email' => 'Correo Electrónico',
-            'password' => 'Contraseña',
+        'verify-email' => [
+            'title' => 'Revisa tu correo',
+            'body' => 'Te enviamos un enlace a :email. Ábrelo para confirmar tu correo y ver tus guías.',
+            'sent' => 'Te enviamos un enlace nuevo.',
+            'resend' => 'Enviar el enlace otra vez',
+            'other' => 'Usar otra cuenta',
         ],
-        'placeholders' => [
-            'email' => 'tu@email.com',
-            'password' => '••••••••',
+        'forgot-password' => [
+            'title' => 'Recuperar tu contraseña',
+            'lead' => 'Escribe tu correo y te enviaremos un enlace para elegir una nueva.',
+            'submit' => 'Enviar enlace',
         ],
-        'submit' => 'Iniciar Sesión',
-        'submit_processing' => 'Accediendo...',
-        'links' => [
-            'forgot_password' => '¿Olvidaste tu contraseña?',
-            'register' => 'Registrarme',
-        ],
-        'footer' => 'Conexión segura y encriptada',
-        'oauth' => [
-            'title' => 'Continuar con',
-            'google' => 'Continuar con Google',
-            'linkedin' => 'Continuar con LinkedIn',
-            'github' => 'Continuar con GitHub',
-            'divider' => 'O',
-        ],
-        'toast' => [
-            'success' => '¡Bienvenido de nuevo, :name!',
-            'error' => 'Error en el inicio de sesión. Por favor verifica tus credenciales e intenta de nuevo.',
-        ],
-    ],
-
-    'register' => [
-        'badge' => 'Registro Seguro',
-        'title' => [
-            'line_1' => 'Crea tu cuenta en',
-            'highlight' => 'Yhn Dev Side',
-        ],
-        'description' => 'Completa tus datos para crear tu cuenta',
-        'fields' => [
-            'name' => 'Nombre',
-            'email' => 'Correo Electrónico',
-            'password' => 'Contraseña',
-            'password_confirmation' => 'Confirmar Contraseña',
-        ],
-        'placeholders' => [
-            'name' => 'Tu nombre',
-            'email' => 'tu@email.com',
-            'password' => '••••••••',
-            'password_confirmation' => '••••••••',
-        ],
-        'submit' => 'Crear Cuenta',
-        'submit_processing' => 'Creando cuenta...',
-        'links' => [
-            'has_account' => 'Ya tengo una cuenta',
-        ],
-        'footer' => 'Conexión segura y encriptada',
-        'toast' => [
-            'success' => '¡Bienvenido a YHN Dev Side, :name! Por favor revisa tu correo para verificar tu cuenta.',
-            'error' => 'Error en el registro. Por favor corrige los errores e intenta de nuevo.',
+        'reset-password' => [
+            'title' => 'Elige una contraseña nueva',
+            'submit' => 'Guardar contraseña',
         ],
     ],
-
-    'forgot_password' => [
-        'badge' => 'Recuperación de Cuenta',
-        'title' => [
-            'line_1' => '¿Olvidaste tu',
-            'highlight' => 'Contraseña?',
-        ],
-        'description' => 'No te preocupes, te enviaremos un enlace de recuperación a tu correo electrónico',
-        'fields' => [
-            'email' => 'Correo Electrónico',
-        ],
-        'placeholders' => [
-            'email' => 'tu@email.com',
-        ],
-        'submit' => 'Enviar Enlace',
-        'submit_processing' => 'Enviando...',
-        'links' => [
-            'back_to_login' => 'Volver al inicio de sesión',
-        ],
-        'footer' => 'Recibirás un correo con instrucciones para restablecer tu contraseña en unos minutos.',
-        'toast' => [
-            'success' => '¡Enlace de restablecimiento enviado! Por favor revisa tu bandeja de entrada.',
-            'error' => 'Error al enviar el enlace. Por favor verifica tu correo e intenta de nuevo.',
-        ],
+    'google' => [
+        'continue' => 'Continuar con Google',
+        'hint' => 'Sin formularios ni contraseñas. Solo eliges tu cuenta.',
+        'unavailable' => 'El acceso con Google no está disponible ahora. Inténtalo en un momento.',
+        'failed' => 'No se pudo completar el acceso con Google. Inténtalo de nuevo.',
+        'not_shared' => 'La cuenta :email no tiene guías en Arcadia. Si te compartieron una guía con otro correo, entra con esa cuenta.',
     ],
-
-    'reset_password' => [
-        'badge' => 'Restablecer Contraseña',
-        'title' => [
-            'line_1' => 'Nueva',
-            'highlight' => 'Contraseña',
-        ],
-        'description' => 'Crea una nueva contraseña segura para tu cuenta',
-        'fields' => [
-            'email' => 'Correo Electrónico',
-            'password' => 'Nueva Contraseña',
-            'password_confirmation' => 'Confirmar Contraseña',
-        ],
-        'placeholders' => [
-            'email' => 'tu@email.com',
-            'password' => 'Mínimo 8 caracteres',
-            'password_confirmation' => 'Repite tu contraseña',
-        ],
-        'submit' => 'Restablecer Contraseña',
-        'submit_processing' => 'Actualizando...',
-        'footer' => 'Tu contraseña será encriptada de forma segura',
-        'validation' => [
-            'email_required' => 'El correo es requerido',
-            'password_min_length' => 'La contraseña debe tener al menos 8 caracteres',
-            'password_mismatch' => 'Las contraseñas no coinciden',
-        ],
-        'toast' => [
-            'success' => '¡Contraseña restablecida exitosamente! Ahora puedes iniciar sesión con tu nueva contraseña.',
-            'error' => 'Error al restablecer la contraseña. Por favor revisa el formulario e intenta de nuevo.',
-        ],
+    // A passkey: only where the browser supports one and `PASSKEYS_ENABLED` is on.
+    'passkey' => [
+        'sign_in' => 'Entrar con una llave de acceso',
+        'signing_in' => 'Comprobando…',
+        'or' => 'o',
     ],
-
-    'two_factor' => [
-        'badge' => 'Verificación en dos pasos',
-        'title' => [
-            'line_1' => 'Un paso más',
-            'highlight' => 'para confirmar que eres tú',
-        ],
-        'description' => 'Introduce el código de seis dígitos de tu aplicación de autenticación.',
-        'description_recovery' => 'Introduce uno de los códigos de recuperación que guardaste al activar la verificación en dos pasos. Cada código sirve una sola vez.',
-        'fields' => [
-            'code' => 'Código de autenticación',
-            'recovery_code' => 'Código de recuperación',
-        ],
-        'placeholders' => [
-            'code' => '123456',
-            'recovery_code' => 'xxxxxxxx-xxxxxxxx',
-        ],
-        'submit' => 'Verificar',
-        'submit_processing' => 'Verificando...',
-        'links' => [
-            'use_recovery' => 'Usar un código de recuperación',
-            'use_code' => 'Usar mi aplicación de autenticación',
-        ],
-        'footer' => 'Los códigos caducan cada 30 segundos. Si el tuyo falla siempre, revisa la hora de tu dispositivo.',
-    ],
-
-    'confirm_password' => [
-        'badge' => 'Área segura',
-        'title' => [
-            'line_1' => 'Confirma tu contraseña',
-            'highlight' => 'antes de continuar',
-        ],
-        'description' => 'Esta acción cambia la configuración de seguridad de tu cuenta, así que te pedimos la contraseña una vez más.',
-        'fields' => [
-            'password' => 'Contraseña',
-        ],
-        'placeholders' => [
-            'password' => 'Tu contraseña actual',
-        ],
-        'submit' => 'Confirmar',
-        'submit_processing' => 'Confirmando...',
-        'footer' => 'No volveremos a pedírtela durante unas horas.',
-    ],
-    'onboarding' => [
-        'step_label' => 'Paso :number',
-        'steps' => [
-            1 => [
-                'title' => 'Verificación de correo',
-                'done' => 'Completado — tu correo está confirmado',
-                'current' => 'Pendiente — confirma tu correo electrónico',
-                'future' => 'Confirma tu correo electrónico',
-            ],
-            2 => [
-                'title' => 'Aprobación del administrador',
-                'done' => 'Completado — tu cuenta fue aprobada',
-                'current' => 'Pendiente — un administrador está revisando tu solicitud',
-                'future' => 'Un administrador revisa tu solicitud',
-            ],
-            3 => [
-                'title' => 'Acceso al panel',
-                'done' => 'Completado — tienes acceso completo',
-                'current' => 'Listo — inicia sesión para continuar',
-                'future' => 'Disponible cuando tu cuenta sea aprobada',
-            ],
-        ],
-    ],
-
-    'verify_email' => [
-        'title' => 'Verifica tu correo electrónico',
-        'resend' => 'Reenviar correo de verificación',
-        'resend_processing' => 'Enviando...',
-        'help' => [
-            'title' => 'Qué tienes que hacer',
-            'items' => [
-                'Revisa tu bandeja de entrada',
-                'Busca un correo de YHN Dev Side',
-                'Abre el enlace de verificación que contiene',
-                'Si no aparece, revisa tu carpeta de spam',
-            ],
-            'expiry' => 'El enlace caduca en 24 horas. Usa el botón de arriba si necesitas uno nuevo.',
-        ],
-        'toast' => [
-            'sent' => 'Correo de verificación reenviado',
-        ],
-    ],
-
-    'waiting_approval' => [
-        'title' => 'Pendiente de aprobación',
-        'headline' => 'Tu cuenta está en revisión',
-        'body' => 'Tu correo electrónico está confirmado. Ahora un administrador revisa la solicitud antes de abrir la cuenta.',
-        'notice' => 'Recibirás un correo cuando la cuenta sea aprobada. Suele tardar unas horas.',
+    // Shown inside an app's own browser (WhatsApp, Instagram…), where Google may refuse to sign in.
+    'in_app' => [
+        'title' => 'Ábrelo en tu navegador',
+        'body' => 'Estás dentro de otra aplicación, y Google podría no dejarte entrar desde aquí. Abre esta página en Chrome o Safari.',
+        'open' => 'Abrir en Chrome',
+        'copy' => 'Copiar enlace',
+        'copied' => 'Enlace copiado: pégalo en tu navegador.',
     ],
 ];

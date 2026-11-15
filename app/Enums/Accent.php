@@ -26,7 +26,7 @@ enum Accent: string
 
     public function label(): string
     {
-        return __("arcadia.appearance.accents.{$this->value}");
+        return __("appearance.accents.{$this->value}");
     }
 
     public function hex(): string

@@ -41,8 +41,8 @@ class VocabularyTermRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => __('arcadia.editor.vocabulary.errors.name'),
-            'slug.unique' => __('arcadia.editor.vocabulary.errors.taken'),
+            'name.required' => __('editor.vocabulary.errors.name'),
+            'slug.unique' => __('editor.vocabulary.errors.taken'),
         ];
     }
 }

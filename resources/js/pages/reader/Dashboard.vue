@@ -78,17 +78,17 @@ const tallies = progress => [
     <div class="mx-auto max-w-2xl px-4 pb-16 pt-8 sm:px-6 sm:pt-12">
         <!-- Signing out is in the reader's bar (`ReaderLayout`), on every reader page. -->
         <header class="min-w-0">
-            <h1 class="m-0 font-display text-2xl font-bold text-ink sm:text-3xl">{{ $t('arcadia.my_guides.title') }}</h1>
+            <h1 class="m-0 font-display text-2xl font-bold text-ink sm:text-3xl">{{ $t('my_guides.title') }}</h1>
             <p v-if="welcome" class="mt-2 mb-0 text-base font-medium text-accent">{{ welcome }}</p>
             <p class="mt-1 mb-0 truncate text-sm text-ink-3">{{ email }}</p>
 
             <div v-if="guides.length" class="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1.5">
                 <span v-if="streak.days" class="inline-flex items-center gap-1.5 rounded-full border border-rule bg-well px-3 py-1 text-sm font-semibold text-ink">
                     <Flame :size="16" class="text-accent" aria-hidden="true" />
-                    {{ $tChoice('arcadia.my_guides.streak.days', streak.days, { count: streak.days }) }}
+                    {{ $tChoice('my_guides.streak.days', streak.days, { count: streak.days }) }}
                 </span>
                 <span v-if="!streak.today" class="text-sm text-ink-3">
-                    {{ $t(streak.days ? 'arcadia.my_guides.streak.keep' : 'arcadia.my_guides.streak.start') }}
+                    {{ $t(streak.days ? 'my_guides.streak.keep' : 'my_guides.streak.start') }}
                 </span>
             </div>
         </header>
@@ -107,13 +107,13 @@ const tallies = progress => [
                             <h2 class="mt-1.5 mb-0 font-display text-xl font-semibold leading-snug text-guide-ink">{{ guide.title }}</h2>
                         </div>
                     </div>
-                    <p v-if="!guide.url" class="mt-2 mb-0 text-sm text-guide-ink-soft">{{ $t('arcadia.my_guides.preparing') }}</p>
+                    <p v-if="!guide.url" class="mt-2 mb-0 text-sm text-guide-ink-soft">{{ $t('my_guides.preparing') }}</p>
 
                     <p v-if="guide.phrase" class="mt-3 mb-0 text-sm font-semibold text-guide-accent">{{ guide.phrase }}</p>
 
                     <div v-if="guide.progress" class="mt-4">
                         <div class="flex items-baseline justify-between gap-3 text-sm">
-                            <span class="font-semibold text-guide-ink">{{ $t('arcadia.my_guides.progress.done', { done: guide.progress.done, total: guide.progress.total }) }}</span>
+                            <span class="font-semibold text-guide-ink">{{ $t('my_guides.progress.done', { done: guide.progress.done, total: guide.progress.total }) }}</span>
                             <span class="font-mono text-guide-accent">{{ percent(guide.progress) }}%</span>
                         </div>
                         <div class="mt-1.5 h-2 overflow-hidden rounded-full bg-guide-well" role="progressbar"
@@ -124,15 +124,15 @@ const tallies = progress => [
                         <ul class="m-0 mt-3 flex flex-wrap gap-x-4 gap-y-1.5 p-0 text-xs text-guide-ink-soft">
                             <li v-for="tally in tallies(guide.progress)" :key="tally.key" class="flex list-none items-center gap-1.5">
                                 <component :is="tally.icon" :size="14" class="text-guide-accent" aria-hidden="true" />
-                                {{ $t(`arcadia.my_guides.progress.${tally.key}`, { done: tally.done, total: tally.total }) }}
+                                {{ $t(`my_guides.progress.${tally.key}`, { done: tally.done, total: tally.total }) }}
                             </li>
                         </ul>
 
                         <!-- Progress is only what they tick: say so where nothing is ticked yet. -->
                         <p class="mt-3 mb-0 text-xs text-guide-ink-soft">
                             {{ guide.progress.last_ticked_at
-                                ? $t('arcadia.my_guides.progress.last', { date: formatDate(guide.progress.last_ticked_at) })
-                                : $t('arcadia.my_guides.progress.none') }}
+                                ? $t('my_guides.progress.last', { date: formatDate(guide.progress.last_ticked_at) })
+                                : $t('my_guides.progress.none') }}
                         </p>
 
                         <!-- The line to do next, one tap away. -->
@@ -141,11 +141,11 @@ const tallies = progress => [
                             <PlayCircle :size="22" class="shrink-0 text-guide-accent" aria-hidden="true" />
                             <span class="min-w-0 flex-1">
                                 <span class="block font-mono text-[11px] uppercase tracking-widest text-guide-accent">
-                                    {{ $t(guide.progress.done ? 'arcadia.my_guides.continue.next' : 'arcadia.my_guides.continue.first') }}
+                                    {{ $t(guide.progress.done ? 'my_guides.continue.next' : 'my_guides.continue.first') }}
                                 </span>
                                 <span class="mt-0.5 block truncate font-semibold text-guide-ink">{{ guide.progress.next.title }}</span>
                                 <span class="block truncate text-xs text-guide-ink-soft">
-                                    {{ $t('arcadia.reader.stage', { number: guide.progress.next.stage }) }} · {{ guide.progress.next.stage_title }}<template v-if="guide.progress.next.minutes"> · {{ $t('arcadia.reader.stage_minutes', { minutes: guide.progress.next.minutes }) }}</template>
+                                    {{ $t('reader.stage', { number: guide.progress.next.stage }) }} · {{ guide.progress.next.stage_title }}<template v-if="guide.progress.next.minutes"> · {{ $t('reader.stage_minutes', { minutes: guide.progress.next.minutes }) }}</template>
                                 </span>
                             </span>
                             <ChevronRight :size="18" class="shrink-0 text-guide-ink-soft" aria-hidden="true" />
@@ -156,20 +156,20 @@ const tallies = progress => [
                     <a v-if="guide.url" :href="guide.url"
                        class="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-guide-accent px-4 py-2.5 text-sm font-semibold text-guide-on-accent no-underline">
                         <BookOpen :size="16" aria-hidden="true" />
-                        {{ $t('arcadia.my_guides.open') }}
+                        {{ $t('my_guides.open') }}
                     </a>
                     <button type="button" @click="pick(guide)"
                             class="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-guide-rule px-4 py-2.5 text-sm font-medium text-guide-ink">
                         <Palette :size="16" aria-hidden="true" />
-                        {{ $t('arcadia.my_guides.colours.action') }}
+                        {{ $t('my_guides.colours.action') }}
                     </button>
                 </div>
             </article>
         </div>
 
         <div v-else class="panel mt-8 p-6 text-center">
-            <p class="m-0 font-semibold text-ink">{{ $t('arcadia.my_guides.empty.title') }}</p>
-            <p class="mt-1 mb-0 text-sm text-ink-3">{{ $t('arcadia.my_guides.empty.hint') }}</p>
+            <p class="m-0 font-semibold text-ink">{{ $t('my_guides.empty.title') }}</p>
+            <p class="mt-1 mb-0 text-sm text-ink-3">{{ $t('my_guides.empty.hint') }}</p>
         </div>
 
         <ReaderColoursSheet v-if="picking" v-model:palette="palette" v-model:accent="accent"

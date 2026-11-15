@@ -39,7 +39,7 @@ const number = value => value === null || value === undefined ? '—' : new Intl
 const when = iso => iso ? new Date(iso).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' }) : '—'
 const usd = value => new Intl.NumberFormat(undefined, { style: 'currency', currency: 'USD', maximumFractionDigits: 4 }).format(value)
 
-const base = 'arcadia.editor.settings.agents'
+const base = 'editor.settings.agents'
 
 const tiles = computed(() => [
     { key: 'conversations', value: number(props.assistant.conversations.total) },
@@ -72,12 +72,12 @@ const applyFilter = value => {
 </script>
 
 <template>
-    <EditorTitle :parts="[$t('arcadia.editor.settings.title'), $t('arcadia.editor.settings.tabs.agents')]" />
+    <EditorTitle :parts="[$t('editor.settings.title'), $t('editor.settings.tabs.agents')]" />
 
     <div class="py-6">
-        <EditorBreadcrumb :trail="[{ label: $t('arcadia.editor.settings.title') }]" />
+        <EditorBreadcrumb :trail="[{ label: $t('editor.settings.title') }]" />
 
-        <PageHeader :title="$t('arcadia.editor.settings.title')" :description="$t('arcadia.editor.settings.description')" />
+        <PageHeader :title="$t('editor.settings.title')" :description="$t('editor.settings.description')" />
 
         <SiteSettingsTabs active="agents" />
 
@@ -85,7 +85,7 @@ const applyFilter = value => {
             <div class="flex flex-wrap items-start justify-between gap-3">
                 <p class="m-0 max-w-prose text-xs text-ink-3">{{ $t(`${base}.hint`) }}</p>
                 <Button type="button" variant="outline" size="sm" :disabled="loading" @click="reload">
-                    <RefreshCw :size="14" :class="loading ? 'animate-spin' : ''" aria-hidden="true" /> {{ $t('arcadia.editor.settings.health.refresh') }}
+                    <RefreshCw :size="14" :class="loading ? 'animate-spin' : ''" aria-hidden="true" /> {{ $t('editor.settings.health.refresh') }}
                 </Button>
             </div>
 
@@ -135,7 +135,7 @@ const applyFilter = value => {
                             </dl>
                             <p v-if="assistant.turns.failed" class="m-0 mt-2 text-[11px] text-ink-4">
                                 {{ $t(`${base}.assistant.failed_hint`) }}
-                                <Link :href="editorRoute('settings.logs')" class="text-ink-2 underline">{{ $t('arcadia.editor.settings.tabs.logs') }}</Link>
+                                <Link :href="editorRoute('settings.logs')" class="text-ink-2 underline">{{ $t('editor.settings.tabs.logs') }}</Link>
                             </p>
                         </div>
 
@@ -214,7 +214,7 @@ const applyFilter = value => {
                 </dl>
                 <p v-if="knowledge.failed" class="m-0 mt-2 text-[11px] text-ink-4">
                     {{ $t(`${base}.knowledge.failed_hint`) }}
-                    <Link :href="editorRoute('settings.health')" class="text-ink-2 underline">{{ $t('arcadia.editor.settings.tabs.health') }}</Link>
+                    <Link :href="editorRoute('settings.health')" class="text-ink-2 underline">{{ $t('editor.settings.tabs.health') }}</Link>
                 </p>
             </section>
         </div>

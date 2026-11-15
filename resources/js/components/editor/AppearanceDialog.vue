@@ -71,16 +71,16 @@ const save = () => {
     <Dialog :open="target !== null" @update:open="value => !value && emit('close')">
         <DialogContent v-if="target" class="sm:max-w-4xl">
             <DialogHeader>
-                <DialogTitle>{{ reader ? $t('arcadia.editor.appearance.reader_title') : $t('arcadia.editor.appearance.default_title') }}</DialogTitle>
-                <DialogDescription>{{ reader ? reader.email : $t('arcadia.editor.appearance.default_hint') }}</DialogDescription>
+                <DialogTitle>{{ reader ? $t('editor.appearance.reader_title') : $t('editor.appearance.default_title') }}</DialogTitle>
+                <DialogDescription>{{ reader ? reader.email : $t('editor.appearance.default_hint') }}</DialogDescription>
             </DialogHeader>
 
             <div class="grid gap-6 md:grid-cols-[minmax(0,18rem)_1fr]">
                 <AppearancePicker v-model:palette="palette" v-model:accent="accent" :options="options" name="editor-appearance" />
 
                 <div class="min-w-0">
-                    <p class="mt-0 mb-2 text-sm font-semibold text-ink">{{ $t('arcadia.editor.appearance.preview') }}</p>
-                    <iframe :src="previewUrl" :title="$t('arcadia.editor.appearance.preview')"
+                    <p class="mt-0 mb-2 text-sm font-semibold text-ink">{{ $t('editor.appearance.preview') }}</p>
+                    <iframe :src="previewUrl" :title="$t('editor.appearance.preview')"
                             class="h-[26rem] w-full rounded-control border border-rule bg-ground md:h-[32rem]"></iframe>
                 </div>
             </div>
@@ -88,15 +88,15 @@ const save = () => {
             <div v-if="confirming" class="flex gap-3 rounded-control border border-signal/30 bg-signal/5 p-4" role="alert">
                 <TriangleAlert :size="18" class="mt-0.5 shrink-0 text-signal" aria-hidden="true" />
                 <div>
-                    <p class="m-0 text-sm font-semibold text-ink">{{ $t('arcadia.editor.appearance.overwrite_title') }}</p>
-                    <p class="mt-1 mb-0 text-sm text-ink-3">{{ $t('arcadia.editor.appearance.overwrite_body') }}</p>
+                    <p class="m-0 text-sm font-semibold text-ink">{{ $t('editor.appearance.overwrite_title') }}</p>
+                    <p class="mt-1 mb-0 text-sm text-ink-3">{{ $t('editor.appearance.overwrite_body') }}</p>
                 </div>
             </div>
 
             <DialogFooter>
-                <Button type="button" variant="outline" :disabled="saving" @click="confirming ? (confirming = false) : emit('close')">{{ $t('arcadia.editor.cancel') }}</Button>
+                <Button type="button" variant="outline" :disabled="saving" @click="confirming ? (confirming = false) : emit('close')">{{ $t('editor.common.cancel') }}</Button>
                 <Button type="button" variant="brand" :disabled="saving" @click="save">
-                    {{ confirming ? $t('arcadia.editor.appearance.overwrite_confirm') : $t('arcadia.editor.appearance.save') }}
+                    {{ confirming ? $t('editor.appearance.overwrite_confirm') : $t('editor.appearance.save') }}
                 </Button>
             </DialogFooter>
         </DialogContent>

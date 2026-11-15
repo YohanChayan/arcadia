@@ -10,7 +10,7 @@ use App\Http\Middleware\RecogniseDevice;
 use App\Http\Middleware\RemoveTrailingSlash;
 use App\Http\Middleware\ResolveLocale;
 use App\Http\Middleware\SetLocale;
-use App\Services\ArcadiaSite;
+use App\Services\Site\Site;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -48,7 +48,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // Signed in already and at a sign-in page: on to where a sign-in lands — a reader's
         // guides, the owner's editor.
-        $middleware->redirectUsersTo(fn (Request $request) => app(ArcadiaSite::class)->homeAfterSignIn($request->user()));
+        $middleware->redirectUsersTo(fn (Request $request) => app(Site::class)->homeAfterSignIn($request->user()));
 
         $middleware->alias([
             'disable-ssr' => DisableSsrForAuth::class,
@@ -113,7 +113,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 // props (`HandleInertiaRequests`).
                 fn () => Inertia::render('errors/Error', [
                     'status' => $status,
-                    'contactEmail' => app(ArcadiaSite::class)->contactEmail(),
+                    'contactEmail' => app(Site::class)->contactEmail(),
                 ])
                     ->toResponse($request)
                     ->setStatusCode($status),

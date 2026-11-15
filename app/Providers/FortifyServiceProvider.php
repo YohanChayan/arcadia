@@ -8,7 +8,7 @@ use App\Http\Responses\PasskeySignedInResponse;
 use App\Http\Responses\SignedInResponse;
 use App\Http\Responses\VerifiedEmailResponse;
 use App\Models\User;
-use App\Services\ArcadiaSite;
+use App\Services\Site\Site;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
@@ -53,7 +53,7 @@ class FortifyServiceProvider extends ServiceProvider
         // What Arcadia gives a new account — a reader membership.
         Event::listen(Registered::class, function (Registered $event) {
             if ($event->user instanceof User) {
-                app(ArcadiaSite::class)->registered($event->user);
+                app(Site::class)->registered($event->user);
             }
         });
 
@@ -80,14 +80,14 @@ class FortifyServiceProvider extends ServiceProvider
                 return null;
             }
 
-            return app(ArcadiaSite::class)->admits($user) ? $user : null;
+            return app(Site::class)->admits($user) ? $user : null;
         });
 
         // A passkey signs in without `authenticateUsing` (the package logs the user in itself),
         // so admission is asked again here: a passkey registered before a membership was removed
         // must not outlive it.
         Passkeys::authorizeLoginUsing(fn (Request $request, PasskeyUser $user): bool => $user instanceof User
-            && app(ArcadiaSite::class)->admits($user));
+            && app(Site::class)->admits($user));
     }
 
     /**
@@ -96,7 +96,7 @@ class FortifyServiceProvider extends ServiceProvider
     private function configureViews(): void
     {
         Fortify::loginView(function (Request $request) {
-            $site = app(ArcadiaSite::class);
+            $site = app(Site::class);
 
             return Inertia::render($site->loginPage(), [
                 'canResetPassword' => Features::enabled(Features::resetPasswords()),
@@ -108,7 +108,7 @@ class FortifyServiceProvider extends ServiceProvider
 
         // The other account screens are Arcadia's own pages.
         $screen = function (string $screen, array $props = []) {
-            [$page, $own] = app(ArcadiaSite::class)->authPage($screen);
+            [$page, $own] = app(Site::class)->authPage($screen);
 
             return Inertia::render($page, $props + $own);
         };

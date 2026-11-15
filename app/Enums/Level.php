@@ -14,6 +14,6 @@ enum Level: string
 
     public function label(): string
     {
-        return __("arcadia.levels.{$this->value}");
+        return __("guide.levels.{$this->value}");
     }
 }

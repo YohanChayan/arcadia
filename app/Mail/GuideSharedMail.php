@@ -3,7 +3,7 @@
 namespace App\Mail;
 
 use App\Models\Reader;
-use App\Services\ArcadiaSite;
+use App\Services\Site\Site;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -22,7 +22,7 @@ class GuideSharedMail extends Mailable
 
     public function build(): static
     {
-        $site = app(ArcadiaSite::class);
+        $site = app(Site::class);
         $guide = $this->reader->guide;
         $brand = $site->mailBrand();
         $url = $site->guideUrl($guide->link_token, $guide->locale);

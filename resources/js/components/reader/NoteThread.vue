@@ -65,11 +65,11 @@ onMounted(async () => {
         <ul v-if="notes.forTarget(target).length" class="m-0 flex flex-col gap-2 p-0">
             <li v-for="note in notes.forTarget(target)" :key="note.id" class="list-none rounded-lg bg-guide-well px-3 py-2.5">
                 <template v-if="editingId === note.id">
-                    <textarea v-model="editing" rows="3" :maxlength="notes.maxLength" :aria-label="$t('arcadia.reader.notes.edit')"
+                    <textarea v-model="editing" rows="3" :maxlength="notes.maxLength" :aria-label="$t('reader.notes.edit')"
                               class="w-full resize-y rounded-md border border-guide-rule bg-guide-surface p-2 text-sm text-guide-ink outline-none focus:border-guide-accent"></textarea>
                     <div class="mt-1.5 flex justify-end gap-2 text-xs">
-                        <button type="button" class="text-guide-ink-soft hover:text-guide-ink" @click="editingId = null">{{ $t('arcadia.reader.notes.cancel') }}</button>
-                        <button type="button" class="font-semibold text-guide-accent" @click="saveEdit(note)">{{ $t('arcadia.reader.notes.save') }}</button>
+                        <button type="button" class="text-guide-ink-soft hover:text-guide-ink" @click="editingId = null">{{ $t('reader.notes.cancel') }}</button>
+                        <button type="button" class="font-semibold text-guide-accent" @click="saveEdit(note)">{{ $t('reader.notes.save') }}</button>
                     </div>
                 </template>
                 <template v-else>
@@ -77,14 +77,14 @@ onMounted(async () => {
                     <div class="mt-1.5 flex items-center justify-between gap-2 text-xs text-guide-ink-soft">
                         <span>{{ formatDate(note.updated_at) }}</span>
                         <span v-if="confirmingId === note.id" class="flex gap-3">
-                            <button type="button" class="hover:text-guide-ink" @click="confirmingId = null">{{ $t('arcadia.reader.notes.cancel') }}</button>
-                            <button type="button" class="font-semibold text-guide-accent" @click="notes.remove(note); confirmingId = null">{{ $t('arcadia.reader.notes.confirm_delete') }}</button>
+                            <button type="button" class="hover:text-guide-ink" @click="confirmingId = null">{{ $t('reader.notes.cancel') }}</button>
+                            <button type="button" class="font-semibold text-guide-accent" @click="notes.remove(note); confirmingId = null">{{ $t('reader.notes.confirm_delete') }}</button>
                         </span>
                         <span v-else class="flex gap-1">
-                            <button type="button" class="rounded p-1 hover:text-guide-accent" :aria-label="$t('arcadia.reader.notes.edit')" @click="edit(note)">
+                            <button type="button" class="rounded p-1 hover:text-guide-accent" :aria-label="$t('reader.notes.edit')" @click="edit(note)">
                                 <Pencil :size="13" aria-hidden="true" />
                             </button>
-                            <button type="button" class="rounded p-1 hover:text-guide-accent" :aria-label="$t('arcadia.reader.notes.delete')" @click="confirmingId = note.id">
+                            <button type="button" class="rounded p-1 hover:text-guide-accent" :aria-label="$t('reader.notes.delete')" @click="confirmingId = note.id">
                                 <Trash2 :size="13" aria-hidden="true" />
                             </button>
                         </span>
@@ -95,13 +95,13 @@ onMounted(async () => {
 
         <form class="mt-2" @submit.prevent="add">
             <textarea ref="box" v-model="draft" rows="2" :maxlength="notes.maxLength"
-                      :placeholder="$t('arcadia.reader.notes.placeholder')" :aria-label="$t('arcadia.reader.notes.add')"
+                      :placeholder="$t('reader.notes.placeholder')" :aria-label="$t('reader.notes.add')"
                       class="w-full resize-y rounded-md border border-guide-rule bg-guide-surface p-2 text-sm text-guide-ink outline-none placeholder:text-guide-ink-soft focus:border-guide-accent"
                       @keydown.meta.enter.prevent="add" @keydown.ctrl.enter.prevent="add"></textarea>
             <div class="mt-1 flex justify-end">
                 <button type="submit" :disabled="!draft.trim() || saving"
                         class="rounded-full bg-guide-accent px-3 py-1.5 text-xs font-semibold text-guide-on-accent disabled:opacity-40">
-                    {{ $t('arcadia.reader.notes.add') }}
+                    {{ $t('reader.notes.add') }}
                 </button>
             </div>
         </form>

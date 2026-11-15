@@ -27,13 +27,13 @@ const tabs = [
 </script>
 
 <template>
-    <nav :aria-label="$t('arcadia.editor.settings.tabs.label')"
+    <nav :aria-label="$t('editor.settings.tabs.label')"
          class="mb-5 inline-flex max-w-full flex-wrap gap-1 rounded-lg bg-well p-1">
         <Link v-for="tab in tabs" :key="tab.key" :href="editorRoute(tab.route)"
               :aria-current="tab.key === active ? 'page' : undefined"
               class="inline-flex flex-none items-center gap-2 rounded-md px-3.5 py-1.5 text-sm font-medium text-ink-3 no-underline transition-[color,box-shadow] hover:text-ink aria-[current=page]:bg-raised-solid aria-[current=page]:text-ink aria-[current=page]:shadow-[var(--shadow-sm)]">
             <component :is="tab.icon" :size="16" aria-hidden="true" />
-            {{ $t(`arcadia.editor.settings.tabs.${tab.key}`) }}
+            {{ $t(`editor.settings.tabs.${tab.key}`) }}
         </Link>
     </nav>
 </template>

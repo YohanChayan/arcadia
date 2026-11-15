@@ -19,8 +19,8 @@ import { ArrowLeft, Languages, Send, Sparkles } from '@lucide/vue'
 import SeoHead from '@/components/common/SeoHead.vue'
 import { Button } from '@/components/ui/button'
 import AuroraBackdrop from '@/components/AuroraBackdrop.vue'
-import ArcadiaMark from '@/components/ArcadiaMark.vue'
-import ArcadiaPhoto from '@/components/ArcadiaPhoto.vue'
+import BrandMark from '@/components/BrandMark.vue'
+import HeroPhoto from '@/components/HeroPhoto.vue'
 import Price from '@/components/landing/Price.vue'
 import RequestDialog from '@/components/landing/RequestDialog.vue'
 
@@ -56,7 +56,7 @@ const seo = computed(() => ({
     siteDomain: props.siteDomain,
 }))
 
-const base = 'arcadia.catalogue'
+const base = 'catalogue'
 
 const alternate = computed(() => Object.values(props.alternates)[0] ?? null)
 
@@ -123,15 +123,15 @@ const asking = ref(false)
 
         <nav class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-5 sm:px-6">
             <a :href="homeUrl" class="no-underline" :aria-label="$t(`${base}.home`)">
-                <ArcadiaMark class="text-2xl [--mark-height:1.1em] sm:text-3xl" />
+                <BrandMark class="text-2xl [--mark-height:1.1em] sm:text-3xl" />
             </a>
             <div class="flex shrink-0 items-center gap-2 text-sm">
-                <a v-if="alternate" :href="alternate" class="chip no-underline transition-colors hover:text-ink" :aria-label="$t('arcadia.landing.switch')">
+                <a v-if="alternate" :href="alternate" class="chip no-underline transition-colors hover:text-ink" :aria-label="$t('landing.switch')">
                     <Languages :size="14" aria-hidden="true" />
-                    <span class="hidden sm:inline">{{ $t('arcadia.landing.switch') }}</span>
+                    <span class="hidden sm:inline">{{ $t('landing.switch') }}</span>
                 </a>
                 <Button type="button" variant="brand" class="hidden sm:inline-flex" @click="asking = true">
-                    {{ $t('arcadia.landing.nav.start') }}
+                    {{ $t('landing.nav.start') }}
                 </Button>
             </div>
         </nav>
@@ -192,7 +192,7 @@ const asking = ref(false)
                                 <div class="relative aspect-[3/2] overflow-hidden rounded-lg border border-rule">
                                     <img v-if="guide.cover" :src="guide.cover.url" :width="guide.cover.width" :height="guide.cover.height" alt=""
                                          loading="lazy" class="block size-full object-cover transition-transform duration-300 group-hover:scale-105">
-                                    <ArcadiaPhoto v-else />
+                                    <HeroPhoto v-else />
                                     <span class="hue-wash absolute inset-0" aria-hidden="true"></span>
                                 </div>
                                 <p class="m-0 mt-2 line-clamp-3 text-sm font-semibold leading-snug text-ink-2 transition-colors group-hover:text-ink">
@@ -210,7 +210,7 @@ const asking = ref(false)
                 <p class="mt-2 mb-0 text-ink-3">{{ $t(`${base}.empty.body`) }}</p>
                 <Button type="button" variant="brand" size="lg" class="mt-6" @click="asking = true">
                     <Send :size="18" aria-hidden="true" />
-                    {{ $t('arcadia.landing.ask.open') }}
+                    {{ $t('landing.ask.open') }}
                 </Button>
             </div>
         </main>
@@ -222,7 +222,7 @@ const asking = ref(false)
                 <p class="mt-2 mb-0 text-ink-3">{{ $t(`${base}.missing.body`) }}</p>
                 <Button type="button" variant="brand" size="lg" class="mt-7" @click="asking = true">
                     <Send :size="18" aria-hidden="true" />
-                    {{ $t('arcadia.landing.ask.open') }}
+                    {{ $t('landing.ask.open') }}
                 </Button>
             </div>
         </section>

@@ -26,11 +26,11 @@ class PromptFormOptions
         return [
             PromptVariableType::LEVEL->value => array_map(fn (Level $level) => [
                 'value' => $level->value,
-                'label' => __("arcadia.levels.{$level->value}"),
+                'label' => __("guide.levels.{$level->value}"),
             ], Level::cases()),
             PromptVariableType::LANGUAGE->value => array_map(fn (string $language) => [
                 'value' => $language,
-                'label' => __("arcadia.editor.prompts.languages.{$language}"),
+                'label' => __("editor.prompts.languages.{$language}"),
             ], ['es', 'en']),
             PromptVariableType::CATEGORY->value => $terms(Category::class),
         ];
@@ -70,7 +70,7 @@ class PromptFormOptions
 
         return array_filter([
             'topic' => $inquiry?->topic ?? $guide->title,
-            'purpose' => $inquiry?->purpose ? __('arcadia.landing.ask.purposes.'.$inquiry->purpose->value) : null,
+            'purpose' => $inquiry?->purpose ? __('landing.ask.purposes.'.$inquiry->purpose->value) : null,
             'learner_name' => $inquiry?->requesterName(),
             'level' => $guide->level->value,
             'goal' => $guide->goals[0] ?? null,

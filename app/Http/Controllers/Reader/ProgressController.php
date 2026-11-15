@@ -35,7 +35,7 @@ class ProgressController
         // A line with a quick check is ticked only by answering it (`QuickCheckController`);
         // clearing it is still the reader's to do.
         $asks = Item::query()->where('version_id', $version->id)->where('key', $data['key'])->sole()->quickCheck() !== null;
-        abort_if($asks && $request->boolean('done'), 422, __('arcadia.reader.quick_check.answer_first'));
+        abort_if($asks && $request->boolean('done'), 422, __('reader.quick_check.answer_first'));
 
         $reader->tick($data['key'], $request->boolean('done'));
 

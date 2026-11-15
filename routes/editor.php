@@ -37,7 +37,7 @@ use App\Http\Controllers\Editor\SiteLogController;
 use App\Http\Controllers\Editor\SiteMailController;
 use App\Http\Controllers\Editor\VersionController;
 use App\Http\Controllers\Editor\VocabularyController;
-use App\Services\ArcadiaSite;
+use App\Services\Site\Site;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -58,7 +58,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-/** @var ArcadiaSite $site */
+/** @var Site $site */
 foreach ($site->locales() as $locale) {
     Route::middleware([$site->localeMiddleware($locale), 'disable-ssr', 'auth', 'approved', 'verified', 'has-role', 'role:admin'])
         ->prefix(ltrim($site->editorPath($locale), '/'))

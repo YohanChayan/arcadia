@@ -26,7 +26,7 @@ const meta = computed(() => [brief.value.creator, brief.value.duration, brief.va
 
 const searchUrl = computed(() => `https://www.youtube.com/results?${new URLSearchParams({ search_query: brief.value.search || props.item.title })}`)
 
-const replacementPrompt = computed(() => trans('arcadia.editor.content.brief.prompt', {
+const replacementPrompt = computed(() => trans('editor.content.brief.prompt', {
     title: props.item.title,
     summary: brief.value.summary ?? '—',
     covers: (brief.value.covers ?? []).join(', ') || '—',
@@ -50,9 +50,9 @@ const replacementPrompt = computed(() => trans('arcadia.editor.content.brief.pro
             <a :href="searchUrl" target="_blank" rel="noopener noreferrer"
                class="inline-flex items-center gap-1.5 rounded-full border border-rule px-2.5 py-1 font-medium text-ink no-underline hover:border-accent hover:text-accent">
                 <Search :size="12" aria-hidden="true" />
-                {{ $t('arcadia.editor.content.brief.search') }}
+                {{ $t('editor.content.brief.search') }}
             </a>
-            <CopyButton :value="replacementPrompt" :label="$t('arcadia.editor.content.brief.copy_prompt')" :copied-label="$t('arcadia.editor.content.brief.copied')" />
+            <CopyButton :value="replacementPrompt" :label="$t('editor.content.brief.copy_prompt')" :copied-label="$t('editor.content.brief.copied')" />
         </div>
     </div>
 </template>

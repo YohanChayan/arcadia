@@ -4,8 +4,8 @@ namespace App\Http\Middleware;
 
 use App\Models\Device;
 use App\Models\User;
-use App\Services\ArcadiaSite;
 use App\Services\Devices;
+use App\Services\Site\Site;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -43,7 +43,7 @@ class RecogniseDevice
 
     public function __construct(
         private readonly Devices $devices,
-        private readonly ArcadiaSite $site,
+        private readonly Site $site,
     ) {}
 
     public function handle(Request $request, Closure $next): Response
@@ -54,7 +54,7 @@ class RecogniseDevice
     /** Null when this request may go on — on a device of the account's — else where it goes instead. */
     public function check(Request $request): ?Response
     {
-        if (! config('arcadia.device_limit_enabled')) {
+        if (! config('site.device_limit_enabled')) {
             return null;
         }
 
@@ -124,6 +124,6 @@ class RecogniseDevice
         $request->session()->regenerateToken();
         Cookie::queue(Cookie::forget(self::COOKIE));
 
-        return redirect()->route('login')->with('error', __('arcadia.devices.signed_out'));
+        return redirect()->route('login')->with('error', __('devices.signed_out'));
     }
 }

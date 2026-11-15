@@ -23,14 +23,14 @@ class ActivityController
 
         $reword->handle($row, $request->input('activity'));
 
-        return back()->with('success', __('arcadia.editor.activities.flash.reworded'));
+        return back()->with('success', __('editor.activities.flash.reworded'));
     }
 
     public function destroy(Guide $guide, string $node, int $id): RedirectResponse
     {
         $this->find($guide, $node, $id)->forceFill(['activity' => null])->save();
 
-        return back()->with('success', __('arcadia.editor.activities.flash.removed'));
+        return back()->with('success', __('editor.activities.flash.removed'));
     }
 
     /** A node of the guide's draft that carries an activity. */

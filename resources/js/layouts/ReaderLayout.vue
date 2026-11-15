@@ -10,7 +10,7 @@
 import { computed } from 'vue'
 import { router, usePage } from '@inertiajs/vue3'
 import { BookOpen, LifeBuoy, LogOut } from '@lucide/vue'
-import ArcadiaMark from '@/components/ArcadiaMark.vue'
+import BrandMark from '@/components/BrandMark.vue'
 import { Button } from '@/components/ui/button'
 
 const page = usePage()
@@ -27,9 +27,9 @@ const signOut = () => router.post(route('logout'))
 
 <template>
     <header class="border-b border-rule">
-        <nav class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6" :aria-label="$t('arcadia.reader_nav.label')">
-            <Link :href="links[0].href" class="no-underline" :aria-label="$t('arcadia.reader_nav.my_guides')">
-                <ArcadiaMark class="text-lg" />
+        <nav class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6" :aria-label="$t('reader.nav.label')">
+            <Link :href="links[0].href" class="no-underline" :aria-label="$t('reader.nav.my_guides')">
+                <BrandMark class="text-lg" />
             </Link>
 
             <div class="flex items-center gap-1">
@@ -38,9 +38,9 @@ const signOut = () => router.post(route('logout'))
                       class="inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium no-underline transition-colors"
                       :class="current(link.href) ? 'bg-hover text-ink' : 'text-ink-3 hover:bg-hover hover:text-ink'">
                     <component :is="link.icon" :size="15" aria-hidden="true" />
-                    {{ $t(`arcadia.reader_nav.${link.key}`) }}
+                    {{ $t(`reader.nav.${link.key}`) }}
                 </Link>
-                <Button type="button" variant="ghost" size="icon-sm" :aria-label="$t('arcadia.my_guides.sign_out')" :title="$t('arcadia.my_guides.sign_out')" @click="signOut">
+                <Button type="button" variant="ghost" size="icon-sm" :aria-label="$t('my_guides.sign_out')" :title="$t('my_guides.sign_out')" @click="signOut">
                     <LogOut :size="15" aria-hidden="true" />
                 </Button>
             </div>

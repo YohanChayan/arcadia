@@ -11,7 +11,7 @@ use Illuminate\Database\Seeder;
 /**
  * The starter prompt for one guide's flyer: what the owner gives ChatGPT or Gemini to make a social
  * media image that sells **this guide** — its title, what the reader will be able to do, its price
- * and how to ask for it. The sibling of `ArcadiaFlyerPromptTemplateSeeder`, which sells Arcadia with
+ * and how to ask for it. The sibling of `BrandFlyerPromptTemplateSeeder`, which sells Arcadia with
  * no guide of its own.
  *
  * **People buy results, not processes** (2026-10-19, the second version), as the general flyer

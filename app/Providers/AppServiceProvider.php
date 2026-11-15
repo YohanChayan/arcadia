@@ -4,8 +4,9 @@ namespace App\Providers;
 
 use App\Actions\Readers\LinkReaderAssignments;
 use App\Models\User;
-use App\Services\ArcadiaSite;
+use App\Services\Site\Site;
 use App\Services\Site\SiteHealth;
+use App\Translation\DirectoryFileLoader;
 use Carbon\CarbonImmutable;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Queue\Events\Looping;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
+use Illuminate\Translation\FileLoader;
 use Illuminate\Validation\Rules\Password;
 
 class AppServiceProvider extends ServiceProvider
@@ -24,7 +26,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton(ArcadiaSite::class, fn () => new ArcadiaSite(config('arcadia')));
+        $this->app->singleton(Site::class, fn () => new Site(config('site')));
+
+        // `lang/{locale}/editor/guides.php` answers `editor.guides.*`, as it does for `$t()`.
+        $this->app->extend('translation.loader', fn (FileLoader $loader) => DirectoryFileLoader::from($loader));
 
         // Derived from APP_URL rather than the environment, so a TLS host and plain HTTP behind
         // a proxy or in a container can share the code.

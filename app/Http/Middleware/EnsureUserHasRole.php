@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Services\ArcadiaSite;
+use App\Services\Site\Site;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,11 +22,11 @@ use Symfony\Component\HttpFoundation\Response;
  * Names are matched against `Role::alias`, never `alias_number`, so the route reads as the
  * rule it states. `'unknown'` can never be named, so an unrecognised role is refused here too.
  *
- * The role is the account's Arcadia membership's (`ArcadiaSite::roleOf()`).
+ * The role is the account's Arcadia membership's (`Site::roleOf()`).
  */
 class EnsureUserHasRole
 {
-    public function __construct(private readonly ArcadiaSite $site) {}
+    public function __construct(private readonly Site $site) {}
 
     public function handle(Request $request, Closure $next, string ...$roles): Response
     {

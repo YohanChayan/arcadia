@@ -79,9 +79,9 @@ class GuideBulkActionTest extends TestCase
         $this->post('/es/editor/guides/bulk', ['action' => 'publish', 'ids' => [$pending->id, $updated->id, $empty->id]])
             ->assertRedirect()
             ->assertSessionHas('success', implode(' ', [
-                trans_choice('arcadia.editor.guides.bulk.flash.published', 2, ['count' => 2]),
-                trans_choice('arcadia.editor.guides.bulk.flash.released', 2, ['count' => 2]),
-                trans_choice('arcadia.editor.guides.bulk.flash.skipped', 1, ['count' => 1]),
+                trans_choice('editor.guides.bulk.flash.published', 2, ['count' => 2]),
+                trans_choice('editor.guides.bulk.flash.released', 2, ['count' => 2]),
+                trans_choice('editor.guides.bulk.flash.skipped', 1, ['count' => 1]),
             ]));
 
         $this->assertTrue($pending->fresh()->isReadable());
@@ -108,7 +108,7 @@ class GuideBulkActionTest extends TestCase
         $english = $this->guide('Excel in English', 'en');
 
         $this->post('/es/editor/guides/bulk', ['action' => 'delete', 'all' => true, 'search' => 'Excel', 'except' => [$guides->first()->id]])
-            ->assertSessionHas('success', trans_choice('arcadia.editor.guides.bulk.flash.deleted', 13, ['count' => 13]));
+            ->assertSessionHas('success', trans_choice('editor.guides.bulk.flash.deleted', 13, ['count' => 13]));
 
         $this->assertSame(
             [$guides->first()->id, $other->id, $english->id],
@@ -134,7 +134,7 @@ class GuideBulkActionTest extends TestCase
         $draft = $this->guide('Borrador');
 
         $this->post('/es/editor/guides/bulk', ['action' => 'draft', 'ids' => [$published->id, $draft->id]])
-            ->assertSessionHas('success', trans_choice('arcadia.editor.guides.bulk.flash.drafted', 1, ['count' => 1]));
+            ->assertSessionHas('success', trans_choice('editor.guides.bulk.flash.drafted', 1, ['count' => 1]));
 
         $this->assertSame(GuideStatus::DRAFT, $published->fresh()->status);
         $this->assertTrue($published->latestVersion()->isReleased());
@@ -171,8 +171,8 @@ class GuideBulkActionTest extends TestCase
 
         $this->post('/es/editor/guides/bulk', ['action' => 'list', 'ids' => [$linkOnly->id, $draft->id]])
             ->assertSessionHas('success', implode(' ', [
-                trans_choice('arcadia.editor.guides.bulk.flash.listed', 1, ['count' => 1]),
-                trans_choice('arcadia.editor.guides.bulk.flash.awaiting', 1, ['count' => 1]),
+                trans_choice('editor.guides.bulk.flash.listed', 1, ['count' => 1]),
+                trans_choice('editor.guides.bulk.flash.awaiting', 1, ['count' => 1]),
             ]));
 
         $this->assertSame([$linkOnly->id], Guide::listed()->pluck('id')->all());
@@ -186,7 +186,7 @@ class GuideBulkActionTest extends TestCase
         $guide->update(['open_for_enrollment' => true]);
 
         $this->post('/es/editor/guides/bulk', ['action' => 'unlist', 'ids' => [$guide->id]])
-            ->assertSessionHas('success', trans_choice('arcadia.editor.guides.bulk.flash.unlisted', 1, ['count' => 1]));
+            ->assertSessionHas('success', trans_choice('editor.guides.bulk.flash.unlisted', 1, ['count' => 1]));
 
         $this->assertFalse(Guide::listed()->exists());
         $this->assertTrue($guide->fresh()->open_for_enrollment);
@@ -197,7 +197,7 @@ class GuideBulkActionTest extends TestCase
         $english = $this->guide('Excel', 'en');
 
         $this->post('/es/editor/guides/bulk', ['action' => 'delete', 'ids' => [$english->id]])
-            ->assertSessionHas('success', trans_choice('arcadia.editor.guides.bulk.flash.deleted', 0, ['count' => 0]));
+            ->assertSessionHas('success', trans_choice('editor.guides.bulk.flash.deleted', 0, ['count' => 0]));
 
         $this->assertModelExists($english);
     }

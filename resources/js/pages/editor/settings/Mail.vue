@@ -26,7 +26,7 @@ const props = defineProps({
 
 const editorRoute = useEditorRoute()
 
-const base = 'arcadia.editor.settings.mail'
+const base = 'editor.settings.mail'
 
 const when = iso => new Date(iso).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })
 
@@ -53,12 +53,12 @@ const applyFilter = value => {
 </script>
 
 <template>
-    <EditorTitle :parts="[$t('arcadia.editor.settings.title'), $t('arcadia.editor.settings.tabs.mail')]" />
+    <EditorTitle :parts="[$t('editor.settings.title'), $t('editor.settings.tabs.mail')]" />
 
     <div class="py-6">
-        <EditorBreadcrumb :trail="[{ label: $t('arcadia.editor.settings.title') }]" />
+        <EditorBreadcrumb :trail="[{ label: $t('editor.settings.title') }]" />
 
-        <PageHeader :title="$t('arcadia.editor.settings.title')" :description="$t('arcadia.editor.settings.description')" />
+        <PageHeader :title="$t('editor.settings.title')" :description="$t('editor.settings.description')" />
 
         <SiteSettingsTabs active="mail" />
 
@@ -71,13 +71,13 @@ const applyFilter = value => {
                     <p class="m-0 mt-1 max-w-prose text-xs text-ink-3">{{ $t(`${base}.hint`, { days: sent.retention_days }) }}</p>
                 </div>
                 <Button type="button" variant="outline" size="sm" :disabled="loading" @click="reload">
-                    <RefreshCw :size="14" :class="loading ? 'animate-spin' : ''" aria-hidden="true" /> {{ $t('arcadia.editor.settings.health.refresh') }}
+                    <RefreshCw :size="14" :class="loading ? 'animate-spin' : ''" aria-hidden="true" /> {{ $t('editor.settings.health.refresh') }}
                 </Button>
             </div>
 
             <div class="mb-3 flex flex-wrap items-center justify-between gap-2">
                 <DateRangeFilter :model-value="current" :loading="loading" @update:model-value="applyFilter" />
-                <span class="font-mono text-[11px] text-ink-4">{{ $t('arcadia.editor.settings.health.filter.showing', { shown: sent.mails.length, total: sent.in_range }) }}</span>
+                <span class="font-mono text-[11px] text-ink-4">{{ $t('editor.settings.health.filter.showing', { shown: sent.mails.length, total: sent.in_range }) }}</span>
             </div>
 
             <ul v-if="sent.by_kind.length" class="m-0 mb-3 flex list-none flex-wrap gap-2 p-0">
@@ -101,11 +101,11 @@ const applyFilter = value => {
                     </p>
                 </li>
             </ul>
-            <p v-if="sent.in_range > sent.mails.length" class="m-0 mt-2 text-[11px] text-ink-4">{{ $t('arcadia.editor.settings.health.filter.capped', { limit: sent.limit }) }}</p>
+            <p v-if="sent.in_range > sent.mails.length" class="m-0 mt-2 text-[11px] text-ink-4">{{ $t('editor.settings.health.filter.capped', { limit: sent.limit }) }}</p>
 
             <p class="m-0 mt-3 text-[11px] text-ink-4">
                 {{ $t(`${base}.failed_hint`) }}
-                <Link :href="editorRoute('settings.health')" class="text-ink-2 underline">{{ $t('arcadia.editor.settings.tabs.health') }}</Link>
+                <Link :href="editorRoute('settings.health')" class="text-ink-2 underline">{{ $t('editor.settings.tabs.health') }}</Link>
             </p>
         </section>
     </div>

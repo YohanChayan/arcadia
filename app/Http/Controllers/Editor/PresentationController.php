@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Editor;
 
 use App\Models\AccessRequest;
 use App\Models\Guide;
-use App\Services\ArcadiaSite;
 use App\Services\GuidePresentation;
+use App\Services\Site\Site;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -25,10 +25,10 @@ class PresentationController
         $pitch = $request->validate(['pitch' => ['nullable', 'string', 'max:'.Guide::MAX_PITCH]])['pitch'] ?? null;
         $guide->forceFill(['pitch' => filled($pitch) ? trim($pitch) : null])->save();
 
-        return back()->with('success', __('arcadia.editor.images.flash.pitch_saved'));
+        return back()->with('success', __('editor.images.flash.pitch_saved'));
     }
 
-    public function preview(Guide $guide, ArcadiaSite $site, GuidePresentation $presentation): Response
+    public function preview(Guide $guide, Site $site, GuidePresentation $presentation): Response
     {
         $this->ownLocale($guide);
 

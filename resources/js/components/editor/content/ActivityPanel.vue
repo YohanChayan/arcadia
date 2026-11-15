@@ -31,9 +31,9 @@ const open = ref(false)
 
 const summary = computed(() => {
     const count = ['questions', 'cards', 'pairs', 'steps'].map(list => activity.value[list]?.length ?? 0).find(length => length > 0) ?? 1
-    const family = trans(`arcadia.editor.activities.families.${activity.value.family}`)
+    const family = trans(`editor.activities.families.${activity.value.family}`)
 
-    return transChoice('arcadia.editor.activities.summary', count, { family, count })
+    return transChoice('editor.activities.summary', count, { family, count })
 })
 
 // Rewording: a copy of the activity, its text edited, sent whole — the server keeps only the text.
@@ -72,10 +72,10 @@ const errorAt = path => form.errors[path]
             </button>
             <span class="flex-1"></span>
             <template v-if="content.editable && !editing">
-                <Button type="button" variant="ghost" size="icon-sm" :aria-label="$t('arcadia.editor.activities.edit')" :title="$t('arcadia.editor.activities.edit')" @click="edit">
+                <Button type="button" variant="ghost" size="icon-sm" :aria-label="$t('editor.activities.edit')" :title="$t('editor.activities.edit')" @click="edit">
                     <Pencil :size="13" aria-hidden="true" />
                 </Button>
-                <Button type="button" variant="ghost" size="icon-sm" :aria-label="$t('arcadia.editor.activities.remove')" :title="$t('arcadia.editor.activities.remove')" @click="removing = true">
+                <Button type="button" variant="ghost" size="icon-sm" :aria-label="$t('editor.activities.remove')" :title="$t('editor.activities.remove')" @click="removing = true">
                     <Trash2 :size="13" aria-hidden="true" />
                 </Button>
             </template>
@@ -88,16 +88,16 @@ const errorAt = path => form.errors[path]
                     <p class="m-0 font-medium text-ink">{{ q + 1 }}. {{ question.prompt }}</p>
                     <ul class="mt-1 mb-0 space-y-0.5 pl-5">
                         <li v-for="(option, o) in question.options" :key="o" :class="o === question.correct ? 'font-semibold text-success' : ''">
-                            <Check v-if="o === question.correct" :size="12" class="mr-1 inline" :aria-label="$t('arcadia.editor.activities.correct')" />{{ option }}
+                            <Check v-if="o === question.correct" :size="12" class="mr-1 inline" :aria-label="$t('editor.activities.correct')" />{{ option }}
                         </li>
                     </ul>
-                    <p class="mt-1 mb-0 text-xs"><span class="text-ink-4">{{ $t('arcadia.editor.activities.explanation') }}:</span> {{ question.explanation }}</p>
-                    <p v-if="question.evidence" class="mt-0.5 mb-0 text-xs italic text-ink-3"><span class="not-italic text-ink-4">{{ $t('arcadia.editor.activities.evidence') }}:</span> {{ question.evidence }}</p>
+                    <p class="mt-1 mb-0 text-xs"><span class="text-ink-4">{{ $t('editor.activities.explanation') }}:</span> {{ question.explanation }}</p>
+                    <p v-if="question.evidence" class="mt-0.5 mb-0 text-xs italic text-ink-3"><span class="not-italic text-ink-4">{{ $t('editor.activities.evidence') }}:</span> {{ question.evidence }}</p>
                 </div>
             </template>
 
             <template v-else-if="activity.family === 'stage_game'">
-                <p class="m-0 font-medium text-ink">{{ $t(`arcadia.editor.activities.games.${activity.game}`) }}</p>
+                <p class="m-0 font-medium text-ink">{{ $t(`editor.activities.games.${activity.game}`) }}</p>
                 <p v-if="activity.instructions" class="m-0 text-xs">{{ activity.instructions }}</p>
                 <ul v-if="activity.pairs?.length" class="m-0 space-y-0.5 pl-5">
                     <li v-for="(pair, p) in activity.pairs" :key="p">{{ pair.left }} <span class="text-ink-4">→</span> {{ pair.right }}</li>
@@ -105,7 +105,7 @@ const errorAt = path => form.errors[path]
                 <ol v-if="activity.steps?.length" class="m-0 space-y-0.5 pl-5">
                     <li v-for="(step, s) in activity.steps" :key="s">{{ step }}</li>
                 </ol>
-                <p v-if="activity.evidence" class="m-0 text-xs italic text-ink-3"><span class="not-italic text-ink-4">{{ $t('arcadia.editor.activities.evidence') }}:</span> {{ activity.evidence }}</p>
+                <p v-if="activity.evidence" class="m-0 text-xs italic text-ink-3"><span class="not-italic text-ink-4">{{ $t('editor.activities.evidence') }}:</span> {{ activity.evidence }}</p>
             </template>
 
             <template v-else-if="activity.family === 'flip_cards'">
@@ -116,9 +116,9 @@ const errorAt = path => form.errors[path]
             </template>
 
             <template v-else-if="activity.family === 'practice_extras'">
-                <p class="m-0"><span class="text-ink-4">{{ $t('arcadia.editor.activities.hint') }}:</span> {{ activity.hint }}</p>
-                <p class="m-0 whitespace-pre-line"><span class="text-ink-4">{{ $t('arcadia.editor.activities.example') }}:</span> {{ activity.example }}</p>
-                <p v-if="activity.rate" class="m-0 text-xs text-ink-3">{{ $t('arcadia.editor.activities.rate') }}</p>
+                <p class="m-0"><span class="text-ink-4">{{ $t('editor.activities.hint') }}:</span> {{ activity.hint }}</p>
+                <p class="m-0 whitespace-pre-line"><span class="text-ink-4">{{ $t('editor.activities.example') }}:</span> {{ activity.example }}</p>
+                <p v-if="activity.rate" class="m-0 text-xs text-ink-3">{{ $t('editor.activities.rate') }}</p>
             </template>
         </div>
 
@@ -131,12 +131,12 @@ const errorAt = path => form.errors[path]
                         <Check :size="13" class="shrink-0" :class="o === question.correct ? 'text-success' : 'invisible'" aria-hidden="true" />
                         <Input v-model="question.options[o]" :aria-invalid="errorAt(`questions.${q}.options.${o}`) ? true : undefined" />
                     </div>
-                    <Textarea v-model="question.explanation" rows="2" class="ml-4 w-[calc(100%-1rem)]" :placeholder="$t('arcadia.editor.activities.explanation')" />
+                    <Textarea v-model="question.explanation" rows="2" class="ml-4 w-[calc(100%-1rem)]" :placeholder="$t('editor.activities.explanation')" />
                 </div>
             </template>
 
             <template v-else-if="form.activity.family === 'stage_game'">
-                <Input v-model="form.activity.instructions" :placeholder="$t('arcadia.editor.activities.instructions')" />
+                <Input v-model="form.activity.instructions" :placeholder="$t('editor.activities.instructions')" />
                 <div v-for="(pair, p) in form.activity.pairs ?? []" :key="`p${p}`" class="grid gap-2 sm:grid-cols-2">
                     <Input v-model="pair.left" />
                     <Input v-model="pair.right" />
@@ -152,8 +152,8 @@ const errorAt = path => form.errors[path]
             </template>
 
             <template v-else-if="form.activity.family === 'practice_extras'">
-                <Textarea v-model="form.activity.hint" rows="2" :placeholder="$t('arcadia.editor.activities.hint')" />
-                <Textarea v-model="form.activity.example" rows="3" :placeholder="$t('arcadia.editor.activities.example')" />
+                <Textarea v-model="form.activity.hint" rows="2" :placeholder="$t('editor.activities.hint')" />
+                <Textarea v-model="form.activity.example" rows="3" :placeholder="$t('editor.activities.example')" />
             </template>
 
             <ul v-if="Object.keys(form.errors).length" class="m-0 space-y-0.5 pl-5 text-xs text-danger">
@@ -161,12 +161,12 @@ const errorAt = path => form.errors[path]
             </ul>
 
             <div class="flex items-center gap-2">
-                <Button type="submit" variant="brand" size="sm" :disabled="form.processing">{{ $t('arcadia.editor.activities.save') }}</Button>
-                <Button type="button" variant="ghost" size="sm" @click="editing = false">{{ $t('arcadia.editor.cancel') }}</Button>
+                <Button type="submit" variant="brand" size="sm" :disabled="form.processing">{{ $t('editor.activities.save') }}</Button>
+                <Button type="button" variant="ghost" size="sm" @click="editing = false">{{ $t('editor.common.cancel') }}</Button>
             </div>
         </form>
 
-        <ConfirmDialog :open="removing" :title="$t('arcadia.editor.activities.remove')" :body="$t('arcadia.editor.activities.remove_confirm')"
-                       :confirm-label="$t('arcadia.editor.activities.remove')" @confirm="remove" @cancel="removing = false" />
+        <ConfirmDialog :open="removing" :title="$t('editor.activities.remove')" :body="$t('editor.activities.remove_confirm')"
+                       :confirm-label="$t('editor.activities.remove')" @confirm="remove" @cancel="removing = false" />
     </div>
 </template>

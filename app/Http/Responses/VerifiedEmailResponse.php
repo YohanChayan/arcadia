@@ -2,7 +2,7 @@
 
 namespace App\Http\Responses;
 
-use App\Services\ArcadiaSite;
+use App\Services\Site\Site;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Laravel\Fortify\Contracts\VerifyEmailResponse;
@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class VerifiedEmailResponse implements VerifyEmailResponse
 {
-    public function __construct(private readonly ArcadiaSite $site) {}
+    public function __construct(private readonly Site $site) {}
 
     /**
      * @param  Request  $request

@@ -66,7 +66,7 @@ class GuidePresentationTest extends TestCase
                 ->where('noIndex', true)
                 ->where('metaDescription', 'Aprende Excel en dos semanas, con videos gratuitos ordenados por etapas.')
                 // Arcadia's own preview until the guide has a cover.
-                ->where('ogImage', '/img/arcadia/og-arcadia-2026-11-es.jpg')
+                ->where('ogImage', '/img/brand/og-arcadia-2026-11-es.jpg')
                 ->missing('sections')
                 ->missing('stages')
                 ->missing('guide.greeting'))
@@ -98,7 +98,7 @@ class GuidePresentationTest extends TestCase
 
     public function test_looking_at_it_spends_no_device_but_reading_it_does(): void
     {
-        config(['arcadia.device_limit_enabled' => true]);
+        config(['site.device_limit_enabled' => true]);
 
         $stranger = User::factory()->withRole(Role::ALIAS_READER)->create(['email_verified_at' => now()]);
         $this->actingAs($stranger)->get($this->link())->assertOk()->assertInertia(fn ($page) => $page->component('GuidePresentation'));

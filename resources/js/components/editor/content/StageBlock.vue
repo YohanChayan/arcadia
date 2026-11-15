@@ -28,7 +28,7 @@ const addingCard = ref(false)
                 <h3 class="m-0 font-display text-lg font-semibold text-ink">
                     <span class="font-mono text-sm text-accent">{{ number }} ·</span> {{ stage.title }}
                 </h3>
-                <p v-if="stage.goal" class="mt-1 mb-0 text-sm text-ink-3">{{ $t('arcadia.editor.content.fields.goal') }} {{ stage.goal }}</p>
+                <p v-if="stage.goal" class="mt-1 mb-0 text-sm text-ink-3">{{ $t('editor.content.fields.goal') }} {{ stage.goal }}</p>
             </div>
             <NodeToolbar node="stages" :row="stage" :first="first" :last="last" @edit="editing = true" />
         </div>
@@ -38,14 +38,14 @@ const addingCard = ref(false)
         <div class="mt-4 flex flex-col gap-3">
             <CardBlock v-for="(card, index) in stage.cards" :key="card.id" :card="card"
                        :first="index === 0" :last="index === stage.cards.length - 1" />
-            <p v-if="stage.cards.length === 0" class="m-0 text-sm text-ink-4">{{ $t('arcadia.editor.content.cards.empty') }}</p>
+            <p v-if="stage.cards.length === 0" class="m-0 text-sm text-ink-4">{{ $t('editor.content.cards.empty') }}</p>
         </div>
 
         <template v-if="content.editable">
             <NodeForm v-if="addingCard" class="mt-3" node="cards" :parent-id="stage.id" @done="addingCard = false" />
             <Button v-else type="button" variant="outline" size="sm" class="mt-3" @click="addingCard = true">
                 <Plus :size="14" aria-hidden="true" />
-                {{ $t('arcadia.editor.content.cards.add') }}
+                {{ $t('editor.content.cards.add') }}
             </Button>
         </template>
     </section>

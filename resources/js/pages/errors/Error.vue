@@ -12,7 +12,7 @@
  */
 import { computed } from 'vue'
 import { Link, router, usePage } from '@inertiajs/vue3'
-import ArcadiaMark from '@/components/ArcadiaMark.vue'
+import BrandMark from '@/components/BrandMark.vue'
 import { Home, RefreshCw, LogOut } from '@lucide/vue'
 import { wTrans } from 'laravel-vue-i18n'
 import { Button, buttonVariants } from '@/components/ui/button'
@@ -43,7 +43,7 @@ const signOut = () => router.post(route('logout'))
     <div class="min-h-screen w-full bg-small-honey-beehive flex items-center justify-center px-4 py-10">
         <div class="w-full max-w-4xl">
             <div class="mb-6">
-                <div class="flex justify-center text-2xl"><ArcadiaMark /></div>
+                <div class="flex justify-center text-2xl"><BrandMark /></div>
             </div>
 
             <div class="bg-raised/60 border border-rule rounded-panel overflow-hidden backdrop-blur-[20px] shadow-[var(--panel-shadow)]">

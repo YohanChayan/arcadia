@@ -33,8 +33,8 @@ const handleRegisterSuccess = () => {
     <div v-if="canManagePasskeys" class="space-y-6">
         <Heading
             variant="small"
-            :title="$t('arcadia.account.passkeys.title')"
-            :description="$t('arcadia.account.passkeys.lead')"
+            :title="$t('account.passkeys.title')"
+            :description="$t('account.passkeys.lead')"
         />
 
         <div class="overflow-hidden rounded-lg border border-border">
@@ -53,8 +53,8 @@ const handleRegisterSuccess = () => {
                 >
                     <KeyRound class="h-7 w-7 text-muted-foreground" />
                 </div>
-                <p class="font-medium">{{ $t('arcadia.account.passkeys.empty') }}</p>
-                <p class="mt-1 text-sm text-muted-foreground">{{ $t('arcadia.account.passkeys.empty_hint') }}</p>
+                <p class="font-medium">{{ $t('account.passkeys.empty') }}</p>
+                <p class="mt-1 text-sm text-muted-foreground">{{ $t('account.passkeys.empty_hint') }}</p>
             </div>
         </div>
 

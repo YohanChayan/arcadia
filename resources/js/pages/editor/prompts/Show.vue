@@ -141,34 +141,34 @@ const deleteTemplate = () => {
 </script>
 
 <template>
-    <EditorTitle :parts="[template.name, $t('arcadia.editor.prompts.title')]" />
+    <EditorTitle :parts="[template.name, $t('editor.prompts.title')]" />
 
     <div class="py-6">
-        <EditorBreadcrumb :trail="[{ label: $t('arcadia.editor.prompts.title'), route: 'prompts.index' }, { label: template.name }]" />
+        <EditorBreadcrumb :trail="[{ label: $t('editor.prompts.title'), route: 'prompts.index' }, { label: template.name }]" />
 
-        <PageHeader :eyebrow="$t('arcadia.editor.prompts.title')" :title="template.name" :description="template.description ?? ''">
+        <PageHeader :eyebrow="$t('editor.prompts.title')" :title="template.name" :description="template.description ?? ''">
             <template #actions>
-                <Button type="button" variant="ghost" size="icon-sm" :aria-label="$t('arcadia.editor.prompts.rename')" @click="renaming = true">
+                <Button type="button" variant="ghost" size="icon-sm" :aria-label="$t('editor.prompts.rename')" @click="renaming = true">
                     <Pencil :size="14" aria-hidden="true" />
                 </Button>
-                <Button v-if="!hasFrozen" type="button" variant="ghost-danger" size="icon-sm" :aria-label="$t('arcadia.editor.prompts.delete.action')"
+                <Button v-if="!hasFrozen" type="button" variant="ghost-danger" size="icon-sm" :aria-label="$t('editor.prompts.delete.action')"
                         @click="confirmingDelete = true">
                     <Trash2 :size="14" aria-hidden="true" />
                 </Button>
                 <Button type="button" variant="outline" @click="trying = true">
                     <FlaskConical :size="16" aria-hidden="true" />
-                    {{ $t('arcadia.editor.prompts.try.open') }}
+                    {{ $t('editor.prompts.try.open') }}
                 </Button>
                 <Button type="button" variant="outline" @click="newVersion">
                     <CopyPlus :size="16" aria-hidden="true" />
-                    {{ $t('arcadia.editor.prompts.new_version') }}
+                    {{ $t('editor.prompts.new_version') }}
                 </Button>
             </template>
         </PageHeader>
 
         <!-- The versions, newest last; the open one lit. -->
-        <nav class="mb-5 flex flex-wrap items-center gap-2" :aria-label="$t('arcadia.editor.prompts.versions')">
-            <Eyebrow as="span" class="mr-1">{{ $t('arcadia.editor.prompts.versions') }}</Eyebrow>
+        <nav class="mb-5 flex flex-wrap items-center gap-2" :aria-label="$t('editor.prompts.versions')">
+            <Eyebrow as="span" class="mr-1">{{ $t('editor.prompts.versions') }}</Eyebrow>
             <Link v-for="item in versions" :key="item.id" :href="versionUrl(item.number)" :title="item.description ?? undefined"
                   class="inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 font-mono text-xs no-underline transition-colors"
                   :class="item.id === version.id ? 'border-accent bg-accent/15 text-ink' : 'border-rule text-ink-3 hover:border-accent hover:text-ink'">
@@ -180,18 +180,18 @@ const deleteTemplate = () => {
         <!-- What the open version is for: a label, editable even once frozen. -->
         <form v-if="describing" class="mb-5 flex max-w-2xl flex-wrap items-start gap-2" @submit.prevent="saveDescription">
             <Field class="min-w-0 flex-1" :data-invalid="description.errors.description ? true : undefined">
-                <FieldLabel for="version-description" class="sr-only">{{ $t('arcadia.editor.prompts.version_description.label') }}</FieldLabel>
+                <FieldLabel for="version-description" class="sr-only">{{ $t('editor.prompts.version_description.label') }}</FieldLabel>
                 <Input id="version-description" v-model="description.description" type="text" maxlength="255" autocomplete="off"
-                       :placeholder="$t('arcadia.editor.prompts.version_description.placeholder')" />
+                       :placeholder="$t('editor.prompts.version_description.placeholder')" />
                 <FieldError v-if="description.errors.description">{{ description.errors.description }}</FieldError>
             </Field>
-            <Button type="button" variant="ghost" @click="describing = false">{{ $t('arcadia.editor.cancel') }}</Button>
-            <Button type="submit" variant="brand" :disabled="description.processing">{{ $t('arcadia.editor.prompts.save') }}</Button>
+            <Button type="button" variant="ghost" @click="describing = false">{{ $t('editor.common.cancel') }}</Button>
+            <Button type="submit" variant="brand" :disabled="description.processing">{{ $t('editor.prompts.save') }}</Button>
         </form>
         <p v-else class="mb-5 flex max-w-2xl items-center gap-2 text-sm" :class="version.description ? 'text-ink-2' : 'text-ink-4'">
             <span class="font-mono text-xs text-ink-4">v{{ version.number }}</span>
-            {{ version.description || $t('arcadia.editor.prompts.version_description.none') }}
-            <Button type="button" variant="ghost" size="icon-sm" :aria-label="$t('arcadia.editor.prompts.version_description.edit')" @click="openDescribing">
+            {{ version.description || $t('editor.prompts.version_description.none') }}
+            <Button type="button" variant="ghost" size="icon-sm" :aria-label="$t('editor.prompts.version_description.edit')" @click="openDescribing">
                 <Pencil :size="14" aria-hidden="true" />
             </Button>
         </p>
@@ -199,9 +199,9 @@ const deleteTemplate = () => {
         <p v-if="!version.editable" class="panel mb-5 flex items-start gap-2 px-4 py-3 text-sm text-ink-2">
             <Lock :size="16" class="mt-0.5 shrink-0 text-accent" aria-hidden="true" />
             <span>
-                {{ version.frozen ? $t('arcadia.editor.prompts.frozen_notice') : $t('arcadia.editor.prompts.history_notice') }}
+                {{ version.frozen ? $t('editor.prompts.frozen_notice') : $t('editor.prompts.history_notice') }}
                 <Link v-if="!version.latest" :href="versionUrl(versions[versions.length - 1].number)" class="ml-1 text-accent">
-                    {{ $t('arcadia.editor.prompts.open_latest') }}
+                    {{ $t('editor.prompts.open_latest') }}
                 </Link>
             </span>
         </p>
@@ -209,16 +209,16 @@ const deleteTemplate = () => {
         <!-- The blanks: what the fill-in form asks for, in order. -->
         <section class="panel mb-6 p-4 sm:p-5" aria-labelledby="variables-title">
             <div class="flex flex-wrap items-baseline justify-between gap-2">
-                <Eyebrow id="variables-title" as="h2">{{ $t('arcadia.editor.prompts.variables.title') }}</Eyebrow>
+                <Eyebrow id="variables-title" as="h2">{{ $t('editor.prompts.variables.title') }}</Eyebrow>
                 <Button v-if="version.editable && editingVariable !== 'new'" type="button" variant="ghost" size="sm" @click="declare('')">
                     <Plus :size="14" aria-hidden="true" />
-                    {{ $t('arcadia.editor.prompts.variables.add') }}
+                    {{ $t('editor.prompts.variables.add') }}
                 </Button>
             </div>
 
             <p v-if="undeclared.length" class="mt-3 mb-0 flex flex-wrap items-center gap-1.5 text-xs text-warning">
                 <TriangleAlert :size="13" aria-hidden="true" />
-                {{ $t('arcadia.editor.prompts.variables.undeclared') }}
+                {{ $t('editor.prompts.variables.undeclared') }}
                 <template v-for="name in undeclared" :key="name">
                     <button v-if="version.editable" type="button" class="rounded-full border border-warning/40 px-2 py-0.5 font-mono text-warning hover:bg-warning/10"
                             @click="declare(name)">{{ name }}</button>
@@ -226,7 +226,7 @@ const deleteTemplate = () => {
                 </template>
             </p>
 
-            <p v-if="!variables.length && editingVariable !== 'new'" class="mt-3 mb-0 text-sm text-ink-4">{{ $t('arcadia.editor.prompts.variables.none') }}</p>
+            <p v-if="!variables.length && editingVariable !== 'new'" class="mt-3 mb-0 text-sm text-ink-4">{{ $t('editor.prompts.variables.none') }}</p>
 
             <ul v-if="variables.length" class="mt-3 mb-0 divide-y divide-rule p-0">
                 <li v-for="(variable, index) in variables" :key="variable.id" class="list-none py-2.5">
@@ -235,19 +235,19 @@ const deleteTemplate = () => {
                         <code class="font-mono text-sm text-accent">{{ '{' + '{' + variable.name + '}' + '}' }}</code>
                         <span class="text-sm text-ink">{{ variable.label }}</span>
                         <Badge variant="neutral">{{ typeLabel(variable.type) }}</Badge>
-                        <Badge v-if="variable.required" variant="active">{{ $t('arcadia.editor.prompts.variables.required_badge') }}</Badge>
+                        <Badge v-if="variable.required" variant="active">{{ $t('editor.prompts.variables.required_badge') }}</Badge>
 
                         <div v-if="version.editable" class="ml-auto flex items-center gap-1">
-                            <Button type="button" variant="ghost" size="icon-sm" :disabled="index === 0" :aria-label="$t('arcadia.editor.prompts.move_up')" @click="moveVariable(variable, 'up')">
+                            <Button type="button" variant="ghost" size="icon-sm" :disabled="index === 0" :aria-label="$t('editor.prompts.move_up')" @click="moveVariable(variable, 'up')">
                                 <ArrowUp :size="14" aria-hidden="true" />
                             </Button>
-                            <Button type="button" variant="ghost" size="icon-sm" :disabled="index === variables.length - 1" :aria-label="$t('arcadia.editor.prompts.move_down')" @click="moveVariable(variable, 'down')">
+                            <Button type="button" variant="ghost" size="icon-sm" :disabled="index === variables.length - 1" :aria-label="$t('editor.prompts.move_down')" @click="moveVariable(variable, 'down')">
                                 <ArrowDown :size="14" aria-hidden="true" />
                             </Button>
-                            <Button type="button" variant="ghost" size="icon-sm" :aria-label="$t('arcadia.editor.prompts.variables.edit')" @click="editingVariable = variable.id">
+                            <Button type="button" variant="ghost" size="icon-sm" :aria-label="$t('editor.prompts.variables.edit')" @click="editingVariable = variable.id">
                                 <Pencil :size="14" aria-hidden="true" />
                             </Button>
-                            <Button type="button" variant="ghost-danger" size="icon-sm" :aria-label="$t('arcadia.editor.prompts.variables.delete.action')" @click="pendingVariable = variable">
+                            <Button type="button" variant="ghost-danger" size="icon-sm" :aria-label="$t('editor.prompts.variables.delete.action')" @click="pendingVariable = variable">
                                 <Trash2 :size="14" aria-hidden="true" />
                             </Button>
                         </div>
@@ -270,16 +270,16 @@ const deleteTemplate = () => {
                         <h2 v-if="section.title" class="m-0 font-display text-base font-semibold text-ink">{{ section.title }}</h2>
 
                         <div v-if="version.editable" class="ml-auto flex items-center gap-1">
-                            <Button type="button" variant="ghost" size="icon-sm" :disabled="index === 0" :aria-label="$t('arcadia.editor.prompts.move_up')" @click="move(section, 'up')">
+                            <Button type="button" variant="ghost" size="icon-sm" :disabled="index === 0" :aria-label="$t('editor.prompts.move_up')" @click="move(section, 'up')">
                                 <ArrowUp :size="14" aria-hidden="true" />
                             </Button>
-                            <Button type="button" variant="ghost" size="icon-sm" :disabled="index === sections.length - 1" :aria-label="$t('arcadia.editor.prompts.move_down')" @click="move(section, 'down')">
+                            <Button type="button" variant="ghost" size="icon-sm" :disabled="index === sections.length - 1" :aria-label="$t('editor.prompts.move_down')" @click="move(section, 'down')">
                                 <ArrowDown :size="14" aria-hidden="true" />
                             </Button>
-                            <Button type="button" variant="ghost" size="icon-sm" :aria-label="$t('arcadia.editor.prompts.edit_section')" @click="editing = section.id">
+                            <Button type="button" variant="ghost" size="icon-sm" :aria-label="$t('editor.prompts.edit_section')" @click="editing = section.id">
                                 <Pencil :size="14" aria-hidden="true" />
                             </Button>
-                            <Button type="button" variant="ghost-danger" size="icon-sm" :aria-label="$t('arcadia.editor.prompts.delete_section.action')" @click="pendingSection = section">
+                            <Button type="button" variant="ghost-danger" size="icon-sm" :aria-label="$t('editor.prompts.delete_section.action')" @click="pendingSection = section">
                                 <Trash2 :size="14" aria-hidden="true" />
                             </Button>
                         </div>
@@ -290,13 +290,13 @@ const deleteTemplate = () => {
             </li>
         </ol>
 
-        <p v-if="!sections.length && editing !== 'new'" class="panel px-4 py-8 text-center text-sm text-ink-4">{{ $t('arcadia.editor.prompts.no_sections') }}</p>
+        <p v-if="!sections.length && editing !== 'new'" class="panel px-4 py-8 text-center text-sm text-ink-4">{{ $t('editor.prompts.no_sections') }}</p>
 
         <div v-if="version.editable" class="mt-4">
             <SectionForm v-if="editing === 'new'" :template-id="template.id" :kinds="kinds" @done="editing = null" />
             <Button v-else type="button" variant="outline" @click="editing = 'new'">
                 <Plus :size="16" aria-hidden="true" />
-                {{ $t('arcadia.editor.prompts.add_section') }}
+                {{ $t('editor.prompts.add_section') }}
             </Button>
         </div>
 
@@ -304,33 +304,33 @@ const deleteTemplate = () => {
         <Dialog v-model:open="trying">
             <DialogContent class="w-[calc(100%-2rem)] max-w-5xl">
                 <DialogHeader>
-                    <DialogTitle>{{ $t('arcadia.editor.prompts.try.title') }} · v{{ version.number }}</DialogTitle>
-                    <DialogDescription>{{ $t('arcadia.editor.prompts.try.hint') }}</DialogDescription>
+                    <DialogTitle>{{ $t('editor.prompts.try.title') }} · v{{ version.number }}</DialogTitle>
+                    <DialogDescription>{{ $t('editor.prompts.try.hint') }}</DialogDescription>
                 </DialogHeader>
                 <PromptFiller :template-id="template.id" :version="fillVersion" :choices="choices" />
             </DialogContent>
         </Dialog>
 
         <ConfirmDialog :open="pendingVariable !== null"
-                       :title="$t('arcadia.editor.prompts.variables.delete.title')"
-                       :body="$t('arcadia.editor.prompts.variables.delete.body')"
-                       :confirm-label="$t('arcadia.editor.prompts.variables.delete.confirm')"
+                       :title="$t('editor.prompts.variables.delete.title')"
+                       :body="$t('editor.prompts.variables.delete.body')"
+                       :confirm-label="$t('editor.prompts.variables.delete.confirm')"
                        :processing="deletingVariable"
                        @confirm="deleteVariable"
                        @cancel="pendingVariable = null" />
 
         <ConfirmDialog :open="pendingSection !== null"
-                       :title="$t('arcadia.editor.prompts.delete_section.title')"
-                       :body="$t('arcadia.editor.prompts.delete_section.body')"
-                       :confirm-label="$t('arcadia.editor.prompts.delete_section.confirm')"
+                       :title="$t('editor.prompts.delete_section.title')"
+                       :body="$t('editor.prompts.delete_section.body')"
+                       :confirm-label="$t('editor.prompts.delete_section.confirm')"
                        :processing="deletingSection"
                        @confirm="deleteSection"
                        @cancel="pendingSection = null" />
 
         <ConfirmDialog :open="confirmingDelete"
-                       :title="$t('arcadia.editor.prompts.delete.title')"
-                       :body="$t('arcadia.editor.prompts.delete.body')"
-                       :confirm-label="$t('arcadia.editor.prompts.delete.confirm')"
+                       :title="$t('editor.prompts.delete.title')"
+                       :body="$t('editor.prompts.delete.body')"
+                       :confirm-label="$t('editor.prompts.delete.confirm')"
                        :processing="deletingTemplate"
                        @confirm="deleteTemplate"
                        @cancel="confirmingDelete = false" />
@@ -339,22 +339,22 @@ const deleteTemplate = () => {
             <DialogContent class="max-w-lg">
                 <form @submit.prevent="saveDetails">
                     <DialogHeader>
-                        <DialogTitle>{{ $t('arcadia.editor.prompts.rename') }}</DialogTitle>
+                        <DialogTitle>{{ $t('editor.prompts.rename') }}</DialogTitle>
                     </DialogHeader>
                     <div class="mt-5 space-y-4">
                         <Field :data-invalid="details.errors.name ? true : undefined">
-                            <FieldLabel for="template-name"><Eyebrow as="span">{{ $t('arcadia.editor.prompts.fields.name') }}</Eyebrow></FieldLabel>
+                            <FieldLabel for="template-name"><Eyebrow as="span">{{ $t('editor.prompts.fields.name') }}</Eyebrow></FieldLabel>
                             <Input id="template-name" v-model="details.name" type="text" maxlength="160" autocomplete="off" />
                             <FieldError v-if="details.errors.name">{{ details.errors.name }}</FieldError>
                         </Field>
                         <Field>
-                            <FieldLabel for="template-description"><Eyebrow as="span">{{ $t('arcadia.editor.prompts.fields.description') }}</Eyebrow></FieldLabel>
+                            <FieldLabel for="template-description"><Eyebrow as="span">{{ $t('editor.prompts.fields.description') }}</Eyebrow></FieldLabel>
                             <Textarea id="template-description" v-model="details.description" rows="3" />
                         </Field>
                     </div>
                     <DialogFooter class="mt-6">
-                        <Button type="button" variant="ghost" @click="renaming = false">{{ $t('arcadia.editor.cancel') }}</Button>
-                        <Button type="submit" variant="brand" :disabled="details.processing">{{ $t('arcadia.editor.prompts.save') }}</Button>
+                        <Button type="button" variant="ghost" @click="renaming = false">{{ $t('editor.common.cancel') }}</Button>
+                        <Button type="submit" variant="brand" :disabled="details.processing">{{ $t('editor.prompts.save') }}</Button>
                     </DialogFooter>
                 </form>
             </DialogContent>

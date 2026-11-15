@@ -16,7 +16,7 @@ enum GuideStatus: string
     {
         return array_map(fn (self $status) => [
             'value' => $status->value,
-            'label' => __("arcadia.editor.guides.statuses.{$status->value}"),
+            'label' => __("editor.guides.statuses.{$status->value}"),
             'tone' => $status === self::PUBLISHED ? 'ok' : 'neutral',
         ], self::cases());
     }

@@ -66,7 +66,7 @@ class CompareController
     {
         $labels = [];
         foreach ($cases as $case) {
-            $labels[$case->value] = __("arcadia.editor.content.{$group}.{$case->value}");
+            $labels[$case->value] = __("editor.content.{$group}.{$case->value}");
         }
 
         return $labels;

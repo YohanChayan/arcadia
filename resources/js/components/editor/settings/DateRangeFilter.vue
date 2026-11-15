@@ -46,19 +46,19 @@ const apply = () => {
 <template>
     <div class="flex flex-wrap items-center gap-2">
         <Tabs :model-value="range" @update:model-value="pick">
-            <TabsList :aria-label="$t('arcadia.editor.settings.health.filter.label')">
+            <TabsList :aria-label="$t('editor.settings.health.filter.label')">
                 <TabsTrigger v-for="key in ranges" :key="key" :value="key" class="px-2.5 text-xs">
-                    {{ $t(`arcadia.editor.settings.health.filter.ranges.${key}`) }}
+                    {{ $t(`editor.settings.health.filter.ranges.${key}`) }}
                 </TabsTrigger>
             </TabsList>
         </Tabs>
 
         <form v-if="range === 'custom'" class="flex flex-wrap items-center gap-2" @submit.prevent="apply">
-            <Input v-model="from" type="date" :max="to || today" class="h-8 w-36 text-xs" :aria-label="$t('arcadia.editor.settings.health.filter.from')" />
+            <Input v-model="from" type="date" :max="to || today" class="h-8 w-36 text-xs" :aria-label="$t('editor.settings.health.filter.from')" />
             <span class="text-xs text-ink-4">–</span>
-            <Input v-model="to" type="date" :min="from" :max="today" class="h-8 w-36 text-xs" :aria-label="$t('arcadia.editor.settings.health.filter.to')" />
+            <Input v-model="to" type="date" :min="from" :max="today" class="h-8 w-36 text-xs" :aria-label="$t('editor.settings.health.filter.to')" />
             <Button type="submit" variant="outline" size="sm" :disabled="!canApply || loading">
-                {{ $t('arcadia.editor.settings.health.filter.apply') }}
+                {{ $t('editor.settings.health.filter.apply') }}
             </Button>
         </form>
 

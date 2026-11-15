@@ -14,11 +14,11 @@ import type { NavItem } from '@/types';
 // A computed, so the labels follow the language once its messages have loaded.
 const sidebarNavItems = computed<NavItem[]>(() => [
     {
-        title: trans('arcadia.account.nav.profile'),
+        title: trans('account.nav.profile'),
         href: editProfile(),
     },
     {
-        title: trans('arcadia.account.nav.security'),
+        title: trans('account.nav.security'),
         href: editSecurity(),
     },
 ]);
@@ -29,15 +29,15 @@ const { isCurrentOrParentUrl } = useCurrentUrl();
 <template>
     <div class="px-4 py-6">
         <Heading
-            :title="$t('arcadia.account.title')"
-            :description="$t('arcadia.account.lead')"
+            :title="$t('account.title')"
+            :description="$t('account.lead')"
         />
 
         <div class="flex flex-col lg:flex-row lg:space-x-12">
             <aside class="w-full max-w-xl lg:w-48">
                 <nav
                     class="flex flex-col space-y-1 space-x-0"
-                    :aria-label="$t('arcadia.account.title')"
+                    :aria-label="$t('account.title')"
                 >
                     <Button
                         v-for="item in sidebarNavItems"

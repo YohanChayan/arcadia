@@ -26,7 +26,7 @@ export const useGuideNotes = notes => {
     const forTarget = target => list.value.filter(note => note.target_kind === target.kind && note.target_key === target.key)
     const countFor = target => forTarget(target).length
 
-    const failed = () => toast.error(trans('arcadia.reader.notes.failed'))
+    const failed = () => toast.error(trans('reader.notes.failed'))
 
     const add = async (target, body) => {
         try {

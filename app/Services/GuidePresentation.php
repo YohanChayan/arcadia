@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Guide;
+use App\Services\Site\Site;
 
 /**
  * What the guide's link shows someone who may not read it (ADR 0022): its cover, title, level,
@@ -13,7 +14,7 @@ use App\Models\Guide;
 class GuidePresentation
 {
     /** @return array<string, mixed> */
-    public function present(Guide $guide, ArcadiaSite $site): array
+    public function present(Guide $guide, Site $site): array
     {
         $guide->loadMissing('category');
         $cover = $guide->cover();
@@ -31,7 +32,7 @@ class GuidePresentation
             'pageTitle' => $guide->title.' · Arcadia',
             'metaDescription' => $guide->pitch
                 ? (string) str($guide->pitch)->squish()->limit(160)
-                : __('arcadia.landing.meta.description'),
+                : __('landing.meta.description'),
             // Shared by link, not yet listed: nothing here for a search engine.
             'noIndex' => true,
             'canonicalUrl' => $site->guideUrl($guide->link_token),

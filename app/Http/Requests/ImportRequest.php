@@ -27,10 +27,10 @@ class ImportRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'file.required' => __('arcadia.editor.import.errors.no_file'),
-            'file.file' => __('arcadia.editor.import.errors.no_file'),
-            'file.extensions' => __('arcadia.editor.import.errors.not_json_file'),
-            'file.max' => __('arcadia.editor.import.errors.too_large'),
+            'file.required' => __('editor.import.errors.no_file'),
+            'file.file' => __('editor.import.errors.no_file'),
+            'file.extensions' => __('editor.import.errors.not_json_file'),
+            'file.max' => __('editor.import.errors.too_large'),
         ];
     }
 

@@ -5,7 +5,7 @@ namespace App\Actions\Auth;
 use App\Actions\Readers\LinkReaderAssignments;
 use App\Models\AuthProvider;
 use App\Models\User;
-use App\Services\ArcadiaSite;
+use App\Services\Site\Site;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Contracts\User as SocialiteUser;
@@ -32,7 +32,7 @@ class AdmitGoogleAccount
         private readonly LinkReaderAssignments $assignments,
     ) {}
 
-    public function handle(SocialiteUser $google, ArcadiaSite $site): ?User
+    public function handle(SocialiteUser $google, Site $site): ?User
     {
         $email = mb_strtolower(trim((string) $google->getEmail()));
 

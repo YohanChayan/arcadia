@@ -20,15 +20,15 @@ const props = defineProps<Props>();
 </script>
 
 <template>
-    <Head :title="$t('arcadia.account.nav.security')" />
+    <Head :title="$t('account.nav.security')" />
 
-    <h1 class="sr-only">{{ $t('arcadia.account.nav.security') }}</h1>
+    <h1 class="sr-only">{{ $t('account.nav.security') }}</h1>
 
     <div class="space-y-6">
         <Heading
             variant="small"
-            :title="$t('arcadia.account.password.title')"
-            :description="$t('arcadia.account.password.lead')"
+            :title="$t('account.password.title')"
+            :description="$t('account.password.lead')"
         />
 
         <Form
@@ -46,38 +46,38 @@ const props = defineProps<Props>();
             v-slot="{ errors, processing }"
         >
             <div class="grid gap-2">
-                <Label for="current_password">{{ $t('arcadia.account.password.current') }}</Label>
+                <Label for="current_password">{{ $t('account.password.current') }}</Label>
                 <PasswordInput
                     id="current_password"
                     name="current_password"
                     class="mt-1 block w-full"
                     autocomplete="current-password"
-                    :placeholder="$t('arcadia.account.password.current')"
+                    :placeholder="$t('account.password.current')"
                 />
                 <InputError :message="errors.current_password" />
             </div>
 
             <div class="grid gap-2">
-                <Label for="password">{{ $t('arcadia.account.password.new') }}</Label>
+                <Label for="password">{{ $t('account.password.new') }}</Label>
                 <PasswordInput
                     id="password"
                     name="password"
                     class="mt-1 block w-full"
                     autocomplete="new-password"
-                    :placeholder="$t('arcadia.account.password.new')"
+                    :placeholder="$t('account.password.new')"
                     :passwordrules="props.passwordRules"
                 />
                 <InputError :message="errors.password" />
             </div>
 
             <div class="grid gap-2">
-                <Label for="password_confirmation">{{ $t('arcadia.account.password.confirm') }}</Label>
+                <Label for="password_confirmation">{{ $t('account.password.confirm') }}</Label>
                 <PasswordInput
                     id="password_confirmation"
                     name="password_confirmation"
                     class="mt-1 block w-full"
                     autocomplete="new-password"
-                    :placeholder="$t('arcadia.account.password.confirm')"
+                    :placeholder="$t('account.password.confirm')"
                     :passwordrules="props.passwordRules"
                 />
                 <InputError :message="errors.password_confirmation" />
@@ -88,10 +88,10 @@ const props = defineProps<Props>();
                     :disabled="processing"
                     data-test="update-password-button"
                 >
-                    {{ $t('arcadia.account.save') }}
+                    {{ $t('account.save') }}
                 </Button>
                 <p v-if="props.status === 'password-updated'" class="text-sm text-muted-foreground" role="status">
-                    {{ $t('arcadia.account.password.saved') }}
+                    {{ $t('account.password.saved') }}
                 </p>
             </div>
         </Form>

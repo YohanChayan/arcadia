@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Reader;
 
 use App\Http\Middleware\RecogniseDevice;
 use App\Models\Device;
-use App\Services\ArcadiaSite;
 use App\Services\Devices;
+use App\Services\Site\Site;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -18,7 +18,7 @@ use Inertia\Response;
  */
 class DeviceController
 {
-    public function show(Request $request, ArcadiaSite $site, Devices $devices): Response|RedirectResponse
+    public function show(Request $request, Site $site, Devices $devices): Response|RedirectResponse
     {
         $user = $request->user();
 
@@ -28,7 +28,7 @@ class DeviceController
         }
 
         return Inertia::render('reader/DeviceLimit', [
-            'pageTitle' => __('arcadia.devices.title').' · Arcadia',
+            'pageTitle' => __('devices.title').' · Arcadia',
             'noIndex' => true,
             'email' => $user->email,
             'limit' => $devices->limitFor($user),
@@ -44,7 +44,7 @@ class DeviceController
     }
 
     /** The reader's own swap: that device out, this browser in. */
-    public function replace(Request $request, int $device, ArcadiaSite $site, Devices $devices): RedirectResponse
+    public function replace(Request $request, int $device, Site $site, Devices $devices): RedirectResponse
     {
         $user = $request->user();
 

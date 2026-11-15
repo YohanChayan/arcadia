@@ -62,7 +62,7 @@ class PromptRenderer
 
         $extra = trim((string) ($values[self::EXTRA] ?? ''));
         if ($extra !== '') {
-            $prompt .= "\n\n## ".__('arcadia.editor.prompts.fill.extra_heading')."\n\n".$extra;
+            $prompt .= "\n\n## ".__('editor.prompts.fill.extra_heading')."\n\n".$extra;
         }
 
         $prompt = $this->dropEmptyLines($prompt, $variables, $values);
@@ -96,7 +96,7 @@ class PromptRenderer
             return $this->words($variable, $value);
         }, $prompt);
 
-        $prompt = str_replace($marker, $content ?? __('arcadia.editor.prompts.fill.content_elsewhere'), $prompt);
+        $prompt = str_replace($marker, $content ?? __('editor.prompts.fill.content_elsewhere'), $prompt);
 
         // A required blank no section uses is still a blank the owner was asked for.
         foreach ($variables as $name => $variable) {
@@ -150,8 +150,8 @@ class PromptRenderer
     private function words(PromptVariable $variable, string $value): string
     {
         return match ($variable->type) {
-            PromptVariableType::LEVEL => __("arcadia.levels.{$value}"),
-            PromptVariableType::LANGUAGE => __("arcadia.editor.prompts.languages.{$value}"),
+            PromptVariableType::LEVEL => __("guide.levels.{$value}"),
+            PromptVariableType::LANGUAGE => __("editor.prompts.languages.{$value}"),
             PromptVariableType::PHONE => $this->phone($value),
             default => $value,
         };

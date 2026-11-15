@@ -40,8 +40,8 @@ class ItemFixRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'title.required' => __('arcadia.editor.content.errors.title'),
-            'url.url' => __('arcadia.editor.content.errors.url'),
+            'title.required' => __('editor.content.errors.title'),
+            'url.url' => __('editor.content.errors.url'),
             ...VideoClip::messages(),
         ];
     }

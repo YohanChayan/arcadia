@@ -47,7 +47,7 @@ class Setting extends Model
     /** `4 a 8`, `4 to 8` — the step length as a prompt reads it, before "minutes". */
     public function stepLengthLabel(): string
     {
-        return __('arcadia.step_length', ['min' => $this->step_min_minutes, 'max' => $this->step_max_minutes]);
+        return __('guide.step_length', ['min' => $this->step_min_minutes, 'max' => $this->step_max_minutes]);
     }
 
     /** A price of 0 is no price: the landing page then leaves it out. */

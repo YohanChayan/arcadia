@@ -76,7 +76,7 @@ const noteCount = computed(() => notes?.countFor(target.value) ?? 0)
     <li ref="line" :id="`line-${item.key}`" :data-guide-line="item.key" class="flex list-none scroll-mt-24 gap-3 py-3">
         <!-- Its id is the anchor "Continue" opens the guide at: Inertia scrolls to it on load, and to
              the top when nothing has the id. -->
-        <button type="button" role="checkbox" :aria-checked="done" :aria-label="`${$t('arcadia.reader.mark_done')}: ${item.title}`"
+        <button type="button" role="checkbox" :aria-checked="done" :aria-label="`${$t('reader.mark_done')}: ${item.title}`"
                 class="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-md border-2 transition-colors"
                 :class="done ? 'border-guide-done bg-guide-done text-guide-on-accent' : 'border-guide-rule hover:border-guide-accent'"
                 :disabled="locked || readOnly" @click="tap">
@@ -88,20 +88,20 @@ const noteCount = computed(() => notes?.countFor(target.value) ?? 0)
             <!-- The owner's view of a reader: where they wrote a note, never what it says. -->
             <p v-if="hasNotes" class="mt-0.5 mb-0 inline-flex items-center gap-1 text-xs text-guide-accent">
                 <NotebookPen :size="12" aria-hidden="true" />
-                {{ $t('arcadia.reader.has_notes') }}
+                {{ $t('reader.has_notes') }}
             </p>
             <p v-if="clipLabel" class="mt-0.5 mb-0 font-mono text-xs text-guide-ink-soft">{{ clipLabel }}</p>
             <p v-if="item.hint" class="mt-0.5 mb-0 text-sm text-guide-ink-soft">{{ item.hint }}</p>
             <p v-if="item.body" class="mt-1 mb-0 whitespace-pre-line text-sm text-guide-ink">{{ item.body }}</p>
 
-            <p v-if="!item.is_available" class="mt-2 mb-0 text-sm text-guide-ink-soft italic">{{ $t('arcadia.reader.unavailable') }}</p>
+            <p v-if="!item.is_available" class="mt-2 mb-0 text-sm text-guide-ink-soft italic">{{ $t('reader.unavailable') }}</p>
 
             <template v-else-if="isLink">
                 <VideoEmbed v-if="item.embed" :embed="item.embed" :title="item.title" @next="next" />
                 <a v-if="item.url" :href="item.url" target="_blank" rel="noopener noreferrer"
                    class="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-guide-accent no-underline hover:underline">
                     <ExternalLink :size="14" aria-hidden="true" />
-                    {{ isYoutube ? $t('arcadia.reader.open_youtube') : $t('arcadia.reader.open_site') }}
+                    {{ isYoutube ? $t('reader.open_youtube') : $t('reader.open_site') }}
                 </a>
                 <QuickCheck v-if="asks" :line-key="item.key" :questions="item.activity.questions" :done="done" :locked="locked" @next="emit('next')" />
             </template>
@@ -110,13 +110,13 @@ const noteCount = computed(() => notes?.countFor(target.value) ?? 0)
                 <button type="button" class="inline-flex items-center gap-1.5 rounded-full py-1 text-guide-ink-soft hover:text-guide-accent"
                         :class="noteCount ? 'font-semibold text-guide-ink' : ''" @click="notes.open(target)">
                     <NotebookPen :size="13" aria-hidden="true" />
-                    {{ $t('arcadia.reader.notes.title') }}
+                    {{ $t('reader.notes.title') }}
                     <span v-if="noteCount" class="rounded-full bg-guide-accent px-1.5 font-mono text-[11px] leading-4 font-semibold text-guide-on-accent">{{ noteCount }}</span>
                 </button>
                 <button type="button" class="inline-flex items-center gap-1 rounded-full border border-guide-rule px-2.5 py-1 text-guide-ink hover:border-guide-accent"
-                        :aria-label="`${$t('arcadia.reader.notes.add')}: ${item.title}`" @click="notes.open(target)">
+                        :aria-label="`${$t('reader.notes.add')}: ${item.title}`" @click="notes.open(target)">
                     <Plus :size="13" aria-hidden="true" />
-                    {{ $t('arcadia.reader.notes.add_short') }}
+                    {{ $t('reader.notes.add_short') }}
                 </button>
             </div>
         </div>

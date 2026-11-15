@@ -40,9 +40,9 @@ class ReaderRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'email.required' => __('arcadia.editor.readers.errors.email'),
-            'email.email' => __('arcadia.editor.readers.errors.email'),
-            'email.unique' => __('arcadia.editor.readers.errors.taken'),
+            'email.required' => __('editor.readers.errors.email'),
+            'email.email' => __('editor.readers.errors.email'),
+            'email.unique' => __('editor.readers.errors.taken'),
         ];
     }
 }

@@ -38,7 +38,7 @@ defineExpose({
                     'absolute inset-y-0 right-0 flex items-center rounded-r-md px-3 text-muted-foreground hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring focus-visible:outline-none',
                 )
             "
-            :aria-label="showPassword ? $t('arcadia.account.password.hide') : $t('arcadia.account.password.show')"
+            :aria-label="showPassword ? $t('account.password.hide') : $t('account.password.show')"
             :tabindex="-1"
         >
             <EyeOff v-if="showPassword" class="size-4" />

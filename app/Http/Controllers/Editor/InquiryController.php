@@ -57,7 +57,7 @@ class InquiryController
             'inquiries' => $inquiries,
             'stages' => array_map(fn (InquiryStage $case) => [
                 'value' => $case->value,
-                'label' => __("arcadia.editor.inquiries.stages.{$case->value}"),
+                'label' => __("editor.inquiries.stages.{$case->value}"),
                 'tone' => $case->tone(),
             ], InquiryStage::cases()),
             'filters' => ['stage' => $stage?->value, 'kind' => $kind, 'search' => $search],
@@ -66,7 +66,7 @@ class InquiryController
                 ->mapWithKeys(fn (InquiryStage $case) => [$case->value => $ofLocale()->atStage($case)->count()]),
             'purposes' => array_map(fn (InquiryPurpose $purpose) => [
                 'value' => $purpose->value,
-                'label' => __('arcadia.landing.ask.purposes.'.$purpose->value),
+                'label' => __('landing.ask.purposes.'.$purpose->value),
             ], InquiryPurpose::cases()),
         ]);
     }
@@ -83,14 +83,14 @@ class InquiryController
             ...$request->safe()->only(['topic', 'contact', 'name']),
         ]);
 
-        return back()->with('success', __('arcadia.editor.inquiries.flash.created'));
+        return back()->with('success', __('editor.inquiries.flash.created'));
     }
 
     public function destroy(int $inquiry): RedirectResponse
     {
         $this->find($inquiry)->delete();
 
-        return back()->with('success', __('arcadia.editor.inquiries.flash.deleted'));
+        return back()->with('success', __('editor.inquiries.flash.deleted'));
     }
 
     private function find(int $id): Inquiry

@@ -68,36 +68,36 @@ const draftNext = () => {
     <Dialog v-model:open="open">
         <DialogContent class="w-[calc(100%-2rem)] max-w-3xl">
             <DialogHeader>
-                <DialogTitle>{{ $t('arcadia.editor.answer_import.title') }}</DialogTitle>
-                <DialogDescription>{{ $t('arcadia.editor.answer_import.lead') }}</DialogDescription>
+                <DialogTitle>{{ $t('editor.answer_import.title') }}</DialogTitle>
+                <DialogDescription>{{ $t('editor.answer_import.lead') }}</DialogDescription>
             </DialogHeader>
 
             <!-- Nothing to import into until there is a draft. -->
             <div v-if="!editable" class="flex flex-col items-start gap-3 rounded-control border border-rule bg-well p-4 text-sm text-ink-2">
                 <p class="m-0 flex items-start gap-2">
                     <Info :size="16" class="mt-0.5 shrink-0 text-accent" aria-hidden="true" />
-                    {{ $t('arcadia.editor.answer_import.no_draft') }}
+                    {{ $t('editor.answer_import.no_draft') }}
                 </p>
                 <Button type="button" variant="brand" size="sm" :disabled="drafting" @click="draftNext">
                     <CopyPlus :size="14" aria-hidden="true" />
-                    {{ $t('arcadia.editor.versions.draft_next') }}
+                    {{ $t('editor.versions.draft_next') }}
                 </Button>
             </div>
 
             <template v-else>
-                <div role="radiogroup" :aria-label="$t('arcadia.editor.answer_import.kind')" class="inline-flex w-fit rounded-full border border-rule p-1">
+                <div role="radiogroup" :aria-label="$t('editor.answer_import.kind')" class="inline-flex w-fit rounded-full border border-rule p-1">
                     <button v-for="option in KINDS" :key="option" type="button" role="radio" :aria-checked="kind === option"
                             class="rounded-full px-4 py-1.5 text-sm font-medium transition-colors"
                             :class="kind === option ? 'bg-accent text-on-accent' : 'text-ink-2 hover:text-ink'"
                             @click="pick(option)">
-                        {{ $t(`arcadia.editor.answer_import.kinds.${option}`) }}
+                        {{ $t(`editor.answer_import.kinds.${option}`) }}
                     </button>
                 </div>
 
                 <p v-if="looksLike" class="m-0 flex flex-wrap items-center gap-2 rounded-control border border-warning/40 bg-warning/5 px-3 py-2 text-sm text-ink-2">
-                    {{ $t('arcadia.editor.answer_import.looks_like', { kind: $t(`arcadia.editor.answer_import.kinds.${looksLike}`) }) }}
+                    {{ $t('editor.answer_import.looks_like', { kind: $t(`editor.answer_import.kinds.${looksLike}`) }) }}
                     <button type="button" class="font-semibold text-accent hover:underline" @click="pick(looksLike)">
-                        {{ $t('arcadia.editor.answer_import.switch') }}
+                        {{ $t('editor.answer_import.switch') }}
                     </button>
                 </p>
 

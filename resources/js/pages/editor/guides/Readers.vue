@@ -62,12 +62,12 @@ const editorRoute = useEditorRoute()
 const percent = ({ done, total }) => (total ? Math.round((done / total) * 100) : 0)
 
 const columns = computed(() => [
-    { key: 'email', label: trans('arcadia.editor.readers.columns.email') },
-    { key: 'account', label: trans('arcadia.editor.readers.columns.account') },
-    { key: 'progress', label: trans('arcadia.editor.readers.columns.progress') },
-    { key: 'colours', label: trans('arcadia.editor.readers.columns.colours') },
-    { key: 'devices', label: trans('arcadia.editor.readers.columns.devices') },
-    { key: 'added', label: trans('arcadia.editor.readers.columns.added'), align: 'right' },
+    { key: 'email', label: trans('editor.readers.columns.email') },
+    { key: 'account', label: trans('editor.readers.columns.account') },
+    { key: 'progress', label: trans('editor.readers.columns.progress') },
+    { key: 'colours', label: trans('editor.readers.columns.colours') },
+    { key: 'devices', label: trans('editor.readers.columns.devices') },
+    { key: 'added', label: trans('editor.readers.columns.added'), align: 'right' },
     { key: 'actions', label: '', align: 'right', width: '1%' },
 ])
 
@@ -143,19 +143,19 @@ const confirmRemove = () => {
 </script>
 
 <template>
-    <EditorTitle :parts="[guide.title, $t('arcadia.editor.readers.title')]" />
+    <EditorTitle :parts="[guide.title, $t('editor.readers.title')]" />
 
     <div class="py-6">
-        <EditorBreadcrumb :trail="[{ label: $t('arcadia.editor.guides.title'), route: 'guides.index' }, { label: guide.title, route: 'content.show', params: { guide: guide.id } }, { label: $t('arcadia.editor.readers.title') }]" />
+        <EditorBreadcrumb :trail="[{ label: $t('editor.guides.title'), route: 'guides.index' }, { label: guide.title, route: 'content.show', params: { guide: guide.id } }, { label: $t('editor.readers.title') }]" />
 
-        <PageHeader :title="$t('arcadia.editor.readers.title')" :description="guide.title" :count="readers.length" />
+        <PageHeader :title="$t('editor.readers.title')" :description="guide.title" :count="readers.length" />
 
-        <p class="mt-0 mb-6 max-w-2xl text-sm text-ink-3">{{ $t('arcadia.editor.readers.lead') }}</p>
+        <p class="mt-0 mb-6 max-w-2xl text-sm text-ink-3">{{ $t('editor.readers.lead') }}</p>
 
         <!-- Requests waiting for an answer: the one thing here that needs the owner. -->
         <section v-if="pendingRequests.length" class="panel mb-6 border-signal/30 p-6">
-            <h2 class="m-0 text-sm font-semibold text-ink">{{ $t('arcadia.editor.readers.requests.title') }} · {{ pendingRequests.length }}</h2>
-            <p class="mt-1 mb-4 text-sm text-ink-3">{{ $t('arcadia.editor.readers.requests.hint') }}</p>
+            <h2 class="m-0 text-sm font-semibold text-ink">{{ $t('editor.readers.requests.title') }} · {{ pendingRequests.length }}</h2>
+            <p class="mt-1 mb-4 text-sm text-ink-3">{{ $t('editor.readers.requests.hint') }}</p>
             <ul class="m-0 grid list-none gap-4 p-0 lg:grid-cols-2">
                 <li v-for="request in pendingRequests" :key="request.id" class="min-w-0 rounded-control border border-rule p-4">
                     <div class="flex flex-wrap items-center gap-3">
@@ -165,11 +165,11 @@ const confirmRemove = () => {
                         </div>
                         <Button type="button" variant="brand" size="sm" @click="accept(request)">
                             <Check :size="14" aria-hidden="true" />
-                            {{ $t('arcadia.editor.readers.requests.accept') }}
+                            {{ $t('editor.readers.requests.accept') }}
                         </Button>
                         <Button type="button" variant="ghost" size="sm" @click="dismiss(request)">
                             <X :size="14" aria-hidden="true" />
-                            {{ $t('arcadia.editor.readers.requests.dismiss') }}
+                            {{ $t('editor.readers.requests.dismiss') }}
                         </Button>
                     </div>
                     <p v-if="request.message" class="mt-2 mb-0 rounded-control bg-well px-3 py-2 text-sm whitespace-pre-line text-ink-2">{{ request.message }}</p>
@@ -185,33 +185,33 @@ const confirmRemove = () => {
             <form class="panel p-6 lg:col-span-2" @submit.prevent="add">
                 <div class="grid gap-4 sm:grid-cols-[minmax(0,1fr)_14rem]">
                     <Field :data-invalid="form.errors.email ? true : undefined">
-                        <FieldLabel for="reader-email"><Eyebrow as="span">{{ $t('arcadia.editor.readers.email') }}</Eyebrow></FieldLabel>
+                        <FieldLabel for="reader-email"><Eyebrow as="span">{{ $t('editor.readers.email') }}</Eyebrow></FieldLabel>
                         <Input id="reader-email" v-model="form.email" type="email" inputmode="email" autocomplete="off"
                                :aria-invalid="form.errors.email ? 'true' : undefined" />
                         <FieldError v-if="form.errors.email">{{ form.errors.email }}</FieldError>
-                        <FieldDescription v-else>{{ $t('arcadia.editor.readers.email_hint') }}</FieldDescription>
+                        <FieldDescription v-else>{{ $t('editor.readers.email_hint') }}</FieldDescription>
                     </Field>
                     <Field :data-invalid="form.errors.name ? true : undefined">
                         <FieldLabel for="reader-name">
-                            <Eyebrow as="span">{{ $t('arcadia.editor.readers.name') }}</Eyebrow>
-                            <span class="text-xs font-normal text-ink-4">· {{ $t('arcadia.editor.optional') }}</span>
+                            <Eyebrow as="span">{{ $t('editor.readers.name') }}</Eyebrow>
+                            <span class="text-xs font-normal text-ink-4">· {{ $t('editor.common.optional') }}</span>
                         </FieldLabel>
-                        <Input id="reader-name" v-model="form.name" maxlength="80" autocomplete="off" :placeholder="$t('arcadia.editor.readers.name_placeholder')" />
+                        <Input id="reader-name" v-model="form.name" maxlength="80" autocomplete="off" :placeholder="$t('editor.readers.name_placeholder')" />
                         <FieldError v-if="form.errors.name">{{ form.errors.name }}</FieldError>
-                        <FieldDescription v-else>{{ $t('arcadia.editor.readers.name_hint') }}</FieldDescription>
+                        <FieldDescription v-else>{{ $t('editor.readers.name_hint') }}</FieldDescription>
                     </Field>
                 </div>
                 <div class="mt-5 flex flex-wrap items-end justify-between gap-4 border-t border-rule pt-4">
                     <div class="flex min-w-0 flex-1 items-start gap-2.5">
                         <Checkbox id="reader-notify" v-model="form.notify" class="mt-0.5" />
                         <div>
-                            <Label for="reader-notify" class="cursor-pointer font-medium text-ink">{{ $t('arcadia.editor.readers.notify') }}</Label>
-                            <p class="mt-0.5 mb-0 text-xs text-ink-3">{{ $t('arcadia.editor.readers.notify_hint') }}</p>
+                            <Label for="reader-notify" class="cursor-pointer font-medium text-ink">{{ $t('editor.readers.notify') }}</Label>
+                            <p class="mt-0.5 mb-0 text-xs text-ink-3">{{ $t('editor.readers.notify_hint') }}</p>
                         </div>
                     </div>
                     <Button type="submit" variant="brand" :disabled="form.processing || !form.email">
                         <UserPlus :size="16" aria-hidden="true" />
-                        {{ $t('arcadia.editor.readers.add') }}
+                        {{ $t('editor.readers.add') }}
                     </Button>
                 </div>
             </form>
@@ -220,29 +220,29 @@ const confirmRemove = () => {
                 <section class="panel p-5">
                     <div class="flex items-start justify-between gap-4">
                         <div class="min-w-0">
-                            <h2 class="m-0 text-sm font-semibold text-ink">{{ $t('arcadia.editor.readers.enrollment.title') }}</h2>
+                            <h2 class="m-0 text-sm font-semibold text-ink">{{ $t('editor.readers.enrollment.title') }}</h2>
                             <p class="mt-1 mb-0 text-sm text-ink-3">
-                                {{ $t(openForEnrollment ? 'arcadia.editor.readers.enrollment.open_hint' : 'arcadia.editor.readers.enrollment.closed_hint') }}
+                                {{ $t(openForEnrollment ? 'editor.readers.enrollment.open_hint' : 'editor.readers.enrollment.closed_hint') }}
                             </p>
                         </div>
-                        <Switch :model-value="openForEnrollment" :aria-label="$t('arcadia.editor.readers.enrollment.switch')"
+                        <Switch :model-value="openForEnrollment" :aria-label="$t('editor.readers.enrollment.switch')"
                                 @update:model-value="setEnrollment" />
                     </div>
 
                     <!-- Only while open: a closed guide is never listed, whatever this says. -->
                     <div v-if="openForEnrollment" class="mt-4 flex items-start justify-between gap-4 border-t border-rule pt-4">
                         <div class="min-w-0">
-                            <h3 class="m-0 text-sm font-semibold text-ink">{{ $t('arcadia.editor.readers.catalogue.title') }}</h3>
+                            <h3 class="m-0 text-sm font-semibold text-ink">{{ $t('editor.readers.catalogue.title') }}</h3>
                             <p class="mt-1 mb-0 text-sm text-ink-3">
-                                {{ $t(inCatalogue ? 'arcadia.editor.readers.catalogue.shown_hint' : 'arcadia.editor.readers.catalogue.hidden_hint') }}
+                                {{ $t(inCatalogue ? 'editor.readers.catalogue.shown_hint' : 'editor.readers.catalogue.hidden_hint') }}
                             </p>
                         </div>
-                        <Switch :model-value="inCatalogue" :aria-label="$t('arcadia.editor.readers.catalogue.switch')"
+                        <Switch :model-value="inCatalogue" :aria-label="$t('editor.readers.catalogue.switch')"
                                 @update:model-value="setCatalogue" />
                     </div>
 
                     <details v-if="answeredRequests.length" class="mt-4">
-                        <summary class="cursor-pointer text-sm text-ink-3 hover:text-ink">{{ $t('arcadia.editor.readers.requests.answered', { count: answeredRequests.length }) }}</summary>
+                        <summary class="cursor-pointer text-sm text-ink-3 hover:text-ink">{{ $t('editor.readers.requests.answered', { count: answeredRequests.length }) }}</summary>
                         <ul class="m-0 mt-3 flex list-none flex-col gap-3 p-0">
                             <li v-for="request in answeredRequests" :key="request.id">
                                 <div class="flex flex-wrap items-center gap-3">
@@ -250,7 +250,7 @@ const confirmRemove = () => {
                                         <p class="m-0 truncate text-sm text-ink">{{ request.email }}</p>
                                         <p class="m-0 truncate text-xs text-ink-4">{{ request.name }} · {{ formatDate(request.decided_at ?? request.created_at) }}</p>
                                     </div>
-                                    <Badge :variant="request.status === 'approved' ? 'ok' : 'neutral'">{{ $t(`arcadia.editor.readers.requests.status.${request.status}`) }}</Badge>
+                                    <Badge :variant="request.status === 'approved' ? 'ok' : 'neutral'">{{ $t(`editor.readers.requests.status.${request.status}`) }}</Badge>
                                 </div>
                                 <div class="mt-1.5">
                                     <RequestNote :note="request.owner_note" :max="noteMax"
@@ -269,11 +269,11 @@ const confirmRemove = () => {
                         </span>
                     </span>
                     <div class="min-w-0 flex-1">
-                        <p class="m-0 text-sm font-semibold text-ink">{{ $t('arcadia.editor.appearance.default_title') }}</p>
-                        <p class="mt-0.5 mb-0 text-xs text-ink-3">{{ swatch(guide.palette, guide.accent).label }} — {{ $t('arcadia.editor.appearance.default_hint') }}</p>
+                        <p class="m-0 text-sm font-semibold text-ink">{{ $t('editor.appearance.default_title') }}</p>
+                        <p class="mt-0.5 mb-0 text-xs text-ink-3">{{ swatch(guide.palette, guide.accent).label }} — {{ $t('editor.appearance.default_hint') }}</p>
                     </div>
                     <Button type="button" variant="outline" size="icon" @click="paintingId = null"
-                            :aria-label="$t('arcadia.editor.appearance.edit')" :title="$t('arcadia.editor.appearance.edit')">
+                            :aria-label="$t('editor.appearance.edit')" :title="$t('editor.appearance.edit')">
                         <Palette :size="16" aria-hidden="true" />
                     </Button>
                 </section>
@@ -281,22 +281,22 @@ const confirmRemove = () => {
         </div>
 
         <DataTable :columns="columns" :rows="readers"
-                   :empty-title="$t('arcadia.editor.readers.empty.title')"
-                   :empty-hint="$t('arcadia.editor.readers.empty.hint')">
+                   :empty-title="$t('editor.readers.empty.title')"
+                   :empty-hint="$t('editor.readers.empty.hint')">
             <template #row="{ row }">
                 <td class="px-4 py-3 align-top">
                     <!-- What the guide calls them: their own name here, else their account's first name. -->
                     <form v-if="namingId === row.id" class="mb-1 flex items-center gap-1.5" @submit.prevent="saveName(row)">
-                        <Input v-model="naming" maxlength="80" class="h-8 w-40" :placeholder="$t('arcadia.editor.readers.name_placeholder')"
-                               :aria-label="$t('arcadia.editor.readers.name')" @keydown.esc="namingId = null" />
-                        <Button type="submit" size="icon-sm" variant="ghost" :aria-label="$t('arcadia.editor.readers.rename_save')"><Check :size="14" aria-hidden="true" /></Button>
-                        <Button type="button" size="icon-sm" variant="ghost" :aria-label="$t('arcadia.editor.cancel')" @click="namingId = null"><X :size="14" aria-hidden="true" /></Button>
+                        <Input v-model="naming" maxlength="80" class="h-8 w-40" :placeholder="$t('editor.readers.name_placeholder')"
+                               :aria-label="$t('editor.readers.name')" @keydown.esc="namingId = null" />
+                        <Button type="submit" size="icon-sm" variant="ghost" :aria-label="$t('editor.readers.rename_save')"><Check :size="14" aria-hidden="true" /></Button>
+                        <Button type="button" size="icon-sm" variant="ghost" :aria-label="$t('editor.common.cancel')" @click="namingId = null"><X :size="14" aria-hidden="true" /></Button>
                     </form>
                     <p v-else class="m-0 mb-0.5 flex items-center gap-1.5 text-sm">
                         <span v-if="row.display_name" class="font-semibold text-accent">{{ row.display_name }}</span>
-                        <span v-if="row.display_name && !row.name" class="text-xs text-ink-4">{{ $t('arcadia.editor.readers.name_from_account') }}</span>
-                        <span v-if="!row.display_name" class="text-xs text-ink-4">{{ $t('arcadia.editor.readers.no_name') }}</span>
-                        <button type="button" class="rounded p-0.5 text-ink-4 hover:text-accent" :aria-label="`${$t('arcadia.editor.readers.rename')}: ${row.email}`" @click="startNaming(row)">
+                        <span v-if="row.display_name && !row.name" class="text-xs text-ink-4">{{ $t('editor.readers.name_from_account') }}</span>
+                        <span v-if="!row.display_name" class="text-xs text-ink-4">{{ $t('editor.readers.no_name') }}</span>
+                        <button type="button" class="rounded p-0.5 text-ink-4 hover:text-accent" :aria-label="`${$t('editor.readers.rename')}: ${row.email}`" @click="startNaming(row)">
                             <Pencil :size="12" aria-hidden="true" />
                         </button>
                     </p>
@@ -305,19 +305,19 @@ const confirmRemove = () => {
                     <p class="mt-1 mb-0 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-ink-4">
                         <span class="inline-flex items-center gap-1">
                             <Mail :size="12" aria-hidden="true" />
-                            <template v-if="row.notified_at">{{ $t('arcadia.editor.readers.told.sent', { date: formatDate(row.notified_at) }) }}</template>
-                            <template v-else-if="row.notify">{{ $t('arcadia.editor.readers.told.waiting') }}</template>
-                            <template v-else>{{ $t('arcadia.editor.readers.told.off') }}</template>
+                            <template v-if="row.notified_at">{{ $t('editor.readers.told.sent', { date: formatDate(row.notified_at) }) }}</template>
+                            <template v-else-if="row.notify">{{ $t('editor.readers.told.waiting') }}</template>
+                            <template v-else>{{ $t('editor.readers.told.off') }}</template>
                         </span>
                         <button v-if="readable" type="button" class="inline-flex items-center gap-1 font-medium text-accent hover:underline" @click="resend(row)">
                             <Send :size="11" aria-hidden="true" />
-                            {{ $t(row.notified_at ? 'arcadia.editor.readers.told.resend' : 'arcadia.editor.readers.told.send') }}
+                            {{ $t(row.notified_at ? 'editor.readers.told.resend' : 'editor.readers.told.send') }}
                         </button>
                     </p>
                 </td>
                 <td class="px-4 py-3 align-top">
                     <Badge :variant="row.has_account ? 'ok' : 'neutral'">
-                        {{ $t(row.has_account ? 'arcadia.editor.readers.account.yes' : 'arcadia.editor.readers.account.no') }}
+                        {{ $t(row.has_account ? 'editor.readers.account.yes' : 'editor.readers.account.no') }}
                     </Badge>
                 </td>
                 <!-- Where they stand on the released version: lines ticked, stages finished, last tick. -->
@@ -332,19 +332,19 @@ const confirmRemove = () => {
                             <div class="h-full rounded-full bg-accent" :style="{ width: `${percent(row.progress)}%` }"></div>
                         </div>
                         <p class="mt-1 mb-0 text-xs text-ink-4">
-                            {{ $t('arcadia.editor.readers.progress.stages', { done: row.progress.stages.done, total: row.progress.stages.total }) }}
+                            {{ $t('editor.readers.progress.stages', { done: row.progress.stages.done, total: row.progress.stages.total }) }}
                         </p>
                         <p class="m-0 text-xs text-ink-4">
                             {{ row.progress.last_ticked_at
-                                ? $t('arcadia.editor.readers.progress.last', { date: formatDate(row.progress.last_ticked_at) })
-                                : $t('arcadia.editor.readers.progress.none') }}
+                                ? $t('editor.readers.progress.last', { date: formatDate(row.progress.last_ticked_at) })
+                                : $t('editor.readers.progress.none') }}
                         </p>
                     </div>
-                    <span v-else class="text-sm text-ink-4" :title="released ? undefined : $t('arcadia.editor.readers.progress.no_release')">—</span>
+                    <span v-else class="text-sm text-ink-4" :title="released ? undefined : $t('editor.readers.progress.no_release')">—</span>
                 </td>
                 <td class="px-4 py-3 align-top">
                     <button type="button" class="flex items-center gap-2 rounded-control text-left text-sm text-ink-2 hover:text-accent"
-                            :aria-label="`${$t('arcadia.editor.appearance.edit')}: ${row.email}`" @click="paintingId = row.id">
+                            :aria-label="`${$t('editor.appearance.edit')}: ${row.email}`" @click="paintingId = row.id">
                         <span class="flex h-6 w-9 shrink-0 overflow-hidden rounded border border-rule" aria-hidden="true">
                             <span class="h-full w-1/2" :style="{ background: swatch(row.palette, row.accent).colours?.ground }"></span>
                             <span class="flex h-full w-1/2 items-center justify-center" :style="{ background: swatch(row.palette, row.accent).colours?.surface }">
@@ -355,15 +355,15 @@ const confirmRemove = () => {
                     </button>
                     <Badge v-if="row.appearance_by" :variant="row.appearance_by === 'reader' ? 'pending' : 'active'" class="mt-1.5"
                            :title="row.appearance_at ? formatDate(row.appearance_at) : undefined">
-                        {{ $t(`arcadia.editor.appearance.by.${row.appearance_by}`) }}
+                        {{ $t(`editor.appearance.by.${row.appearance_by}`) }}
                     </Badge>
                 </td>
                 <td class="px-4 py-3 align-top">
                     <button v-if="row.user_id" type="button"
                             class="inline-flex items-center gap-1.5 rounded-control text-sm whitespace-nowrap text-ink-2 hover:text-accent"
-                            :aria-label="`${$t('arcadia.editor.devices.title')}: ${row.email}`" @click="devicesOfId = row.id">
+                            :aria-label="`${$t('editor.devices.title')}: ${row.email}`" @click="devicesOfId = row.id">
                         <Laptop :size="14" aria-hidden="true" />
-                        {{ $t('arcadia.editor.devices.count', { used: row.devices.length, limit: row.device_limit ?? deviceLimit }) }}
+                        {{ $t('editor.devices.count', { used: row.devices.length, limit: row.device_limit ?? deviceLimit }) }}
                     </button>
                     <span v-else class="text-sm text-ink-4">—</span>
                 </td>
@@ -372,11 +372,11 @@ const confirmRemove = () => {
                     <!-- The guide as they see it, their ticks included: read only, in a tab of its own. -->
                     <a v-if="row.user_id && released" :href="editorRoute('readers.view', { guide: guide.id, reader: row.id })" target="_blank" rel="noopener"
                        :class="buttonVariants({ variant: 'ghost', size: 'icon-sm' })"
-                       :aria-label="`${$t('arcadia.editor.readers.view.action')}: ${row.email}`" :title="$t('arcadia.editor.readers.view.action')">
+                       :aria-label="`${$t('editor.readers.view.action')}: ${row.email}`" :title="$t('editor.readers.view.action')">
                         <Eye :size="14" aria-hidden="true" />
                     </a>
                     <Button type="button" variant="ghost-danger" size="icon-sm" @click="pendingRemove = row"
-                            :aria-label="$t('arcadia.editor.readers.remove.action')" :title="$t('arcadia.editor.readers.remove.action')">
+                            :aria-label="$t('editor.readers.remove.action')" :title="$t('editor.readers.remove.action')">
                         <Trash2 :size="14" aria-hidden="true" />
                     </Button>
                 </td>
@@ -388,9 +388,9 @@ const confirmRemove = () => {
         <DevicesDialog :reader="devicesOf" :site-limit="deviceLimit" @close="devicesOfId = null" />
 
         <ConfirmDialog :open="pendingRemove !== null"
-                       :title="$t('arcadia.editor.readers.remove.title')"
-                       :body="$t('arcadia.editor.readers.remove.body')"
-                       :confirm-label="$t('arcadia.editor.readers.remove.confirm')"
+                       :title="$t('editor.readers.remove.title')"
+                       :body="$t('editor.readers.remove.body')"
+                       :confirm-label="$t('editor.readers.remove.confirm')"
                        :processing="removing"
                        @confirm="confirmRemove"
                        @cancel="pendingRemove = null" />

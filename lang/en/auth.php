@@ -17,218 +17,63 @@ return [
     'password' => 'The provided password is incorrect.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
 
-    // Login and Register page translations
-    'login' => [
-        'badge' => 'Secure Access',
-        'title' => [
-            'line_1' => 'Welcome to',
-            'highlight' => 'Yhn Dev Side',
+    // The sign-in and register screens (`AuthFrame.vue`).
+    'meta' => ['title' => 'Sign in · Arcadia'],
+    'back' => 'Back to home',
+    'heading' => 'Sign in',
+    'lead' => 'Sign in with the Google account your guide was shared with.',
+    'fields' => ['name' => 'Your name', 'email' => 'Email', 'password' => 'Password', 'password_confirmation' => 'Repeat the password', 'remember' => 'Remember me'],
+    'submit' => 'Sign in',
+    'submitting' => 'Signing in…',
+    'owner' => 'Sign in with email and password',
+    'forgot' => 'Forgot your password?',
+    'no_account' => 'No account?',
+    'create_account' => 'Create one',
+    // The other account screens on Arcadia (`Site::authPage()`), since 2026-10-15.
+    'screens' => [
+        'register' => [
+            'title' => 'Create an account',
+            'lead' => 'With your email and a password, if you would rather not use Google.',
+            'email_hint' => 'Use the email your guide was shared with. We will send you a link to confirm it.',
+            'submit' => 'Create account',
+            'have_account' => 'Already have an account?',
         ],
-        'description' => 'Enter your credentials to access your dashboard',
-        'fields' => [
-            'email' => 'Email Address',
-            'password' => 'Password',
+        'verify-email' => [
+            'title' => 'Check your email',
+            'body' => 'We sent a link to :email. Open it to confirm your email and see your guides.',
+            'sent' => 'We sent you a new link.',
+            'resend' => 'Send the link again',
+            'other' => 'Use another account',
         ],
-        'placeholders' => [
-            'email' => 'your@email.com',
-            'password' => '••••••••',
+        'forgot-password' => [
+            'title' => 'Recover your password',
+            'lead' => 'Enter your email and we will send you a link to choose a new one.',
+            'submit' => 'Send link',
         ],
-        'submit' => 'Sign In',
-        'submit_processing' => 'Signing in...',
-        'links' => [
-            'forgot_password' => 'Forgot your password?',
-            'register' => 'Register',
-        ],
-        'footer' => 'Secure and encrypted connection',
-        'oauth' => [
-            'title' => 'Continue with',
-            'google' => 'Continue with Google',
-            'linkedin' => 'Continue with LinkedIn',
-            'github' => 'Continue with GitHub',
-            'divider' => 'OR',
-        ],
-        'toast' => [
-            'success' => 'Welcome back, :name!',
-            'error' => 'Login failed. Please check your credentials and try again.',
-        ],
-    ],
-
-    'register' => [
-        'badge' => 'Secure Registration',
-        'title' => [
-            'line_1' => 'Create your account on',
-            'highlight' => 'Yhn Dev Side',
-        ],
-        'description' => 'Complete your details to create your account',
-        'fields' => [
-            'name' => 'Name',
-            'email' => 'Email Address',
-            'password' => 'Password',
-            'password_confirmation' => 'Confirm Password',
-        ],
-        'placeholders' => [
-            'name' => 'Your name',
-            'email' => 'your@email.com',
-            'password' => '••••••••',
-            'password_confirmation' => '••••••••',
-        ],
-        'submit' => 'Create Account',
-        'submit_processing' => 'Creating account...',
-        'links' => [
-            'has_account' => 'I already have an account',
-        ],
-        'footer' => 'Secure and encrypted connection',
-        'toast' => [
-            'success' => 'Welcome to YHN Dev Side, :name! Please check your email to verify your account.',
-            'error' => 'Registration failed. Please correct the errors and try again.',
+        'reset-password' => [
+            'title' => 'Choose a new password',
+            'submit' => 'Save password',
         ],
     ],
-
-    'forgot_password' => [
-        'badge' => 'Account Recovery',
-        'title' => [
-            'line_1' => 'Forgot your',
-            'highlight' => 'Password?',
-        ],
-        'description' => 'No worries, we will send you a recovery link to your email',
-        'fields' => [
-            'email' => 'Email Address',
-        ],
-        'placeholders' => [
-            'email' => 'your@email.com',
-        ],
-        'submit' => 'Send Link',
-        'submit_processing' => 'Sending...',
-        'links' => [
-            'back_to_login' => 'Back to login',
-        ],
-        'footer' => 'You will receive an email with instructions to reset your password in a few minutes.',
-        'toast' => [
-            'success' => 'Password reset link sent! Please check your email inbox.',
-            'error' => 'Failed to send reset link. Please verify your email address and try again.',
-        ],
+    'google' => [
+        'continue' => 'Continue with Google',
+        'hint' => 'No forms, no passwords. Just pick your account.',
+        'unavailable' => 'Signing in with Google is not available right now. Try again in a moment.',
+        'failed' => 'Signing in with Google could not be completed. Please try again.',
+        'not_shared' => 'The account :email has no guides on Arcadia. If your guide was shared with another email, sign in with that account.',
     ],
-
-    'reset_password' => [
-        'badge' => 'Reset Password',
-        'title' => [
-            'line_1' => 'New',
-            'highlight' => 'Password',
-        ],
-        'description' => 'Create a new secure password for your account',
-        'fields' => [
-            'email' => 'Email Address',
-            'password' => 'New Password',
-            'password_confirmation' => 'Confirm Password',
-        ],
-        'placeholders' => [
-            'email' => 'your@email.com',
-            'password' => 'Minimum 8 characters',
-            'password_confirmation' => 'Repeat your password',
-        ],
-        'submit' => 'Reset Password',
-        'submit_processing' => 'Updating...',
-        'footer' => 'Your password will be securely encrypted',
-        'validation' => [
-            'email_required' => 'Email is required',
-            'password_min_length' => 'Password must be at least 8 characters',
-            'password_mismatch' => 'Passwords do not match',
-        ],
-        'toast' => [
-            'success' => 'Password reset successfully! You can now login with your new password.',
-            'error' => 'Password reset failed. Please check the form and try again.',
-        ],
+    // A passkey: only where the browser supports one and `PASSKEYS_ENABLED` is on.
+    'passkey' => [
+        'sign_in' => 'Sign in with a passkey',
+        'signing_in' => 'Checking…',
+        'or' => 'or',
     ],
-
-    'two_factor' => [
-        'badge' => 'Two-step verification',
-        'title' => [
-            'line_1' => 'One more step',
-            'highlight' => 'to confirm it is you',
-        ],
-        'description' => 'Enter the six-digit code from your authenticator app.',
-        'description_recovery' => 'Enter one of the recovery codes you saved when you set up two-step verification. Each code works once.',
-        'fields' => [
-            'code' => 'Authentication code',
-            'recovery_code' => 'Recovery code',
-        ],
-        'placeholders' => [
-            'code' => '123456',
-            'recovery_code' => 'xxxxxxxx-xxxxxxxx',
-        ],
-        'submit' => 'Verify',
-        'submit_processing' => 'Verifying...',
-        'links' => [
-            'use_recovery' => 'Use a recovery code instead',
-            'use_code' => 'Use my authenticator app instead',
-        ],
-        'footer' => 'Codes expire every 30 seconds. If yours keeps failing, check your device clock.',
-    ],
-
-    'confirm_password' => [
-        'badge' => 'Secure area',
-        'title' => [
-            'line_1' => 'Confirm your password',
-            'highlight' => 'before continuing',
-        ],
-        'description' => 'This action changes your account security settings, so we ask for your password one more time.',
-        'fields' => [
-            'password' => 'Password',
-        ],
-        'placeholders' => [
-            'password' => 'Your current password',
-        ],
-        'submit' => 'Confirm',
-        'submit_processing' => 'Confirming...',
-        'footer' => 'We will not ask again for a few hours.',
-    ],
-    'onboarding' => [
-        'step_label' => 'Step :number',
-        'steps' => [
-            1 => [
-                'title' => 'Email verification',
-                'done' => 'Done — your email address is confirmed',
-                'current' => 'Pending — confirm your email address',
-                'future' => 'Confirm your email address',
-            ],
-            2 => [
-                'title' => 'Administrator approval',
-                'done' => 'Done — your account was approved',
-                'current' => 'Pending — an administrator is reviewing your request',
-                'future' => 'An administrator reviews your request',
-            ],
-            3 => [
-                'title' => 'Dashboard access',
-                'done' => 'Done — you have full access',
-                'current' => 'Ready — sign in to continue',
-                'future' => 'Available once your account is approved',
-            ],
-        ],
-    ],
-
-    'verify_email' => [
-        'title' => 'Verify your email address',
-        'resend' => 'Resend verification email',
-        'resend_processing' => 'Sending...',
-        'help' => [
-            'title' => 'What you need to do',
-            'items' => [
-                'Check your inbox',
-                'Look for an email from YHN Dev Side',
-                'Open the verification link inside it',
-                'If it is not there, check your spam folder',
-            ],
-            'expiry' => 'The link expires in 24 hours. Use the button above if you need a new one.',
-        ],
-        'toast' => [
-            'sent' => 'Verification email sent again',
-        ],
-    ],
-
-    'waiting_approval' => [
-        'title' => 'Waiting for approval',
-        'headline' => 'Your account is being reviewed',
-        'body' => 'Your email address is confirmed. An administrator now reviews the request before the account is opened.',
-        'notice' => 'You will get an email when the account is approved. This usually takes a few hours.',
+    // Shown inside an app's own browser (WhatsApp, Instagram…), where Google may refuse to sign in.
+    'in_app' => [
+        'title' => 'Open it in your browser',
+        'body' => 'You are inside another app, and Google may not let you sign in from here. Open this page in Chrome or Safari.',
+        'open' => 'Open in Chrome',
+        'copy' => 'Copy link',
+        'copied' => 'Link copied: paste it into your browser.',
     ],
 ];

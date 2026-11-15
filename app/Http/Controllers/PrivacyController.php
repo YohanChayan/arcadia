@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\ArcadiaSite;
+use App\Services\Site\Site;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -16,10 +16,10 @@ use Inertia\Response;
  */
 class PrivacyController
 {
-    public function __invoke(ArcadiaSite $site): Response
+    public function __invoke(Site $site): Response
     {
         return Inertia::render('Privacy', [
-            'pageTitle' => __('arcadia.privacy.title'),
+            'pageTitle' => __('privacy.title'),
             'noIndex' => true,
             'canonicalUrl' => $site->url($site->privacyPath()),
             'email' => $site->contactEmail(),

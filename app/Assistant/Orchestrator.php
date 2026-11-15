@@ -157,7 +157,7 @@ class Orchestrator
             report($exception);
 
             $turn->update(['status' => TurnStatus::FAILED]);
-            $channel->turnFailed(__('arcadia.assistant.failed', [], $conversation->locale));
+            $channel->turnFailed(__('assistant.failed', [], $conversation->locale));
         }
 
         return $turn;

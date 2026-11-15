@@ -61,7 +61,7 @@ const answer = isKnown => {
 
     if (props.saved?.saveUrl) {
         window.axios.put(props.saved.saveUrl, { key, known: isKnown })
-            .catch(() => toast.error(trans('arcadia.reader.cards.failed')))
+            .catch(() => toast.error(trans('reader.cards.failed')))
     }
 }
 
@@ -77,9 +77,9 @@ const again = () => {
         <div class="flex items-center justify-between gap-3 text-sm">
             <p class="m-0 flex items-center gap-1.5 font-semibold text-guide-accent">
                 <Layers :size="16" aria-hidden="true" />
-                {{ $t('arcadia.reader.cards.title') }}
+                {{ $t('reader.cards.title') }}
             </p>
-            <p class="m-0 font-mono text-xs text-guide-ink-soft">{{ $t('arcadia.reader.cards.known', { known, total: cards.length }) }}</p>
+            <p class="m-0 font-mono text-xs text-guide-ink-soft">{{ $t('reader.cards.known', { known, total: cards.length }) }}</p>
         </div>
 
         <!-- A card: its front until turned, then its back and the two answers. -->
@@ -89,7 +89,7 @@ const again = () => {
                 <span class="flip-card-inner">
                     <span class="flip-card-face rounded-xl border-2 border-guide-rule bg-guide-well" :aria-hidden="flipped || undefined">
                         <span class="block font-display text-lg font-semibold text-guide-ink">{{ current.front }}</span>
-                        <span class="mt-3 block text-xs text-guide-ink-soft">{{ $t('arcadia.reader.cards.turn') }}</span>
+                        <span class="mt-3 block text-xs text-guide-ink-soft">{{ $t('reader.cards.turn') }}</span>
                     </span>
                     <span class="flip-card-face flip-card-back rounded-xl border-2 border-guide-accent bg-guide-well" :aria-hidden="!flipped || undefined">
                         <span class="block text-base text-guide-ink">{{ current.back }}</span>
@@ -101,10 +101,10 @@ const again = () => {
                 <span class="font-mono text-xs text-guide-ink-soft">{{ dealt - queue.length + 1 }} / {{ dealt }}</span>
                 <div v-if="flipped" class="flex flex-wrap gap-2">
                     <button type="button" class="rounded-full border border-guide-rule px-4 py-2 text-sm font-semibold text-guide-ink hover:border-guide-accent" @click="answer(false)">
-                        {{ $t('arcadia.reader.cards.not_yet') }}
+                        {{ $t('reader.cards.not_yet') }}
                     </button>
                     <button type="button" class="rounded-full bg-guide-accent px-4 py-2 text-sm font-semibold text-guide-on-accent" @click="answer(true)">
-                        {{ $t('arcadia.reader.cards.knew') }}
+                        {{ $t('reader.cards.knew') }}
                     </button>
                 </div>
             </div>
@@ -112,11 +112,11 @@ const again = () => {
 
         <!-- Nothing due: how they stand, and the deck again. -->
         <div v-else class="mt-4 rounded-xl bg-guide-well p-5 text-center">
-            <p class="m-0 font-display text-lg font-semibold text-guide-ink">{{ $t('arcadia.reader.cards.done', { known, total: cards.length }) }}</p>
-            <p v-if="leftForTomorrow" class="mt-1 mb-0 text-sm text-guide-ink-soft">{{ $t('arcadia.reader.cards.tomorrow') }}</p>
+            <p class="m-0 font-display text-lg font-semibold text-guide-ink">{{ $t('reader.cards.done', { known, total: cards.length }) }}</p>
+            <p v-if="leftForTomorrow" class="mt-1 mb-0 text-sm text-guide-ink-soft">{{ $t('reader.cards.tomorrow') }}</p>
             <button type="button" class="mt-4 inline-flex items-center gap-1.5 rounded-full border border-guide-rule px-4 py-2 text-sm font-semibold text-guide-ink hover:border-guide-accent" @click="again">
                 <RotateCcw :size="14" aria-hidden="true" />
-                {{ $t('arcadia.reader.cards.again') }}
+                {{ $t('reader.cards.again') }}
             </button>
         </div>
     </div>

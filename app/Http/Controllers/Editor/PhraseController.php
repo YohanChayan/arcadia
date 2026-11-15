@@ -24,14 +24,14 @@ class PhraseController
     {
         Phrase::create(['locale' => app()->getLocale(), ...$request->validated()]);
 
-        return back()->with('success', __('arcadia.editor.phrases.flash.saved'));
+        return back()->with('success', __('editor.phrases.flash.saved'));
     }
 
     public function update(PhraseRequest $request, int $phrase): RedirectResponse
     {
         $this->find($phrase)->update($request->validated());
 
-        return back()->with('success', __('arcadia.editor.phrases.flash.saved'));
+        return back()->with('success', __('editor.phrases.flash.saved'));
     }
 
     /** Taken from every guide that chose it; the guides stay. */
@@ -39,7 +39,7 @@ class PhraseController
     {
         $this->find($phrase)->delete();
 
-        return back()->with('success', __('arcadia.editor.phrases.flash.deleted'));
+        return back()->with('success', __('editor.phrases.flash.deleted'));
     }
 
     private function find(int $id): Phrase

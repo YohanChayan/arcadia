@@ -39,7 +39,7 @@ export const useGuideProgress = progress => {
 
         window.axios.put(progress.saveUrl, { key, done: value }).catch(() => {
             mark(key, !value)
-            toast.error(trans('arcadia.reader.progress_failed'))
+            toast.error(trans('reader.progress_failed'))
         })
     }
 

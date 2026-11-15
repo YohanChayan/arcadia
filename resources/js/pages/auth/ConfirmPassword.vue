@@ -18,12 +18,12 @@ defineProps<{ canUsePasskeys?: boolean }>();
 </script>
 
 <template>
-    <Head :title="$t('arcadia.account.confirm.title')" />
+    <Head :title="$t('account.confirm.title')" />
 
     <!-- Its own heading: `app.js` assigns the layout, so a layout-props object here would be dropped. -->
     <div class="mb-6 space-y-2 text-center">
-        <h1 class="text-xl font-medium">{{ $t('arcadia.account.confirm.title') }}</h1>
-        <p class="text-sm text-muted-foreground">{{ $t('arcadia.account.confirm.lead') }}</p>
+        <h1 class="text-xl font-medium">{{ $t('account.confirm.title') }}</h1>
+        <p class="text-sm text-muted-foreground">{{ $t('account.confirm.lead') }}</p>
     </div>
 
     <PasskeyVerify
@@ -32,9 +32,9 @@ defineProps<{ canUsePasskeys?: boolean }>();
             options: confirmOptions,
             submit: confirmStore,
         }"
-        :label="$t('arcadia.account.confirm.passkey')"
-        :loading-label="$t('arcadia.account.confirm.passkey_loading')"
-        :separator="$t('arcadia.account.confirm.or')"
+        :label="$t('account.confirm.passkey')"
+        :loading-label="$t('account.confirm.passkey_loading')"
+        :separator="$t('account.confirm.or')"
     />
 
     <Form
@@ -44,7 +44,7 @@ defineProps<{ canUsePasskeys?: boolean }>();
     >
         <div class="space-y-6">
             <div class="grid gap-2">
-                <Label htmlFor="password">{{ $t('arcadia.account.confirm.password') }}</Label>
+                <Label htmlFor="password">{{ $t('account.confirm.password') }}</Label>
                 <PasswordInput
                     id="password"
                     name="password"
@@ -64,7 +64,7 @@ defineProps<{ canUsePasskeys?: boolean }>();
                     data-test="confirm-password-button"
                 >
                     <Spinner v-if="processing" />
-                    {{ $t('arcadia.account.confirm.button') }}
+                    {{ $t('account.confirm.button') }}
                 </Button>
             </div>
         </div>

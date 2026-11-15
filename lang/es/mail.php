@@ -1,7 +1,7 @@
 <?php
 
 /*
-| The account emails — verify the address, reset the password — (`ArcadiaAccountMail`,
+| The account emails — verify the address, reset the password — (`AccountMail`,
 | view `mail/account`). `:site` is the brand's name: Arcadia.
 */
 

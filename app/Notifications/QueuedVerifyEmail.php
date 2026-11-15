@@ -2,7 +2,7 @@
 
 namespace App\Notifications;
 
-use App\Notifications\Concerns\ArcadiaAccountMail;
+use App\Notifications\Concerns\AccountMail;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -16,11 +16,11 @@ use Illuminate\Notifications\Messages\MailMessage;
  * account had already been created. Queued, the visitor reaches the verify screen regardless,
  * and a failure lands in `failed_jobs`, where Site settings → Health shows it with a Retry.
  *
- * Its look, language and queue are Arcadia's (`ArcadiaAccountMail`).
+ * Its look, language and queue are Arcadia's (`AccountMail`).
  */
 class QueuedVerifyEmail extends VerifyEmail implements ShouldQueue
 {
-    use ArcadiaAccountMail;
+    use AccountMail;
     use Queueable;
 
     public function toMail($notifiable): MailMessage

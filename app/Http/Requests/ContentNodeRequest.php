@@ -71,10 +71,10 @@ class ContentNodeRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'title.required' => __('arcadia.editor.content.errors.title'),
-            'body.required' => __('arcadia.editor.content.errors.body'),
-            'url.required' => __('arcadia.editor.content.errors.url'),
-            'url.url' => __('arcadia.editor.content.errors.url'),
+            'title.required' => __('editor.content.errors.title'),
+            'body.required' => __('editor.content.errors.body'),
+            'url.required' => __('editor.content.errors.url'),
+            'url.url' => __('editor.content.errors.url'),
             ...VideoClip::messages(),
         ];
     }

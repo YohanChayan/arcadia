@@ -41,11 +41,11 @@ const handleCancel = () => {
 
 <template>
     <div v-if="!isSupported" class="text-sm text-muted-foreground">
-        {{ $t('arcadia.account.passkeys.unsupported') }}
+        {{ $t('account.passkeys.unsupported') }}
     </div>
 
     <Button v-else-if="!showForm" variant="outline" @click="showForm = true">
-        {{ $t('arcadia.account.passkeys.add') }}
+        {{ $t('account.passkeys.add') }}
     </Button>
 
     <form
@@ -54,17 +54,17 @@ const handleCancel = () => {
         class="space-y-4 rounded-lg border border-border bg-muted/50 p-4"
     >
         <div class="grid gap-2">
-            <Label for="passkey-name">{{ $t('arcadia.account.passkeys.name') }}</Label>
+            <Label for="passkey-name">{{ $t('account.passkeys.name') }}</Label>
             <Input
                 id="passkey-name"
                 type="text"
                 v-model="name"
-                :placeholder="$t('arcadia.account.passkeys.name_placeholder')"
+                :placeholder="$t('account.passkeys.name_placeholder')"
                 class="mt-1 block w-full border-foreground/20"
                 v-focus
             />
             <p class="text-xs text-muted-foreground">
-                {{ $t('arcadia.account.passkeys.name_hint') }}
+                {{ $t('account.passkeys.name_hint') }}
             </p>
         </div>
 
@@ -72,10 +72,10 @@ const handleCancel = () => {
 
         <div class="flex gap-2">
             <Button type="submit" :disabled="isLoading || !name.trim()">
-                {{ isLoading ? $t('arcadia.account.passkeys.registering') : $t('arcadia.account.passkeys.register') }}
+                {{ isLoading ? $t('account.passkeys.registering') : $t('account.passkeys.register') }}
             </Button>
             <Button type="button" variant="ghost" @click="handleCancel">
-                {{ $t('arcadia.account.cancel') }}
+                {{ $t('account.cancel') }}
             </Button>
         </div>
     </form>

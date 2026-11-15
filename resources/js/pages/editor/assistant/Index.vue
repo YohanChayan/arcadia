@@ -92,16 +92,16 @@ function clear(): void {
 </script>
 
 <template>
-    <EditorTitle :parts="[$t('arcadia.editor.assistant.title')]" />
+    <EditorTitle :parts="[$t('editor.assistant.title')]" />
 
     <div class="py-6">
         <EditorBreadcrumb
-            :trail="[{ label: $t('arcadia.editor.assistant.title') }]"
+            :trail="[{ label: $t('editor.assistant.title') }]"
         />
 
         <PageHeader
-            :title="$t('arcadia.editor.assistant.title')"
-            :description="$t('arcadia.editor.assistant.description')"
+            :title="$t('editor.assistant.title')"
+            :description="$t('editor.assistant.description')"
         />
 
         <p
@@ -111,7 +111,7 @@ function clear(): void {
         >
             <TriangleAlert class="size-4 shrink-0" />
             {{
-                $t('arcadia.editor.assistant.no_key', {
+                $t('editor.assistant.no_key', {
                     provider: props.provider,
                 })
             }}
@@ -119,7 +119,7 @@ function clear(): void {
 
         <p class="mb-4 font-mono text-xs text-ink-3">
             {{
-                $t('arcadia.editor.assistant.models', {
+                $t('editor.assistant.models', {
                     planner: props.models.planner,
                     speaker: props.models.speaker,
                 })
@@ -127,8 +127,8 @@ function clear(): void {
             ·
             {{
                 props.cacheInstructions
-                    ? $t('arcadia.editor.assistant.cache_on')
-                    : $t('arcadia.editor.assistant.cache_off')
+                    ? $t('editor.assistant.cache_on')
+                    : $t('editor.assistant.cache_off')
             }}
         </p>
 
@@ -136,27 +136,27 @@ function clear(): void {
             <AssistantChat
                 class="h-[70vh] min-h-[28rem]"
                 :url="messagesUrl"
-                :greeting="$t('arcadia.assistant.greeting')"
+                :greeting="$t('assistant.greeting')"
                 @turn-completed="record"
                 @reset="clear"
             />
 
             <section
                 class="panel flex h-[70vh] min-h-[28rem] flex-col overflow-hidden"
-                :aria-label="$t('arcadia.editor.assistant.metrics')"
+                :aria-label="$t('editor.assistant.metrics')"
             >
                 <p
                     v-if="turns.length === 0"
                     class="m-auto max-w-xs p-6 text-center text-sm text-ink-3"
                 >
-                    {{ $t('arcadia.editor.assistant.empty') }}
+                    {{ $t('editor.assistant.empty') }}
                 </p>
 
                 <template v-else>
                     <div
                         class="flex flex-wrap gap-1.5 border-b border-rule p-3"
                         role="group"
-                        :aria-label="$t('arcadia.editor.assistant.turns')"
+                        :aria-label="$t('editor.assistant.turns')"
                     >
                         <button
                             v-for="(_, index) in turns"
@@ -172,7 +172,7 @@ function clear(): void {
                             @click="selected = index"
                         >
                             {{
-                                $t('arcadia.editor.assistant.turn', {
+                                $t('editor.assistant.turn', {
                                     number: String(index + 1),
                                 })
                             }}
@@ -199,7 +199,7 @@ function clear(): void {
                                 />
                                 {{
                                     $t(
-                                        `arcadia.editor.assistant.tabs.${each.key}`,
+                                        `editor.assistant.tabs.${each.key}`,
                                     )
                                 }}
                                 <Badge
@@ -222,7 +222,7 @@ function clear(): void {
                                 >
                                     {{
                                         $t(
-                                            'arcadia.editor.assistant.no_passages',
+                                            'editor.assistant.no_passages',
                                         )
                                     }}
                                 </p>
@@ -268,7 +268,7 @@ function clear(): void {
                                 <p class="mb-3 text-sm text-ink-3">
                                     {{
                                         $t(
-                                            'arcadia.editor.assistant.engagement_lead',
+                                            'editor.assistant.engagement_lead',
                                         )
                                     }}
                                 </p>
@@ -280,7 +280,7 @@ function clear(): void {
                                     >
                                         <span class="text-ink-3">{{
                                             $t(
-                                                'arcadia.editor.assistant.turn',
+                                                'editor.assistant.turn',
                                                 {
                                                     number: String(index + 1),
                                                 },
@@ -314,7 +314,7 @@ function clear(): void {
                                             >
                                                 {{
                                                     $t(
-                                                        'arcadia.editor.assistant.this_turn',
+                                                        'editor.assistant.this_turn',
                                                     )
                                                 }}
                                             </th>
@@ -323,7 +323,7 @@ function clear(): void {
                                             >
                                                 {{
                                                     $t(
-                                                        'arcadia.editor.assistant.conversation',
+                                                        'editor.assistant.conversation',
                                                     )
                                                 }}
                                             </th>
@@ -336,7 +336,7 @@ function clear(): void {
                                             >
                                                 {{
                                                     $t(
-                                                        'arcadia.editor.assistant.input',
+                                                        'editor.assistant.input',
                                                     )
                                                 }}
                                             </th>
@@ -361,7 +361,7 @@ function clear(): void {
                                             >
                                                 {{
                                                     $t(
-                                                        'arcadia.editor.assistant.cached',
+                                                        'editor.assistant.cached',
                                                     )
                                                 }}
                                             </th>
@@ -373,7 +373,7 @@ function clear(): void {
                                                         .cached_input_tokens ===
                                                     null
                                                         ? $t(
-                                                              'arcadia.editor.assistant.not_reported',
+                                                              'editor.assistant.not_reported',
                                                           )
                                                         : tokens(
                                                               turn.usage
@@ -393,7 +393,7 @@ function clear(): void {
                                             >
                                                 {{
                                                     $t(
-                                                        'arcadia.editor.assistant.output',
+                                                        'editor.assistant.output',
                                                     )
                                                 }}
                                             </th>
@@ -419,7 +419,7 @@ function clear(): void {
                                             >
                                                 {{
                                                     $t(
-                                                        'arcadia.editor.assistant.cost',
+                                                        'editor.assistant.cost',
                                                     )
                                                 }}
                                             </th>
@@ -429,7 +429,7 @@ function clear(): void {
                                                 {{
                                                     turn.cost === null
                                                         ? $t(
-                                                              'arcadia.editor.assistant.no_price',
+                                                              'editor.assistant.no_price',
                                                           )
                                                         : money(turn.cost)
                                                 }}
@@ -440,7 +440,7 @@ function clear(): void {
                                                 {{
                                                     totals.cost === null
                                                         ? $t(
-                                                              'arcadia.editor.assistant.no_price',
+                                                              'editor.assistant.no_price',
                                                           )
                                                         : money(totals.cost)
                                                 }}
@@ -457,7 +457,7 @@ function clear(): void {
                                 >
                                     {{
                                         $t(
-                                            'arcadia.editor.assistant.no_conversions',
+                                            'editor.assistant.no_conversions',
                                         )
                                     }}
                                 </p>
@@ -483,7 +483,7 @@ function clear(): void {
                                         </span>
                                         <span class="text-xs text-ink-3">{{
                                             $t(
-                                                'arcadia.editor.assistant.turn',
+                                                'editor.assistant.turn',
                                                 {
                                                     number: String(
                                                         conversion.turn,

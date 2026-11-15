@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
             PromptTemplateSeeder::class,
             CoverPromptTemplateSeeder::class,
             GuideFlyerPromptTemplateSeeder::class,
-            ArcadiaFlyerPromptTemplateSeeder::class,
+            BrandFlyerPromptTemplateSeeder::class,
         ]);
 
         if (app()->isLocal()) {

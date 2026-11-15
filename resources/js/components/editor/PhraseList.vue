@@ -72,26 +72,26 @@ const confirmDelete = () => {
 
 <template>
     <div>
-        <p class="mt-0 mb-4 max-w-prose text-sm text-ink-3">{{ $t('arcadia.editor.phrases.description') }}</p>
+        <p class="mt-0 mb-4 max-w-prose text-sm text-ink-3">{{ $t('editor.phrases.description') }}</p>
 
         <form class="panel mb-6 max-w-3xl p-5" @submit.prevent="add">
             <Field :data-invalid="form.errors.text ? true : undefined">
                 <div class="flex flex-col gap-3 sm:flex-row">
                     <Select v-model="form.moment">
-                        <SelectTrigger class="sm:w-48" :aria-label="$t('arcadia.editor.phrases.moment')"><SelectValue /></SelectTrigger>
+                        <SelectTrigger class="sm:w-48" :aria-label="$t('editor.phrases.moment')"><SelectValue /></SelectTrigger>
                         <SelectContent>
                             <SelectItem v-for="moment in moments" :key="moment.value" :value="moment.value">{{ moment.label }}</SelectItem>
                         </SelectContent>
                     </Select>
                     <Input v-model="form.text" :maxlength="maxLength" class="flex-1" autocomplete="off"
-                           :placeholder="$t('arcadia.editor.phrases.placeholder')" :aria-label="$t('arcadia.editor.phrases.text')" />
+                           :placeholder="$t('editor.phrases.placeholder')" :aria-label="$t('editor.phrases.text')" />
                     <Button type="submit" variant="brand" :disabled="form.processing || !form.text.trim()">
                         <Plus :size="16" aria-hidden="true" />
-                        {{ $t('arcadia.editor.phrases.add') }}
+                        {{ $t('editor.phrases.add') }}
                     </Button>
                 </div>
                 <FieldError v-if="form.errors.text">{{ form.errors.text }}</FieldError>
-                <FieldDescription v-else>{{ $t('arcadia.editor.phrases.hint', { max: maxLength }) }}</FieldDescription>
+                <FieldDescription v-else>{{ $t('editor.phrases.hint', { max: maxLength }) }}</FieldDescription>
             </Field>
         </form>
 
@@ -101,21 +101,21 @@ const confirmDelete = () => {
                     {{ group.label }}
                     <Badge variant="neutral" class="px-1.5 py-0 font-mono text-[10px]">{{ group.phrases.length }}</Badge>
                 </h2>
-                <p class="mt-0.5 mb-3 text-xs text-ink-4">{{ $t(`arcadia.editor.phrases.when.${group.value}`) }}</p>
+                <p class="mt-0.5 mb-3 text-xs text-ink-4">{{ $t(`editor.phrases.when.${group.value}`) }}</p>
 
-                <p v-if="!group.phrases.length" class="m-0 text-sm text-ink-4">{{ $t('arcadia.editor.phrases.empty') }}</p>
+                <p v-if="!group.phrases.length" class="m-0 text-sm text-ink-4">{{ $t('editor.phrases.empty') }}</p>
                 <ul v-else class="m-0 divide-y divide-rule p-0">
                     <li v-for="phrase in group.phrases" :key="phrase.id" class="flex list-none items-center gap-3 py-2">
                         <form v-if="editingId === phrase.id" class="flex flex-1 items-center gap-1.5" @submit.prevent="save(phrase)">
-                            <Input v-model="editing" :maxlength="maxLength" class="h-8 flex-1" :aria-label="$t('arcadia.editor.phrases.text')" @keydown.esc="editingId = null" />
-                            <Button type="submit" size="icon-sm" variant="ghost" :aria-label="$t('arcadia.editor.phrases.save')"><Check :size="14" aria-hidden="true" /></Button>
-                            <Button type="button" size="icon-sm" variant="ghost" :aria-label="$t('arcadia.editor.cancel')" @click="editingId = null"><X :size="14" aria-hidden="true" /></Button>
+                            <Input v-model="editing" :maxlength="maxLength" class="h-8 flex-1" :aria-label="$t('editor.phrases.text')" @keydown.esc="editingId = null" />
+                            <Button type="submit" size="icon-sm" variant="ghost" :aria-label="$t('editor.phrases.save')"><Check :size="14" aria-hidden="true" /></Button>
+                            <Button type="button" size="icon-sm" variant="ghost" :aria-label="$t('editor.common.cancel')" @click="editingId = null"><X :size="14" aria-hidden="true" /></Button>
                         </form>
                         <template v-else>
                             <span class="min-w-0 flex-1 text-sm text-ink">{{ phrase.text }}</span>
-                            <span class="shrink-0 font-mono text-[11px] text-ink-4">{{ $tChoice('arcadia.editor.phrases.used_by', phrase.guides_count, { count: phrase.guides_count }) }}</span>
-                            <Button type="button" size="icon-sm" variant="ghost" :aria-label="$t('arcadia.editor.phrases.edit')" @click="edit(phrase)"><Pencil :size="14" aria-hidden="true" /></Button>
-                            <Button type="button" size="icon-sm" variant="ghost-danger" :aria-label="$t('arcadia.editor.phrases.delete.action')" @click="pendingDelete = phrase"><Trash2 :size="14" aria-hidden="true" /></Button>
+                            <span class="shrink-0 font-mono text-[11px] text-ink-4">{{ $tChoice('editor.phrases.used_by', phrase.guides_count, { count: phrase.guides_count }) }}</span>
+                            <Button type="button" size="icon-sm" variant="ghost" :aria-label="$t('editor.phrases.edit')" @click="edit(phrase)"><Pencil :size="14" aria-hidden="true" /></Button>
+                            <Button type="button" size="icon-sm" variant="ghost-danger" :aria-label="$t('editor.phrases.delete.action')" @click="pendingDelete = phrase"><Trash2 :size="14" aria-hidden="true" /></Button>
                         </template>
                     </li>
                 </ul>
@@ -123,9 +123,9 @@ const confirmDelete = () => {
         </div>
 
         <ConfirmDialog :open="pendingDelete !== null"
-                       :title="$t('arcadia.editor.phrases.delete.title')"
-                       :body="$t('arcadia.editor.phrases.delete.body')"
-                       :confirm-label="$t('arcadia.editor.phrases.delete.confirm')"
+                       :title="$t('editor.phrases.delete.title')"
+                       :body="$t('editor.phrases.delete.body')"
+                       :confirm-label="$t('editor.phrases.delete.confirm')"
                        :processing="deleting"
                        @confirm="confirmDelete"
                        @cancel="pendingDelete = null" />

@@ -6,8 +6,8 @@ use App\Enums\Accent;
 use App\Enums\Palette;
 use App\Models\Guide;
 use App\Services\Appearance;
-use App\Services\ArcadiaSite;
 use App\Services\GuidePresenter;
+use App\Services\Site\Site;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -22,7 +22,7 @@ use Inertia\Response;
  */
 class PreviewController
 {
-    public function __invoke(Request $request, Guide $guide, GuidePresenter $presenter, ArcadiaSite $site): Response
+    public function __invoke(Request $request, Guide $guide, GuidePresenter $presenter, Site $site): Response
     {
         abort_unless($guide->locale === app()->getLocale(), 404);
 

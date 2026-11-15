@@ -28,6 +28,6 @@ class AppearanceController
 
         $reader->paint(Palette::from($data['palette']), Accent::from($data['accent']), Reader::BY_READER);
 
-        return back()->with('success', __('arcadia.my_guides.flash.saved'));
+        return back()->with('success', __('my_guides.flash.saved'));
     }
 }

@@ -231,11 +231,11 @@ const after = computed(() => props.sections.filter(section => section.kind !== '
             <div class="relative mx-auto max-w-3xl px-4 pb-20 pt-8 sm:px-6 sm:pt-12" :class="notes.enabled ? 'lg:mx-0 lg:w-full lg:px-0' : ''">
                 <p v-if="viewingAs" class="mb-6 flex items-center gap-2 rounded-xl border border-guide-accent bg-guide-surface px-4 py-3 text-sm text-guide-ink">
                     <Eye :size="16" class="shrink-0 text-guide-accent" aria-hidden="true" />
-                    {{ $t('arcadia.reader.viewing_as', { name: viewingAs }) }}
+                    {{ $t('reader.viewing_as', { name: viewingAs }) }}
                 </p>
                 <p v-if="preview" class="mb-6 flex items-center gap-2 rounded-xl border border-guide-accent bg-guide-surface px-4 py-3 text-sm text-guide-ink">
                     <Eye :size="16" class="shrink-0 text-guide-accent" aria-hidden="true" />
-                    {{ $t('arcadia.reader.preview', { number: version }) }}
+                    {{ $t('reader.preview', { number: version }) }}
                 </p>
 
                 <!-- The personal opening, before anything else. -->
@@ -248,18 +248,18 @@ const after = computed(() => props.sections.filter(section => section.kind !== '
                     <p v-if="guide.category" class="m-0 font-mono text-xs uppercase tracking-widest text-guide-accent">{{ guide.category }}</p>
                     <h1 class="mt-2 mb-0 font-display text-3xl font-bold leading-tight text-guide-ink sm:text-4xl">{{ guide.title }}</h1>
                     <p class="mt-3 mb-0 flex flex-wrap gap-x-4 gap-y-1 text-sm text-guide-ink-soft">
-                        <span><span class="text-guide-ink">{{ $t('arcadia.reader.level') }}:</span> {{ guide.level }}</span>
-                        <span v-if="guide.goals.length"><span class="text-guide-ink">{{ $t('arcadia.reader.goals') }}:</span> {{ guide.goals.join(' · ') }}</span>
+                        <span><span class="text-guide-ink">{{ $t('reader.level') }}:</span> {{ guide.level }}</span>
+                        <span v-if="guide.goals.length"><span class="text-guide-ink">{{ $t('reader.goals') }}:</span> {{ guide.goals.join(' · ') }}</span>
                     </p>
 
                     <div class="mt-6">
                         <ProgressBar :done="progress.count(keys)" :total="keys.length" />
-                        <p v-if="props.progress" class="mt-1 mb-0 text-xs text-guide-ink-soft">{{ $t('arcadia.reader.progress_saved') }}</p>
+                        <p v-if="props.progress" class="mt-1 mb-0 text-xs text-guide-ink-soft">{{ $t('reader.progress_saved') }}</p>
                     </div>
                 </header>
 
                 <section v-for="section in before" :key="section.key" class="mt-8 rounded-2xl bg-guide-well p-5 sm:p-6">
-                    <h2 class="m-0 font-display text-lg font-semibold text-guide-ink">{{ section.title || $t(`arcadia.editor.content.section_kinds.${section.kind}`) }}</h2>
+                    <h2 class="m-0 font-display text-lg font-semibold text-guide-ink">{{ section.title || $t(`editor.content.section_kinds.${section.kind}`) }}</h2>
                     <p class="mt-2 mb-0 whitespace-pre-line text-guide-ink">{{ section.body }}</p>
                 </section>
 
@@ -271,12 +271,12 @@ const after = computed(() => props.sections.filter(section => section.kind !== '
                 </div>
 
                 <section v-for="section in after" :key="section.key" class="mt-8">
-                    <h2 class="m-0 font-display text-lg font-semibold text-guide-ink">{{ section.title || $t(`arcadia.editor.content.section_kinds.${section.kind}`) }}</h2>
+                    <h2 class="m-0 font-display text-lg font-semibold text-guide-ink">{{ section.title || $t(`editor.content.section_kinds.${section.kind}`) }}</h2>
                     <!-- "Must master" as flip cards, when it has them; the list stays, folded under them. -->
                     <template v-if="section.activity?.family === 'flip_cards' && section.activity.cards.length">
                         <FlipDeck :cards="section.activity.cards" :saved="cards" />
                         <details class="mt-3">
-                            <summary class="cursor-pointer text-sm text-guide-ink-soft hover:text-guide-accent">{{ $t('arcadia.reader.cards.list') }}</summary>
+                            <summary class="cursor-pointer text-sm text-guide-ink-soft hover:text-guide-accent">{{ $t('reader.cards.list') }}</summary>
                             <p class="mt-2 mb-0 whitespace-pre-line text-guide-ink-soft">{{ section.body }}</p>
                         </details>
                     </template>
@@ -284,8 +284,8 @@ const after = computed(() => props.sections.filter(section => section.kind !== '
                 </section>
 
                 <footer class="mt-16 border-t border-guide-rule pt-6 text-center text-xs text-guide-ink-soft">
-                    <a v-if="myGuidesUrl" :href="myGuidesUrl" class="mr-4 text-guide-ink-soft no-underline hover:text-guide-accent">{{ $t('arcadia.my_guides.title') }}</a>
-                    <a :href="privacyUrl" class="text-guide-ink-soft no-underline hover:text-guide-accent">{{ $t('arcadia.reader.privacy') }}</a>
+                    <a v-if="myGuidesUrl" :href="myGuidesUrl" class="mr-4 text-guide-ink-soft no-underline hover:text-guide-accent">{{ $t('my_guides.title') }}</a>
+                    <a :href="privacyUrl" class="text-guide-ink-soft no-underline hover:text-guide-accent">{{ $t('reader.privacy') }}</a>
                 </footer>
             </div>
 
@@ -301,7 +301,7 @@ const after = computed(() => props.sections.filter(section => section.kind !== '
                     :class="notes.enabled ? 'lg:right-auto lg:left-4' : ''"
                     @click="picking = true">
                 <Palette :size="16" aria-hidden="true" />
-                {{ $t('arcadia.my_guides.colours.action') }}
+                {{ $t('my_guides.colours.action') }}
             </button>
 
             <ReaderColoursSheet v-model:palette="palette" v-model:accent="accent"

@@ -48,18 +48,18 @@ const tone = key => chosen.value === key ? 'bg-accent/15 font-semibold text-ink'
     <Dialog v-model:open="open">
         <DialogContent class="w-[calc(100%-2rem)] max-w-6xl">
             <DialogHeader>
-                <DialogTitle>{{ $t('arcadia.editor.prompts_hub.title') }}</DialogTitle>
-                <DialogDescription>{{ $t('arcadia.editor.prompts_hub.lead') }}</DialogDescription>
+                <DialogTitle>{{ $t('editor.prompts_hub.title') }}</DialogTitle>
+                <DialogDescription>{{ $t('editor.prompts_hub.lead') }}</DialogDescription>
             </DialogHeader>
 
             <div class="grid gap-5 md:grid-cols-[13rem_minmax(0,1fr)]">
-                <nav class="flex flex-row flex-wrap gap-1 md:flex-col" :aria-label="$t('arcadia.editor.prompts_hub.title')">
-                    <Eyebrow as="span" tone="muted" size="sm" class="hidden px-3 pt-1 md:block">{{ $t('arcadia.editor.prompts_hub.content') }}</Eyebrow>
+                <nav class="flex flex-row flex-wrap gap-1 md:flex-col" :aria-label="$t('editor.prompts_hub.title')">
+                    <Eyebrow as="span" tone="muted" size="sm" class="hidden px-3 pt-1 md:block">{{ $t('editor.prompts_hub.content') }}</Eyebrow>
                     <button type="button" :class="[item, tone(RESEARCH)]" :aria-current="chosen === RESEARCH || undefined" @click="chosen = RESEARCH">
-                        {{ $t('arcadia.editor.content.research.action') }}
+                        {{ $t('editor.content.research.action') }}
                     </button>
                     <template v-if="activityPrompts.length">
-                        <Eyebrow as="span" tone="muted" size="sm" class="hidden px-3 pt-3 md:block">{{ $t('arcadia.editor.prompts_hub.activities') }}</Eyebrow>
+                        <Eyebrow as="span" tone="muted" size="sm" class="hidden px-3 pt-3 md:block">{{ $t('editor.prompts_hub.activities') }}</Eyebrow>
                         <button v-for="prompt in activityPrompts" :key="prompt.family" type="button" :class="[item, tone(prompt.family)]"
                                 :aria-current="chosen === prompt.family || undefined" @click="chosen = prompt.family">
                             {{ prompt.label }}
@@ -70,10 +70,10 @@ const tone = key => chosen.value === key ? 'bg-accent/15 font-semibold text-ink'
                 <div class="min-w-0">
                     <!-- The research prompt: copying it records it on the guide. -->
                     <template v-if="chosen === RESEARCH">
-                        <p class="mt-0 mb-3 text-sm text-ink-3">{{ research.prompt ? $t('arcadia.editor.content.research.hint') : $t('arcadia.editor.content.research.missing') }}</p>
+                        <p class="mt-0 mb-3 text-sm text-ink-3">{{ research.prompt ? $t('editor.content.research.hint') : $t('editor.content.research.missing') }}</p>
                         <p v-if="researchRecorded" class="mt-0 mb-3 flex items-center gap-1.5 text-sm text-success">
                             <CircleCheck :size="15" aria-hidden="true" />
-                            {{ $t('arcadia.editor.content.research.recorded') }}
+                            {{ $t('editor.content.research.recorded') }}
                         </p>
                         <p v-if="researchError" class="mt-0 mb-3 text-sm text-danger">{{ researchError }}</p>
                         <VersionedPromptFiller v-if="research.prompt" :key="RESEARCH" :prompt="research.prompt" :version-id="research.versionId"
@@ -82,7 +82,7 @@ const tone = key => chosen.value === key ? 'bg-accent/15 font-semibold text-ink'
 
                     <!-- An activity prompt: the guide's content put in by the server; copying records nothing. -->
                     <template v-else-if="activity">
-                        <p class="mt-0 mb-3 text-sm text-ink-3">{{ $t('arcadia.editor.activity_import.prompt_hint') }}</p>
+                        <p class="mt-0 mb-3 text-sm text-ink-3">{{ $t('editor.activity_import.prompt_hint') }}</p>
                         <VersionedPromptFiller :key="activity.family" :prompt="activity.prompt" :choices="choices"
                                                :initial="activity.values" :guide-id="guideId" />
                     </template>

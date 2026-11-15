@@ -9,7 +9,7 @@ use Tests\TestCase;
 
 /**
  * Arcadia's sign-in is the owner's door, guarded twice: the site admits only the owner at
- * authentication (`ArcadiaSite::admits()`), and the editor's routes refuse anyone else at the
+ * authentication (`Site::admits()`), and the editor's routes refuse anyone else at the
  * route (`role:admin`). Each gate is proved on its own here.
  */
 class GuideSignInTest extends TestCase

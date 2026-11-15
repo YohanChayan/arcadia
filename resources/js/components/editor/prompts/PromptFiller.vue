@@ -139,12 +139,12 @@ const fieldId = name => `fill-${props.version.id}-${name}`
 <template>
     <div class="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)]">
         <div class="space-y-4">
-            <p v-if="!version.variables.length" class="m-0 text-sm text-ink-4">{{ $t('arcadia.editor.prompts.fill.no_variables') }}</p>
+            <p v-if="!version.variables.length" class="m-0 text-sm text-ink-4">{{ $t('editor.prompts.fill.no_variables') }}</p>
 
             <Field v-for="variable in version.variables" :key="variable.name">
                 <FieldLabel :for="fieldId(variable.name)">
                     <Eyebrow as="span">{{ variable.label }}</Eyebrow>
-                    <span v-if="!variable.required" class="text-xs font-normal text-ink-4">· {{ $t('arcadia.editor.optional') }}</span>
+                    <span v-if="!variable.required" class="text-xs font-normal text-ink-4">· {{ $t('editor.common.optional') }}</span>
                 </FieldLabel>
 
                 <Select v-if="isChoice(variable)" v-model="selects[variable.name].value">
@@ -160,29 +160,29 @@ const fieldId = name => `fill-${props.version.id}-${name}`
 
             <Field class="border-t border-rule pt-4">
                 <FieldLabel :for="fieldId(EXTRA)">
-                    <Eyebrow as="span">{{ $t('arcadia.editor.prompts.fill.extra') }}</Eyebrow>
-                    <span class="text-xs font-normal text-ink-4">· {{ $t('arcadia.editor.optional') }}</span>
+                    <Eyebrow as="span">{{ $t('editor.prompts.fill.extra') }}</Eyebrow>
+                    <span class="text-xs font-normal text-ink-4">· {{ $t('editor.common.optional') }}</span>
                 </FieldLabel>
-                <Textarea :id="fieldId(EXTRA)" v-model="values[EXTRA]" rows="3" :placeholder="$t('arcadia.editor.prompts.fill.extra_placeholder')" />
+                <Textarea :id="fieldId(EXTRA)" v-model="values[EXTRA]" rows="3" :placeholder="$t('editor.prompts.fill.extra_placeholder')" />
             </Field>
         </div>
 
         <div class="min-w-0">
             <div class="mb-2 flex items-center justify-between gap-3">
                 <Eyebrow as="span">
-                    {{ $t('arcadia.editor.prompts.fill.preview', { number: version.number }) }}
+                    {{ $t('editor.prompts.fill.preview', { number: version.number }) }}
                 </Eyebrow>
                 <Button type="button" variant="brand" size="sm" :disabled="!canCopy" @click="copy">
                     <component :is="copied ? Check : Copy" :size="14" aria-hidden="true" />
-                    {{ copied ? $t('arcadia.editor.prompts.fill.copied') : $t('arcadia.editor.prompts.fill.copy') }}
+                    {{ copied ? $t('editor.prompts.fill.copied') : $t('editor.prompts.fill.copy') }}
                 </Button>
             </div>
 
             <p v-if="result.missing.length" class="mt-0 mb-2 flex items-center gap-1.5 text-xs text-warning">
                 <TriangleAlert :size="13" aria-hidden="true" />
-                {{ $t('arcadia.editor.prompts.fill.missing', { names: missingLabels }) }}
+                {{ $t('editor.prompts.fill.missing', { names: missingLabels }) }}
             </p>
-            <p v-if="failed" class="mt-0 mb-2 text-xs text-danger">{{ $t('arcadia.editor.prompts.fill.failed') }}</p>
+            <p v-if="failed" class="mt-0 mb-2 text-xs text-danger">{{ $t('editor.prompts.fill.failed') }}</p>
 
             <div class="relative">
                 <pre class="m-0 max-h-[28rem] min-h-40 overflow-auto rounded-control border border-rule bg-well px-3 py-2.5 font-mono text-xs leading-relaxed whitespace-pre-wrap text-ink-2"

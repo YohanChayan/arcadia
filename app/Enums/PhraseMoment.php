@@ -29,7 +29,7 @@ enum PhraseMoment: string
 
     public function label(): string
     {
-        return __("arcadia.editor.phrases.moments.{$this->value}");
+        return __("editor.phrases.moments.{$this->value}");
     }
 
     /** @return list<array{value: string, label: string}> every moment, in a reader's order, for a form */

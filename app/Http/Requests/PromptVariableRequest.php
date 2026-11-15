@@ -48,6 +48,6 @@ class PromptVariableRequest extends FormRequest
 
     public function messages(): array
     {
-        return ['name.regex' => __('arcadia.editor.prompts.variables.name_rule')];
+        return ['name.regex' => __('editor.prompts.variables.name_rule')];
     }
 }

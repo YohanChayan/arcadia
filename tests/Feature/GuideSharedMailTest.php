@@ -54,7 +54,7 @@ class GuideSharedMailTest extends TestCase
     {
         $guide = $this->guide();
 
-        $this->add($guide)->assertSessionHas('success', __('arcadia.editor.readers.flash.added_and_told', ['email' => 'ana@gmail.com']));
+        $this->add($guide)->assertSessionHas('success', __('editor.readers.flash.added_and_told', ['email' => 'ana@gmail.com']));
 
         Mail::assertSent(GuideSharedMail::class, function (GuideSharedMail $mail) use ($guide) {
             $html = $mail->render();
@@ -72,7 +72,7 @@ class GuideSharedMailTest extends TestCase
     {
         $guide = $this->guide(readable: false);
 
-        $this->add($guide)->assertSessionHas('success', __('arcadia.editor.readers.flash.added_waiting', ['email' => 'ana@gmail.com']));
+        $this->add($guide)->assertSessionHas('success', __('editor.readers.flash.added_waiting', ['email' => 'ana@gmail.com']));
         $this->add($guide, 'bob@gmail.com', notify: false);
         Mail::assertNothingSent();
 
@@ -108,7 +108,7 @@ class GuideSharedMailTest extends TestCase
         Mail::assertSent(GuideSharedMail::class, 1);
 
         $this->post("/es/editor/guides/{$guide->id}/readers/{$reader->id}/notify")
-            ->assertSessionHas('success', __('arcadia.editor.readers.flash.resent', ['email' => 'ana@gmail.com']));
+            ->assertSessionHas('success', __('editor.readers.flash.resent', ['email' => 'ana@gmail.com']));
         Mail::assertSent(GuideSharedMail::class, 2);
     }
 
@@ -118,7 +118,7 @@ class GuideSharedMailTest extends TestCase
         $this->add($guide);
 
         $this->post("/es/editor/guides/{$guide->id}/readers/".Reader::sole()->id.'/notify')
-            ->assertSessionHas('error', __('arcadia.editor.readers.flash.not_readable'));
+            ->assertSessionHas('error', __('editor.readers.flash.not_readable'));
         Mail::assertNothingSent();
     }
 

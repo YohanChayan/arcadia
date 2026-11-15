@@ -26,9 +26,9 @@ defineProps({
 const editorRoute = useEditorRoute()
 
 const columns = computed(() => [
-    { key: 'name', label: trans('arcadia.editor.prompts.columns.name') },
-    { key: 'versions', label: trans('arcadia.editor.prompts.columns.versions'), align: 'right' },
-    { key: 'updated', label: trans('arcadia.editor.prompts.columns.updated'), align: 'right' },
+    { key: 'name', label: trans('editor.prompts.columns.name') },
+    { key: 'versions', label: trans('editor.prompts.columns.versions'), align: 'right' },
+    { key: 'updated', label: trans('editor.prompts.columns.updated'), align: 'right' },
 ])
 
 const formatDate = iso => new Date(iso).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })
@@ -39,23 +39,23 @@ const create = () => form.post(editorRoute('prompts.store'))
 </script>
 
 <template>
-    <EditorTitle :parts="[$t('arcadia.editor.prompts.title')]" />
+    <EditorTitle :parts="[$t('editor.prompts.title')]" />
 
     <div class="py-6">
-        <EditorBreadcrumb :trail="[{ label: $t('arcadia.editor.prompts.title') }]" />
+        <EditorBreadcrumb :trail="[{ label: $t('editor.prompts.title') }]" />
 
-        <PageHeader :title="$t('arcadia.editor.prompts.title')" :description="$t('arcadia.editor.prompts.description')" :count="templates.length">
+        <PageHeader :title="$t('editor.prompts.title')" :description="$t('editor.prompts.description')" :count="templates.length">
             <template #actions>
                 <Button type="button" variant="brand" @click="creating = true">
                     <Plus :size="16" aria-hidden="true" />
-                    {{ $t('arcadia.editor.prompts.new') }}
+                    {{ $t('editor.prompts.new') }}
                 </Button>
             </template>
         </PageHeader>
 
         <DataTable :columns="columns" :rows="templates"
-                   :empty-title="$t('arcadia.editor.prompts.empty.title')"
-                   :empty-hint="$t('arcadia.editor.prompts.empty.hint')">
+                   :empty-title="$t('editor.prompts.empty.title')"
+                   :empty-hint="$t('editor.prompts.empty.hint')">
             <template #row="{ row }">
                 <td class="px-4 py-3 align-top">
                     <Link :href="editorRoute('prompts.show', row.id)" class="font-medium text-ink no-underline hover:text-accent">{{ row.name }}</Link>
@@ -70,27 +70,27 @@ const create = () => form.post(editorRoute('prompts.store'))
             <DialogContent class="max-w-lg">
                 <form @submit.prevent="create">
                     <DialogHeader>
-                        <DialogTitle>{{ $t('arcadia.editor.prompts.new') }}</DialogTitle>
+                        <DialogTitle>{{ $t('editor.prompts.new') }}</DialogTitle>
                     </DialogHeader>
 
                     <div class="mt-5 space-y-4">
                         <Field :data-invalid="form.errors.name ? true : undefined">
-                            <FieldLabel for="prompt-name"><Eyebrow as="span">{{ $t('arcadia.editor.prompts.fields.name') }}</Eyebrow></FieldLabel>
+                            <FieldLabel for="prompt-name"><Eyebrow as="span">{{ $t('editor.prompts.fields.name') }}</Eyebrow></FieldLabel>
                             <Input id="prompt-name" v-model="form.name" type="text" maxlength="160" autocomplete="off" />
                             <FieldError v-if="form.errors.name">{{ form.errors.name }}</FieldError>
                         </Field>
                         <Field>
                             <FieldLabel for="prompt-description">
-                                <Eyebrow as="span">{{ $t('arcadia.editor.prompts.fields.description') }}</Eyebrow>
-                                <span class="text-xs font-normal text-ink-4">· {{ $t('arcadia.editor.optional') }}</span>
+                                <Eyebrow as="span">{{ $t('editor.prompts.fields.description') }}</Eyebrow>
+                                <span class="text-xs font-normal text-ink-4">· {{ $t('editor.common.optional') }}</span>
                             </FieldLabel>
                             <Textarea id="prompt-description" v-model="form.description" rows="3" />
                         </Field>
                     </div>
 
                     <DialogFooter class="mt-6">
-                        <Button type="button" variant="ghost" @click="creating = false">{{ $t('arcadia.editor.cancel') }}</Button>
-                        <Button type="submit" variant="brand" :disabled="form.processing">{{ $t('arcadia.editor.prompts.create') }}</Button>
+                        <Button type="button" variant="ghost" @click="creating = false">{{ $t('editor.common.cancel') }}</Button>
+                        <Button type="submit" variant="brand" :disabled="form.processing">{{ $t('editor.prompts.create') }}</Button>
                     </DialogFooter>
                 </form>
             </DialogContent>

@@ -59,12 +59,12 @@ const applyFilter = value => {
 </script>
 
 <template>
-    <EditorTitle :parts="[$t('arcadia.editor.settings.title'), $t('arcadia.editor.settings.tabs.logs')]" />
+    <EditorTitle :parts="[$t('editor.settings.title'), $t('editor.settings.tabs.logs')]" />
 
     <div class="py-6">
-        <EditorBreadcrumb :trail="[{ label: $t('arcadia.editor.settings.title') }]" />
+        <EditorBreadcrumb :trail="[{ label: $t('editor.settings.title') }]" />
 
-        <PageHeader :title="$t('arcadia.editor.settings.title')" :description="$t('arcadia.editor.settings.description')" />
+        <PageHeader :title="$t('editor.settings.title')" :description="$t('editor.settings.description')" />
 
         <SiteSettingsTabs active="logs" />
 
@@ -73,32 +73,32 @@ const applyFilter = value => {
                 <div class="min-w-0">
                     <Eyebrow as="h2" class="flex flex-wrap items-center gap-2">
                         <component :is="LEVEL[log.level].icon" :size="14" :class="LEVEL[log.level].text" aria-hidden="true" />
-                        {{ $t('arcadia.editor.settings.logs.title') }}
-                        <span v-if="log.exists" class="font-mono normal-case tracking-normal text-ink-4">{{ $t('arcadia.editor.settings.logs.size', { size: size(log.bytes) }) }} · {{ $t('arcadia.editor.settings.logs.environment', { env: log.environment }) }}</span>
-                        <span v-if="log.last_day" class="font-mono normal-case tracking-normal text-signal">· {{ $t('arcadia.editor.settings.logs.last_day', { count: log.last_day }) }}</span>
+                        {{ $t('editor.settings.logs.title') }}
+                        <span v-if="log.exists" class="font-mono normal-case tracking-normal text-ink-4">{{ $t('editor.settings.logs.size', { size: size(log.bytes) }) }} · {{ $t('editor.settings.logs.environment', { env: log.environment }) }}</span>
+                        <span v-if="log.last_day" class="font-mono normal-case tracking-normal text-signal">· {{ $t('editor.settings.logs.last_day', { count: log.last_day }) }}</span>
                     </Eyebrow>
-                    <p class="m-0 mt-1 max-w-prose text-xs text-ink-3">{{ $t('arcadia.editor.settings.logs.hint') }}</p>
+                    <p class="m-0 mt-1 max-w-prose text-xs text-ink-3">{{ $t('editor.settings.logs.hint') }}</p>
                 </div>
                 <Button type="button" variant="outline" size="sm" :disabled="loading" @click="reload">
-                    <RefreshCw :size="14" :class="loading ? 'animate-spin' : ''" aria-hidden="true" /> {{ $t('arcadia.editor.settings.health.refresh') }}
+                    <RefreshCw :size="14" :class="loading ? 'animate-spin' : ''" aria-hidden="true" /> {{ $t('editor.settings.health.refresh') }}
                 </Button>
             </div>
 
-            <p v-if="!log.exists" class="m-0 text-sm text-ink-3">{{ $t('arcadia.editor.settings.logs.missing') }}</p>
+            <p v-if="!log.exists" class="m-0 text-sm text-ink-3">{{ $t('editor.settings.logs.missing') }}</p>
             <template v-else>
                 <div class="mb-3 flex flex-wrap items-center justify-between gap-2">
                     <DateRangeFilter :model-value="current" :loading="loading" @update:model-value="applyFilter" />
-                    <span class="font-mono text-[11px] text-ink-4">{{ $t('arcadia.editor.settings.health.filter.showing', { shown: log.errors.length, total: log.in_range }) }}</span>
+                    <span class="font-mono text-[11px] text-ink-4">{{ $t('editor.settings.health.filter.showing', { shown: log.errors.length, total: log.in_range }) }}</span>
                 </div>
 
-                <p v-if="!log.errors.length" class="m-0 rounded-lg bg-well px-3 py-2.5 text-sm text-ink-3">{{ $t('arcadia.editor.settings.health.filter.empty') }}</p>
+                <p v-if="!log.errors.length" class="m-0 rounded-lg bg-well px-3 py-2.5 text-sm text-ink-3">{{ $t('editor.settings.health.filter.empty') }}</p>
                 <ul v-else class="m-0 grid max-h-[36rem] grid-cols-1 list-none gap-1.5 overflow-y-auto overscroll-contain p-0 pr-1">
                     <li v-for="(error, i) in log.errors" :key="`${error.at}-${i}`" class="rounded-lg bg-well px-3 py-2">
                         <p class="m-0 font-mono text-[10px] text-ink-4">{{ error.at }} · <span class="uppercase text-danger">{{ error.level }}</span></p>
                         <p class="m-0 mt-0.5 break-words font-mono text-[11px] text-ink-2">{{ error.message }}</p>
                     </li>
                 </ul>
-                <p v-if="log.in_range > log.errors.length" class="m-0 mt-2 text-[11px] text-ink-4">{{ $t('arcadia.editor.settings.health.filter.capped', { limit: log.limit }) }}</p>
+                <p v-if="log.in_range > log.errors.length" class="m-0 mt-2 text-[11px] text-ink-4">{{ $t('editor.settings.health.filter.capped', { limit: log.limit }) }}</p>
             </template>
         </section>
     </div>

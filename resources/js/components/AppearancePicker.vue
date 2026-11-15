@@ -21,7 +21,7 @@ const accent = defineModel('accent', { type: String, required: true })
 <template>
     <div class="grid gap-5">
         <fieldset class="m-0 min-w-0 border-0 p-0">
-            <legend class="mb-2 text-sm font-semibold text-ink">{{ $t('arcadia.appearance.palette') }}</legend>
+            <legend class="mb-2 text-sm font-semibold text-ink">{{ $t('appearance.palette') }}</legend>
             <div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
                 <label v-for="option in options.palettes" :key="option.value"
                        class="relative flex cursor-pointer items-center gap-2.5 rounded-control border p-2 text-sm text-ink-2 transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-focus"
@@ -40,7 +40,7 @@ const accent = defineModel('accent', { type: String, required: true })
         </fieldset>
 
         <fieldset class="m-0 min-w-0 border-0 p-0">
-            <legend class="mb-2 text-sm font-semibold text-ink">{{ $t('arcadia.appearance.accent') }}</legend>
+            <legend class="mb-2 text-sm font-semibold text-ink">{{ $t('appearance.accent') }}</legend>
             <div class="flex flex-wrap gap-2">
                 <label v-for="option in options.accents" :key="option.value" :title="option.label"
                        class="relative flex size-11 cursor-pointer items-center justify-center rounded-full border-2 transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-focus"

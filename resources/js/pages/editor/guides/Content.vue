@@ -161,63 +161,63 @@ const recordResearch = payload => {
 </script>
 
 <template>
-    <EditorTitle :parts="[guide.title, $t('arcadia.editor.content.title')]" />
+    <EditorTitle :parts="[guide.title, $t('editor.content.title')]" />
 
     <div class="py-6">
-        <EditorBreadcrumb :trail="[{ label: $t('arcadia.editor.guides.title'), route: 'guides.index' }, { label: guide.title }]" />
+        <EditorBreadcrumb :trail="[{ label: $t('editor.guides.title'), route: 'guides.index' }, { label: guide.title }]" />
 
         <!-- The header carries only what moves the version on — release it, or draft the next — and
              how it reads. The rest is the toolbar below, in two groups: which version, and its research. -->
-        <PageHeader :title="guide.title" :eyebrow="$t('arcadia.editor.content.title')">
+        <PageHeader :title="guide.title" :eyebrow="$t('editor.content.title')">
             <template #actions>
                 <!-- A new tab, so the owner keeps their place in the editor. -->
                 <a :href="editorRoute('preview', { guide, version: version.number })" target="_blank" rel="noopener"
                    :class="buttonVariants({ variant: 'outline', size: 'sm' })" class="no-underline">
                     <Eye :size="14" aria-hidden="true" />
-                    {{ $t('arcadia.editor.guides.preview') }}
+                    {{ $t('editor.guides.preview') }}
                 </a>
                 <Button v-if="editable" type="button" variant="brand" size="sm" @click="confirmingRelease = true">
                     <Rocket :size="14" aria-hidden="true" />
-                    {{ $t('arcadia.editor.versions.release.action') }}
+                    {{ $t('editor.versions.release.action') }}
                 </Button>
-                <Button v-if="version.latest && version.released" type="button" variant="brand" size="sm" @click="draftNext" :title="$t('arcadia.editor.versions.draft_next_hint')">
+                <Button v-if="version.latest && version.released" type="button" variant="brand" size="sm" @click="draftNext" :title="$t('editor.versions.draft_next_hint')">
                     <CopyPlus :size="14" aria-hidden="true" />
-                    {{ $t('arcadia.editor.versions.draft_next') }}
+                    {{ $t('editor.versions.draft_next') }}
                 </Button>
             </template>
         </PageHeader>
 
         <div class="panel mb-6 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 px-4 py-3">
-            <div role="group" :aria-label="$t('arcadia.editor.content.toolbar.versions')" class="flex flex-wrap items-center gap-2">
-                <Eyebrow as="span" class="mr-1 hidden sm:inline">{{ $t('arcadia.editor.content.toolbar.versions') }}</Eyebrow>
+            <div role="group" :aria-label="$t('editor.content.toolbar.versions')" class="flex flex-wrap items-center gap-2">
+                <Eyebrow as="span" class="mr-1 hidden sm:inline">{{ $t('editor.content.toolbar.versions') }}</Eyebrow>
                 <Select :model-value="String(version.number)" @update:model-value="number => showVersion(number)">
-                    <SelectTrigger size="sm" class="h-8 w-auto gap-2 data-[size=sm]:py-0" :aria-label="$t('arcadia.editor.versions.history')">
+                    <SelectTrigger size="sm" class="h-8 w-auto gap-2 data-[size=sm]:py-0" :aria-label="$t('editor.versions.history')">
                         <History :size="14" aria-hidden="true" />
                         <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem v-for="v in versions" :key="v.id" :value="String(v.number)">
-                            {{ $t('arcadia.editor.content.version', { number: v.number }) }} ·
-                            {{ v.released_at ? $t('arcadia.editor.content.released') : $t('arcadia.editor.content.draft') }}
+                            {{ $t('editor.content.version', { number: v.number }) }} ·
+                            {{ v.released_at ? $t('editor.content.released') : $t('editor.content.draft') }}
                         </SelectItem>
                     </SelectContent>
                 </Select>
                 <Link v-if="versions.length > 1" :href="editorRoute('compare', { guide })" :class="buttonVariants({ variant: 'ghost', size: 'sm' })" class="no-underline">
                     <GitCompare :size="14" aria-hidden="true" />
-                    {{ $t('arcadia.editor.compare.action') }}
+                    {{ $t('editor.compare.action') }}
                 </Link>
             </div>
 
             <!-- The AI's part, in the order the work goes: copy a prompt, then bring its answer in. -->
-            <div role="group" :aria-label="$t('arcadia.editor.content.toolbar.research')" class="flex flex-wrap items-center gap-2">
-                <Eyebrow as="span" class="mr-1 hidden sm:inline">{{ $t('arcadia.editor.content.toolbar.research') }}</Eyebrow>
+            <div role="group" :aria-label="$t('editor.content.toolbar.research')" class="flex flex-wrap items-center gap-2">
+                <Eyebrow as="span" class="mr-1 hidden sm:inline">{{ $t('editor.content.toolbar.research') }}</Eyebrow>
                 <Button type="button" variant="outline" size="sm" @click="openPrompts">
                     <ScrollText :size="14" aria-hidden="true" />
-                    {{ $t('arcadia.editor.prompts_hub.action') }}
+                    {{ $t('editor.prompts_hub.action') }}
                 </Button>
                 <Button v-if="version.latest" type="button" variant="outline" size="sm" @click="importing = true">
                     <FileJson :size="14" aria-hidden="true" />
-                    {{ $t('arcadia.editor.answer_import.action') }}
+                    {{ $t('editor.answer_import.action') }}
                 </Button>
             </div>
         </div>
@@ -228,57 +228,57 @@ const recordResearch = payload => {
 
         <p v-if="!version.latest" class="panel mb-6 flex flex-wrap items-center gap-2 p-4 text-sm text-ink-2">
             <History :size="16" class="shrink-0 text-accent" aria-hidden="true" />
-            {{ $t('arcadia.editor.versions.viewing_old') }}
-            <Link :href="editorRoute('content.show', { guide })" class="font-medium text-accent no-underline hover:underline">{{ $t('arcadia.editor.versions.latest') }}</Link>
+            {{ $t('editor.versions.viewing_old') }}
+            <Link :href="editorRoute('content.show', { guide })" class="font-medium text-accent no-underline hover:underline">{{ $t('editor.versions.latest') }}</Link>
         </p>
         <p v-else-if="version.released" class="panel mb-6 flex items-start gap-2 p-4 text-sm text-ink-2">
             <Lock :size="16" class="mt-0.5 shrink-0 text-accent" aria-hidden="true" />
-            {{ $t('arcadia.editor.content.released_notice') }}
+            {{ $t('editor.content.released_notice') }}
         </p>
 
         <VersionChanges v-if="version.number > 1" :changes="changes" />
 
         <section class="panel mb-6 p-5 sm:p-6">
-            <h2 class="m-0 font-display text-base font-semibold text-ink">{{ $t('arcadia.editor.content.sections.title') }}</h2>
-            <p class="mt-1 mb-0 text-sm text-ink-3">{{ $t('arcadia.editor.content.sections.hint') }}</p>
+            <h2 class="m-0 font-display text-base font-semibold text-ink">{{ $t('editor.content.sections.title') }}</h2>
+            <p class="mt-1 mb-0 text-sm text-ink-3">{{ $t('editor.content.sections.hint') }}</p>
 
             <div class="mt-4 flex flex-col gap-4">
                 <SectionRow v-for="(section, index) in sections" :key="section.id" :section="section"
                             :first="index === 0" :last="index === sections.length - 1" />
-                <p v-if="sections.length === 0" class="m-0 text-sm text-ink-4">{{ $t('arcadia.editor.content.sections.empty') }}</p>
+                <p v-if="sections.length === 0" class="m-0 text-sm text-ink-4">{{ $t('editor.content.sections.empty') }}</p>
             </div>
 
             <template v-if="editable">
                 <NodeForm v-if="addingSection" class="mt-4" node="sections" @done="addingSection = false" />
                 <Button v-else type="button" variant="outline" size="sm" class="mt-4" @click="addingSection = true">
                     <Plus :size="14" aria-hidden="true" />
-                    {{ $t('arcadia.editor.content.sections.add') }}
+                    {{ $t('editor.content.sections.add') }}
                 </Button>
             </template>
         </section>
 
-        <h2 class="mb-3 font-display text-base font-semibold text-ink">{{ $t('arcadia.editor.content.stages.title') }}</h2>
+        <h2 class="mb-3 font-display text-base font-semibold text-ink">{{ $t('editor.content.stages.title') }}</h2>
 
         <div class="flex flex-col gap-5">
             <StageBlock v-for="(stage, index) in stages" :key="stage.id" :stage="stage" :number="index + 1"
                         :first="index === 0" :last="index === stages.length - 1" />
-            <p v-if="stages.length === 0" class="panel m-0 p-5 text-sm text-ink-4">{{ $t('arcadia.editor.content.stages.empty') }}</p>
+            <p v-if="stages.length === 0" class="panel m-0 p-5 text-sm text-ink-4">{{ $t('editor.content.stages.empty') }}</p>
         </div>
 
         <template v-if="editable">
             <NodeForm v-if="addingStage" class="mt-5" node="stages" @done="addingStage = false" />
             <Button v-else type="button" variant="brand" class="mt-5" @click="addingStage = true">
                 <Plus :size="16" aria-hidden="true" />
-                {{ $t('arcadia.editor.content.stages.add') }}
+                {{ $t('editor.content.stages.add') }}
             </Button>
         </template>
 
         <FixDialog :item="fixing" @close="fixing = null" />
 
         <ConfirmDialog :open="confirmingRelease"
-                       :title="$t('arcadia.editor.versions.release.title', { number: version.number })"
-                       :body="$t('arcadia.editor.versions.release.body')"
-                       :confirm-label="$t('arcadia.editor.versions.release.confirm')"
+                       :title="$t('editor.versions.release.title', { number: version.number })"
+                       :body="$t('editor.versions.release.body')"
+                       :confirm-label="$t('editor.versions.release.confirm')"
                        :processing="releasing"
                        @confirm="release"
                        @cancel="confirmingRelease = false" />
@@ -286,27 +286,27 @@ const recordResearch = payload => {
         <Dialog :open="released !== null" @update:open="value => !value && (released = null)">
             <DialogContent v-if="released !== null" class="max-w-lg">
                 <DialogHeader>
-                    <DialogTitle>{{ $t('arcadia.editor.versions.released.title', { number: released }) }}</DialogTitle>
+                    <DialogTitle>{{ $t('editor.versions.released.title', { number: released }) }}</DialogTitle>
                     <DialogDescription>{{ props.guide.title }}</DialogDescription>
                 </DialogHeader>
 
                 <div class="grid gap-3">
-                    <p class="m-0 text-sm text-ink-3">{{ $t('arcadia.editor.versions.released.body') }}</p>
-                    <CodeBlock :code="props.guide.link" :copy-label="$t('arcadia.editor.guides.link.copy')" :copied-label="$t('arcadia.editor.guides.link.copied')" />
+                    <p class="m-0 text-sm text-ink-3">{{ $t('editor.versions.released.body') }}</p>
+                    <CodeBlock :code="props.guide.link" :copy-label="$t('editor.guides.link.copy')" :copied-label="$t('editor.guides.link.copied')" />
                     <!-- A guide set back to draft stays there through releases (VersionController::release). -->
-                    <Badge v-if="!props.guide.readable" variant="pending" class="justify-self-start">{{ $t('arcadia.editor.guides.link.not_published') }}</Badge>
+                    <Badge v-if="!props.guide.readable" variant="pending" class="justify-self-start">{{ $t('editor.guides.link.not_published') }}</Badge>
                 </div>
 
                 <DialogFooter>
-                    <Button type="button" variant="brand" @click="released = null">{{ $t('arcadia.editor.close') }}</Button>
+                    <Button type="button" variant="brand" @click="released = null">{{ $t('editor.common.close') }}</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
 
         <ConfirmDialog :open="pendingDelete !== null"
-                       :title="$t('arcadia.editor.content.delete.title')"
-                       :body="$t('arcadia.editor.content.delete.body')"
-                       :confirm-label="$t('arcadia.editor.content.delete.confirm')"
+                       :title="$t('editor.content.delete.title')"
+                       :body="$t('editor.content.delete.body')"
+                       :confirm-label="$t('editor.content.delete.confirm')"
                        :processing="deleting"
                        @confirm="confirmDelete"
                        @cancel="pendingDelete = null" />

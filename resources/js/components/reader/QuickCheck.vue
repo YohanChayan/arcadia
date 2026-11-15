@@ -46,7 +46,7 @@ const submit = async () => {
     try {
         outcome.value = await progress.check(props.lineKey, chosen.value, props.questions)
     } catch {
-        toast.error(trans('arcadia.reader.quick_check.failed'))
+        toast.error(trans('reader.quick_check.failed'))
     } finally {
         checking.value = false
     }
@@ -72,17 +72,17 @@ const tone = (question, option) => {
     <div data-quick-check class="mt-3 rounded-xl border border-guide-rule bg-guide-well p-4">
         <p class="m-0 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-guide-accent">
             <CircleHelp :size="14" aria-hidden="true" />
-            {{ $t('arcadia.reader.quick_check.title') }}
+            {{ $t('reader.quick_check.title') }}
         </p>
 
         <!-- Answered: nothing left to do here. -->
         <p v-if="done && !outcome" class="mt-2 mb-0 flex items-center gap-1.5 text-sm text-guide-ink-soft">
             <Check :size="15" class="text-guide-done" aria-hidden="true" />
-            {{ $t('arcadia.reader.quick_check.answered') }}
+            {{ $t('reader.quick_check.answered') }}
         </p>
 
         <template v-else>
-            <p v-if="!outcome" class="mt-1 mb-0 text-sm text-guide-ink-soft">{{ $t(progress?.readOnly ? 'arcadia.reader.quick_check.read_only' : locked ? 'arcadia.reader.quick_check.locked' : 'arcadia.reader.quick_check.lead') }}</p>
+            <p v-if="!outcome" class="mt-1 mb-0 text-sm text-guide-ink-soft">{{ $t(progress?.readOnly ? 'reader.quick_check.read_only' : locked ? 'reader.quick_check.locked' : 'reader.quick_check.lead') }}</p>
 
             <fieldset v-for="(question, q) in questions" :key="q" class="m-0 mt-3 border-0 p-0">
                 <legend class="mb-2 p-0 font-medium text-guide-ink">{{ question.prompt }}</legend>
@@ -104,23 +104,23 @@ const tone = (question, option) => {
             <div v-if="!idle" class="mt-4 flex flex-wrap items-center gap-3" aria-live="polite">
                 <button v-if="!outcome" type="button" :disabled="!ready || checking" @click="submit"
                         class="rounded-full bg-guide-accent px-5 py-2 text-sm font-semibold text-guide-on-accent disabled:opacity-50">
-                    {{ $t('arcadia.reader.quick_check.check') }}
+                    {{ $t('reader.quick_check.check') }}
                 </button>
                 <template v-else-if="outcome.passed">
                     <p class="m-0 flex items-center gap-1.5 text-sm font-semibold text-guide-done">
                         <Check :size="16" aria-hidden="true" />
-                        {{ $t('arcadia.reader.quick_check.right') }}
+                        {{ $t('reader.quick_check.right') }}
                     </p>
                     <button type="button" @click="emit('next')"
                             class="rounded-full bg-guide-accent px-5 py-2 text-sm font-semibold text-guide-on-accent">
-                        {{ $t('arcadia.reader.quick_check.next') }}
+                        {{ $t('reader.quick_check.next') }}
                     </button>
                 </template>
                 <template v-else>
-                    <p class="m-0 text-sm text-guide-ink-soft">{{ $t('arcadia.reader.quick_check.wrong') }}</p>
+                    <p class="m-0 text-sm text-guide-ink-soft">{{ $t('reader.quick_check.wrong') }}</p>
                     <button type="button" @click="retry"
                             class="rounded-full border border-guide-rule px-5 py-2 text-sm font-semibold text-guide-ink hover:border-guide-accent">
-                        {{ $t('arcadia.reader.quick_check.retry') }}
+                        {{ $t('reader.quick_check.retry') }}
                     </button>
                 </template>
             </div>

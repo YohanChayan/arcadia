@@ -103,7 +103,7 @@ enum ActivityFamily: string
 
     public function label(): string
     {
-        return __("arcadia.editor.activities.families.{$this->value}");
+        return __("editor.activities.families.{$this->value}");
     }
 
     /**

@@ -71,11 +71,11 @@ class VideoClip
     public static function messages(): array
     {
         return [
-            'clip_start.integer' => __('arcadia.editor.content.errors.clip_time'),
-            'clip_end.integer' => __('arcadia.editor.content.errors.clip_time'),
-            'clip_start.required_with' => __('arcadia.editor.content.errors.clip_start'),
-            'clip_end.gt' => __('arcadia.editor.content.errors.clip_end'),
-            'clip_evidence.required_with' => __('arcadia.editor.content.errors.clip_evidence'),
+            'clip_start.integer' => __('editor.content.errors.clip_time'),
+            'clip_end.integer' => __('editor.content.errors.clip_time'),
+            'clip_start.required_with' => __('editor.content.errors.clip_start'),
+            'clip_end.gt' => __('editor.content.errors.clip_end'),
+            'clip_evidence.required_with' => __('editor.content.errors.clip_evidence'),
         ];
     }
 

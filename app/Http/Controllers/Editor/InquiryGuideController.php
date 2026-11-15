@@ -19,6 +19,6 @@ class InquiryGuideController
         $guide = $start->handle($inquiry);
 
         return to_route(app()->getLocale().'.editor.content.show', ['guide' => $guide->id])
-            ->with('success', __('arcadia.editor.prompts.provenance.started'));
+            ->with('success', __('editor.prompts.provenance.started'));
     }
 }

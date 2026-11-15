@@ -24,7 +24,7 @@ defineProps({
     loginUrl: { type: String, required: true },
 })
 
-const base = 'arcadia.landing.sample.samples'
+const base = 'landing.sample.samples'
 
 const samples = [
     { key: 'excel', icon: FileSpreadsheet, hue: 'var(--aurora-1)' },
@@ -169,14 +169,14 @@ const complete = computed(() => progress.count(keys.value) === keys.value.length
 </script>
 
 <template>
-    <figure ref="figure" class="relative m-0 mx-auto w-full min-w-0 max-w-[25rem] lg:flex lg:max-w-none lg:items-center lg:gap-4" :aria-label="$t('arcadia.landing.sample.label')" :style="{ '--hue': sample.hue }"
+    <figure ref="figure" class="relative m-0 mx-auto w-full min-w-0 max-w-[25rem] lg:flex lg:max-w-none lg:items-center lg:gap-4" :aria-label="$t('landing.sample.label')" :style="{ '--hue': sample.hue }"
             @mouseenter="pause" @mouseleave="resume" @focusin="pause" @focusout="onFocusOut">
         <!-- Which goal the phone shows, each guide by its own title. On a wide screen, a stack to
              the phone's left, one under another, the chosen one nudged towards the phone. On a
              phone there is no room beside it, so one row above it that scrolls sideways, faded
              at its ends to say there is more. -->
         <div ref="picker" class="picker -mx-4 flex snap-x gap-2 overflow-x-auto px-4 pb-1 lg:mx-0 lg:mb-0 lg:w-44 lg:shrink-0 lg:snap-none lg:flex-col lg:overflow-visible lg:px-0 lg:pb-0"
-             role="group" :aria-label="$t('arcadia.landing.sample.pick')" @scroll.passive="onGoalsScroll">
+             role="group" :aria-label="$t('landing.sample.pick')" @scroll.passive="onGoalsScroll">
             <button v-for="option in samples" :key="option.key" type="button" :aria-pressed="current === option.key"
                     class="inline-flex shrink-0 snap-start items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium whitespace-nowrap transition-all duration-200 lg:items-start lg:rounded-2xl lg:py-2 lg:text-left lg:leading-snug lg:whitespace-normal"
                     :class="current === option.key ? 'tab-on border-transparent text-ink lg:translate-x-2' : 'border-rule bg-raised text-ink-3 hover:text-ink'"
@@ -191,7 +191,7 @@ const complete = computed(() => progress.count(keys.value) === keys.value.length
              below does not jump. -->
         <p aria-hidden="true" class="mt-2 mb-4 flex items-center justify-end gap-1 text-xs text-ink-4 transition-opacity duration-300 lg:hidden"
            :class="hasScrolledGoals ? 'opacity-0' : 'opacity-100'">
-            {{ $t('arcadia.landing.sample.swipe') }}
+            {{ $t('landing.sample.swipe') }}
             <ChevronsRight :size="14" class="nudge text-accent" />
         </p>
 
@@ -208,7 +208,7 @@ const complete = computed(() => progress.count(keys.value) === keys.value.length
                         <!-- The owner's way in, dressed as one of the phone's own status icons: there for
                              whoever looks, never in a visitor's way. -->
                         <a :href="loginUrl" class="-m-1.5 p-1.5 text-ink-4 no-underline transition-colors hover:text-ink-2"
-                           :aria-label="$t('arcadia.landing.sample.sign_in')" :title="$t('arcadia.landing.sample.sign_in')">
+                           :aria-label="$t('landing.sample.sign_in')" :title="$t('landing.sample.sign_in')">
                             <LockOpen :size="11" aria-hidden="true" />
                         </a>
                     </div>
@@ -224,7 +224,7 @@ const complete = computed(() => progress.count(keys.value) === keys.value.length
                                     <div class="goal mt-4 rounded-2xl p-3.5">
                                         <p class="m-0 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-guide-ink">
                                             <Target :size="14" aria-hidden="true" />
-                                            {{ $t('arcadia.landing.sample.goal') }}
+                                            {{ $t('landing.sample.goal') }}
                                         </p>
                                         <p class="mt-1 mb-0 text-sm font-medium leading-snug text-guide-ink">{{ $t(`${base}.${current}.goal`) }}</p>
                                     </div>
@@ -236,7 +236,7 @@ const complete = computed(() => progress.count(keys.value) === keys.value.length
                                     <Transition name="pop">
                                         <p v-if="complete" class="mt-3 mb-0 flex items-center gap-2 rounded-xl bg-guide-well px-3 py-2 text-sm font-semibold text-guide-done">
                                             <PartyPopper :size="16" aria-hidden="true" />
-                                            {{ $t('arcadia.landing.sample.complete') }}
+                                            {{ $t('landing.sample.complete') }}
                                         </p>
                                     </Transition>
                                 </header>
@@ -250,7 +250,7 @@ const complete = computed(() => progress.count(keys.value) === keys.value.length
 
             <!-- A <p>, not a <figcaption>: the caption sits in the phone's column, and a
                  figcaption must be the figure's own child. -->
-            <p class="mt-3 mb-0 text-center text-xs text-ink-4">{{ $t('arcadia.landing.sample.note') }}</p>
+            <p class="mt-3 mb-0 text-center text-xs text-ink-4">{{ $t('landing.sample.note') }}</p>
         </div>
     </figure>
 </template>

@@ -108,7 +108,7 @@ class SiteMailTest extends TestCase
             ->assertInertia(fn ($page) => $page
                 ->where('sent.in_range', 1)
                 ->where('sent.mails.0.subject', 'Just now')
-                ->where('sent.mails.0.kind', __('arcadia.editor.settings.mail.kinds.direct')));
+                ->where('sent.mails.0.kind', __('editor.settings.mail.kinds.direct')));
 
         $this->get('/es/editor/settings/mail?mail_range=7d')
             ->assertInertia(fn ($page) => $page

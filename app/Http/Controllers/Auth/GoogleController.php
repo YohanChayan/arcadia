@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Actions\Auth\AdmitGoogleAccount;
-use App\Services\ArcadiaSite;
+use App\Services\Site\Site;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,7 +26,7 @@ use Throwable;
  */
 class GoogleController
 {
-    public function redirect(ArcadiaSite $site): SymfonyRedirect
+    public function redirect(Site $site): SymfonyRedirect
     {
         try {
             // Always the account picker: a phone holds several Google accounts, and the one a
@@ -37,23 +37,23 @@ class GoogleController
         } catch (Throwable $e) {
             report($e);
 
-            return redirect()->route('login')->with('error', __('arcadia.auth.google.unavailable'));
+            return redirect()->route('login')->with('error', __('auth.google.unavailable'));
         }
     }
 
-    public function callback(Request $request, ArcadiaSite $site, AdmitGoogleAccount $admit): RedirectResponse
+    public function callback(Request $request, Site $site, AdmitGoogleAccount $admit): RedirectResponse
     {
         try {
             $google = $this->driver($site)->user();
         } catch (Throwable $e) {
             // A cancelled consent, a stale or forged state, Google unreachable.
-            return redirect()->route('login')->with('error', __('arcadia.auth.google.failed'));
+            return redirect()->route('login')->with('error', __('auth.google.failed'));
         }
 
         $user = $admit->handle($google, $site);
 
         if (! $user) {
-            return redirect()->route('login')->with('error', __('arcadia.auth.google.not_shared', ['email' => $google->getEmail()]));
+            return redirect()->route('login')->with('error', __('auth.google.not_shared', ['email' => $google->getEmail()]));
         }
 
         Auth::login($user, remember: true);
@@ -73,7 +73,7 @@ class GoogleController
         return redirect()->intended($site->homeAfterSignIn($user));
     }
 
-    private function driver(ArcadiaSite $site): AbstractProvider
+    private function driver(Site $site): AbstractProvider
     {
         /** @var AbstractProvider $driver */
         $driver = Socialite::driver('google');

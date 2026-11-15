@@ -52,20 +52,20 @@ const submit = () => {
     <form class="rounded-panel border border-accent/40 bg-well p-4" @submit.prevent="submit">
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <Field :data-invalid="form.errors.name ? true : undefined">
-                <FieldLabel :for="id('name')"><Eyebrow as="span">{{ $t('arcadia.editor.prompts.variables.name') }}</Eyebrow></FieldLabel>
+                <FieldLabel :for="id('name')"><Eyebrow as="span">{{ $t('editor.prompts.variables.name') }}</Eyebrow></FieldLabel>
                 <Input :id="id('name')" v-model="form.name" type="text" maxlength="40" autocomplete="off" class="font-mono" />
                 <FieldError v-if="form.errors.name">{{ form.errors.name }}</FieldError>
-                <FieldDescription v-else>{{ $t('arcadia.editor.prompts.variables.name_hint') }}</FieldDescription>
+                <FieldDescription v-else>{{ $t('editor.prompts.variables.name_hint') }}</FieldDescription>
             </Field>
 
             <Field :data-invalid="form.errors.label ? true : undefined">
-                <FieldLabel :for="id('label')"><Eyebrow as="span">{{ $t('arcadia.editor.prompts.variables.label') }}</Eyebrow></FieldLabel>
+                <FieldLabel :for="id('label')"><Eyebrow as="span">{{ $t('editor.prompts.variables.label') }}</Eyebrow></FieldLabel>
                 <Input :id="id('label')" v-model="form.label" type="text" maxlength="160" autocomplete="off" />
                 <FieldError v-if="form.errors.label">{{ form.errors.label }}</FieldError>
             </Field>
 
             <Field>
-                <FieldLabel :for="id('type')"><Eyebrow as="span">{{ $t('arcadia.editor.prompts.variables.type') }}</Eyebrow></FieldLabel>
+                <FieldLabel :for="id('type')"><Eyebrow as="span">{{ $t('editor.prompts.variables.type') }}</Eyebrow></FieldLabel>
                 <Select v-model="form.type">
                     <SelectTrigger :id="id('type')"><SelectValue /></SelectTrigger>
                     <SelectContent>
@@ -76,21 +76,21 @@ const submit = () => {
         </div>
 
         <Field class="mt-4" :data-invalid="form.errors.default_value ? true : undefined">
-            <FieldLabel :for="id('default')"><Eyebrow as="span">{{ $t('arcadia.editor.prompts.variables.default') }}</Eyebrow></FieldLabel>
+            <FieldLabel :for="id('default')"><Eyebrow as="span">{{ $t('editor.prompts.variables.default') }}</Eyebrow></FieldLabel>
             <Textarea v-if="form.type === 'longtext'" :id="id('default')" v-model="form.default_value" rows="3" />
             <Input v-else :id="id('default')" v-model="form.default_value" type="text" autocomplete="off" />
             <FieldError v-if="form.errors.default_value">{{ form.errors.default_value }}</FieldError>
-            <FieldDescription v-else>{{ $t('arcadia.editor.prompts.variables.default_hint') }}</FieldDescription>
+            <FieldDescription v-else>{{ $t('editor.prompts.variables.default_hint') }}</FieldDescription>
         </Field>
 
         <div class="mt-4 flex flex-wrap items-center justify-between gap-3">
             <div class="flex items-center gap-2">
                 <Checkbox :id="id('required')" v-model="form.required" />
-                <Label :for="id('required')" class="cursor-pointer font-normal text-ink-2">{{ $t('arcadia.editor.prompts.variables.required') }}</Label>
+                <Label :for="id('required')" class="cursor-pointer font-normal text-ink-2">{{ $t('editor.prompts.variables.required') }}</Label>
             </div>
             <div class="flex gap-2">
-                <Button type="button" variant="ghost" @click="emit('done')">{{ $t('arcadia.editor.cancel') }}</Button>
-                <Button type="submit" variant="brand" :disabled="form.processing">{{ $t('arcadia.editor.prompts.variables.save') }}</Button>
+                <Button type="button" variant="ghost" @click="emit('done')">{{ $t('editor.common.cancel') }}</Button>
+                <Button type="submit" variant="brand" :disabled="form.processing">{{ $t('editor.prompts.variables.save') }}</Button>
             </div>
         </div>
     </form>

@@ -43,12 +43,12 @@ const showBrief = ref(!props.item.is_available)
                 <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
                     <span class="text-sm font-medium text-ink">{{ item.title }}</span>
                     <Badge variant="neutral">{{ content.label('items', item.kind) }}</Badge>
-                    <Badge v-if="item.is_preview" variant="active">{{ $t('arcadia.editor.content.flags.preview') }}</Badge>
-                    <Badge v-if="!item.is_available" variant="off">{{ $t('arcadia.editor.content.flags.unavailable') }}</Badge>
+                    <Badge v-if="item.is_preview" variant="active">{{ $t('editor.content.flags.preview') }}</Badge>
+                    <Badge v-if="!item.is_available" variant="off">{{ $t('editor.content.flags.unavailable') }}</Badge>
                 </div>
                 <a v-if="isLink && item.url" :href="item.url" target="_blank" rel="noopener noreferrer"
                    class="mt-0.5 inline-flex max-w-full items-center gap-1 truncate text-xs text-ink-3 no-underline hover:text-accent"
-                   :aria-label="`${$t('arcadia.editor.content.actions.open')}: ${item.title}`">
+                   :aria-label="`${$t('editor.content.actions.open')}: ${item.title}`">
                     <ExternalLink :size="12" aria-hidden="true" />
                     <span class="truncate">{{ item.url }}</span>
                 </a>
@@ -58,7 +58,7 @@ const showBrief = ref(!props.item.is_available)
                 <p v-if="item.body" class="mt-1 mb-0 whitespace-pre-line text-sm text-ink-2">{{ item.body }}</p>
             </div>
             <span class="hidden pt-0.5 font-mono text-[11px] text-ink-4 sm:inline">{{ item.key }}</span>
-            <Button type="button" variant="ghost" size="icon-sm" @click="content.fix(item)" :aria-label="$t('arcadia.editor.versions.fix.action')" :title="$t('arcadia.editor.versions.fix.action')">
+            <Button type="button" variant="ghost" size="icon-sm" @click="content.fix(item)" :aria-label="$t('editor.versions.fix.action')" :title="$t('editor.versions.fix.action')">
                 <Wrench :size="14" aria-hidden="true" />
             </Button>
             <NodeToolbar node="items" :row="item" :first="first" :last="last" @edit="editing = true" />
@@ -68,7 +68,7 @@ const showBrief = ref(!props.item.is_available)
         <div v-if="hasBrief" class="mt-1.5">
             <button type="button" class="inline-flex items-center gap-1 text-xs font-medium text-ink-3 hover:text-accent"
                     :aria-expanded="showBrief" @click="showBrief = !showBrief">
-                {{ $t('arcadia.editor.content.brief.toggle') }}
+                {{ $t('editor.content.brief.toggle') }}
                 <ChevronDown :size="12" class="transition-transform" :class="showBrief ? 'rotate-180' : ''" aria-hidden="true" />
             </button>
             <ItemBrief v-if="showBrief" :item="item" class="mt-1.5" />

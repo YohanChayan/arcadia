@@ -34,11 +34,11 @@ const formatSize = bytes => bytes >= 1024 * 1024
                         <a :href="image.original" target="_blank" rel="noopener"
                            class="mt-0.5 flex items-center gap-1 text-ink-3 no-underline hover:text-accent">
                             <ExternalLink :size="12" aria-hidden="true" />
-                            {{ $t('arcadia.editor.images.download') }}
+                            {{ $t('editor.images.download') }}
                         </a>
                     </span>
                     <Button type="button" variant="ghost-danger" size="icon" class="size-8 shrink-0" :disabled="disabled"
-                            :aria-label="$t('arcadia.editor.images.remove.action')" :title="$t('arcadia.editor.images.remove.action')"
+                            :aria-label="$t('editor.images.remove.action')" :title="$t('editor.images.remove.action')"
                             @click="emit('remove', image)">
                         <Trash2 :size="14" aria-hidden="true" />
                     </Button>

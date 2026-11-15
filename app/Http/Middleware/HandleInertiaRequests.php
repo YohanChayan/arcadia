@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Services\ArcadiaSite;
+use App\Services\Site\Site;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
@@ -11,7 +11,7 @@ class HandleInertiaRequests extends Middleware
 {
     protected $rootView = 'app';
 
-    public function __construct(private readonly ArcadiaSite $site) {}
+    public function __construct(private readonly Site $site) {}
 
     /**
      * Determines the current asset version.

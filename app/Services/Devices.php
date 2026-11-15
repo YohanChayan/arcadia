@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Device;
 use App\Models\Membership;
 use App\Models\User;
+use App\Services\Site\Site;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -24,7 +25,7 @@ class Devices
 {
     public const REPLACE_EVERY_DAYS = 30;
 
-    public function __construct(private readonly ArcadiaSite $site) {}
+    public function __construct(private readonly Site $site) {}
 
     public function membership(User $user): ?Membership
     {
@@ -145,6 +146,6 @@ class Devices
             default => null,
         };
 
-        return implode(' · ', array_filter([$browser, $system])) ?: __('arcadia.devices.unknown');
+        return implode(' · ', array_filter([$browser, $system])) ?: __('devices.unknown');
     }
 }

@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Editor;
 use App\Models\Guide;
 use App\Models\Note;
 use App\Models\Reader;
-use App\Services\ArcadiaSite;
 use App\Services\GuidePresenter;
+use App\Services\Site\Site;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -23,7 +23,7 @@ use Inertia\Response;
  */
 class ReaderViewController
 {
-    public function __invoke(Guide $guide, Reader $reader, GuidePresenter $presenter, ArcadiaSite $site): Response
+    public function __invoke(Guide $guide, Reader $reader, GuidePresenter $presenter, Site $site): Response
     {
         abort_unless($guide->locale === app()->getLocale(), 404);
         abort_unless($reader->guide_id === $guide->id && $reader->user_id !== null, 404);

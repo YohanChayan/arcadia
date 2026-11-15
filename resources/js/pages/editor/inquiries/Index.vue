@@ -36,10 +36,10 @@ const props = defineProps({
 const editorRoute = useEditorRoute()
 
 const columns = computed(() => [
-    { key: 'topic', label: trans('arcadia.editor.inquiries.columns.topic') },
-    { key: 'contact', label: trans('arcadia.editor.inquiries.columns.contact') },
-    { key: 'status', label: trans('arcadia.editor.inquiries.columns.status') },
-    { key: 'when', label: trans('arcadia.editor.inquiries.columns.when'), align: 'right' },
+    { key: 'topic', label: trans('editor.inquiries.columns.topic') },
+    { key: 'contact', label: trans('editor.inquiries.columns.contact') },
+    { key: 'status', label: trans('editor.inquiries.columns.status') },
+    { key: 'when', label: trans('editor.inquiries.columns.when'), align: 'right' },
     { key: 'actions', label: '', align: 'right', width: '1%' },
 ])
 
@@ -73,7 +73,7 @@ const creating = ref(false)
 
 // Each stage with how many it would show, whatever stage is filtered now.
 const stageFilters = computed(() => [
-    { value: null, label: trans('arcadia.editor.inquiries.filters.all'), count: Object.values(props.stageCounts).reduce((sum, n) => sum + n, 0) },
+    { value: null, label: trans('editor.inquiries.filters.all'), count: Object.values(props.stageCounts).reduce((sum, n) => sum + n, 0) },
     ...props.stages.map(s => ({ value: s.value, label: s.label, count: props.stageCounts[s.value] ?? 0 })),
 ])
 
@@ -111,16 +111,16 @@ const goToPage = page => router.get(editorRoute('inquiries.index'), query({ page
 </script>
 
 <template>
-    <EditorTitle :parts="[$t('arcadia.editor.inquiries.title')]" />
+    <EditorTitle :parts="[$t('editor.inquiries.title')]" />
 
     <div class="py-6">
-        <EditorBreadcrumb :trail="[{ label: $t('arcadia.editor.inquiries.title') }]" />
+        <EditorBreadcrumb :trail="[{ label: $t('editor.inquiries.title') }]" />
 
-        <PageHeader :title="$t('arcadia.editor.inquiries.title')" :description="$t('arcadia.editor.inquiries.description')" :count="inquiries.total">
+        <PageHeader :title="$t('editor.inquiries.title')" :description="$t('editor.inquiries.description')" :count="inquiries.total">
             <template #actions>
                 <Button type="button" variant="brand" size="sm" @click="creating = true">
                     <Plus :size="14" aria-hidden="true" />
-                    {{ $t('arcadia.editor.inquiries.create.action') }}
+                    {{ $t('editor.inquiries.create.action') }}
                 </Button>
             </template>
         </PageHeader>
@@ -129,22 +129,22 @@ const goToPage = page => router.get(editorRoute('inquiries.index'), query({ page
 
         <div class="mb-3 flex flex-wrap items-center gap-2">
             <SearchField v-model="searchTerm" class="min-w-0 flex-1 basis-64 sm:max-w-md"
-                         :label="$t('arcadia.editor.inquiries.search')" :button-label="$t('arcadia.editor.inquiries.search_submit')"
+                         :label="$t('editor.inquiries.search')" :button-label="$t('editor.inquiries.search_submit')"
                          @search="search" />
             <Select v-model="kind">
-                <SelectTrigger class="w-auto min-w-44" :aria-label="$t('arcadia.editor.inquiries.filters.kind')"><SelectValue /></SelectTrigger>
+                <SelectTrigger class="w-auto min-w-44" :aria-label="$t('editor.inquiries.filters.kind')"><SelectValue /></SelectTrigger>
                 <SelectContent>
                     <SelectItem v-for="option in ['all', 'whatsapp', 'email']" :key="option" :value="option">
-                        {{ $t(`arcadia.editor.inquiries.filters.kinds.${option}`) }}
+                        {{ $t(`editor.inquiries.filters.kinds.${option}`) }}
                     </SelectItem>
                 </SelectContent>
             </Select>
             <Button v-if="filtered" type="button" variant="ghost" size="sm" @click="clearFilters">
-                {{ $t('arcadia.editor.inquiries.filters.clear') }}
+                {{ $t('editor.inquiries.filters.clear') }}
             </Button>
         </div>
 
-        <div role="group" :aria-label="$t('arcadia.editor.inquiries.filters.label')" class="mb-4 flex flex-wrap gap-1">
+        <div role="group" :aria-label="$t('editor.inquiries.filters.label')" class="mb-4 flex flex-wrap gap-1">
             <Button v-for="filter in stageFilters" :key="filter.value ?? 'all'" type="button" size="sm"
                     :variant="filters.stage === filter.value ? 'secondary' : 'ghost'"
                     :aria-pressed="filters.stage === filter.value"
@@ -155,8 +155,8 @@ const goToPage = page => router.get(editorRoute('inquiries.index'), query({ page
         </div>
 
         <DataTable :columns="columns" :rows="inquiries.data"
-                   :empty-title="filtered ? $t('arcadia.editor.inquiries.filters.empty') : $t('arcadia.editor.inquiries.empty.title')"
-                   :empty-hint="filtered ? '' : $t('arcadia.editor.inquiries.empty.hint')">
+                   :empty-title="filtered ? $t('editor.inquiries.filters.empty') : $t('editor.inquiries.empty.title')"
+                   :empty-hint="filtered ? '' : $t('editor.inquiries.empty.hint')">
             <template #row="{ row }">
                 <td class="px-4 py-3 align-top">
                     <p class="m-0 text-ink" :class="row.stage === 'pending' ? 'font-semibold' : ''">{{ row.topic }}</p>
@@ -165,14 +165,14 @@ const goToPage = page => router.get(editorRoute('inquiries.index'), query({ page
                     </p>
                     <!-- The account that asked: the email to assign the guide to. -->
                     <p v-if="row.account_email" class="mt-0.5 mb-0 inline-flex items-center gap-1 text-xs text-ink-3"
-                       :title="$t('arcadia.editor.inquiries.account')">
+                       :title="$t('editor.inquiries.account')">
                         <UserRound :size="12" aria-hidden="true" />
                         {{ row.account_email }}
                     </p>
                     <p v-if="row.guide" class="mt-1 mb-0">
                         <Link :href="editorRoute('content.show', { guide: row.guide.id })" class="inline-flex items-center gap-1 text-xs text-success no-underline hover:underline">
                             <BookOpen :size="12" aria-hidden="true" />
-                            {{ $t('arcadia.editor.prompts.provenance.guide_badge', { title: row.guide.title }) }}
+                            {{ $t('editor.prompts.provenance.guide_badge', { title: row.guide.title }) }}
                         </Link>
                     </p>
                 </td>
@@ -180,11 +180,11 @@ const goToPage = page => router.get(editorRoute('inquiries.index'), query({ page
                     <div class="flex items-center gap-1">
                         <a :href="row.reply_url" v-bind="row.contact_kind === 'whatsapp' ? { target: '_blank', rel: 'noopener noreferrer' } : {}"
                            class="inline-flex items-center gap-1.5 text-sm font-medium text-accent no-underline hover:underline"
-                           :title="$t(`arcadia.editor.inquiries.reply.${row.contact_kind}`)">
+                           :title="$t(`editor.inquiries.reply.${row.contact_kind}`)">
                             <component :is="row.contact_kind === 'whatsapp' ? MessageCircle : Mail" :size="14" aria-hidden="true" />
                             {{ row.contact }}
                         </a>
-                        <CopyButton :value="row.contact" :label="$t('arcadia.editor.inquiries.copy')" :copied-label="$t('arcadia.editor.inquiries.copied')" />
+                        <CopyButton :value="row.contact" :label="$t('editor.inquiries.copy')" :copied-label="$t('editor.inquiries.copied')" />
                     </div>
                 </td>
                 <td class="px-4 py-3 align-top">
@@ -197,17 +197,17 @@ const goToPage = page => router.get(editorRoute('inquiries.index'), query({ page
                         <Link v-if="row.guide" :href="editorRoute('content.show', { guide: row.guide.id })"
                               :class="buttonVariants({ variant: 'outline', size: 'sm' })" class="no-underline">
                             <BookOpen :size="14" aria-hidden="true" />
-                            {{ $t('arcadia.editor.inquiries.open_guide') }}
+                            {{ $t('editor.inquiries.open_guide') }}
                         </Link>
                         <Button v-else type="button" variant="outline" size="sm"
                                 :disabled="startingGuide === row.id" @click="startGuide(row)">
                             <BookPlus :size="14" aria-hidden="true" />
-                            {{ $t('arcadia.editor.prompts.provenance.start') }}
+                            {{ $t('editor.prompts.provenance.start') }}
                         </Button>
 
                         <DropdownMenu>
                             <DropdownMenuTrigger as-child>
-                                <Button type="button" variant="ghost" size="icon-sm" :aria-label="$t('arcadia.editor.inquiries.more')" :title="$t('arcadia.editor.inquiries.more')">
+                                <Button type="button" variant="ghost" size="icon-sm" :aria-label="$t('editor.inquiries.more')" :title="$t('editor.inquiries.more')">
                                     <MoreHorizontal :size="14" aria-hidden="true" />
                                 </Button>
                             </DropdownMenuTrigger>
@@ -215,13 +215,13 @@ const goToPage = page => router.get(editorRoute('inquiries.index'), query({ page
                                 <DropdownMenuItem as-child>
                                     <a :href="row.reply_url" v-bind="row.contact_kind === 'whatsapp' ? { target: '_blank', rel: 'noopener noreferrer' } : {}" class="no-underline">
                                         <component :is="row.contact_kind === 'whatsapp' ? MessageCircle : Mail" aria-hidden="true" />
-                                        {{ $t(`arcadia.editor.inquiries.reply.${row.contact_kind}`) }}
+                                        {{ $t(`editor.inquiries.reply.${row.contact_kind}`) }}
                                     </a>
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem variant="destructive" @select="pendingDelete = row">
                                     <Trash2 aria-hidden="true" />
-                                    {{ $t('arcadia.editor.inquiries.delete.action') }}
+                                    {{ $t('editor.inquiries.delete.action') }}
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
@@ -235,9 +235,9 @@ const goToPage = page => router.get(editorRoute('inquiries.index'), query({ page
         </DataTable>
 
         <ConfirmDialog :open="pendingDelete !== null"
-                       :title="$t('arcadia.editor.inquiries.delete.title')"
-                       :body="$t('arcadia.editor.inquiries.delete.body')"
-                       :confirm-label="$t('arcadia.editor.inquiries.delete.confirm')"
+                       :title="$t('editor.inquiries.delete.title')"
+                       :body="$t('editor.inquiries.delete.body')"
+                       :confirm-label="$t('editor.inquiries.delete.confirm')"
                        :processing="deleting"
                        @confirm="confirmDelete"
                        @cancel="pendingDelete = null" />

@@ -65,11 +65,11 @@ class PromptTemplateController
             'undeclared' => array_values(array_diff($renderer->placeholders($version), $version->variables->pluck('name')->all())),
             'kinds' => array_map(fn (PromptSectionKind $kind) => [
                 'value' => $kind->value,
-                'label' => __("arcadia.editor.prompts.kinds.{$kind->value}"),
+                'label' => __("editor.prompts.kinds.{$kind->value}"),
             ], PromptSectionKind::cases()),
             'types' => array_map(fn (PromptVariableType $type) => [
                 'value' => $type->value,
-                'label' => __("arcadia.editor.prompts.types.{$type->value}"),
+                'label' => __("editor.prompts.types.{$type->value}"),
             ], PromptVariableType::cases()),
             // For the "Probar" panel, which fills this version like a request's popup does.
             'fillVersion' => $options->version($version),
@@ -81,7 +81,7 @@ class PromptTemplateController
     {
         $template->update($request->validated());
 
-        return back()->with('success', __('arcadia.editor.prompts.flash.saved'));
+        return back()->with('success', __('editor.prompts.flash.saved'));
     }
 
     /** A template a guide was produced from keeps that guide's provenance: it is not deleted. */
@@ -92,6 +92,6 @@ class PromptTemplateController
         $template->delete();
 
         return to_route(app()->getLocale().'.editor.prompts.index')
-            ->with('success', __('arcadia.editor.prompts.flash.deleted'));
+            ->with('success', __('editor.prompts.flash.deleted'));
     }
 }

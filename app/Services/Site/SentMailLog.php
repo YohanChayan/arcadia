@@ -49,7 +49,7 @@ class SentMailLog
     /** "Guide shared", "Password reset" — or the class's own name for a mail not named in the lang file. */
     private function kind(?string $mailable): string
     {
-        $key = 'arcadia.editor.settings.mail.kinds.'.($mailable ? Str::snake(class_basename($mailable)) : 'direct');
+        $key = 'editor.settings.mail.kinds.'.($mailable ? Str::snake(class_basename($mailable)) : 'direct');
 
         return Lang::has($key) ? __($key) : class_basename((string) $mailable);
     }

@@ -189,7 +189,7 @@ class AssistantOrchestratorTest extends TestCase
 
         $this->assertSame(TurnStatus::FAILED, $turn->refresh()->status);
         $this->assertSame(['started', 'failed'], $this->channel->events);
-        $this->assertSame(__('arcadia.assistant.failed', [], 'es'), $this->channel->failure);
+        $this->assertSame(__('assistant.failed', [], 'es'), $this->channel->failure);
         $this->assertCount(0, $conversation->history(20));
         Speaker::assertNeverPrompted();
     }

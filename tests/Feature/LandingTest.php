@@ -52,18 +52,18 @@ class LandingTest extends TestCase
                 ->where('pageTitle', fn ($title) => str_starts_with($title, 'Arcadia · '))
                 ->where('metaDescription', fn ($text) => str_contains($text, 'Arcadia'))
                 ->where('ogImageAlt', fn ($text) => str_starts_with($text, 'Arcadia — '))
-                ->where('ogImage', "/img/arcadia/og-arcadia-2026-11-{$locale}.jpg")
+                ->where('ogImage', "/img/brand/og-arcadia-2026-11-{$locale}.jpg")
                 ->where('siteName', 'Arcadia')
                 ->where('noIndex', true));
 
             // A shared guide link previews as the sign-in, to a signed-out crawler: Arcadia's preview.
             $this->get('/login')->assertInertia(fn ($page) => $page
                 ->where('pageTitle', $signIn)
-                ->where('ogImage', "/img/arcadia/og-arcadia-2026-11-{$locale}.jpg")
+                ->where('ogImage', "/img/brand/og-arcadia-2026-11-{$locale}.jpg")
                 ->where('siteName', 'Arcadia'));
         }
 
-        $manifest = json_decode(file_get_contents(public_path('img/arcadia/site.webmanifest')), true);
+        $manifest = json_decode(file_get_contents(public_path('img/brand/site.webmanifest')), true);
         $this->assertSame(['Arcadia', 'Arcadia'], [$manifest['name'], $manifest['short_name']]);
 
         // No former host or old name left in what a visitor reads.

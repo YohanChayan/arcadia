@@ -18,13 +18,13 @@ class PromptVersionController
         $version = $draft->handle($template);
 
         return to_route(app()->getLocale().'.editor.prompts.show', [$template, 'version' => $version->number])
-            ->with('success', __('arcadia.editor.prompts.flash.versioned', ['number' => $version->number]));
+            ->with('success', __('editor.prompts.flash.versioned', ['number' => $version->number]));
     }
 
     public function update(PromptVersionRequest $request, PromptTemplate $template, int $version): RedirectResponse
     {
         $template->versions()->findOrFail($version)->update($request->validated());
 
-        return back()->with('success', __('arcadia.editor.prompts.flash.saved'));
+        return back()->with('success', __('editor.prompts.flash.saved'));
     }
 }

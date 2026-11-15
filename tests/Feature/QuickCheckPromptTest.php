@@ -79,7 +79,7 @@ class QuickCheckPromptTest extends TestCase
     {
         $this->fill()->assertOk()
             ->assertJsonPath('undeclared', [])
-            ->assertJson(fn ($json) => $json->where('prompt', fn ($prompt) => str_contains($prompt, __('arcadia.editor.prompts.fill.content_elsewhere')))->etc());
+            ->assertJson(fn ($json) => $json->where('prompt', fn ($prompt) => str_contains($prompt, __('editor.prompts.fill.content_elsewhere')))->etc());
 
         // Only this editor's own guides.
         $english = Guide::create(['locale' => 'en', 'title' => 'Excel', 'level' => Level::BASIC]);

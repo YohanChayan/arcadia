@@ -15,12 +15,12 @@ defineProps({
 </script>
 
 <template>
-    <EditorTitle :parts="[$t('arcadia.editor.guides.new')]" />
+    <EditorTitle :parts="[$t('editor.guides.new')]" />
 
     <div class="py-6">
-        <EditorBreadcrumb :trail="[{ label: $t('arcadia.editor.guides.title'), route: 'guides.index' }, { label: $t('arcadia.editor.guides.new') }]" />
+        <EditorBreadcrumb :trail="[{ label: $t('editor.guides.title'), route: 'guides.index' }, { label: $t('editor.guides.new') }]" />
 
-        <PageHeader :title="$t('arcadia.editor.guides.new')" />
-        <GuideForm v-bind="$props" :submit-label="$t('arcadia.editor.guides.save')" />
+        <PageHeader :title="$t('editor.guides.new')" />
+        <GuideForm v-bind="$props" :submit-label="$t('editor.guides.save')" />
     </div>
 </template>

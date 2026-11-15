@@ -35,6 +35,6 @@ class SettingsController
             ...$request->safe()->only(['step_min_minutes', 'step_max_minutes']),
         ])->save();
 
-        return back()->with('success', __('arcadia.editor.settings.flash.saved'));
+        return back()->with('success', __('editor.settings.flash.saved'));
     }
 }

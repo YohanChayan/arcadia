@@ -1,6 +1,6 @@
 {{--
     An account email — verify the address, reset the password — in Arcadia's brand
-    (`MailBrand`, via `ArcadiaAccountMail`): teal on navy.
+    (`MailBrand`, via `AccountMail`): teal on navy.
     Inline styles only: mail clients strip stylesheets, so nothing here can rely on `app.css`.
     The words arrive translated; this only lays them out.
 --}}

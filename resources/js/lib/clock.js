@@ -15,6 +15,6 @@ export const clipLabel = (start, end) => {
     }
 
     return end == null
-        ? trans('arcadia.reader.clip_from', { start: clock(start) })
-        : trans('arcadia.reader.clip', { start: clock(start), end: clock(end), minutes: Math.max(1, Math.round((end - start) / 60)) })
+        ? trans('reader.clip_from', { start: clock(start) })
+        : trans('reader.clip', { start: clock(start), end: clock(end), minutes: Math.max(1, Math.round((end - start) / 60)) })
 }

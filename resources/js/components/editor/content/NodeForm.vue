@@ -60,14 +60,14 @@ const submit = () => {
             <template v-for="field in visible" :key="field.name">
                 <div v-if="field.type === 'checkbox'" class="flex items-center gap-2">
                     <Checkbox :id="id(field.name)" v-model="form[field.name]" />
-                    <Label :for="id(field.name)" class="cursor-pointer font-normal text-ink-2">{{ $t(`arcadia.editor.content.fields.${field.name}`) }}</Label>
+                    <Label :for="id(field.name)" class="cursor-pointer font-normal text-ink-2">{{ $t(`editor.content.fields.${field.name}`) }}</Label>
                 </div>
 
                 <Field v-else :data-invalid="form.errors[field.name] ? true : undefined"
                        :class="field.type === 'textarea' || field.name === 'title' || field.type === 'url' ? 'sm:col-span-2' : ''">
                     <FieldLabel :for="id(field.name)">
-                        <Eyebrow as="span">{{ $t(`arcadia.editor.content.fields.${field.name}`) }}</Eyebrow>
-                        <span v-if="field.optional" class="text-xs text-ink-4">· {{ $t('arcadia.editor.optional') }}</span>
+                        <Eyebrow as="span">{{ $t(`editor.content.fields.${field.name}`) }}</Eyebrow>
+                        <span v-if="field.optional" class="text-xs text-ink-4">· {{ $t('editor.common.optional') }}</span>
                     </FieldLabel>
 
                     <Select v-if="field.type === 'select'" v-model="form[field.name]">
@@ -89,8 +89,8 @@ const submit = () => {
         <FieldError v-if="form.errors.parent_id" class="mt-2">{{ form.errors.parent_id }}</FieldError>
 
         <div class="mt-4 flex gap-2">
-            <Button type="submit" variant="brand" size="sm" :disabled="form.processing">{{ $t('arcadia.editor.content.actions.save') }}</Button>
-            <Button type="button" variant="outline" size="sm" @click="emit('done')">{{ $t('arcadia.editor.content.actions.cancel') }}</Button>
+            <Button type="submit" variant="brand" size="sm" :disabled="form.processing">{{ $t('editor.content.actions.save') }}</Button>
+            <Button type="button" variant="outline" size="sm" @click="emit('done')">{{ $t('editor.content.actions.cancel') }}</Button>
         </div>
     </form>
 </template>

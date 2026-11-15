@@ -45,7 +45,7 @@ class CategoryGuidesRequest extends FormRequest
                     ->count();
 
                 if ($filedElsewhere > 0) {
-                    $validator->errors()->add('guide_ids', trans_choice('arcadia.editor.vocabulary.categorizer.errors.filed_elsewhere', $filedElsewhere, ['count' => $filedElsewhere]));
+                    $validator->errors()->add('guide_ids', trans_choice('editor.vocabulary.categorizer.errors.filed_elsewhere', $filedElsewhere, ['count' => $filedElsewhere]));
                 }
             },
         ];
@@ -55,8 +55,8 @@ class CategoryGuidesRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'guide_ids.required' => __('arcadia.editor.vocabulary.categorizer.errors.none'),
-            'guide_ids.*.exists' => __('arcadia.editor.guides.errors.vocabulary'),
+            'guide_ids.required' => __('editor.vocabulary.categorizer.errors.none'),
+            'guide_ids.*.exists' => __('editor.guides.errors.vocabulary'),
         ];
     }
 }

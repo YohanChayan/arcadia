@@ -6,7 +6,7 @@ use App\Enums\GuideStatus;
 use App\Jobs\SendAccessRequestNotificationJob;
 use App\Models\AccessRequest;
 use App\Models\Guide;
-use App\Services\ArcadiaSite;
+use App\Services\Site\Site;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
@@ -18,7 +18,7 @@ use Illuminate\Http\Request;
  */
 class AccessRequestController
 {
-    public function __invoke(Request $request, string $token, ArcadiaSite $site): RedirectResponse
+    public function __invoke(Request $request, string $token, Site $site): RedirectResponse
     {
         $guide = Guide::query()
             ->where('link_token', $token)
@@ -45,6 +45,6 @@ class AccessRequestController
             SendAccessRequestNotificationJob::dispatch($accessRequest);
         }
 
-        return back()->with('success', __('arcadia.presentation.flash.requested'));
+        return back()->with('success', __('presentation.flash.requested'));
     }
 }

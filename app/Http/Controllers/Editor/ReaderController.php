@@ -139,7 +139,7 @@ class ReaderController
         $name = $request->validate(['name' => ['nullable', 'string', 'max:80']])['name'] ?? null;
         $names->handle($reader, $name);
 
-        return back()->with('success', __('arcadia.editor.readers.flash.renamed'));
+        return back()->with('success', __('editor.readers.flash.renamed'));
     }
 
     /** "Send again" — the reader says it never arrived. */
@@ -149,8 +149,8 @@ class ReaderController
         abort_unless($reader->guide_id === $guide->id, 404);
 
         return $tell->again($reader)
-            ? back()->with('success', __('arcadia.editor.readers.flash.resent', ['email' => $reader->email]))
-            : back()->with('error', __('arcadia.editor.readers.flash.not_readable'));
+            ? back()->with('success', __('editor.readers.flash.resent', ['email' => $reader->email]))
+            : back()->with('error', __('editor.readers.flash.not_readable'));
     }
 
     /**
@@ -176,7 +176,7 @@ class ReaderController
 
         $accessRequest->decide(AccessRequestStatus::DECLINED, $request->user());
 
-        return back()->with('success', __('arcadia.editor.readers.flash.dismissed'));
+        return back()->with('success', __('editor.readers.flash.dismissed'));
     }
 
     /** The owner's own note on a request — his record of the payment. Blank clears it. */
@@ -188,7 +188,7 @@ class ReaderController
         $note = $request->validate(['owner_note' => ['nullable', 'string', 'max:'.AccessRequest::MAX_MESSAGE]])['owner_note'] ?? null;
         $accessRequest->forceFill(['owner_note' => filled($note) ? trim($note) : null])->save();
 
-        return back()->with('success', __('arcadia.editor.readers.flash.note_saved'));
+        return back()->with('success', __('editor.readers.flash.note_saved'));
     }
 
     /** Open or close the guide for enrollment requests from its link. */
@@ -199,7 +199,7 @@ class ReaderController
         $open = $request->validate(['open' => ['required', 'boolean']])['open'];
         $guide->forceFill(['open_for_enrollment' => $open])->save();
 
-        return back()->with('success', __($open ? 'arcadia.editor.readers.flash.enrollment_opened' : 'arcadia.editor.readers.flash.enrollment_closed'));
+        return back()->with('success', __($open ? 'editor.readers.flash.enrollment_opened' : 'editor.readers.flash.enrollment_closed'));
     }
 
     /** Show the guide in the catalogue while it is open, or keep it to its link (ADR 0024). */
@@ -210,7 +210,7 @@ class ReaderController
         $listed = $request->validate(['listed' => ['required', 'boolean']])['listed'];
         $guide->forceFill(['in_catalogue' => $listed])->save();
 
-        return back()->with('success', __($listed ? 'arcadia.editor.readers.flash.catalogue_shown' : 'arcadia.editor.readers.flash.catalogue_hidden'));
+        return back()->with('success', __($listed ? 'editor.readers.flash.catalogue_shown' : 'editor.readers.flash.catalogue_hidden'));
     }
 
     public function destroy(Guide $guide, Reader $reader): RedirectResponse
@@ -221,16 +221,16 @@ class ReaderController
         // Kept, marked removed: their guide then tells them it is no longer available to them.
         $reader->delete();
 
-        return back()->with('success', __('arcadia.editor.readers.flash.removed', ['email' => $reader->email]));
+        return back()->with('success', __('editor.readers.flash.removed', ['email' => $reader->email]));
     }
 
     /** What adding said: told now, told once the guide can be opened, or not told. */
     private function addedFlash(Reader $reader, bool $sent): string
     {
         return match (true) {
-            $sent => 'arcadia.editor.readers.flash.added_and_told',
-            $reader->notify && $reader->notified_at === null => 'arcadia.editor.readers.flash.added_waiting',
-            default => 'arcadia.editor.readers.flash.added',
+            $sent => 'editor.readers.flash.added_and_told',
+            $reader->notify && $reader->notified_at === null => 'editor.readers.flash.added_waiting',
+            default => 'editor.readers.flash.added',
         };
     }
 

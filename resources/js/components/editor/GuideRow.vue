@@ -54,9 +54,9 @@ const presentation = computed(() => [
 ])
 
 const screens = computed(() => [
-    { key: 'content', href: editorRoute('content.show', { guide: props.guide.id }), icon: ListTree, label: trans('arcadia.editor.content.action') },
-    { key: 'readers', href: editorRoute('readers.index', { guide: props.guide.id }), icon: Users, label: trans('arcadia.editor.readers.action') },
-    { key: 'images', href: editorRoute('images.index', { guide: props.guide.id }), icon: ImageIcon, label: trans('arcadia.editor.images.action') },
+    { key: 'content', href: editorRoute('content.show', { guide: props.guide.id }), icon: ListTree, label: trans('editor.content.action') },
+    { key: 'readers', href: editorRoute('readers.index', { guide: props.guide.id }), icon: Users, label: trans('editor.readers.action') },
+    { key: 'images', href: editorRoute('images.index', { guide: props.guide.id }), icon: ImageIcon, label: trans('editor.images.action') },
 ])
 
 const formatDate = iso => new Date(iso).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })
@@ -67,12 +67,12 @@ const formatDate = iso => new Date(iso).toLocaleDateString(undefined, { day: 'nu
         :class="selected ? 'border-accent/50 bg-accent/5' : 'border-rule'">
         <div class="flex min-w-0 flex-1 items-center gap-3">
             <Checkbox :model-value="selected" @update:model-value="emit('toggle')"
-                      :aria-label="$t('arcadia.editor.guides.bulk.select_guide', { title: guide.title })" />
+                      :aria-label="$t('editor.guides.bulk.select_guide', { title: guide.title })" />
 
             <!-- The cover, small; it leads to the guide's images, as the card's did. -->
             <Link :href="editorRoute('images.index', { guide: guide.id })"
                   class="relative grid aspect-[1200/630] w-28 shrink-0 place-items-center overflow-hidden rounded-md border border-rule bg-raised text-ink-4 no-underline sm:w-36"
-                  :aria-label="$t('arcadia.editor.images.action')" :title="$t('arcadia.editor.images.action')">
+                  :aria-label="$t('editor.images.action')" :title="$t('editor.images.action')">
                 <img v-if="guide.cover" :src="guide.cover" alt="" width="1200" height="630" loading="lazy" class="absolute inset-0 size-full object-cover">
                 <ImageIcon v-else :size="20" aria-hidden="true" />
             </Link>
@@ -89,25 +89,25 @@ const formatDate = iso => new Date(iso).toLocaleDateString(undefined, { day: 'nu
                     {{ guide.title }}
                 </Link>
                 <p v-if="stateNote" class="m-0 mt-0.5 text-xs" :class="stateNote.tone">
-                    {{ $t(`arcadia.editor.guides.state.${stateNote.key}`) }}
+                    {{ $t(`editor.guides.state.${stateNote.key}`) }}
                 </p>
 
                 <div class="mt-2 flex flex-wrap items-baseline gap-x-4 gap-y-1 text-[11px] text-ink-4">
                     <span v-for="metric in metrics" :key="metric.key">
-                        {{ $t(`arcadia.editor.guides.columns.${metric.key}`) }}
+                        {{ $t(`editor.guides.columns.${metric.key}`) }}
                         <span class="font-mono text-xs tabular-nums" :class="metric.tone ?? 'text-ink'">{{ metric.value }}</span>
                     </span>
                     <span class="flex flex-wrap items-baseline gap-x-2">
-                        <span>{{ $t('arcadia.editor.guides.presentation') }}</span>
+                        <span>{{ $t('editor.guides.presentation') }}</span>
                         <span v-for="figure in presentation" :key="figure.key">
                             <span class="font-mono tabular-nums" :class="figure.tone">{{ figure.value }}</span>
-                            {{ $t(`arcadia.editor.home.presentations.${figure.key}`).toLowerCase() }}
+                            {{ $t(`editor.home.presentations.${figure.key}`).toLowerCase() }}
                         </span>
-                        <span v-if="!guide.open_for_enrollment">· {{ $t('arcadia.editor.home.presentations.closed') }}</span>
+                        <span v-if="!guide.open_for_enrollment">· {{ $t('editor.home.presentations.closed') }}</span>
                     </span>
                     <span class="font-mono"
-                          :title="`${$t('arcadia.editor.guides.columns.created')} ${formatDate(guide.created_at)} · ${$t('arcadia.editor.guides.columns.updated')} ${formatDate(guide.updated_at)}`">
-                        {{ $t('arcadia.editor.guides.columns.updated') }} {{ formatDate(guide.updated_at) }}
+                          :title="`${$t('editor.guides.columns.created')} ${formatDate(guide.created_at)} · ${$t('editor.guides.columns.updated')} ${formatDate(guide.updated_at)}`">
+                        {{ $t('editor.guides.columns.updated') }} {{ formatDate(guide.updated_at) }}
                     </span>
                 </div>
             </div>
@@ -121,26 +121,26 @@ const formatDate = iso => new Date(iso).toLocaleDateString(undefined, { day: 'nu
                 <component :is="screen.icon" :size="16" aria-hidden="true" />
             </Link>
             <Button type="button" variant="ghost" size="icon-sm" @click="emit('link')" :class="guide.readable ? 'text-accent' : 'text-ink-4'"
-                    :aria-label="$t('arcadia.editor.guides.link.action')" :title="$t('arcadia.editor.guides.link.action')">
+                    :aria-label="$t('editor.guides.link.action')" :title="$t('editor.guides.link.action')">
                 <Link2 :size="16" aria-hidden="true" />
             </Button>
 
             <span class="mx-1 h-5 w-px bg-rule" aria-hidden="true" />
 
             <!-- A disabled button shows no tooltip, so the reason sits on its wrapper. -->
-            <span :class="{ invisible: isUpToDate }" :title="hasNoContent ? $t('arcadia.editor.guides.publish.no_content') : $t('arcadia.editor.guides.publish.action')">
+            <span :class="{ invisible: isUpToDate }" :title="hasNoContent ? $t('editor.guides.publish.no_content') : $t('editor.guides.publish.action')">
                 <Button type="button" variant="success" size="icon-sm" :disabled="hasNoContent || isUpToDate" @click="emit('publish')"
-                        :aria-label="hasNoContent ? $t('arcadia.editor.guides.publish.no_content') : $t('arcadia.editor.guides.publish.action')">
+                        :aria-label="hasNoContent ? $t('editor.guides.publish.no_content') : $t('editor.guides.publish.action')">
                     <Send :size="16" aria-hidden="true" />
                 </Button>
             </span>
             <Link :href="editorRoute('guides.edit', guide.id)"
                   :class="buttonVariants({ variant: 'outline', size: 'icon-sm' })" class="no-underline"
-                  :aria-label="$t('arcadia.editor.guides.edit')" :title="$t('arcadia.editor.guides.edit')">
+                  :aria-label="$t('editor.guides.edit')" :title="$t('editor.guides.edit')">
                 <Pencil :size="14" aria-hidden="true" />
             </Link>
             <Button type="button" variant="danger" size="icon-sm" @click="emit('delete')"
-                    :aria-label="$t('arcadia.editor.guides.delete.action')" :title="$t('arcadia.editor.guides.delete.action')">
+                    :aria-label="$t('editor.guides.delete.action')" :title="$t('editor.guides.delete.action')">
                 <Trash2 :size="16" aria-hidden="true" />
             </Button>
         </div>

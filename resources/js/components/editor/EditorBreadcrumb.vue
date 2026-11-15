@@ -16,11 +16,11 @@ const props = defineProps({
 const editorRoute = useEditorRoute()
 
 const items = computed(() => [
-    { label: trans('arcadia.editor.nav.items.home'), href: editorRoute('home') },
+    { label: trans('editor.nav.items.home'), href: editorRoute('home') },
     ...props.trail.map(({ label, route, params }) => ({ label, href: route ? editorRoute(route, params) : null })),
 ])
 </script>
 
 <template>
-    <Breadcrumb :items="items" :label="$t('arcadia.editor.breadcrumb.label')" :back-label="$t('arcadia.editor.breadcrumb.back')" />
+    <Breadcrumb :items="items" :label="$t('editor.common.breadcrumb.label')" :back-label="$t('editor.common.breadcrumb.back')" />
 </template>

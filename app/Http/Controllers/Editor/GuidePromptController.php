@@ -35,7 +35,7 @@ class GuidePromptController
 
         if ($missing !== []) {
             throw ValidationException::withMessages([
-                'values' => __('arcadia.editor.prompts.fill.missing', ['names' => implode(', ', $missing)]),
+                'values' => __('editor.prompts.fill.missing', ['names' => implode(', ', $missing)]),
             ]);
         }
 

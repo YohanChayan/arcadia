@@ -7,7 +7,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { usePage, router } from '@inertiajs/vue3'
 import { PanelLeftClose, PanelLeft, MoreVertical, LogOut, UserPen } from '@lucide/vue'
-import ArcadiaMark from '@/components/ArcadiaMark.vue'
+import BrandMark from '@/components/BrandMark.vue'
 import { Button } from '@/components/ui/button'
 
 const props = defineProps({
@@ -56,7 +56,7 @@ const logout = () => router.post(route('logout'))
             <div class="space-y-6">
                 <div class="flex items-center justify-between pb-5 border-b border-rule">
                     <a :href="homeHref" class="block px-3 py-2 rounded-control transition-colors hover:bg-ink/5">
-                        <slot name="brand"><ArcadiaMark class="text-xl" /></slot>
+                        <slot name="brand"><BrandMark class="text-xl" /></slot>
                     </a>
                     <Button type="button" variant="ghost" size="icon" class="text-ink-3 hover:text-accent" :aria-label="$t('shell.collapse')" @click="open = false">
                         <PanelLeftClose :size="20" />

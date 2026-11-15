@@ -119,7 +119,7 @@ class GuideImportTest extends TestCase
         $this->assertTrue($problems->contains(fn ($p) => $p['place'] === 'Etapa 1 · tarjeta 1 · ítem 2 · kind'));
         $this->assertTrue($problems->contains(fn ($p) => str_ends_with($p['place'], 'ref')));
 
-        $this->preview($guide, 'no hay json aquí')->assertJsonPath('problems.0.message', __('arcadia.editor.import.errors.no_json', [], 'es'));
+        $this->preview($guide, 'no hay json aquí')->assertJsonPath('problems.0.message', __('editor.import.errors.no_json', [], 'es'));
     }
 
     public function test_only_a_json_file_is_read(): void
@@ -127,11 +127,11 @@ class GuideImportTest extends TestCase
         $guide = $this->guide();
         $url = "/es/editor/guides/{$guide->id}/import/preview";
 
-        $this->postJson($url, [])->assertJsonValidationErrors(['file' => __('arcadia.editor.import.errors.no_file', [], 'es')]);
+        $this->postJson($url, [])->assertJsonValidationErrors(['file' => __('editor.import.errors.no_file', [], 'es')]);
         $this->postJson($url, ['file' => $this->upload(json_encode($this->answer()), 'respuesta.txt')])
-            ->assertJsonValidationErrors(['file' => __('arcadia.editor.import.errors.not_json_file', [], 'es')]);
+            ->assertJsonValidationErrors(['file' => __('editor.import.errors.not_json_file', [], 'es')]);
         $this->postJson($url, ['file' => UploadedFile::fake()->create('respuesta.json', 600, 'application/json')])
-            ->assertJsonValidationErrors(['file' => __('arcadia.editor.import.errors.too_large', [], 'es')]);
+            ->assertJsonValidationErrors(['file' => __('editor.import.errors.too_large', [], 'es')]);
     }
 
     public function test_importing_writes_the_whole_tree_with_keys_minted_by_the_app(): void

@@ -12,7 +12,7 @@ use App\Models\Role;
 use App\Models\Setting;
 use App\Models\User;
 use App\Services\PromptRenderer;
-use Database\Seeders\ArcadiaFlyerPromptTemplateSeeder;
+use Database\Seeders\BrandFlyerPromptTemplateSeeder;
 use Database\Seeders\CoverPromptTemplateSeeder;
 use Database\Seeders\GuideFlyerPromptTemplateSeeder;
 use Database\Seeders\PromptTemplateSeeder;
@@ -348,8 +348,8 @@ class PromptFillTest extends TestCase
 
     public function test_the_arcadia_flyer_template_starts_filled_and_draws_no_empty_field(): void
     {
-        $this->seed(ArcadiaFlyerPromptTemplateSeeder::class);
-        $this->seed(ArcadiaFlyerPromptTemplateSeeder::class);
+        $this->seed(BrandFlyerPromptTemplateSeeder::class);
+        $this->seed(BrandFlyerPromptTemplateSeeder::class);
 
         $version = PromptTemplate::sole()->latestVersion();
         $defaults = $version->variables->pluck('default_value', 'name');
@@ -383,12 +383,12 @@ class PromptFillTest extends TestCase
 
     public function test_the_arcadia_flyer_seeded_before_its_second_text_gets_it_as_a_new_version(): void
     {
-        $template = PromptTemplate::create(['name' => ArcadiaFlyerPromptTemplateSeeder::NAME]);
+        $template = PromptTemplate::create(['name' => BrandFlyerPromptTemplateSeeder::NAME]);
         $first = $template->latestVersion();
         $first->sections()->create(['kind' => 'copy', 'title' => 'Texto exacto', 'body' => 'Cualquier dato que aparezca como «—» se omite.', 'position' => 1]);
 
-        $this->seed(ArcadiaFlyerPromptTemplateSeeder::class);
-        $this->seed(ArcadiaFlyerPromptTemplateSeeder::class);
+        $this->seed(BrandFlyerPromptTemplateSeeder::class);
+        $this->seed(BrandFlyerPromptTemplateSeeder::class);
 
         $this->assertSame(2, $template->versions()->count());
         $this->assertStringContainsString('«—»', $first->fresh()->sections()->sole()->body);

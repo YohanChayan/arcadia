@@ -9,10 +9,10 @@ use App\Enums\Palette;
 use App\Enums\PhraseMoment;
 use App\Models\Reader;
 use App\Services\Appearance;
-use App\Services\ArcadiaSite;
 use App\Services\GuideProgressSummary;
 use App\Services\MotivationPicker;
 use App\Services\ReadingStreak;
+use App\Services\Site\Site;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -25,7 +25,7 @@ use Inertia\Response;
  */
 class DashboardController
 {
-    public function __invoke(Request $request, ArcadiaSite $site, GuideProgressSummary $summary, MotivationPicker $motivation, ReadingStreak $streak): Response
+    public function __invoke(Request $request, Site $site, GuideProgressSummary $summary, MotivationPicker $motivation, ReadingStreak $streak): Response
     {
         $readers = Reader::query()
             ->where('user_id', $request->user()->id)
@@ -71,7 +71,7 @@ class DashboardController
                 ];
             })->values(),
             'appearanceOptions' => Appearance::options(),
-            'pageTitle' => __('arcadia.my_guides.meta.title'),
+            'pageTitle' => __('my_guides.meta.title'),
             'noIndex' => true,
         ]);
     }

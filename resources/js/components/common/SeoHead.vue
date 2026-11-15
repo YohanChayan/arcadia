@@ -7,7 +7,7 @@
  * which meant a change to the Twitter card shape was eleven edits and any page that missed
  * one disagreed with the rest silently — nothing renders differently, the tag is just wrong.
  *
- * The share image's absolute URL is built from the site's own domain (`ArcadiaSite::preview()`),
+ * The share image's absolute URL is built from the site's own domain (`Site::preview()`),
  * never the request host — a mirror must not preview itself.
  */
 import { computed } from 'vue'

@@ -8,10 +8,10 @@ use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\PrivacyController;
 use App\Http\Controllers\RootController;
-use App\Services\ArcadiaSite;
+use App\Services\Site\Site;
 use Illuminate\Support\Facades\Route;
 
-$site = app(ArcadiaSite::class);
+$site = app(Site::class);
 
 // The editor first, so its `/{locale}/editor` paths are matched before the public ones. Each file
 // reads the site as `$site`.

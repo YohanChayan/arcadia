@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'title' => 'Asistente de ventas',
+    'description' => 'Conversa con el asistente como lo haría un visitante y mira, turno a turno, qué pasajes leyó, cuánto interés vio y cuánto costó.',
+    'no_key' => 'El proveedor :provider no tiene clave configurada: el asistente no podrá responder.',
+    'models' => 'Planificador :planner · respuesta :speaker',
+    'cache_on' => 'caché de instrucciones activada (sin efecto en Gemini, que la aplica sola)',
+    'cache_off' => 'caché de instrucciones desactivada',
+    'metrics' => 'Métricas de la conversación',
+    'empty' => 'Escribe al asistente: aquí verás lo que decidió en cada turno.',
+    'turns' => 'Turnos',
+    'turn' => 'Turno :number',
+    'tabs' => ['passages' => 'Pasajes', 'engagement' => 'Interés', 'usage' => 'Consumo', 'conversions' => 'Conversiones'],
+    'no_passages' => 'Ningún pasaje encajó con este mensaje.',
+    'engagement_lead' => 'Interés del visitante en conseguir una guía, de 0 a 100, después de cada mensaje.',
+    'this_turn' => 'Este turno',
+    'conversation' => 'Conversación',
+    'input' => 'Tokens de entrada',
+    'cached' => 'De ellos, en caché',
+    'output' => 'Tokens de salida',
+    'cost' => 'Costo',
+    'not_reported' => 'no informado',
+    'no_price' => 'sin precio',
+    'no_conversions' => 'Todavía nadie aceptó una guía ofrecida.',
+];

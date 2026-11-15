@@ -94,7 +94,7 @@ const confirm = () => {
 
 <template>
     <div class="flex flex-col gap-4">
-            <p class="m-0 text-sm text-ink-3">{{ $t('arcadia.editor.import.lead') }}</p>
+            <p class="m-0 text-sm text-ink-3">{{ $t('editor.import.lead') }}</p>
 
             <div>
                 <input ref="fileInput" type="file" accept=".json,application/json" class="hidden" @change="pick">
@@ -105,15 +105,15 @@ const confirm = () => {
                         <FileJson :size="16" class="shrink-0 text-ink-3" aria-hidden="true" />
                         <span class="truncate font-mono text-xs">{{ file.name }}</span>
                     </p>
-                    <p v-else class="m-0 text-sm text-ink-3">{{ $t('arcadia.editor.import.drop') }}</p>
+                    <p v-else class="m-0 text-sm text-ink-3">{{ $t('editor.import.drop') }}</p>
                     <div class="flex flex-wrap items-center gap-2">
                         <Button type="button" variant="ghost" size="sm" @click="fileInput?.click()">
                             <FileUp :size="14" aria-hidden="true" />
-                            {{ file ? $t('arcadia.editor.import.change_file') : $t('arcadia.editor.import.file') }}
+                            {{ file ? $t('editor.import.change_file') : $t('editor.import.file') }}
                         </Button>
                         <Button type="button" variant="outline" size="sm" :disabled="!file || checking" @click="check">
                             <Spinner v-if="checking" class="size-3.5" />
-                            {{ $t('arcadia.editor.import.check') }}
+                            {{ $t('editor.import.check') }}
                         </Button>
                     </div>
                 </div>
@@ -121,13 +121,13 @@ const confirm = () => {
 
             <p v-if="fileError" class="m-0 text-sm text-danger">{{ fileError }}</p>
 
-            <p v-if="failed === 'check'" class="m-0 text-sm text-danger">{{ $t('arcadia.editor.import.errors.check_failed') }}</p>
+            <p v-if="failed === 'check'" class="m-0 text-sm text-danger">{{ $t('editor.import.errors.check_failed') }}</p>
 
             <!-- Problems: each at its place, to fix in the answer or to ask the AI again. -->
             <div v-if="preview?.problems?.length" class="rounded-control border border-danger/40 bg-danger/5 p-3">
                 <p class="m-0 flex items-center gap-1.5 text-sm font-semibold text-danger">
                     <TriangleAlert :size="15" aria-hidden="true" />
-                    {{ $t('arcadia.editor.import.problems', { count: preview.problems.length }) }}
+                    {{ $t('editor.import.problems', { count: preview.problems.length }) }}
                 </p>
                 <ul class="mt-2 mb-0 max-h-56 space-y-1 overflow-y-auto pl-5 text-sm text-ink-2">
                     <li v-for="(problem, index) in preview.problems" :key="index">
@@ -140,10 +140,10 @@ const confirm = () => {
             <div v-else-if="preview?.summary" class="rounded-control border border-success/40 bg-success/5 p-3 text-sm text-ink-2">
                 <p class="m-0 flex items-center gap-1.5 font-semibold text-success">
                     <CircleCheck :size="15" aria-hidden="true" />
-                    {{ $t('arcadia.editor.import.ready') }}
+                    {{ $t('editor.import.ready') }}
                 </p>
                 <p class="mt-2 mb-0">
-                    {{ $t('arcadia.editor.import.counts', {
+                    {{ $t('editor.import.counts', {
                         stages: preview.summary.stages,
                         items: preview.summary.items,
                         links: preview.summary.links,
@@ -153,35 +153,35 @@ const confirm = () => {
                     }) }}
                 </p>
                 <p v-if="preview.summary.title" class="mt-1 mb-0">
-                    <span class="text-ink-3">{{ $t('arcadia.editor.import.title_label') }}</span> {{ preview.summary.title }}
+                    <span class="text-ink-3">{{ $t('editor.import.title_label') }}</span> {{ preview.summary.title }}
                     <template v-if="preview.summary.level"> · {{ preview.summary.level }}</template>
                 </p>
                 <p v-if="preview.summary.goals.length" class="mt-1 mb-0 text-xs text-ink-3">
-                    {{ $t('arcadia.editor.import.goals', { goals: preview.summary.goals.join(' · ') }) }}
+                    {{ $t('editor.import.goals', { goals: preview.summary.goals.join(' · ') }) }}
                 </p>
                 <p class="mt-1 mb-0 text-xs text-ink-3">
-                    {{ preview.summary.greeting ? $t('arcadia.editor.import.with_greeting') : $t('arcadia.editor.import.no_greeting') }}
-                    · {{ preview.summary.curator_notes ? $t('arcadia.editor.import.with_notes') : $t('arcadia.editor.import.no_notes') }}
+                    {{ preview.summary.greeting ? $t('editor.import.with_greeting') : $t('editor.import.no_greeting') }}
+                    · {{ preview.summary.curator_notes ? $t('editor.import.with_notes') : $t('editor.import.no_notes') }}
                 </p>
 
                 <div class="mt-3 space-y-2 border-t border-rule pt-3">
                     <div class="flex items-center gap-2">
                         <Checkbox id="import-details" v-model="applyDetails" />
-                        <Label for="import-details" class="cursor-pointer font-normal text-ink-2">{{ $t('arcadia.editor.import.apply_details') }}</Label>
+                        <Label for="import-details" class="cursor-pointer font-normal text-ink-2">{{ $t('editor.import.apply_details') }}</Label>
                     </div>
                     <div v-if="preview.has_content" class="flex items-center gap-2">
                         <Checkbox id="import-replace" v-model="replace" />
-                        <Label for="import-replace" class="cursor-pointer font-normal text-warning">{{ $t('arcadia.editor.import.replace') }}</Label>
+                        <Label for="import-replace" class="cursor-pointer font-normal text-warning">{{ $t('editor.import.replace') }}</Label>
                     </div>
                 </div>
             </div>
 
-            <p v-if="failed === 'import'" class="m-0 text-sm text-danger">{{ $t('arcadia.editor.import.errors.import_failed') }}</p>
+            <p v-if="failed === 'import'" class="m-0 text-sm text-danger">{{ $t('editor.import.errors.import_failed') }}</p>
 
             <div class="flex justify-end">
                 <Button type="button" variant="brand" :disabled="!preview?.summary || (preview.has_content && !replace) || importing" @click="confirm">
                     <Spinner v-if="importing" class="size-3.5" />
-                    {{ $t('arcadia.editor.import.confirm') }}
+                    {{ $t('editor.import.confirm') }}
                 </Button>
             </div>
     </div>

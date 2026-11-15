@@ -149,7 +149,7 @@ export function useAssistantChat(options: AssistantChatOptions): AssistantChat {
                 message:
                     error instanceof Error && error.message !== ''
                         ? error.message
-                        : trans('arcadia.assistant.failed'),
+                        : trans('assistant.failed'),
             };
         } finally {
             inFlight = null;
@@ -206,7 +206,7 @@ function parseStreamEvent(event: ServerSentEvent): AssistantStreamEvent | null {
                 message:
                     typeof payload.message === 'string'
                         ? payload.message
-                        : trans('arcadia.assistant.failed'),
+                        : trans('assistant.failed'),
             };
         default:
             return null;
@@ -216,11 +216,11 @@ function parseStreamEvent(event: ServerSentEvent): AssistantStreamEvent | null {
 // What a refused request says: a validation or throttle message from Laravel, or ours.
 async function failureMessage(response: Response): Promise<string> {
     if (response.status === 419) {
-        return trans('arcadia.assistant.expired');
+        return trans('assistant.expired');
     }
 
     if (response.status === 429) {
-        return trans('arcadia.assistant.too_many');
+        return trans('assistant.too_many');
     }
 
     try {
@@ -239,7 +239,7 @@ async function failureMessage(response: Response): Promise<string> {
         // Not JSON — an HTML error page; the generic message below says enough.
     }
 
-    return trans('arcadia.assistant.failed');
+    return trans('assistant.failed');
 }
 
 // Laravel's CSRF cookie, which Inertia's own client sends for every other request.

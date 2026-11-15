@@ -46,7 +46,7 @@ const submit = () => {
     <form class="rounded-panel border border-accent/40 bg-well p-4" @submit.prevent="submit">
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-[14rem_1fr]">
             <Field>
-                <FieldLabel :for="id('kind')"><Eyebrow as="span">{{ $t('arcadia.editor.prompts.fields.kind') }}</Eyebrow></FieldLabel>
+                <FieldLabel :for="id('kind')"><Eyebrow as="span">{{ $t('editor.prompts.fields.kind') }}</Eyebrow></FieldLabel>
                 <Select v-model="form.kind">
                     <SelectTrigger :id="id('kind')"><SelectValue /></SelectTrigger>
                     <SelectContent>
@@ -57,8 +57,8 @@ const submit = () => {
 
             <Field :data-invalid="form.errors.title ? true : undefined">
                 <FieldLabel :for="id('title')">
-                    <Eyebrow as="span">{{ $t('arcadia.editor.prompts.fields.title') }}</Eyebrow>
-                    <span class="text-xs font-normal text-ink-4">· {{ $t('arcadia.editor.optional') }}</span>
+                    <Eyebrow as="span">{{ $t('editor.prompts.fields.title') }}</Eyebrow>
+                    <span class="text-xs font-normal text-ink-4">· {{ $t('editor.common.optional') }}</span>
                 </FieldLabel>
                 <Input :id="id('title')" v-model="form.title" type="text" maxlength="160" autocomplete="off" />
                 <FieldError v-if="form.errors.title">{{ form.errors.title }}</FieldError>
@@ -66,16 +66,16 @@ const submit = () => {
         </div>
 
         <Field class="mt-4" :data-invalid="form.errors.body ? true : undefined">
-            <FieldLabel :for="id('body')"><Eyebrow as="span">{{ $t('arcadia.editor.prompts.fields.body') }}</Eyebrow></FieldLabel>
+            <FieldLabel :for="id('body')"><Eyebrow as="span">{{ $t('editor.prompts.fields.body') }}</Eyebrow></FieldLabel>
             <Textarea :id="id('body')" v-model="form.body" rows="10" class="font-mono text-sm"
                       :aria-invalid="form.errors.body ? 'true' : undefined" />
             <FieldError v-if="form.errors.body">{{ form.errors.body }}</FieldError>
-            <FieldDescription v-else>{{ $t('arcadia.editor.prompts.fields.body_hint') }}</FieldDescription>
+            <FieldDescription v-else>{{ $t('editor.prompts.fields.body_hint') }}</FieldDescription>
         </Field>
 
         <div class="mt-4 flex justify-end gap-2">
-            <Button type="button" variant="ghost" @click="emit('done')">{{ $t('arcadia.editor.cancel') }}</Button>
-            <Button type="submit" variant="brand" :disabled="form.processing">{{ $t('arcadia.editor.prompts.save_section') }}</Button>
+            <Button type="button" variant="ghost" @click="emit('done')">{{ $t('editor.common.cancel') }}</Button>
+            <Button type="submit" variant="brand" :disabled="form.processing">{{ $t('editor.prompts.save_section') }}</Button>
         </div>
     </form>
 </template>

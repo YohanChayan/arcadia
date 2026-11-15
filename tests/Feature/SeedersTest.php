@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Guide;
 use App\Models\User;
-use App\Services\ArcadiaSite;
+use App\Services\Site\Site;
 use Database\Seeders\DatabaseSeeder;
 use Database\Seeders\DemoSeeder;
 use Database\Seeders\UserSeeder;
@@ -31,7 +31,7 @@ class SeedersTest extends TestCase
         $this->seedAll();
         $owner = User::firstWhere('email', 'yhndevside@gmail.com');
 
-        $this->assertTrue(app(ArcadiaSite::class)->admits($owner));
+        $this->assertTrue(app(Site::class)->admits($owner));
 
         $this->actingAs($owner)->get('/es/editor/guides')
             ->assertOk()

@@ -148,6 +148,6 @@ class GuideVisitsTest extends TestCase
     {
         $this->get('/privacidad')->assertOk()->assertInertia(fn ($page) => $page->component('Privacy'));
 
-        $this->assertStringContainsString('una vez por navegador y día', __('arcadia.privacy.sections.visits.body', [], 'es'));
+        $this->assertStringContainsString('una vez por navegador y día', __('privacy.sections.visits.body', [], 'es'));
     }
 }

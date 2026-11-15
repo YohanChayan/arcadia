@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\PromptTemplate;
-use Database\Seeders\ArcadiaFlyerPromptTemplateSeeder;
+use Database\Seeders\BrandFlyerPromptTemplateSeeder;
 use Database\Seeders\CoverPromptTemplateSeeder;
 use Database\Seeders\GuideFlyerPromptTemplateSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -38,14 +38,14 @@ class BrandNameTest extends TestCase
 
     public function test_the_web_manifest_names_arcadia(): void
     {
-        $manifest = json_decode(file_get_contents(public_path('img/arcadia/site.webmanifest')), true);
+        $manifest = json_decode(file_get_contents(public_path('img/brand/site.webmanifest')), true);
 
         $this->assertSame(['Arcadia', 'Arcadia'], [$manifest['name'], $manifest['short_name']]);
     }
 
     public function test_no_seeded_prompt_names_the_old_brand_and_the_spanish_word_survives(): void
     {
-        $this->seed([CoverPromptTemplateSeeder::class, GuideFlyerPromptTemplateSeeder::class, ArcadiaFlyerPromptTemplateSeeder::class]);
+        $this->seed([CoverPromptTemplateSeeder::class, GuideFlyerPromptTemplateSeeder::class, BrandFlyerPromptTemplateSeeder::class]);
 
         $text = PromptTemplate::with('versions.sections', 'versions.variables')->get()
             ->flatMap(fn ($template) => [$template->name, $template->description, ...$template->versions->flatMap(fn ($version) => [
@@ -58,6 +58,6 @@ class BrandNameTest extends TestCase
 
         $this->assertDoesNotMatchRegularExpression(self::OLD_NAME, $text);
         $this->assertStringContainsString('Arcadia', $text);
-        $this->assertSame('Flyer de Arcadia — imagen', ArcadiaFlyerPromptTemplateSeeder::NAME);
+        $this->assertSame('Flyer de Arcadia — imagen', BrandFlyerPromptTemplateSeeder::NAME);
     }
 }
