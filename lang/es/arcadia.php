@@ -561,16 +561,22 @@ return [
                 'clear' => 'Quitar selección',
                 'publish' => 'Publicar',
                 'draft' => 'Pasar a borrador',
+                'catalogue' => 'Catálogo',
+                'list' => 'Listar en el catálogo',
+                'unlist' => 'Quitar del catálogo',
                 'delete' => 'Eliminar',
                 'checking' => 'Revisando las guías…',
                 'more' => 'y :count más',
                 'titles' => [
                     'publish' => '{1} ¿Publicar 1 guía?|[2,*] ¿Publicar :count guías?',
                     'draft' => '{1} ¿Pasar 1 guía a borrador?|[2,*] ¿Pasar :count guías a borrador?',
+                    'list' => '{1} ¿Listar 1 guía en el catálogo?|[2,*] ¿Listar :count guías en el catálogo?',
+                    'unlist' => '{1} ¿Quitar 1 guía del catálogo?|[2,*] ¿Quitar :count guías del catálogo?',
                     'delete' => '{1} ¿Eliminar 1 guía?|[2,*] ¿Eliminar :count guías?',
                 ],
                 'bodies' => [
                     'draft' => 'Sus lectores dejan de poder abrirlas hasta que las vuelvas a publicar. Sus versiones y su contenido se conservan.',
+                    'unlist' => 'Dejan de aparecer en el catálogo. Siguen abiertas a inscripción para quien tenga su enlace.',
                     'delete' => 'Se eliminan con todas sus versiones, su contenido y sus imágenes. Quien tenga su enlace dejará de poder abrirlas. No se puede deshacer.',
                 ],
                 // What publishing does to each guide, before it is confirmed (`GuidePublishing`).
@@ -580,10 +586,19 @@ return [
                     'ready' => 'Ya están publicadas y al día: no cambian.',
                     'no_content' => 'Sin contenido: no se pueden publicar y se quedan como están.',
                 ],
+                // What listing does to each guide, before it is confirmed (`GuideListing`).
+                'list_groups' => [
+                    'lists' => 'Se abren a inscripción y aparecen en el catálogo.',
+                    'awaits_publishing' => 'Aún no están publicadas: quedan marcadas y aparecerán en el catálogo cuando las publiques.',
+                    'ready' => 'Ya aparecen en el catálogo: no cambian.',
+                ],
                 'nothing' => 'Ninguna de estas guías tiene contenido que publicar.',
+                'nothing_to_list' => 'Todas estas guías ya aparecen en el catálogo.',
                 'confirm' => [
                     'publish' => 'Publicar',
                     'draft' => 'Pasar a borrador',
+                    'list' => 'Listar',
+                    'unlist' => 'Quitar del catálogo',
                     'delete' => 'Eliminar',
                 ],
                 'flash' => [
@@ -591,6 +606,9 @@ return [
                     'released' => '{1} 1 con su borrador publicado como versión nueva.|[2,*] :count con su borrador publicado como versión nueva.',
                     'skipped' => '{1} 1 omitida por no tener contenido.|[2,*] :count omitidas por no tener contenido.',
                     'drafted' => '{0} Ninguna guía estaba publicada.|{1} 1 guía pasada a borrador.|[2,*] :count guías pasadas a borrador.',
+                    'listed' => '{0} Ninguna guía nueva en el catálogo.|{1} 1 guía listada en el catálogo.|[2,*] :count guías listadas en el catálogo.',
+                    'awaiting' => '{1} 1 aparecerá cuando la publiques.|[2,*] :count aparecerán cuando las publiques.',
+                    'unlisted' => '{0} Ninguna guía estaba en el catálogo.|{1} 1 guía quitada del catálogo.|[2,*] :count guías quitadas del catálogo.',
                     'deleted' => '{0} Ninguna guía eliminada.|{1} 1 guía eliminada.|[2,*] :count guías eliminadas.',
                 ],
             ],

@@ -8,8 +8,9 @@
 # streams the dump back gzipped. It needs the admin user, which runs Docker; `agent-ro` cannot
 # read every table, so it cannot make a dump.
 #
-# Locally, from the repository root with the stack up: the database is dropped and recreated,
-# the dump imported as root, sessions, cache and queued jobs emptied (production's are of no use
+# Locally, from the repository root with the stack up: the database is saved to
+# storage/app/db-dumps/arcadia-local-<date>.sql.gz (the five newest kept), then dropped and
+# recreated, the dump imported as root, sessions, cache and queued jobs emptied (production's are of no use
 # here), migrations newer than production run, and agent_ro's grants re-applied.
 #
 #   --yes          do not ask before replacing the local database
@@ -17,7 +18,7 @@
 #   --from <file>  import a dump kept earlier instead of fetching one; no SSH, the file is kept
 set -euo pipefail
 
-host="${ARCADIA_PROD_SSH:yhndev-}"
+host="${ARCADIA_PROD_SSH:-yhndev}"
 assume_yes=false
 keep=false
 from=""
@@ -60,8 +61,12 @@ if [[ -n "$from" ]]; then
     keep=true
 fi
 
+# A failed run keeps the dump: after the drop it is the only copy left to import again.
 cleanup() {
-    if [[ "$keep" != true ]]; then
+    local status=$?
+    if [[ $status -ne 0 && -s "$dump" ]]; then
+        echo "Dump kept at $dump (import it with --from)." >&2
+    elif [[ "$keep" != true ]]; then
         rm -f "$dump"
     fi
 }
@@ -97,6 +102,21 @@ mysql_root() {
     docker compose exec -T mysql sh -c 'MYSQL_PWD="$MYSQL_ROOT_PASSWORD" exec mysql -uroot --default-character-set=utf8mb4 "$@"' -- "$@"
 }
 
+# The local database is never dropped unsaved: it goes to a file first, checked like the dump,
+# and only the five newest of those are kept. Restore one with --from.
+has_local="$(mysql_root -N -e "SELECT COUNT(*) FROM information_schema.schemata WHERE schema_name = 'arcadia'")"
+if [[ "$has_local" == 1 ]]; then
+    backup="$dump_dir/arcadia-local-$(date +%Y%m%d-%H%M%S).sql.gz"
+    echo "→ Backing up the local database to $backup…"
+    docker compose exec -T mysql sh -c 'MYSQL_PWD="$MYSQL_ROOT_PASSWORD" exec mysqldump -uroot --single-transaction --quick --no-tablespaces --routines --triggers --set-gtid-purged=OFF --default-character-set=utf8mb4 arcadia' \
+        | gzip > "$backup"
+    if ! gzip -dc "$backup" | tail -n 1 | grep -q 'Dump completed'; then
+        echo "The local backup is incomplete; nothing was replaced." >&2
+        exit 1
+    fi
+    ls -1t "$dump_dir"/arcadia-local-*.sql.gz | tail -n +6 | while read -r old; do rm -f "$old"; done
+fi
+
 echo "→ Recreating the local database…"
 mysql_root -e "DROP DATABASE IF EXISTS arcadia; CREATE DATABASE arcadia CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 
@@ -124,4 +144,7 @@ else
 fi
 if [[ "$keep" == true ]]; then
     echo "  Dump kept at $dump"
+fi
+if [[ -n "${backup:-}" ]]; then
+    echo "  Your previous local database: $backup (restore it with --from)"
 fi

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Editor;
 
+use App\Actions\Guides\ListGuide;
 use App\Actions\Guides\PublishGuide;
 use App\Enums\GuideBulkAction;
+use App\Enums\GuideListing;
 use App\Enums\GuidePublishing;
 use App\Enums\GuideStatus;
 use App\Http\Requests\BulkGuideRequest;
@@ -13,49 +15,64 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
 
 /**
- * One action on many guides from the guides list: publish, take down, or delete.
+ * One action on many guides from the guides list: publish, take down, list in the catalogue,
+ * keep out of it, or delete.
  *
- * `preview` answers, before the owner confirms, what the action would reach — and for
- * publishing, which drafts it would release and which guides it must leave out for having no
- * content. `apply` then does it, guide by guide, so each takes the same path one guide does.
+ * `preview` answers, before the owner confirms, what the action would reach — for publishing,
+ * which drafts it would release and which guides it must leave out for having no content; for
+ * listing, which appear at once and which only once published. `apply` then does it, guide by guide, so each takes the same path one guide does.
  */
 class BulkGuideController
 {
     /** At most this many titles named per group in the confirmation; the rest are counted. */
     private const NAMED = 8;
 
-    public function preview(BulkGuideRequest $request, PublishGuide $publish): JsonResponse
+    public function preview(BulkGuideRequest $request, PublishGuide $publish, ListGuide $list): JsonResponse
     {
-        $guides = $request->guides()->orderBy('title')->get(['id', 'title', 'status', 'locale']);
+        $guides = $request->guides()->orderBy('title')->get(['id', 'title', 'status', 'locale', 'open_for_enrollment', 'in_catalogue']);
 
-        if ($request->action() !== GuideBulkAction::PUBLISH) {
-            return response()->json(['total' => $guides->count()]);
-        }
-
-        $groups = $guides->groupBy(fn (Guide $guide) => $publish->assess($guide)->value);
-
-        return response()->json([
-            'total' => $guides->count(),
-            'groups' => collect(GuidePublishing::cases())->mapWithKeys(fn (GuidePublishing $state) => [
-                $state->value => [
-                    'count' => $groups->get($state->value, collect())->count(),
-                    'titles' => $groups->get($state->value, collect())->take(self::NAMED)->pluck('title'),
-                ],
-            ]),
-        ]);
+        return match ($request->action()) {
+            GuideBulkAction::PUBLISH => $this->grouped($guides, GuidePublishing::cases(), fn (Guide $guide) => $publish->assess($guide)),
+            GuideBulkAction::LIST => $this->grouped($guides, GuideListing::cases(), fn (Guide $guide) => $list->assess($guide)),
+            default => response()->json(['total' => $guides->count()]),
+        };
     }
 
-    public function apply(BulkGuideRequest $request, PublishGuide $publish): RedirectResponse
+    public function apply(BulkGuideRequest $request, PublishGuide $publish, ListGuide $list): RedirectResponse
     {
         $guides = $request->guides()->get();
 
         $message = match ($request->action()) {
             GuideBulkAction::PUBLISH => $this->publish($guides, $publish),
             GuideBulkAction::DRAFT => $this->takeDown($guides),
+            GuideBulkAction::LIST => $this->list($guides, $list),
+            GuideBulkAction::UNLIST => $this->unlist($guides),
             GuideBulkAction::DELETE => $this->delete($guides),
         };
 
         return back()->with('success', $message);
+    }
+
+    /**
+     * The guides grouped by what the action would do to each, every state present even when empty.
+     *
+     * @param  Collection<int, Guide>  $guides
+     * @param  array<int, \BackedEnum>  $states
+     * @param  callable(Guide): \BackedEnum  $assess
+     */
+    private function grouped(Collection $guides, array $states, callable $assess): JsonResponse
+    {
+        $groups = $guides->groupBy(fn (Guide $guide) => $assess($guide)->value);
+
+        return response()->json([
+            'total' => $guides->count(),
+            'groups' => collect($states)->mapWithKeys(fn (\BackedEnum $state) => [
+                $state->value => [
+                    'count' => $groups->get($state->value, collect())->count(),
+                    'titles' => $groups->get($state->value, collect())->take(self::NAMED)->pluck('title'),
+                ],
+            ]),
+        ]);
     }
 
     /** @param  Collection<int, Guide>  $guides */
@@ -80,6 +97,33 @@ class BulkGuideController
         $published->each(fn (Guide $guide) => $guide->update(['status' => GuideStatus::DRAFT]));
 
         return trans_choice('arcadia.editor.guides.bulk.flash.drafted', $published->count(), ['count' => $published->count()]);
+    }
+
+    /** @param  Collection<int, Guide>  $guides */
+    private function list(Collection $guides, ListGuide $list): string
+    {
+        $outcomes = $guides->map(fn (Guide $guide) => $list->handle($guide))->countBy(fn (GuideListing $outcome) => $outcome->value);
+        $listed = $outcomes->get(GuideListing::LISTS->value, 0);
+        $waiting = $outcomes->get(GuideListing::AWAITS_PUBLISHING->value, 0);
+
+        return collect([
+            trans_choice('arcadia.editor.guides.bulk.flash.listed', $listed, ['count' => $listed]),
+            $waiting ? trans_choice('arcadia.editor.guides.bulk.flash.awaiting', $waiting, ['count' => $waiting]) : null,
+        ])->filter()->implode(' ');
+    }
+
+    /**
+     * Each kept to its link: still open to whoever has it, out of the catalogue (ADR 0024).
+     *
+     * @param  Collection<int, Guide>  $guides
+     */
+    private function unlist(Collection $guides): string
+    {
+        $listed = $guides->where('in_catalogue', true);
+        // One by one, so each is reindexed (`KnowledgeServiceProvider`).
+        $listed->each(fn (Guide $guide) => $guide->update(['in_catalogue' => false]));
+
+        return trans_choice('arcadia.editor.guides.bulk.flash.unlisted', $listed->count(), ['count' => $listed->count()]);
     }
 
     /** @param  Collection<int, Guide>  $guides */

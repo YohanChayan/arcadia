@@ -1,7 +1,7 @@
 <script setup>
 /**
  * This site's guides, twelve to a page, one row each (`GuideRow`), and what can be done to many
- * of them at once: publish, set to draft, or delete.
+ * of them at once: publish, set to draft, list in the catalogue or remove from it, or delete.
  *
  * A selection is either the guides ticked by hand, kept across pages, or every guide the filter
  * matches — across all its pages — less any unticked after; `picked` holds the ticked ids in
@@ -10,7 +10,7 @@
  */
 import { computed, ref } from 'vue'
 import { router } from '@inertiajs/vue3'
-import { Plus, BookOpen, ChevronDown, Send, FileMinus, Trash2, X } from '@lucide/vue'
+import { Plus, BookOpen, ChevronDown, Send, FileMinus, Trash2, X, LibraryBig, EyeOff } from '@lucide/vue'
 import PageHeader from '@/components/common/PageHeader.vue'
 import EditorTitle from '@/components/editor/EditorTitle.vue'
 import EditorBreadcrumb from '@/components/editor/EditorBreadcrumb.vue'
@@ -19,7 +19,17 @@ import PaginationControls from '@/components/common/PaginationControls.vue'
 import SearchField from '@/components/common/SearchField.vue'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuSub,
+    DropdownMenuSubContent,
+    DropdownMenuSubTrigger,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
 import GuideLinkDialog from '@/components/editor/GuideLinkDialog.vue'
 import GuideRow from '@/components/editor/GuideRow.vue'
@@ -126,7 +136,12 @@ const bulkDone = () => {
 const bulkActions = [
     { key: 'publish', icon: Send, tone: 'text-success' },
     { key: 'draft', icon: FileMinus, tone: '' },
-    { key: 'delete', icon: Trash2, variant: 'destructive' },
+]
+
+// Whether the guides appear on the public catalogue, in a level of their own (ADR 0024).
+const catalogueActions = [
+    { key: 'list', icon: LibraryBig, tone: 'text-success' },
+    { key: 'unlist', icon: EyeOff, tone: '' },
 ]
 
 // Each choice with how many it would show, whatever is filtered now.
@@ -228,13 +243,27 @@ const goToPage = page => router.get(editorRoute('guides.index'), query({ page })
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>{{ $t('arcadia.editor.guides.bulk.label') }}</DropdownMenuLabel>
-                            <template v-for="bulk in bulkActions" :key="bulk.key">
-                                <DropdownMenuSeparator v-if="bulk.variant === 'destructive'" />
-                                <DropdownMenuItem :variant="bulk.variant ?? 'default'" @select="askBulk(bulk.key)">
-                                    <component :is="bulk.icon" :class="bulk.tone" aria-hidden="true" />
-                                    {{ $t(`arcadia.editor.guides.bulk.${bulk.key}`) }}
-                                </DropdownMenuItem>
-                            </template>
+                            <DropdownMenuItem v-for="bulk in bulkActions" :key="bulk.key" @select="askBulk(bulk.key)">
+                                <component :is="bulk.icon" :class="bulk.tone" aria-hidden="true" />
+                                {{ $t(`arcadia.editor.guides.bulk.${bulk.key}`) }}
+                            </DropdownMenuItem>
+                            <DropdownMenuSub>
+                                <DropdownMenuSubTrigger>
+                                    <LibraryBig aria-hidden="true" />
+                                    {{ $t('arcadia.editor.guides.bulk.catalogue') }}
+                                </DropdownMenuSubTrigger>
+                                <DropdownMenuSubContent>
+                                    <DropdownMenuItem v-for="bulk in catalogueActions" :key="bulk.key" @select="askBulk(bulk.key)">
+                                        <component :is="bulk.icon" :class="bulk.tone" aria-hidden="true" />
+                                        {{ $t(`arcadia.editor.guides.bulk.${bulk.key}`) }}
+                                    </DropdownMenuItem>
+                                </DropdownMenuSubContent>
+                            </DropdownMenuSub>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem variant="destructive" @select="askBulk('delete')">
+                                <Trash2 aria-hidden="true" />
+                                {{ $t('arcadia.editor.guides.bulk.delete') }}
+                            </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </template>

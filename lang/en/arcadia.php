@@ -560,16 +560,22 @@ return [
                 'clear' => 'Clear selection',
                 'publish' => 'Publish',
                 'draft' => 'Set to draft',
+                'catalogue' => 'Catalogue',
+                'list' => 'List in the catalogue',
+                'unlist' => 'Remove from the catalogue',
                 'delete' => 'Delete',
                 'checking' => 'Checking the guides…',
                 'more' => 'and :count more',
                 'titles' => [
                     'publish' => '{1} Publish 1 guide?|[2,*] Publish :count guides?',
                     'draft' => '{1} Set 1 guide to draft?|[2,*] Set :count guides to draft?',
+                    'list' => '{1} List 1 guide in the catalogue?|[2,*] List :count guides in the catalogue?',
+                    'unlist' => '{1} Remove 1 guide from the catalogue?|[2,*] Remove :count guides from the catalogue?',
                     'delete' => '{1} Delete 1 guide?|[2,*] Delete :count guides?',
                 ],
                 'bodies' => [
                     'draft' => 'Their readers can no longer open them until you publish them again. Their versions and content are kept.',
+                    'unlist' => 'They no longer appear in the catalogue. Anyone with their link can still ask to enroll.',
                     'delete' => 'Every version, all their content and their images go with them. Anyone with their link can no longer open them. This cannot be undone.',
                 ],
                 // What publishing does to each guide, before it is confirmed (`GuidePublishing`).
@@ -579,10 +585,19 @@ return [
                     'ready' => 'Already published and up to date: unchanged.',
                     'no_content' => 'No content: they cannot be published and are left as they are.',
                 ],
+                // What listing does to each guide, before it is confirmed (`GuideListing`).
+                'list_groups' => [
+                    'lists' => 'Opened for enrollment and shown in the catalogue.',
+                    'awaits_publishing' => 'Not published yet: marked, and shown in the catalogue once you publish them.',
+                    'ready' => 'Already in the catalogue: unchanged.',
+                ],
                 'nothing' => 'None of these guides has content to publish.',
+                'nothing_to_list' => 'All of these guides are already in the catalogue.',
                 'confirm' => [
                     'publish' => 'Publish',
                     'draft' => 'Set to draft',
+                    'list' => 'List',
+                    'unlist' => 'Remove from the catalogue',
                     'delete' => 'Delete',
                 ],
                 'flash' => [
@@ -590,6 +605,9 @@ return [
                     'released' => '{1} 1 with its draft released as a new version.|[2,*] :count with their draft released as a new version.',
                     'skipped' => '{1} 1 left out for having no content.|[2,*] :count left out for having no content.',
                     'drafted' => '{0} No guide was published.|{1} 1 guide set to draft.|[2,*] :count guides set to draft.',
+                    'listed' => '{0} No new guide in the catalogue.|{1} 1 guide listed in the catalogue.|[2,*] :count guides listed in the catalogue.',
+                    'awaiting' => '{1} 1 will appear once you publish it.|[2,*] :count will appear once you publish them.',
+                    'unlisted' => '{0} No guide was in the catalogue.|{1} 1 guide removed from the catalogue.|[2,*] :count guides removed from the catalogue.',
                     'deleted' => '{0} No guide deleted.|{1} 1 guide deleted.|[2,*] :count guides deleted.',
                 ],
             ],

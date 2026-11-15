@@ -15,7 +15,7 @@ use Tests\TestCase;
 
 /**
  * One action on many guides from the guides list: publish — releasing pending drafts and leaving
- * out guides with no content — set to draft, and delete; by ids, or every guide the filter
+ * out guides with no content — set to draft, list in the catalogue or keep out of it, and delete; by ids, or every guide the filter
  * matches, always within the editor's own language.
  */
 class GuideBulkActionTest extends TestCase
@@ -138,6 +138,58 @@ class GuideBulkActionTest extends TestCase
 
         $this->assertSame(GuideStatus::DRAFT, $published->fresh()->status);
         $this->assertTrue($published->latestVersion()->isReleased());
+    }
+
+    private function readable(Guide $guide): Guide
+    {
+        $this->withContent($guide)->latestVersion()->release();
+        $guide->update(['status' => GuideStatus::PUBLISHED]);
+
+        return $guide;
+    }
+
+    public function test_the_preview_says_which_guides_listing_shows_at_once(): void
+    {
+        $closed = $this->readable($this->guide('Cerrada'));
+        $listed = $this->readable($this->guide('Ya listada'));
+        $listed->update(['open_for_enrollment' => true]);
+        $draft = $this->guide('Borrador');
+
+        $this->postJson('/es/editor/guides/bulk/preview', ['action' => 'list', 'ids' => [$closed->id, $listed->id, $draft->id]])
+            ->assertOk()
+            ->assertJsonPath('total', 3)
+            ->assertJsonPath('groups.lists.titles', ['Cerrada'])
+            ->assertJsonPath('groups.awaits_publishing.titles', ['Borrador'])
+            ->assertJsonPath('groups.ready.titles', ['Ya listada']);
+    }
+
+    public function test_listing_opens_each_guide_and_puts_it_in_the_catalogue(): void
+    {
+        $linkOnly = $this->readable($this->guide('Solo por enlace'));
+        $linkOnly->update(['open_for_enrollment' => true, 'in_catalogue' => false]);
+        $draft = $this->guide('Borrador');
+
+        $this->post('/es/editor/guides/bulk', ['action' => 'list', 'ids' => [$linkOnly->id, $draft->id]])
+            ->assertSessionHas('success', implode(' ', [
+                trans_choice('arcadia.editor.guides.bulk.flash.listed', 1, ['count' => 1]),
+                trans_choice('arcadia.editor.guides.bulk.flash.awaiting', 1, ['count' => 1]),
+            ]));
+
+        $this->assertSame([$linkOnly->id], Guide::listed()->pluck('id')->all());
+        $this->assertTrue($draft->fresh()->open_for_enrollment);
+        $this->assertTrue($draft->fresh()->in_catalogue);
+    }
+
+    public function test_unlisting_keeps_each_guide_open_to_its_link(): void
+    {
+        $guide = $this->readable($this->guide('Listada'));
+        $guide->update(['open_for_enrollment' => true]);
+
+        $this->post('/es/editor/guides/bulk', ['action' => 'unlist', 'ids' => [$guide->id]])
+            ->assertSessionHas('success', trans_choice('arcadia.editor.guides.bulk.flash.unlisted', 1, ['count' => 1]));
+
+        $this->assertFalse(Guide::listed()->exists());
+        $this->assertTrue($guide->fresh()->open_for_enrollment);
     }
 
     public function test_a_guide_of_the_other_language_is_never_reached(): void
