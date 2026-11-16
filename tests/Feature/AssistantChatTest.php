@@ -105,6 +105,28 @@ class AssistantChatTest extends TestCase
         Planner::assertNeverPrompted();
     }
 
+    public function test_a_conversation_from_another_channel_cannot_be_continued(): void
+    {
+        $console = Conversation::create(['channel' => 'console', 'locale' => 'es', 'user_id' => $this->owner->id]);
+
+        $this->actingAs($this->owner)
+            ->postJson(route('es.editor.assistant.messages'), ['message' => 'Hola', 'conversation_id' => $console->id])
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors('conversation_id');
+
+        Planner::assertNeverPrompted();
+    }
+
+    public function test_a_malformed_conversation_id_is_refused(): void
+    {
+        $this->actingAs($this->owner)
+            ->postJson(route('es.editor.assistant.messages'), ['message' => 'Hola', 'conversation_id' => 'not-a-ulid'])
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors('conversation_id');
+
+        $this->assertSame(0, Conversation::count());
+    }
+
     public function test_an_empty_or_overlong_message_is_refused(): void
     {
         $this->actingAs($this->owner)

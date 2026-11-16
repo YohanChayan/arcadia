@@ -8,32 +8,17 @@
  * the same chat runs in the editor's test screen and, later, on the landing page.
  */
 import { trans } from 'laravel-vue-i18n';
-import { onScopeDispose, ref, toValue } from 'vue';
-import type { MaybeRefOrGetter, Ref } from 'vue';
+import { computed, onScopeDispose, ref, toValue } from 'vue';
 import { readEventStream } from '@/lib/event-stream';
 import type { ServerSentEvent } from '@/lib/event-stream';
 import type {
+    AssistantChat,
+    AssistantChatOptions,
     AssistantChatStatus,
     AssistantMessage,
     AssistantStreamEvent,
     AssistantTurnMetrics,
 } from '@/types';
-
-export type AssistantChatOptions = {
-    url: MaybeRefOrGetter<string>;
-    context?: MaybeRefOrGetter<Record<string, string>>;
-    onConversationStarted?: (conversationId: string) => void;
-    onTurnCompleted?: (metrics: AssistantTurnMetrics) => void;
-};
-
-export type AssistantChat = {
-    messages: Ref<AssistantMessage[]>;
-    status: Ref<AssistantChatStatus>;
-    conversationId: Ref<string | null>;
-    send: (text: string) => Promise<void>;
-    retry: () => Promise<void>;
-    reset: () => void;
-};
 
 export function useAssistantChat(options: AssistantChatOptions): AssistantChat {
     const messages = ref<AssistantMessage[]>([]);
@@ -42,14 +27,28 @@ export function useAssistantChat(options: AssistantChatOptions): AssistantChat {
 
     let inFlight: AbortController | null = null;
     let lastVisitorText = '';
+    // A key for the list only; `crypto.randomUUID()` would need a secure context, which a dev
+    // host over plain HTTP is not.
+    let lastLocalId = 0;
+
+    const isReplying = computed(() => status.value.state === 'replying');
+
+    function canSend(text: string): boolean {
+        return text.trim() !== '' && !isReplying.value;
+    }
+
+    function localId(): string {
+        lastLocalId += 1;
+
+        return `local-${lastLocalId}`;
+    }
 
     async function send(text: string): Promise<void> {
-        const message = text.trim();
-
-        if (message === '' || status.value.state === 'replying') {
+        if (!canSend(text)) {
             return;
         }
 
+        const message = text.trim();
         lastVisitorText = message;
         messages.value.push({ id: localId(), role: 'visitor', text: message });
 
@@ -158,13 +157,22 @@ export function useAssistantChat(options: AssistantChatOptions): AssistantChat {
 
     onScopeDispose(() => inFlight?.abort());
 
-    return { messages, status, conversationId, send, retry, reset };
+    return {
+        messages,
+        status,
+        conversationId,
+        canSend,
+        isReplying,
+        send,
+        retry,
+        reset,
+    };
 }
 
 /**
  * The one place that knows the wire format. The server is ours and writes these from the same
- * contract, so a `done` payload is trusted once it is an object; an event this client does not
- * know is ignored rather than failed on, so the server can add one first.
+ * contract, so a `done` payload is trusted once its top-level shape holds; an event this client
+ * does not know is ignored rather than failed on, so the server can add one first.
  */
 function parseStreamEvent(event: ServerSentEvent): AssistantStreamEvent | null {
     let data: unknown;
@@ -196,10 +204,9 @@ function parseStreamEvent(event: ServerSentEvent): AssistantStreamEvent | null {
                 ? { type: 'delta', text: payload.text }
                 : null;
         case 'done':
-            return {
-                type: 'done',
-                metrics: payload as unknown as AssistantTurnMetrics,
-            };
+            return isTurnMetrics(payload)
+                ? { type: 'done', metrics: payload }
+                : null;
         case 'error':
             return {
                 type: 'error',
@@ -211,6 +218,18 @@ function parseStreamEvent(event: ServerSentEvent): AssistantStreamEvent | null {
         default:
             return null;
     }
+}
+
+function isTurnMetrics(
+    payload: Record<string, unknown>,
+): payload is AssistantTurnMetrics {
+    return (
+        typeof payload.turn_id === 'string' &&
+        Array.isArray(payload.passages) &&
+        typeof payload.engagement === 'number' &&
+        typeof payload.usage === 'object' &&
+        payload.usage !== null
+    );
 }
 
 // What a refused request says: a validation or throttle message from Laravel, or ours.
@@ -249,14 +268,4 @@ function xsrfToken(): string {
         .find((each) => each.startsWith('XSRF-TOKEN='));
 
     return cookie ? decodeURIComponent(cookie.split('=')[1]) : '';
-}
-
-// A key for the list only; `crypto.randomUUID()` would need a secure context, which a dev host
-// over plain HTTP is not.
-let lastLocalId = 0;
-
-function localId(): string {
-    lastLocalId += 1;
-
-    return `local-${lastLocalId}`;
 }

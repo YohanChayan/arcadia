@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Editor;
 
 use App\Assistant\Channels\WebChannel;
-use App\Assistant\Models\Conversation;
 use App\Assistant\Orchestrator;
 use App\Http\Requests\AssistantMessageRequest;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -18,11 +17,10 @@ class AssistantMessageController
     public function __invoke(AssistantMessageRequest $request, Orchestrator $orchestrator): StreamedResponse
     {
         $channel = new WebChannel;
-        $conversation = $request->filled('conversation_id')
-            ? Conversation::query()->whereKey($request->validated('conversation_id'))->firstOrFail()
-            : $orchestrator->start($channel->name(), $this->locale(), $request->user());
+        $conversation = $request->conversation()
+            ?? $orchestrator->start($channel->name(), $request->assistantLocale(), $request->user());
 
-        $message = (string) $request->validated('message');
+        $message = $request->message();
 
         return response()->stream(function () use ($orchestrator, $conversation, $message, $channel): void {
             // A reader who closes the tab mid-reply has still been charged for it: the turn
@@ -37,12 +35,5 @@ class AssistantMessageController
             'Cache-Control' => 'no-cache, no-transform',
             'X-Accel-Buffering' => 'no',
         ]);
-    }
-
-    private function locale(): string
-    {
-        $locales = config('assistant.locales');
-
-        return in_array(app()->getLocale(), $locales, true) ? app()->getLocale() : $locales[0];
     }
 }

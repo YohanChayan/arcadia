@@ -14,6 +14,12 @@ return [
         'title' => 'Version :number released',
         'body' => 'This is the guide\'s link. Its readers open it with their Google account and see this version.',
     ],
+    'discard' => [
+        'action' => 'Discard draft',
+        'title' => 'Discard the draft of version :number?',
+        'body' => 'Its content and change log are deleted. Version :previous stays as it is.',
+        'confirm' => 'Discard',
+    ],
     'draft_next' => 'New version',
     'draft_next_hint' => 'Copies this version into a new draft to change it.',
     'changes' => [
@@ -33,6 +39,7 @@ return [
         'released' => 'Version :number released.',
         'released_and_published' => 'Version :number released, and the guide published with it: its readers can open it now.',
         'drafted' => 'Draft of version :number ready.',
+        'discarded' => 'Draft of version :number discarded.',
         'fixed' => '{1} Fixed in 1 version.|[2,*] Fixed in :count versions.',
     ],
 ];

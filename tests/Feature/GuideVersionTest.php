@@ -89,6 +89,39 @@ class GuideVersionTest extends TestCase
             ->where("copies.{$this->item->key}", 2));
     }
 
+    public function test_a_draft_on_top_of_a_released_version_is_discarded_with_its_content(): void
+    {
+        $this->post($this->url('/versions/release'));
+        $this->post($this->url('/versions'));
+        $draft = $this->guide->latestVersion();
+        $draft->changes()->create(['kind' => 'other', 'title' => 'Por error']);
+
+        $this->delete($this->url('/versions/draft'))
+            ->assertRedirect(route('es.editor.content.show', ['guide' => $this->guide->id]))
+            ->assertSessionHas('success', __('editor.versions.flash.discarded', ['number' => 2]));
+
+        $this->assertModelMissing($draft);
+        $this->assertSame(0, Item::where('version_id', $draft->id)->count());
+        $this->assertSame(0, $draft->changes()->count());
+
+        $latest = $this->guide->latestVersion();
+        $this->assertSame(1, $latest->number);
+        $this->assertTrue($latest->isReleased());
+        $this->assertModelExists($this->item);
+    }
+
+    public function test_version_one_and_a_released_version_are_never_discarded(): void
+    {
+        // Version 1, still a draft: the guide's base.
+        $this->delete($this->url('/versions/draft'))->assertStatus(409);
+
+        // Released: frozen.
+        $this->post($this->url('/versions/release'));
+        $this->delete($this->url('/versions/draft'))->assertStatus(409);
+
+        $this->assertSame(1, $this->guide->versions()->count());
+    }
+
     public function test_an_earlier_version_is_shown_read_only(): void
     {
         $this->post($this->url('/versions/release'));

@@ -135,10 +135,11 @@ foreach ($site->locales() as $locale) {
             Route::post('/guides/{guide:id}/content/{node}/{id}/move/{direction}', [ContentController::class, 'move'])
                 ->where(['node' => $nodes, 'id' => '[0-9]+', 'direction' => 'up|down'])->name('content.move');
 
-            // Versions: release the draft, draft the next, its change log, and fix-everywhere — the
-            // one edit that reaches released versions.
+            // Versions: release the draft, draft the next or discard it, its change log, and
+            // fix-everywhere — the one edit that reaches released versions.
             Route::post('/guides/{guide:id}/versions/release', [VersionController::class, 'release'])->name('versions.release');
             Route::post('/guides/{guide:id}/versions', [VersionController::class, 'store'])->name('versions.store');
+            Route::delete('/guides/{guide:id}/versions/draft', [VersionController::class, 'destroy'])->name('versions.destroy');
             Route::post('/guides/{guide:id}/versions/changes', [VersionController::class, 'storeChange'])->name('versions.changes.store');
             Route::delete('/guides/{guide:id}/versions/changes/{change}', [VersionController::class, 'destroyChange'])
                 ->whereNumber('change')->name('versions.changes.destroy');

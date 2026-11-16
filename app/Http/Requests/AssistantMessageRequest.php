@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Assistant\Channels\WebChannel;
+use App\Assistant\Models\Conversation;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -36,8 +38,39 @@ class AssistantMessageRequest extends FormRequest
                 'ulid',
                 Rule::exists('assistant_conversations', 'id')
                     ->where('user_id', $this->user()?->id)
-                    ->where('channel', 'web'),
+                    ->where('channel', WebChannel::NAME),
             ],
         ];
+    }
+
+    public function message(): string
+    {
+        return (string) $this->validated('message');
+    }
+
+    /**
+     * The conversation this message goes on with, or null when it starts a new one. Scoped again
+     * to its owner and channel, so the lookup never leans on the rule alone.
+     */
+    public function conversation(): ?Conversation
+    {
+        $id = $this->validated('conversation_id');
+
+        if ($id === null) {
+            return null;
+        }
+
+        return Conversation::query()
+            ->continuableBy($this->user(), WebChannel::NAME)
+            ->whereKey($id)
+            ->firstOrFail();
+    }
+
+    /** A new conversation's language: this editor's, when the assistant speaks it, else its first. */
+    public function assistantLocale(): string
+    {
+        $locales = config('assistant.locales');
+
+        return in_array(app()->getLocale(), $locales, true) ? app()->getLocale() : $locales[0];
     }
 }

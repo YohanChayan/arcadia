@@ -7,33 +7,22 @@
  *
  * Replies are plain text: the persona is told not to write markdown, and line breaks are kept.
  */
-import { ArrowUp, RotateCcw, Sparkles } from '@lucide/vue';
+import { ArrowUp, RotateCcw } from '@lucide/vue';
 import { nextTick, ref, useTemplateRef, watch } from 'vue';
+import AssistantBubble from '@/components/assistant/AssistantBubble.vue';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { useAssistantChat } from '@/composables/useAssistantChat';
-import type { AssistantTurnMetrics } from '@/types';
+import type { AssistantChatEmits, AssistantChatProps } from '@/types';
 
-const props = withDefaults(
-    defineProps<{
-        url: string;
-        context?: Record<string, string>;
-        // The assistant's opening line, shown before anything is sent. It is never posted.
-        greeting?: string | null;
-    }>(),
-    {
-        context: () => ({}),
-        greeting: null,
-    },
-);
+const props = withDefaults(defineProps<AssistantChatProps>(), {
+    context: () => ({}),
+    greeting: null,
+});
 
-const emit = defineEmits<{
-    'conversation-started': [conversationId: string];
-    'turn-completed': [metrics: AssistantTurnMetrics];
-    reset: [];
-}>();
+const emit = defineEmits<AssistantChatEmits>();
 
-const { messages, status, send, retry, reset } = useAssistantChat({
+const { messages, status, canSend, send, retry, reset } = useAssistantChat({
     url: () => props.url,
     context: () => props.context,
     onConversationStarted: (conversationId) =>
@@ -47,7 +36,7 @@ const log = useTemplateRef<HTMLElement>('log');
 async function submit(): Promise<void> {
     const text = draft.value;
 
-    if (text.trim() === '' || status.value.state === 'replying') {
+    if (!canSend(text)) {
         return;
     }
 
@@ -105,21 +94,9 @@ watch(
             :aria-label="$t('assistant.log_label')"
             class="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto p-4"
         >
-            <div
-                v-if="greeting && messages.length === 0"
-                class="flex items-start gap-2"
-            >
-                <span
-                    class="mt-1 grid size-7 shrink-0 place-items-center rounded-full bg-accent/15 text-accent"
-                >
-                    <Sparkles class="size-4" />
-                </span>
-                <p
-                    class="max-w-[85%] rounded-2xl rounded-tl-sm bg-well px-4 py-2.5 whitespace-pre-line text-ink"
-                >
-                    {{ greeting }}
-                </p>
-            </div>
+            <AssistantBubble v-if="greeting && messages.length === 0">
+                {{ greeting }}
+            </AssistantBubble>
 
             <p
                 v-else-if="messages.length === 0"
@@ -136,27 +113,16 @@ watch(
                     {{ message.text }}
                 </p>
 
-                <div v-else class="flex items-start gap-2">
+                <AssistantBubble v-else>
+                    <span v-if="message.text !== ''">{{ message.text }}</span>
                     <span
-                        class="mt-1 grid size-7 shrink-0 place-items-center rounded-full bg-accent/15 text-accent"
+                        v-else
+                        class="inline-flex items-center gap-2 text-ink-3"
                     >
-                        <Sparkles class="size-4" />
+                        <Spinner />
+                        {{ $t('assistant.typing') }}
                     </span>
-                    <p
-                        class="max-w-[85%] rounded-2xl rounded-tl-sm bg-well px-4 py-2.5 whitespace-pre-line text-ink"
-                    >
-                        <span v-if="message.text !== ''">{{
-                            message.text
-                        }}</span>
-                        <span
-                            v-else
-                            class="inline-flex items-center gap-2 text-ink-3"
-                        >
-                            <Spinner />
-                            {{ $t('assistant.typing') }}
-                        </span>
-                    </p>
-                </div>
+                </AssistantBubble>
             </template>
 
             <div
@@ -189,7 +155,7 @@ watch(
             <textarea
                 v-model="draft"
                 rows="1"
-                maxlength="2000"
+                :maxlength="props.maxLength"
                 :placeholder="$t('assistant.placeholder')"
                 :aria-label="$t('assistant.placeholder')"
                 class="field-sizing-content max-h-40 min-h-10 flex-1 resize-none rounded-control border-2 border-rule bg-well px-3 py-2 text-ink transition-colors outline-none placeholder:text-ink-4 focus-visible:border-accent"
@@ -198,7 +164,7 @@ watch(
             <Button
                 type="submit"
                 size="icon"
-                :disabled="draft.trim() === '' || status.state === 'replying'"
+                :disabled="!canSend(draft)"
                 :aria-label="$t('assistant.send')"
             >
                 <ArrowUp />

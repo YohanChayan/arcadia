@@ -4,6 +4,7 @@ namespace App\Assistant\Models;
 
 use App\Assistant\TurnStatus;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -21,6 +22,16 @@ class Conversation extends Model
     protected $table = 'assistant_conversations';
 
     protected $fillable = ['channel', 'locale', 'user_id', 'participant'];
+
+    /**
+     * The conversations `$user` may go on with: their own, on the channel they started them on.
+     *
+     * @param  Builder<self>  $query
+     */
+    public function scopeContinuableBy(Builder $query, User $user, string $channel): void
+    {
+        $query->where('user_id', $user->id)->where('channel', $channel);
+    }
 
     /** @return BelongsTo<User, $this> */
     public function user(): BelongsTo

@@ -17,10 +17,10 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 /**
- * A guide's versions: release the draft, draft the next one, keep its change log, and repair a
- * dead line in every version at once.
+ * A guide's versions: release the draft, draft the next one or discard it, keep its change log,
+ * and repair a dead line in every version at once.
  *
- * Release and the change log act on the latest version only while it is a draft. Fix-everywhere
+ * Release, discard and the change log act on the latest version only while it is a draft. Fix-everywhere
  * is the exception that reaches released versions too: a buyer's copy must not rot.
  */
 class VersionController
@@ -58,6 +58,22 @@ class VersionController
         return redirect()
             ->route(app()->getLocale().'.editor.content.show', ['guide' => $guide->id])
             ->with('success', __('editor.versions.flash.drafted', ['number' => $draft->number]));
+    }
+
+    /**
+     * Discard the draft — one drafted by mistake, on top of a released version. The previous
+     * version becomes the latest again; the draft's content and change log go with it by foreign
+     * key. Version 1 is the guide's base and is never discarded: delete the guide instead.
+     */
+    public function destroy(Guide $guide): RedirectResponse
+    {
+        $version = $this->draft($guide);
+        abort_if($version->number === 1, 409);
+        $version->delete();
+
+        return redirect()
+            ->route(app()->getLocale().'.editor.content.show', ['guide' => $guide->id])
+            ->with('success', __('editor.versions.flash.discarded', ['number' => $version->number]));
     }
 
     public function storeChange(Request $request, Guide $guide): RedirectResponse

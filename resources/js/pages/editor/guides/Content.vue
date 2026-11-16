@@ -18,7 +18,7 @@
  */
 import { provide, ref } from 'vue'
 import { router } from '@inertiajs/vue3'
-import { Plus, Lock, Rocket, CopyPlus, History, GitCompare, Eye, FileJson, ScrollText } from '@lucide/vue'
+import { Plus, Lock, Rocket, CopyPlus, History, GitCompare, Eye, FileJson, ScrollText, Trash2 } from '@lucide/vue'
 import PageHeader from '@/components/common/PageHeader.vue'
 import Eyebrow from '@/components/common/Eyebrow.vue'
 import EditorTitle from '@/components/editor/EditorTitle.vue'
@@ -138,6 +138,19 @@ const release = () => {
 }
 const draftNext = () => router.post(editorRoute('versions.store', { guide }))
 
+// A draft made by mistake, on top of a released version, is discarded; version 1 never is.
+const discarding = ref(false)
+const confirmingDiscard = ref(false)
+const discard = () => {
+    discarding.value = true
+    router.delete(editorRoute('versions.destroy', { guide }), {
+        onFinish: () => {
+            discarding.value = false
+            confirmingDiscard.value = false
+        },
+    })
+}
+
 // Every prompt, in one popup; and what recording the last research copy said.
 const prompting = ref(false)
 const researchRecorded = ref(false)
@@ -176,6 +189,10 @@ const recordResearch = payload => {
                     <Eye :size="14" aria-hidden="true" />
                     {{ $t('editor.guides.preview') }}
                 </a>
+                <Button v-if="editable && version.number > 1" type="button" variant="outline" size="sm" @click="confirmingDiscard = true">
+                    <Trash2 :size="14" aria-hidden="true" />
+                    {{ $t('editor.versions.discard.action') }}
+                </Button>
                 <Button v-if="editable" type="button" variant="brand" size="sm" @click="confirmingRelease = true">
                     <Rocket :size="14" aria-hidden="true" />
                     {{ $t('editor.versions.release.action') }}
@@ -282,6 +299,14 @@ const recordResearch = payload => {
                        :processing="releasing"
                        @confirm="release"
                        @cancel="confirmingRelease = false" />
+
+        <ConfirmDialog :open="confirmingDiscard"
+                       :title="$t('editor.versions.discard.title', { number: version.number })"
+                       :body="$t('editor.versions.discard.body', { previous: version.number - 1 })"
+                       :confirm-label="$t('editor.versions.discard.confirm')"
+                       :processing="discarding"
+                       @confirm="discard"
+                       @cancel="confirmingDiscard = false" />
 
         <Dialog :open="released !== null" @update:open="value => !value && (released = null)">
             <DialogContent v-if="released !== null" class="max-w-lg">

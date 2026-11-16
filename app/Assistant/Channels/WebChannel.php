@@ -14,9 +14,11 @@ use App\Assistant\TurnMetrics;
  */
 class WebChannel implements Channel
 {
+    public const NAME = 'web';
+
     public function name(): string
     {
-        return 'web';
+        return self::NAME;
     }
 
     public function turnStarted(Turn $turn): void

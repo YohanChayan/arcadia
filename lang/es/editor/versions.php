@@ -14,6 +14,12 @@ return [
         'title' => 'Versión :number publicada',
         'body' => 'Este es el enlace de la guía. Sus lectores lo abren con su cuenta de Google y ven esta versión.',
     ],
+    'discard' => [
+        'action' => 'Descartar borrador',
+        'title' => '¿Descartar el borrador de la versión :number?',
+        'body' => 'Se borran su contenido y sus cambios anotados. La versión :previous queda tal cual.',
+        'confirm' => 'Descartar',
+    ],
     'draft_next' => 'Nueva versión',
     'draft_next_hint' => 'Copia esta versión en un borrador nuevo para cambiarla.',
     'changes' => [
@@ -33,6 +39,7 @@ return [
         'released' => 'Versión :number publicada.',
         'released_and_published' => 'Versión :number publicada, y la guía también: ya la pueden abrir sus lectores.',
         'drafted' => 'Borrador de la versión :number listo.',
+        'discarded' => 'Borrador de la versión :number descartado.',
         'fixed' => '{1} Corregida en 1 versión.|[2,*] Corregida en :count versiones.',
     ],
 ];
